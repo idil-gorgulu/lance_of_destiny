@@ -26,8 +26,8 @@ public class StartPage extends Page {
         signupButton.addActionListener(e -> Navigator.getInstance().showSignupPage());
 
         JButton buildingModeButton = new JButton("Open Building Mode");
-        signupButton.setAlignmentX(JComponent.CENTER_ALIGNMENT);
-        signupButton.addActionListener(e -> Navigator.getInstance().showBuildingPage());
+        buildingModeButton.setAlignmentX(JComponent.CENTER_ALIGNMENT);
+        buildingModeButton.addActionListener(e -> Navigator.getInstance().showBuildingPage());
 
         add(loginButton);
         add(signupButton);
