@@ -1,4 +1,6 @@
 package org.system;
+
+import org.ata_swing_ui.BuildingModePage;
 import org.oguz_swing_ui.LoginPage;
 import org.oguz_swing_ui.Page;
 import org.oguz_swing_ui.SignupPage;
@@ -41,6 +43,8 @@ public class Navigator {
     public void showSignupPage() {
         showPage(new SignupPage());
     }
+
+    public void showBuildingPage() { showPage(new BuildingModePage()); }
 
     public void show() {
         mainFrame.setVisible(true);
