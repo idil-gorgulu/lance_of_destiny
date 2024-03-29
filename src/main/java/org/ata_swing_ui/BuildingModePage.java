@@ -5,6 +5,8 @@ import javax.swing.*;
 import java.awt.*;
 
 public class BuildingModePage extends Page {
+
+    private JPanel gridPanel;
     public BuildingModePage() {
         super();
         initUI();
@@ -35,9 +37,15 @@ public class BuildingModePage extends Page {
     }
 
     private void showOptionPopup() {
-        String[] options = {"Barrier1", "Barrier2", "Barrier3", "Barrier4"};
+        String[] options = {"Simple barrier", "Reinforced barrier", "Explosive barrier", "Rewarding barrier"};
         int choice = JOptionPane.showOptionDialog(null, "Which barrier",
                 "Options", JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE,
                 null, options, options[0]);
+        if (choice != JOptionPane.CLOSED_OPTION) {
+
+            // Determine the type of barrier chosen
+            int barrierType = choice; //should be used to create barrier
+
+        }
     }
 }
