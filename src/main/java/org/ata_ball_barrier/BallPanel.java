@@ -55,8 +55,6 @@ public class BallPanel extends JPanel {
     {
         super.paintComponent( g );
         g.setColor(Color.red);
-
-
         g.fillOval(x - radius, y - radius, radius*2, radius*2);
     }
 
