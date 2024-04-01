@@ -2,7 +2,6 @@ package org.ata_ball_barrier;
 import org.domain.Coordinate;
 import javax.swing.*;
 import java.awt.*;
-import java.awt.geom.AffineTransform;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -10,8 +9,8 @@ import javax.imageio.ImageIO;
 
 public class Fireball extends JPanel {
     private Coordinate coordinate;
-    private int xVelocity = 3;
-    private int yVelocity = 2;
+    private int xVelocity = 0;
+    private int yVelocity = 3;
     private int fireballRadius = 15;
     private BufferedImage fireballImage;
 
@@ -23,23 +22,15 @@ public class Fireball extends JPanel {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        setPreferredSize(new Dimension(fireballImage.getWidth(), fireballImage.getHeight()));
-        Timer timer = new Timer(10 , e -> repaint());
-        timer.start();
+        setPreferredSize(new Dimension(getFireballRadius() * 2,getFireballRadius() * 2));
     }
 
-    private void moveFireball() {
-        // Update position
-        coordinate.setX(coordinate.getX() + xVelocity);
-        coordinate.setY(coordinate.getY() + yVelocity);
+    public void moveFireball(){
+        this.getCoordinate().setX(this.getCoordinate().getX() + this.xVelocity);
+        this.getCoordinate().setY(this.getCoordinate().getY() + this.yVelocity);
+        //System.out.println(this.getCoordinate().getX());
+        //System.out.println(this.getCoordinate().getY());
 
-        // Boundary detection and bounce
-        if (coordinate.getX() < fireballRadius || coordinate.getX() > getWidth() - fireballRadius) {
-            xVelocity *= -1;
-        }
-        if (coordinate.getY() < fireballRadius || coordinate.getY() > getHeight() - fireballRadius) {
-            yVelocity *= -1;
-        }
     }
 
     @Override
@@ -47,11 +38,8 @@ public class Fireball extends JPanel {
         super.paintComponent(g);
         if (fireballImage != null) {
             Graphics2D g2d = (Graphics2D) g.create();
-
-            // Calculate the top-left corner coordinates for centering the image
             int x = (getWidth() - fireballImage.getWidth()) / 2;
             int y = (getHeight() - fireballImage.getHeight()) / 2;
-
             g2d.drawImage(fireballImage, x, y, this);
             g2d.dispose();
         }
@@ -63,4 +51,26 @@ public class Fireball extends JPanel {
     public void setCoordinate(Coordinate coordinate) {
         this.coordinate = coordinate;
     }
+
+    public int getFireballRadius() {
+        return fireballRadius;
+    }
+
+    public int getxVelocity() {
+        return xVelocity;
+    }
+
+    public void setxVelocity(int xVelocity) {
+        this.xVelocity = xVelocity;
+    }
+
+    public int getyVelocity() {
+        return yVelocity;
+    }
+
+    public void setyVelocity(int yVelocity) {
+        this.yVelocity = yVelocity;
+    }
+
+
 }

@@ -24,8 +24,6 @@ public class MagicalStaff extends JPanel {
             e.printStackTrace();
         }
         setPreferredSize(new Dimension(magicalStaffImage.getWidth(), magicalStaffImage.getHeight()));
-        Timer timer = new Timer(10, e -> repaint());
-        timer.start();
     }
 
     @Override
@@ -44,15 +42,18 @@ public class MagicalStaff extends JPanel {
         repaint();
     }
 
-    public void slideMagicalStaff(MagicalStaff magicalStaff, int dx, int dy) {
-        Point currentLocation = magicalStaff.getLocation();
-        int newX = currentLocation.x + dx;
-        int newY = currentLocation.y + dy;
-        magicalStaff.setLocation(newX, newY);
+    public void slideMagicalStaff(int dx, int dy) {
+        this.getCoordinate().setX(this.getCoordinate().getX() + dx);
+        this.getCoordinate().setY(this.getCoordinate().getY() + dy);
+        repaint();
     }
 
     public Coordinate getCoordinate() {
         return coordinate;
     }
     public void setCoordinate(Coordinate coordinate) {this.coordinate = coordinate;}
+
+    public double getAngle() {
+        return angle;
+    }
 }
