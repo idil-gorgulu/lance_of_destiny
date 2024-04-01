@@ -27,10 +27,15 @@ public class StartPage extends Page {
 
         JButton buildingModeButton = new JButton("Open Building Mode");
         buildingModeButton.setAlignmentX(JComponent.CENTER_ALIGNMENT);
-        buildingModeButton.addActionListener(e -> Navigator.getInstance().showBuildingPage());
+        buildingModeButton.addActionListener(e -> Navigator.getInstance().showBuildingModePage());
+
+        JButton runningModeButton = new JButton("Open Running Mode");
+        runningModeButton.setAlignmentX(JComponent.CENTER_ALIGNMENT);
+        runningModeButton.addActionListener(e -> Navigator.getInstance().showRunningModePage());
 
         add(loginButton);
         add(signupButton);
         add(buildingModeButton);
+        add(runningModeButton);
     }
 }
