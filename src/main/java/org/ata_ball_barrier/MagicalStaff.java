@@ -1,5 +1,7 @@
 package org.ata_ball_barrier;
 
+import org.domain.Coordinate;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.geom.AffineTransform;
@@ -10,9 +12,11 @@ import javax.imageio.ImageIO;
 
 public class MagicalStaff extends JPanel {
     private BufferedImage magicalStaffImage;
-    public double angle;
+    private double angle;
+    private Coordinate coordinate;
 
     public MagicalStaff() {
+        this.coordinate = new Coordinate(200,200);
         this.angle = 0;
         try {
             magicalStaffImage = ImageIO.read(new File("assets/200Player.png"));
@@ -39,4 +43,16 @@ public class MagicalStaff extends JPanel {
         angle += dTheta;
         repaint();
     }
+
+    public void slideMagicalStaff(MagicalStaff magicalStaff, int dx, int dy) {
+        Point currentLocation = magicalStaff.getLocation();
+        int newX = currentLocation.x + dx;
+        int newY = currentLocation.y + dy;
+        magicalStaff.setLocation(newX, newY);
+    }
+
+    public Coordinate getCoordinate() {
+        return coordinate;
+    }
+    public void setCoordinate(Coordinate coordinate) {this.coordinate = coordinate;}
 }
