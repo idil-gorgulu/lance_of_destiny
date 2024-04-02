@@ -9,7 +9,7 @@ import javax.imageio.ImageIO;
 
 public class Fireball extends JPanel {
     private Coordinate coordinate;
-    private int xVelocity = 0;
+    private int xVelocity = 3;
     private int yVelocity = 3;
     private int fireballRadius = 15;
     private BufferedImage fireballImage;
@@ -26,11 +26,9 @@ public class Fireball extends JPanel {
     }
 
     public void moveFireball(){
+        // change this so that coordinate will hande the update of the location
         this.getCoordinate().setX(this.getCoordinate().getX() + this.xVelocity);
         this.getCoordinate().setY(this.getCoordinate().getY() + this.yVelocity);
-        //System.out.println(this.getCoordinate().getX());
-        //System.out.println(this.getCoordinate().getY());
-
     }
 
     @Override
