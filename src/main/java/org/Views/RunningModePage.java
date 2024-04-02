@@ -22,7 +22,7 @@ public class RunningModePage extends Page implements KeyListener {
         initUI();
         addKeyListener(this);
         setFocusable(true);
-        requestFocusInWindow();
+        requestFocus();
         setupTimer();
     }
 
@@ -82,6 +82,7 @@ public class RunningModePage extends Page implements KeyListener {
                 fireball.getCoordinate().setX(fireballPositionX);
                 fireball.getCoordinate().setY(fireballPositionY);
                 fireball.setBounds(fireball.getCoordinate().getX(), fireball.getCoordinate().getY(), fireballWidth, fireball.getPreferredSize().height);
+                requestFocus();
                 add(fireball);
                 //System.out.println(fireball.getCoordinate().getX());
                 //System.out.println(fireball.getCoordinate().getY());
