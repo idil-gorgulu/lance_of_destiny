@@ -1,5 +1,5 @@
-package org.ata_swing_ui;
-import org.oguz_swing_ui.Page;
+package org.Views;
+import org.Views.Page;
 
 import javax.swing.*;
 import java.awt.*;

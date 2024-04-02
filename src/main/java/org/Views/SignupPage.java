@@ -1,4 +1,4 @@
-package org.oguz_swing_ui;
+package org.Views;
 
 public class SignupPage extends Page {
     public SignupPage(){

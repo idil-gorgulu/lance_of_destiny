@@ -1,5 +1,4 @@
-package org.oguz_swing_ui;
-import org.system.Navigator;
+package org.Views;
 
 import javax.swing.*;
 

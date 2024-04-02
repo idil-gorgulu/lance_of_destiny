@@ -1,5 +1,5 @@
 package org.waterfall;
-import org.system.Navigator;
+import org.Views.Navigator;
 
 import javax.swing.*;
 

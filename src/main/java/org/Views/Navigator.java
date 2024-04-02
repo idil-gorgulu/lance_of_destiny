@@ -1,7 +1,5 @@
-package org.system;
+package org.Views;
 
-import org.ata_swing_ui.BuildingModePage;
-import org.oguz_swing_ui.*;
 import javax.swing.*;
 
 public class Navigator {

@@ -1,4 +1,5 @@
-package org.domain_items;
+package org.Domain;
+
 
 public class Barrier {
     private Coordinate coordinates;

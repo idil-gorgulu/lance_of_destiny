@@ -1,7 +1,6 @@
-package org.domain;
+package org.Domain;
 
-import org.ata_ball_barrier.Fireball;
-import org.ata_ball_barrier.MagicalStaff;
+import org.Controllers.RunningModeController;
 
 public class Game {
 

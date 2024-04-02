@@ -1,4 +1,4 @@
-package org.domain;
+package org.Domain;
 
 public class Vector {
     private double x, y;

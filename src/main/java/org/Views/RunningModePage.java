@@ -1,9 +1,9 @@
-package org.oguz_swing_ui;
+package org.Views;
 
-import org.ata_ball_barrier.Fireball;
-import org.ata_ball_barrier.MagicalStaff;
-import org.domain.RunningModeController;
-import org.domain.Vector;
+import org.Domain.Fireball;
+import org.Domain.MagicalStaff;
+import org.Controllers.RunningModeController;
+import org.Domain.Vector;
 
 import javax.swing.*;
 import java.awt.*;

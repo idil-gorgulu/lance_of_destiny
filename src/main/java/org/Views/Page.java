@@ -1,4 +1,4 @@
-package org.oguz_swing_ui;
+package org.Views;
 import javax.swing.JPanel;
 
 public abstract class Page extends JPanel {

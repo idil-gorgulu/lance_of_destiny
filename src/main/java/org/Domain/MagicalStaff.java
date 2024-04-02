@@ -1,6 +1,6 @@
-package org.ata_ball_barrier;
+package org.Domain;
 
-import org.domain.Coordinate;
+import org.Domain.Coordinate;
 
 import javax.swing.*;
 import java.awt.*;

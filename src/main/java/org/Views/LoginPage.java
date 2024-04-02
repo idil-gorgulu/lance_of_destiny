@@ -1,4 +1,4 @@
-package org.oguz_swing_ui;
+package org.Views;
 import javax.swing.*;
 
 public class LoginPage extends Page {

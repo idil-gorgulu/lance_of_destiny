@@ -1,11 +1,8 @@
-package org.domain;
+package org.Controllers;
 
-import org.ata_ball_barrier.MagicalStaff;
-import org.oguz_swing_ui.RunningModePage;
-
-import java.awt.*;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
+import org.Domain.Game;
+import org.Domain.MagicalStaff;
+import org.Views.RunningModePage;
 
 public class RunningModeController {
     private RunningModePage runningModePage;

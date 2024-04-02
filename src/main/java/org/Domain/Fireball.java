@@ -1,5 +1,5 @@
-package org.ata_ball_barrier;
-import org.domain.Coordinate;
+package org.Domain;
+import org.Domain.Coordinate;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.image.BufferedImage;
