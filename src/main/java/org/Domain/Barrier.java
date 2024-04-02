@@ -23,9 +23,11 @@ public class Barrier {
             return "./lance_of_destiny/assets/Firm.png";
         }else if(type == 2) { //Explosive barrier
             return "./lance_of_destiny/assets/RedGem.png";
-        }else { //Rewarding barrier
+        }else if (type == 3) {
             return "./lance_of_destiny/assets/GreenGem.png";
         }
+        // In here return Exception
+        return null;
     }
 
     public Coordinate getCoordinates() {

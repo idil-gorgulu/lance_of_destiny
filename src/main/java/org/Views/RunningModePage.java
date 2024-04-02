@@ -1,5 +1,6 @@
 package org.Views;
 
+import org.Domain.Barrier;
 import org.Domain.Fireball;
 import org.Domain.MagicalStaff;
 import org.Controllers.RunningModeController;
@@ -14,6 +15,8 @@ public class RunningModePage extends Page implements KeyListener {
 
     private Fireball fireball;
     private MagicalStaff magicalStaff;
+    private Barrier barrier;
+    //I dont think this is a good way
     private RunningModeController runningModeController;
 
     public RunningModePage() {
@@ -62,17 +65,6 @@ public class RunningModePage extends Page implements KeyListener {
                 int screenWidth = getWidth();
                 int screenHeight = getHeight();
 
-                // Initializing MagicalStaff
-                magicalStaff = runningModeController.getGameSession().getMagicalStaff();
-                int magicalStaffWidth = magicalStaff.getPreferredSize().width;
-                int magicalStaffHeight = magicalStaff.getPreferredSize().height;
-                int magicalStaffPositionX = (screenWidth - magicalStaffWidth) / 2;
-                int magicalStaffPositionY = (screenHeight - magicalStaffHeight - 50);
-                magicalStaff.getCoordinate().setX(magicalStaffPositionX);
-                magicalStaff.getCoordinate().setY(magicalStaffPositionY);
-                magicalStaff.setBounds(magicalStaff.getCoordinate().getX(), magicalStaff.getCoordinate().getY(), magicalStaff.getPreferredSize().width, magicalStaff.getPreferredSize().height);
-                add(magicalStaff);
-
                 // Initializing Fireball
                 fireball = runningModeController.getGameSession().getFireball();
                 int fireballWidth = fireball.getPreferredSize().width;
@@ -87,6 +79,21 @@ public class RunningModePage extends Page implements KeyListener {
                 //System.out.println(fireball.getCoordinate().getX());
                 //System.out.println(fireball.getCoordinate().getY());
                 repaint();
+
+                // Initializing MagicalStaff
+                magicalStaff = runningModeController.getGameSession().getMagicalStaff();
+                int magicalStaffWidth = magicalStaff.getPreferredSize().width;
+                int magicalStaffHeight = magicalStaff.getPreferredSize().height;
+                int magicalStaffPositionX = (screenWidth - magicalStaffWidth) / 2;
+                int magicalStaffPositionY = (screenHeight - magicalStaffHeight - 50);
+                magicalStaff.getCoordinate().setX(magicalStaffPositionX);
+                magicalStaff.getCoordinate().setY(magicalStaffPositionY);
+                magicalStaff.setBounds(magicalStaff.getCoordinate().getX(), magicalStaff.getCoordinate().getY(), magicalStaff.getPreferredSize().width, magicalStaff.getPreferredSize().height);
+                add(magicalStaff);
+
+
+                barrier = runningModeController.getGameSession().getBarrier();
+
             }
         });
     }

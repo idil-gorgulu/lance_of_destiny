@@ -6,11 +6,14 @@ public class Game {
 
     private Fireball fireball;
     private MagicalStaff magicalStaff;
-    private RunningModeController runningModeController;
-    public Game(RunningModeController runningModeController){
-        this.runningModeController = runningModeController;
+
+    // This will be a list
+    private Barrier Barrier;
+    public Game(){
         this.fireball = new Fireball();
         this.magicalStaff = new MagicalStaff();
+        // Think about how to initialize it, from constuctor maybe?
+        this.Barrier = new Barrier(new Coordinate(100, 200), 0);
     }
 
     public Fireball getFireball() {
@@ -19,5 +22,9 @@ public class Game {
 
     public MagicalStaff getMagicalStaff() {
         return magicalStaff;
+    }
+
+    public Barrier getBarrier() {
+        return Barrier;
     }
 }

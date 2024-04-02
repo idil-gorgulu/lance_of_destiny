@@ -8,7 +8,7 @@ public class Navigator {
 
     private Navigator() {
         mainFrame = new JFrame("Lance of Destiny");
-        mainFrame.setSize(400, 300);
+        mainFrame.setSize(1000, 750);
         mainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         mainFrame.setLocationRelativeTo(null);
     }
