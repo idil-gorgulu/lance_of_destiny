@@ -1,33 +1,54 @@
 package org.Domain;
 
 
-public class Barrier {
+import javax.imageio.ImageIO;
+import javax.swing.*;
+import java.awt.*;
+import java.awt.geom.AffineTransform;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
+
+public class Barrier extends JPanel {
     private Coordinate coordinates;
-    private int width;
-    private int height;
     private int type; //will indicate the type of the barrier
-    private String imageDirectory;
+    private BufferedImage barrierImage;
 
     public Barrier(Coordinate coordinates, int type) {
         this.coordinates = coordinates;
-        this.width = 10;
-        this.height = 10;
         this.type = type;
-        this.imageDirectory = setImageDirectory();
+        try {
+            this.barrierImage = ImageIO.read(new File(setImageDirectory(type)));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        setPreferredSize(new Dimension(barrierImage.getWidth(), barrierImage.getHeight()));
     }
 
-    private String setImageDirectory() {
+    private String setImageDirectory(int type) {
         if(type == 0) { //Simple barrier
-            return "./lance_of_destiny/assets/BlueGem.png";
+            return "assets/BlueGem.png";
         }else if(type == 1) { //Reinforced barrier
-            return "./lance_of_destiny/assets/Firm.png";
+            return "assets/Firm.png";
         }else if(type == 2) { //Explosive barrier
-            return "./lance_of_destiny/assets/RedGem.png";
+            return "assets/RedGem.png";
         }else if (type == 3) {
-            return "./lance_of_destiny/assets/GreenGem.png";
+            return "assets/GreenGem.png";
         }
         // In here return Exception
         return null;
+    }
+
+    @Override
+    protected void paintComponent(Graphics g) {
+        super.paintComponent(g);
+        if (barrierImage != null) {
+            Graphics2D g2d = (Graphics2D) g.create();
+            int x = (getWidth() - barrierImage.getWidth()) / 2;
+            int y = (getHeight() - barrierImage.getHeight()) / 2;
+            g2d.drawImage(barrierImage,x ,y ,this);
+            g2d.dispose();
+        }
     }
 
     public Coordinate getCoordinates() {
@@ -38,22 +59,6 @@ public class Barrier {
         this.coordinates = coordinates;
     }
 
-    public int getWidth() {
-        return width;
-    }
-
-    public void setWidth(int width) {
-        this.width = width;
-    }
-
-    public int getHeight() {
-        return height;
-    }
-
-    public void setHeight(int height) {
-        this.height = height;
-    }
-
     public int getType() {
         return type;
     }
@@ -62,11 +67,4 @@ public class Barrier {
         this.type = type;
     }
 
-    public String getImageDirectory() {
-        return imageDirectory;
-    }
-
-    public void setImageDirectory(String imageDirectory) {
-        this.imageDirectory = imageDirectory;
-    }
 }

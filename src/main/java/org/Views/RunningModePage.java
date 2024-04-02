@@ -45,6 +45,8 @@ public class RunningModePage extends Page implements KeyListener {
                 magicalStaff.setBounds(magicalStaff.getCoordinate().getX(), magicalStaff.getCoordinate().getY(), magicalStaff.getPreferredSize().width, magicalStaff.getPreferredSize().height);
                 fireball = runningModeController.getGameSession().getFireball();
                 fireball.setBounds(fireball.getCoordinate().getX(), fireball.getCoordinate().getY(), fireball.getWidth(), fireball.getPreferredSize().height);
+                barrier = runningModeController.getGameSession().getBarrier();
+                barrier.setBounds(barrier.getCoordinates().getX(), barrier.getCoordinates().getY(), barrier.getWidth(), barrier.getHeight());
                 //System.out.println(fireball.getCoordinate().getX());
                 //System.out.println(fireball.getCoordinate().getY());
                 repaint();
@@ -74,11 +76,9 @@ public class RunningModePage extends Page implements KeyListener {
                 fireball.getCoordinate().setX(fireballPositionX);
                 fireball.getCoordinate().setY(fireballPositionY);
                 fireball.setBounds(fireball.getCoordinate().getX(), fireball.getCoordinate().getY(), fireballWidth, fireball.getPreferredSize().height);
-                requestFocus();
                 add(fireball);
                 //System.out.println(fireball.getCoordinate().getX());
                 //System.out.println(fireball.getCoordinate().getY());
-                repaint();
 
                 // Initializing MagicalStaff
                 magicalStaff = runningModeController.getGameSession().getMagicalStaff();
@@ -89,11 +89,20 @@ public class RunningModePage extends Page implements KeyListener {
                 magicalStaff.getCoordinate().setX(magicalStaffPositionX);
                 magicalStaff.getCoordinate().setY(magicalStaffPositionY);
                 magicalStaff.setBounds(magicalStaff.getCoordinate().getX(), magicalStaff.getCoordinate().getY(), magicalStaff.getPreferredSize().width, magicalStaff.getPreferredSize().height);
+                requestFocus();
                 add(magicalStaff);
 
 
                 barrier = runningModeController.getGameSession().getBarrier();
-
+                int barrierStaffWidth = barrier.getPreferredSize().width;
+                int barrierStaffHeight = barrier.getPreferredSize().height;
+                int barrierStaffPositionX = (screenWidth - magicalStaffWidth) / 2;
+                int barrierStaffPositionY = (screenHeight - magicalStaffHeight - 50);
+                barrier.getCoordinates().setX(barrierStaffPositionX);
+                barrier.getCoordinates().setY(barrierStaffPositionY);
+                barrier.setBounds(barrier.getCoordinates().getX(), barrier.getCoordinates().getY(), barrier.getPreferredSize().width, barrier.getPreferredSize().height);
+                add(barrier);
+                repaint();
             }
         });
     }

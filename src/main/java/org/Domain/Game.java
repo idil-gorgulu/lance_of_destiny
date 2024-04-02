@@ -13,7 +13,7 @@ public class Game {
         this.fireball = new Fireball();
         this.magicalStaff = new MagicalStaff();
         // Think about how to initialize it, from constuctor maybe?
-        this.Barrier = new Barrier(new Coordinate(100, 200), 0);
+        this.Barrier = new Barrier(new Coordinate(1000, 800), 0);
     }
 
     public Fireball getFireball() {
@@ -24,7 +24,5 @@ public class Game {
         return magicalStaff;
     }
 
-    public Barrier getBarrier() {
-        return Barrier;
-    }
+    public Barrier getBarrier() { return Barrier;}
 }
