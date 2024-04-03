@@ -13,7 +13,7 @@ public class Game {
         this.fireball = new Fireball();
         this.magicalStaff = new MagicalStaff();
         // Think about how to initialize it, from constuctor maybe?
-        this.Barrier = new Barrier(new Coordinate(200, 600), 0);
+        this.Barrier = new Barrier(new Coordinate(450, 600), 0);
     }
 
     public Fireball getFireball() {

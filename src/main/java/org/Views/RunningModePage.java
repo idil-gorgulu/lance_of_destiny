@@ -76,6 +76,7 @@ public class RunningModePage extends Page implements KeyListener {
                 fireball.getCoordinate().setX(fireballPositionX);
                 fireball.getCoordinate().setY(fireballPositionY);
                 fireball.setBounds(fireball.getCoordinate().getX(), fireball.getCoordinate().getY(), fireballWidth, fireball.getPreferredSize().height);
+                fireball.setBackground(Color.red);
                 add(fireball);
                 //System.out.println(fireball.getCoordinate().getX());
                 //System.out.println(fireball.getCoordinate().getY());
@@ -89,12 +90,14 @@ public class RunningModePage extends Page implements KeyListener {
                 magicalStaff.getCoordinate().setX(magicalStaffPositionX);
                 magicalStaff.getCoordinate().setY(magicalStaffPositionY);
                 magicalStaff.setBounds(magicalStaff.getCoordinate().getX(), magicalStaff.getCoordinate().getY(), magicalStaff.getPreferredSize().width, magicalStaff.getPreferredSize().height);
+                magicalStaff.setBackground(Color.green);
                 requestFocus();
                 add(magicalStaff);
 
 
                 barrier = runningModeController.getGameSession().getBarrier();
                 barrier.setBounds(barrier.getCoordinates().getX(), barrier.getCoordinates().getY(), barrier.getPreferredSize().width, barrier.getPreferredSize().height);
+                barrier.setBackground(Color.blue);
                 add(barrier);
                 repaint();
             }
@@ -163,8 +166,9 @@ public class RunningModePage extends Page implements KeyListener {
             fireball.setxVelocity((int) vNew.getX());
             fireball.setyVelocity((int) vNew.getY());
         } else if (barrierRect.intersects(fireballRect)) {
+
             double b = 1.0; // b = 1 for a perfect elastic collision
-            double normalAngleRadians = Math.toRadians((double) (1/4));
+            double normalAngleRadians = Math.toRadians((double) (90%360));
             Vector normal = new Vector(Math.cos(normalAngleRadians), Math.sin(normalAngleRadians));
             Vector velocity = new Vector(xVelocity, yVelocity);
             Vector vNew = velocity.subtract(normal.scale(2 * velocity.dot(normal))).scale(b);
