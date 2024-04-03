@@ -4,6 +4,7 @@ import org.Domain.MagicalStaff;
 import org.Views.RunningModePage;
 import org.Domain.Game;
 
+
 public class MagicalStaffController {
     private Game game;
     private RunningModePage runningModePage;
@@ -12,5 +13,4 @@ public class MagicalStaffController {
     public MagicalStaffController(RunningModePage runningModePage){
         this.magicalStaff = new MagicalStaff();
     }
-
 }
