@@ -39,6 +39,9 @@ public class MagicalStaff extends JPanel {
 
     public void rotate(double dTheta) {
         angle += dTheta;
+        Dimension newSize = calculateRotatedDimensions(angle);
+        setPreferredSize(newSize);
+        revalidate();
         repaint();
     }
 
@@ -46,6 +49,15 @@ public class MagicalStaff extends JPanel {
         this.getCoordinate().setX(this.getCoordinate().getX() + dx);
         this.getCoordinate().setY(this.getCoordinate().getY() + dy);
         repaint();
+    }
+
+    private Dimension calculateRotatedDimensions(double angle) {
+        double radians = Math.toRadians(angle);
+        double sin = Math.abs(Math.sin(radians));
+        double cos = Math.abs(Math.cos(radians));
+        int newWidth = (int) Math.floor(magicalStaffImage.getWidth() * cos + magicalStaffImage.getHeight() * sin);
+        int newHeight = (int) Math.floor(magicalStaffImage.getHeight() * cos + magicalStaffImage.getWidth() * sin);
+        return new Dimension(newWidth, newHeight);
     }
 
     public Coordinate getCoordinate() {

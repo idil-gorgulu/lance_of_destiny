@@ -1,5 +1,6 @@
 package org.Views;
 
+import org.Controllers.MagicalStaffController;
 import org.Domain.Barrier;
 import org.Domain.Fireball;
 import org.Domain.MagicalStaff;
@@ -19,9 +20,12 @@ public class RunningModePage extends Page implements KeyListener {
     //I dont think this is a good way
     private RunningModeController runningModeController;
 
+    private MagicalStaffController magicalStaffController;
+
     public RunningModePage() {
         super();
         this.runningModeController = new RunningModeController(this);
+        this.magicalStaffController = new MagicalStaffController(this);
         initUI();
         addKeyListener(this);
         setFocusable(true);
