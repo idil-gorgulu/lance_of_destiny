@@ -47,8 +47,8 @@ public class RunningModePage extends Page implements KeyListener {
                 fireball.setBounds(fireball.getCoordinate().getX(), fireball.getCoordinate().getY(), fireball.getWidth(), fireball.getPreferredSize().height);
                 barrier = runningModeController.getGameSession().getBarrier();
                 barrier.setBounds(barrier.getCoordinates().getX(), barrier.getCoordinates().getY(), barrier.getWidth(), barrier.getHeight());
-                System.out.println(barrier.getCoordinates().getX());
-                System.out.println(barrier.getCoordinates().getY());
+                //System.out.println(barrier.getCoordinates().getX());
+                //System.out.println(barrier.getCoordinates().getY());
                 repaint();
             }
         });
@@ -141,12 +141,14 @@ public class RunningModePage extends Page implements KeyListener {
         int magicalStaffHeight = magicalStaff.getPreferredSize().height;
         double magicalStaffAngle = magicalStaff.getAngle();
 
+
         int xVelocity = fireball.getxVelocity();
         int yVelocity = fireball.getyVelocity();
         double normalAngle = (magicalStaffAngle + 90) % 360;
 
         Rectangle staffRect = new Rectangle(magicalStaffX, magicalStaffY, magicalStaffWidth, magicalStaffHeight);
         Rectangle fireballRect = new Rectangle(fireballX - fireballRadius, fireballY - fireballRadius, fireballRadius * 2, fireballRadius * 2);
+        Rectangle barrierRect = new Rectangle(barrier.getCoordinates().getX(), barrier.getCoordinates().getY(), (int) barrier.getPreferredSize().getWidth(), (int) barrier.getPreferredSize().getHeight());
 
         if (staffRect.intersects(fireballRect)) {
             // The collision formula: Vnew = b * (-2*(V dot N)*N + V)
@@ -155,6 +157,14 @@ public class RunningModePage extends Page implements KeyListener {
             // N: normal vector of the surface collided with
             double b = 1.0; // b = 1 for a perfect elastic collision
             double normalAngleRadians = Math.toRadians(normalAngle);
+            Vector normal = new Vector(Math.cos(normalAngleRadians), Math.sin(normalAngleRadians));
+            Vector velocity = new Vector(xVelocity, yVelocity);
+            Vector vNew = velocity.subtract(normal.scale(2 * velocity.dot(normal))).scale(b);
+            fireball.setxVelocity((int) vNew.getX());
+            fireball.setyVelocity((int) vNew.getY());
+        } else if (barrierRect.intersects(fireballRect)) {
+            double b = 1.0; // b = 1 for a perfect elastic collision
+            double normalAngleRadians = Math.toRadians((double) (1/4));
             Vector normal = new Vector(Math.cos(normalAngleRadians), Math.sin(normalAngleRadians));
             Vector velocity = new Vector(xVelocity, yVelocity);
             Vector vNew = velocity.subtract(normal.scale(2 * velocity.dot(normal))).scale(b);
