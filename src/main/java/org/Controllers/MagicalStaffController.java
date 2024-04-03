@@ -13,5 +13,4 @@ public class MagicalStaffController {
         this.magicalStaff = new MagicalStaff();
     }
 
-
 }
