@@ -35,6 +35,7 @@ public class Barrier extends JPanel {
         }else if (type == 3) {
             return "assets/GreenGem.png";
         }
+
         // In here return Exception
         return null;
     }
