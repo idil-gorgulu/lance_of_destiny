@@ -47,8 +47,8 @@ public class RunningModePage extends Page implements KeyListener {
                 fireball.setBounds(fireball.getCoordinate().getX(), fireball.getCoordinate().getY(), fireball.getWidth(), fireball.getPreferredSize().height);
                 barrier = runningModeController.getGameSession().getBarrier();
                 barrier.setBounds(barrier.getCoordinates().getX(), barrier.getCoordinates().getY(), barrier.getWidth(), barrier.getHeight());
-                //System.out.println(fireball.getCoordinate().getX());
-                //System.out.println(fireball.getCoordinate().getY());
+                System.out.println(barrier.getCoordinates().getX());
+                System.out.println(barrier.getCoordinates().getY());
                 repaint();
             }
         });
@@ -94,12 +94,6 @@ public class RunningModePage extends Page implements KeyListener {
 
 
                 barrier = runningModeController.getGameSession().getBarrier();
-                int barrierStaffWidth = barrier.getPreferredSize().width;
-                int barrierStaffHeight = barrier.getPreferredSize().height;
-                int barrierStaffPositionX = (screenWidth - magicalStaffWidth) / 2;
-                int barrierStaffPositionY = (screenHeight - magicalStaffHeight - 50);
-                barrier.getCoordinates().setX(barrierStaffPositionX);
-                barrier.getCoordinates().setY(barrierStaffPositionY);
                 barrier.setBounds(barrier.getCoordinates().getX(), barrier.getCoordinates().getY(), barrier.getPreferredSize().width, barrier.getPreferredSize().height);
                 add(barrier);
                 repaint();
