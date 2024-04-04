@@ -49,3 +49,4 @@ public class BuildingModePage extends Page {
         }
     }
 }
+
