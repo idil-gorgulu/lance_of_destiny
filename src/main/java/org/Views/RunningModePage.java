@@ -1,11 +1,8 @@
 package org.Views;
 
 import org.Controllers.MagicalStaffController;
-import org.Domain.Barrier;
-import org.Domain.Fireball;
-import org.Domain.MagicalStaff;
+import org.Domain.*;
 import org.Controllers.RunningModeController;
-import org.Domain.Vector;
 
 import javax.swing.*;
 import java.awt.*;
@@ -21,6 +18,9 @@ public class RunningModePage extends Page implements KeyListener {
     private RunningModeController runningModeController;
 
     private MagicalStaffController magicalStaffController;
+
+    private Chance chance;
+    private Score score;
 
     public RunningModePage() {
         super();
@@ -53,6 +53,13 @@ public class RunningModePage extends Page implements KeyListener {
                 barrier.setBounds(barrier.getCoordinates().getX(), barrier.getCoordinates().getY(), barrier.getWidth(), barrier.getHeight());
                 //System.out.println(barrier.getCoordinates().getX());
                 //System.out.println(barrier.getCoordinates().getY());
+                chance= runningModeController.getGameSession().getChance();
+                chance.setBounds(chance.getCoordinate().getX(), chance.getCoordinate().getY(), chance.getWidth(), chance.getHeight());
+
+                score= runningModeController.getGameSession().getScore();
+                score.setBounds(score.getCoordinate().getX(), score.getCoordinate().getY(), score.getWidth(), score.getHeight());
+
+
                 repaint();
             }
         });
@@ -103,6 +110,17 @@ public class RunningModePage extends Page implements KeyListener {
                 barrier.setBounds(barrier.getCoordinates().getX(), barrier.getCoordinates().getY(), barrier.getPreferredSize().width, barrier.getPreferredSize().height);
                 barrier.setBackground(Color.blue);
                 add(barrier);
+
+                chance= runningModeController.getGameSession().getChance();
+                chance.setBounds(chance.getCoordinate().getX(), chance.getCoordinate().getY(), chance.getPreferredSize().width, chance.getPreferredSize().height);
+                chance.setBackground(Color.lightGray);
+                add(chance).setVisible(true);
+
+                score= runningModeController.getGameSession().getScore();
+                score.setBounds(score.getCoordinate().getX(), score.getCoordinate().getY(), score.getPreferredSize().width, score.getPreferredSize().height);
+                score.setBackground(Color.lightGray);
+                add(score).setVisible(true);
+
                 repaint();
             }
         });
