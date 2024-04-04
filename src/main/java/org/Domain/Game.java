@@ -10,6 +10,7 @@ public class Game {
     // This will be a list
     private Barrier Barrier; //will be removed
     private ArrayList<Barrier> barriers = new ArrayList<Barrier>(); // Could maybe be a hashmap?
+    private static Game instance;
     public Game(){
         this.fireball = new Fireball();
         this.magicalStaff = new MagicalStaff();
@@ -46,5 +47,14 @@ public class Game {
             System.out.println("No barriers in that coordinates");
         }
 
+    }
+    public static Game getInstance(){
+        if(instance==null){
+            instance=new Game();
+            return instance;
+        }
+        else{
+            return instance;
+        }
     }
 }
