@@ -34,7 +34,7 @@ public class RunningModePage extends Page implements KeyListener {
     }
 
     private void setupTimer() {
-        int delay = 16; // Roughly 60 FPS, adjust as needed
+        int delay = 4; // Roughly 60 FPS, adjust as needed
         Timer timer = new Timer(delay, e -> updateGame());
         timer.start();
     }
