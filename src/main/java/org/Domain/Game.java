@@ -8,15 +8,27 @@ public class Game {
     private MagicalStaff magicalStaff;
 
     // This will be a list
+
+    
+    private Chance chance;
+    private Score score;
+
     private Barrier Barrier; //will be removed
     private ArrayList<Barrier> barriers = new ArrayList<Barrier>(); // Could maybe be a hashmap?
     private static Game instance;
+
     public Game(){
         this.fireball = new Fireball();
         this.magicalStaff = new MagicalStaff();
         // Think about how to initialize it, from constuctor maybe?
         this.Barrier = new Barrier(new Coordinate(450, 600), 0);
+
+
+        this.chance= new Chance(3);
+        this.score= new Score();
+
         barriers.add(new Barrier(new Coordinate(450, 600), 0));
+
     }
 
 
@@ -29,6 +41,10 @@ public class Game {
     }
 
     public Barrier getBarrier() { return Barrier;}
+
+
+    public Chance getChance() { return chance;}
+    public Score getScore(){return score;}
 
     public void addBarrier(Coordinate coordinates, int type){
         Barrier newBarrier = new Barrier(coordinates, type);
