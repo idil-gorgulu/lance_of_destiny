@@ -87,7 +87,7 @@ public class StartPage extends Page {
         } catch (IOException e) {
             e.printStackTrace();
         }
-
+        add(Box.createVerticalStrut(50));
         JLabel gameTitle = new JLabel("Lance of Destiny");
         gameTitle.setForeground(Color.WHITE);
         gameTitle.setFont(new Font("Arial", Font.BOLD, 24)); // You can adjust the font size and style
@@ -104,10 +104,13 @@ public class StartPage extends Page {
         signupButton.addActionListener(e -> Navigator.getInstance().showSignupPage());
         buildingModeButton.addActionListener(e -> Navigator.getInstance().showBuildingModePage());
         runningModeButton.addActionListener(e -> Navigator.getInstance().showRunningModePage());
-
+        add(Box.createVerticalStrut(10));
         add(loginButton);
+        add(Box.createVerticalStrut(10));
         add(signupButton);
+        add(Box.createVerticalStrut(10));
         add(buildingModeButton);
+        add(Box.createVerticalStrut(10));
         add(runningModeButton);
     }
 
