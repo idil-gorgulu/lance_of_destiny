@@ -1,9 +1,7 @@
 package org.Views;
 
-
 import org.Domain.Barrier;
 import org.Domain.Coordinate;
-import org.Views.Page;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
@@ -14,12 +12,13 @@ import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
-import java.util.Objects;
 
 public class BuildingModePage extends Page {
     private BufferedImage backgroundImage;
     private JPanel gridPanel;
     private JLabel leftBarriers;
+    private JButton[] buttons;
+    private int selectedButtonIndex = -1;
 
     public BuildingModePage() {
         super();
@@ -42,54 +41,56 @@ public class BuildingModePage extends Page {
         JPanel menuContainer = new JPanel(new BorderLayout());
         menuContainer.add(menuBar, BorderLayout.NORTH);
 
-        menuContainer.add(infoContainer, BorderLayout.SOUTH);
+        menuContainer.add(infoContainer, BorderLayout.CENTER);
         add(menuContainer, BorderLayout.WEST);
 
-
-        JPanel barrierPanel = new JPanel(new FlowLayout());
-
-        for (int i = 0; i < 4; i++) {
-            JButton button = new JButton();
-
-            if (i == 0) {
-                try {
-                    Image img = ImageIO.read(Objects.requireNonNull(getClass().getResource("assets/iconbluegem.png")));
-                    button.setIcon(new ImageIcon(img));
-                } catch (Exception ex) {
-                    System.out.println(ex);
+        // Adding buttons that will be used to choose type of barrier
+        JPanel buttonPanel = new JPanel(new FlowLayout());
+        buttons = new JButton[4]; // List of buttons
+        try {
+            Image img1 = ImageIO.read(new File("assets/iconbluegem.png"));
+            Image img2 = ImageIO.read(new File("assets/Firm.png"));
+            Image img3 = ImageIO.read(new File("assets/iconredgem.png"));
+            Image img4 = ImageIO.read(new File("assets/GreenGem.png"));
+            for (int i = 0; i < buttons.length; i++) {
+                JButton button = new JButton();
+                switch (i) {
+                    case 0:
+                        button.setIcon(new ImageIcon(img1));
+                        break;
+                    case 1:
+                        button.setIcon(new ImageIcon(img2));
+                        break;
+                    case 2:
+                        button.setIcon(new ImageIcon(img3));
+                        break;
+                    case 3:
+                        button.setIcon(new ImageIcon(img4));
+                        break;
+                    default:
+                        break;
                 }
-                button.setText("Simple Barrier");
+                int finalI = i; //needed for the mouse listener appearently.
+                button.addMouseListener(new MouseAdapter() {
+                    @Override
+                    public void mouseClicked(MouseEvent e) {
+                        if (selectedButtonIndex == finalI) {
+                            selectedButtonIndex = -1; // Deselect the button
+                        } else {
+                            selectedButtonIndex = finalI; // Select the button
+                        }
+                        updateButtonState();
+                        System.out.println("selected button: "+selectedButtonIndex); //To keep track on the console.
+                    }
+                });
+                button.setBorder(BorderFactory.createRaisedBevelBorder());
+                buttonPanel.add(button);
+                buttons[i] = button; //Keeping in a list.
             }
-            button.addActionListener(e -> showOptionPopup());
-            button.setOpaque(true);
-
-            barrierPanel.add(button);
+        } catch (IOException e) {
+            e.printStackTrace();
         }
-        add(barrierPanel, BorderLayout.NORTH);
-
-        gridPanel = new JPanel(null) {
-            @Override
-            protected void paintComponent(Graphics g) {
-                super.paintComponent(g);
-                if (backgroundImage != null) {
-                    g.drawImage(backgroundImage, 0, 0, getWidth(), getHeight(), this);
-                }
-            }
-        };
-
-        gridPanel.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseClicked(MouseEvent e) {
-//                int cellWidth = gridPanel.getWidth() / 20;
-//                int cellHeight = gridPanel.getHeight() / 30;
-//                int column = e.getX() / cellWidth;
-//                int row = e.getY() / cellHeight;
-//                System.out.println(column);
-//                System.out.println(row);
-                // Place a barrier at the clicked cell
-                addBarrier(new Coordinate(e.getX(), e.getY()));
-            }
-        });
+        add(buttonPanel, BorderLayout.NORTH);
 
         try {
             backgroundImage = ImageIO.read(new File("assets/Background.png"));
@@ -97,40 +98,53 @@ public class BuildingModePage extends Page {
             e.printStackTrace();
         }
 
+        gridPanel = new JPanel(null) { //not initializing with a builtin panel type.
+            @Override
+            protected void paintComponent(Graphics g) { //to set background for panel.
+                super.paintComponent(g);
+                g.drawImage(backgroundImage, 0, 0, getWidth(), getHeight(), this);
+            }
+        };
+
+        gridPanel.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                if (selectedButtonIndex != -1) { //If -1, means a button is not currently selected.
+                    System.out.println("Mouse click coordinates:"+ e.getX()+" "+ e.getY());
+                    addBarrier(new Coordinate(e.getX(), e.getY()));
+                }
+            }
+        });
+
         Border border = BorderFactory.createLineBorder(Color.BLACK);
         gridPanel.setBorder(border);
-
         add(gridPanel, BorderLayout.CENTER);
 
         JLabel statusLabel = new JLabel("Building Mode", SwingConstants.CENTER);
         add(statusLabel, BorderLayout.SOUTH);
 
-        gridPanel.setPreferredSize(new Dimension(600, 400)); // Adjust dimensions as needed
-    }
-
-    private void showOptionPopup() {
-        String[] options = {"Deneme"};
-        int choice = JOptionPane.showOptionDialog(null, "Which barrier",
-                "Options", JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE,
-                null, options, options[0]);
-        if (choice != JOptionPane.CLOSED_OPTION) {
-
-            int barrierType = choice; //should be used to create barrier
-
-        }
+        gridPanel.setSize(new Dimension(400, 500)); // Adjust dimensions as needed
     }
 
     private void addBarrier(Coordinate coordinates) {
-        int barrierType = 1;
-        // Create a new Barrier object with the specified coordinates and type
+        int barrierType = selectedButtonIndex;
+        //Create a new Barrier object with the specified coordinates and type
         Barrier barrier = new Barrier(coordinates, barrierType);
-        System.out.println("barrier x:"+ barrier.getCoordinates().getX()+"barrier y:"+ barrier.getCoordinates().getY() );
         barrier.setBounds(barrier.getCoordinates().getX(), barrier.getCoordinates().getY(), barrier.getPreferredSize().width, barrier.getPreferredSize().height);
-        barrier.setBackground(new Color(0, 0, 0, 0));
+        barrier.setBackground(new Color(0, 0, 0, 0)); //background is transparent.
         gridPanel.add(barrier);
         gridPanel.repaint();
-
         gridPanel.revalidate();
         gridPanel.repaint();
+    }
+    private void updateButtonState() {
+        for (int i = 0; i < buttons.length; i++) { //Initially reset all buttons.
+            buttons[i].setBorder(BorderFactory.createRaisedBevelBorder());
+            buttons[i].setBackground(null);
+        }
+        if (selectedButtonIndex != -1) {
+            buttons[selectedButtonIndex].setBorder(BorderFactory.createLoweredBevelBorder()); // Highlight selected button
+            buttons[selectedButtonIndex].setBackground(Color.GREEN); // Make selected button green
+        }
     }
 }
