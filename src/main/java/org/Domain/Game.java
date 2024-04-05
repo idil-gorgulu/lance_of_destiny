@@ -15,6 +15,7 @@ public class Game {
 
     private Barrier Barrier; //will be removed
     private ArrayList<Barrier> barriers = new ArrayList<Barrier>(); // Could maybe be a hashmap?
+    private static Game instance;
 
     public Game(){
         this.fireball = new Fireball();
@@ -63,5 +64,13 @@ public class Game {
         }
 
     }
-
+    public static Game getInstance(){
+        if(instance==null){
+            instance=new Game();
+            return instance;
+        }
+        else{
+            return instance;
+        }
+    }
 }
