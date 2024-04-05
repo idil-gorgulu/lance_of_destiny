@@ -86,7 +86,7 @@ public class RunningModePage extends Page implements KeyListener {
                 int fireballPositionY = (screenHeight - fireballHeight - 200);
                 fireball.getCoordinate().setX(fireballPositionX);
                 fireball.getCoordinate().setY(fireballPositionY);
-                fireball.setBounds(fireball.getCoordinate().getX(), fireball.getCoordinate().getY(), fireballWidth, fireball.getPreferredSize().height);
+                fireball.setBounds(fireballPositionX, fireballPositionY, fireballWidth, fireballHeight);
                 fireball.setBackground(Color.red);
                 add(fireball);
                 //System.out.println(fireball.getCoordinate().getX());
@@ -100,14 +100,20 @@ public class RunningModePage extends Page implements KeyListener {
                 int magicalStaffPositionY = (screenHeight - magicalStaffHeight - 50);
                 magicalStaff.getCoordinate().setX(magicalStaffPositionX);
                 magicalStaff.getCoordinate().setY(magicalStaffPositionY);
-                magicalStaff.setBounds(magicalStaff.getCoordinate().getX(), magicalStaff.getCoordinate().getY(), magicalStaff.getPreferredSize().width, magicalStaff.getPreferredSize().height);
+                magicalStaff.setBounds(magicalStaffPositionX, magicalStaffPositionY, magicalStaffWidth, magicalStaffHeight);
                 magicalStaff.setBackground(Color.green);
                 requestFocus();
                 add(magicalStaff);
 
 
                 barrier = runningModeController.getGameSession().getBarrier();
-                barrier.setBounds(barrier.getCoordinates().getX(), barrier.getCoordinates().getY(), barrier.getPreferredSize().width, barrier.getPreferredSize().height);
+                int barrierWidth = barrier.getPreferredSize().width;
+                int barrierHeight = barrier.getPreferredSize().height;
+                int barrierPositionX =  300;
+                int barrierPositionY =  300;
+                barrier.getCoordinates().setX(barrierPositionX);
+                barrier.getCoordinates().setY(barrierPositionY);
+                barrier.setBounds(barrierPositionX, barrierPositionY, barrierWidth, barrierHeight);
                 barrier.setBackground(Color.blue);
                 add(barrier);
 
