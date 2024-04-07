@@ -8,6 +8,7 @@ import java.io.IOException;
 import javax.imageio.ImageIO;
 
 public class Fireball extends JPanel {
+    // Deneme
     private Coordinate coordinate;
     private int xVelocity = 6;
     private int yVelocity = 6;
