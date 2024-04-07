@@ -35,6 +35,7 @@ public class LoginPage extends Page {
         JButton loginButton = new JButton("Login");
         loginButton.setAlignmentX(JComponent.CENTER_ALIGNMENT);
         add(loginButton);
+        // atadeneme
     }
 
     //TODO Kagan: implement authorize user.
