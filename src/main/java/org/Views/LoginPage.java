@@ -36,7 +36,8 @@ public class LoginPage extends Page {
         loginButton.setAlignmentX(JComponent.CENTER_ALIGNMENT);
         add(loginButton);
 
-        //sSSDASDAS
+        //wewewe
+
 
     }
 
