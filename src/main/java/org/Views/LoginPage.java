@@ -4,6 +4,7 @@ import javax.swing.*;
 public class LoginPage extends Page {
 
     public LoginPage() {
+        // Merhaba atakan
         super(); // Call the constructor of the abstract Page class
         initUI();
     }
