@@ -164,10 +164,12 @@ public class RunningModePage extends Page implements KeyListener {
                     runningModeController.getGameSession().getMagicalStaff().slideMagicalStaff(+15, 0); // Move left
                 break;
             case KeyEvent.VK_A:
-                runningModeController.getGameSession().getMagicalStaff().rotate(-Math.toRadians(5)); // Rotate left
+                if ((runningModeController.getGameSession().getMagicalStaff().getAngle() > - Math.toRadians(45)))
+                    runningModeController.getGameSession().getMagicalStaff().rotate(-Math.toRadians(5)); // Rotate left
                 break;
             case KeyEvent.VK_D:
-                runningModeController.getGameSession().getMagicalStaff().rotate(+Math.toRadians(5)); // Rotate left
+                if ((runningModeController.getGameSession().getMagicalStaff().getAngle() <  Math.toRadians(45)))
+                    runningModeController.getGameSession().getMagicalStaff().rotate(+Math.toRadians(5)); // Rotate left
                 break;
         }
     }
