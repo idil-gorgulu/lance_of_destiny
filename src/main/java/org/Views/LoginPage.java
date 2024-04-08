@@ -34,7 +34,6 @@ public class LoginPage extends Page {
         setLayout(new BorderLayout());
 
 
-        // Arka planı çizecek üst paneli oluşturun
         JPanel backgroundPanel = new JPanel(new BorderLayout()) {
             @Override
             protected void paintComponent(Graphics g) {
@@ -47,7 +46,7 @@ public class LoginPage extends Page {
         backgroundPanel.setOpaque(false);
         add(backgroundPanel, BorderLayout.NORTH);
 
-        // backButtonPanel artık backgroundPanel içinde yer alıyor
+
         JPanel backButtonPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
         backButtonPanel.setOpaque(false); // Make the panel transparent
         JButton backButton = new JButton("Back");
@@ -77,7 +76,7 @@ public class LoginPage extends Page {
         // Panel for the rest of the login form
         JPanel formPanel = new JPanel();
         formPanel.setLayout(new BoxLayout(formPanel, BoxLayout.Y_AXIS));
-        formPanel.setOpaque(false); // Ensure form panel is transparent to show the background
+        formPanel.setOpaque(false);
 
         // Setup for email text field
         JTextField emailTextField = setupTextField("email");
@@ -130,7 +129,6 @@ public class LoginPage extends Page {
             public void focusLost(FocusEvent e) {
                 if (textField.getText().isEmpty()) {
                     textField.setForeground(Color.GRAY);
-                    // textField.setText(placeholder); // Bu satırı kaldırdık çünkü artık paintComponent içinde placeholder'ı çiziyoruz.
                 }
             }
         });
