@@ -10,7 +10,7 @@ public class RunningModeController {
 
     public RunningModeController(RunningModePage runningModePage){
         this.runningModePage = runningModePage;
-        this.gameSession = new Game();
+        this.gameSession = Game.getInstance();
     }
 
     public void rotateMagicalStaff(MagicalStaff magicalStaff, double dTheta) {

@@ -1,5 +1,7 @@
 package org.Views;
 
+import org.Controllers.BuildingModeController;
+import org.Controllers.RunningModeController;
 import org.Domain.Barrier;
 import org.Domain.Coordinate;
 
@@ -14,14 +16,17 @@ import java.io.File;
 import java.io.IOException;
 
 public class BuildingModePage extends Page {
+    private BuildingModeController buildingModeController;
     private BufferedImage backgroundImage;
-    private JPanel gridPanel;
+    private JPanel buildingPanel;
+    private JPanel buildingContainer;
     private JLabel leftBarriers;
     private JButton[] buttons;
     private int selectedButtonIndex = -1;
 
     public BuildingModePage() {
         super();
+        this.buildingModeController = new BuildingModeController(this);
         initUI();
     }
 
@@ -35,10 +40,12 @@ public class BuildingModePage extends Page {
 
         JPanel infoContainer = new JPanel(new FlowLayout());
         leftBarriers = new JLabel("Add at least this many more:");
-        leftBarriers.setBounds(450, 50, 70, 20);
+        leftBarriers.setBounds(50, 50, 70, 20); //
         infoContainer.add(leftBarriers);
 
         JPanel menuContainer = new JPanel(new BorderLayout());
+        menuContainer.setPreferredSize(new Dimension(200, 500));
+
         menuContainer.add(menuBar, BorderLayout.NORTH);
 
         menuContainer.add(infoContainer, BorderLayout.CENTER);
@@ -52,6 +59,10 @@ public class BuildingModePage extends Page {
             Image img2 = ImageIO.read(new File("assets/Firm.png"));
             Image img3 = ImageIO.read(new File("assets/iconredgem.png"));
             Image img4 = ImageIO.read(new File("assets/GreenGem.png"));
+
+            int maxWidth = 0;
+            int maxHeight = 0;
+
             for (int i = 0; i < buttons.length; i++) {
                 JButton button = new JButton();
                 switch (i) {
@@ -70,6 +81,9 @@ public class BuildingModePage extends Page {
                     default:
                         break;
                 }
+                maxWidth = Math.max(maxWidth, button.getPreferredSize().width);
+                maxHeight = Math.max(maxHeight, button.getPreferredSize().height);
+
                 int finalI = i; //needed for the mouse listener appearently.
                 button.addMouseListener(new MouseAdapter() {
                     @Override
@@ -86,6 +100,11 @@ public class BuildingModePage extends Page {
                 button.setBorder(BorderFactory.createRaisedBevelBorder());
                 buttonPanel.add(button);
                 buttons[i] = button; //Keeping in a list.
+
+            }
+            Dimension buttonSize = new Dimension(maxWidth, maxHeight);
+            for (JButton button : buttons) {
+                button.setPreferredSize(buttonSize);
             }
         } catch (IOException e) {
             e.printStackTrace();
@@ -98,45 +117,76 @@ public class BuildingModePage extends Page {
             e.printStackTrace();
         }
 
-        gridPanel = new JPanel(null) { //not initializing with a builtin panel type.
+        buildingContainer = new JPanel();
+        buildingContainer.setLayout(new BorderLayout());
+
+        buildingPanel = new JPanel(null) { //not initializing with a builtin panel type.
             @Override
             protected void paintComponent(Graphics g) { //to set background for panel.
                 super.paintComponent(g);
                 g.drawImage(backgroundImage, 0, 0, getWidth(), getHeight(), this);
             }
         };
-
-        gridPanel.addMouseListener(new MouseAdapter() {
+        buildingPanel.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
                 if (selectedButtonIndex != -1) { //If -1, means a button is not currently selected.
                     System.out.println("Mouse click coordinates:"+ e.getX()+" "+ e.getY());
-                    addBarrier(new Coordinate(e.getX(), e.getY()));
+                    addBarrierImage(new Coordinate(e.getX(), e.getY()));
                 }
             }
         });
 
         Border border = BorderFactory.createLineBorder(Color.BLACK);
-        gridPanel.setBorder(border);
-        add(gridPanel, BorderLayout.CENTER);
-
+        buildingPanel.setPreferredSize(new Dimension(400, 500)); // Set preferred size of buildingPanel
+        buildingPanel.setBorder(border);
+        buildingContainer.add(buildingPanel, BorderLayout.CENTER);
+        add(buildingContainer, BorderLayout.CENTER);
         JLabel statusLabel = new JLabel("Building Mode", SwingConstants.CENTER);
         add(statusLabel, BorderLayout.SOUTH);
 
-        gridPanel.setSize(new Dimension(400, 500)); // Adjust dimensions as needed
+        // Set the preferred size of the buildingContainer
+        buildingContainer.setPreferredSize(new Dimension(400, 500)); // Match the size of buildingPanel
+
     }
 
-    private void addBarrier(Coordinate coordinates) {
-        int barrierType = selectedButtonIndex;
-        //Create a new Barrier object with the specified coordinates and type
-        Barrier barrier = new Barrier(coordinates, barrierType);
-        barrier.setBounds(barrier.getCoordinates().getX(), barrier.getCoordinates().getY(), barrier.getPreferredSize().width, barrier.getPreferredSize().height);
-        barrier.setBackground(new Color(0, 0, 0, 0)); //background is transparent.
-        gridPanel.add(barrier);
-        gridPanel.repaint();
-        gridPanel.revalidate();
-        gridPanel.repaint();
+    private void addBarrierImage(Coordinate coordinates) {
+        if (selectedButtonIndex == -1) {
+            // No barrier type selected, do nothing
+            return;
+        }
+        BuildingModeController.addBarrier(coordinates, selectedButtonIndex);
+        int x = coordinates.getX();
+        int y = coordinates.getY();
+
+        ImageIcon icon = null;
+        switch (selectedButtonIndex) {
+            case 0:
+                icon = new ImageIcon("assets/iconbluegem.png");
+                break;
+            case 1:
+                icon = new ImageIcon("assets/Firm.png");
+                break;
+            case 2:
+                icon = new ImageIcon("assets/iconredgem.png");
+                break;
+            case 3:
+                icon = new ImageIcon("assets/GreenGem.png");
+                break;
+            default:
+                break;
+        }
+
+
+        if (icon != null) {
+            JLabel barrierLabel = new JLabel(icon);
+            barrierLabel.setBounds(x, y, icon.getIconWidth(), icon.getIconHeight());
+            buildingPanel.add(barrierLabel);
+            buildingPanel.repaint();
+            buildingPanel.revalidate();
+        }
     }
+
     private void updateButtonState() {
         for (int i = 0; i < buttons.length; i++) { //Initially reset all buttons.
             buttons[i].setBorder(BorderFactory.createRaisedBevelBorder());

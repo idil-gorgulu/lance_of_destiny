@@ -23,7 +23,6 @@ public class Game {
         // Think about how to initialize it, from constuctor maybe?
         this.Barrier = new Barrier(new Coordinate(450, 600), 0);
 
-
         this.chance= new Chance(3);
         this.score= new Score();
 
