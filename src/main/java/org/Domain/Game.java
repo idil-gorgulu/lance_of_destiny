@@ -72,4 +72,36 @@ public class Game {
             return instance;
         }
     }
+
+    public void setFireball(Fireball fireball) {
+        this.fireball = fireball;
+    }
+
+    public void setMagicalStaff(MagicalStaff magicalStaff) {
+        this.magicalStaff = magicalStaff;
+    }
+
+    public void setChance(Chance chance) {
+        this.chance = chance;
+    }
+
+    public void setScore(Score score) {
+        this.score = score;
+    }
+
+    public void setBarrier(org.Domain.Barrier barrier) {
+        Barrier = barrier;
+    }
+
+    public ArrayList<org.Domain.Barrier> getBarriers() {
+        return barriers;
+    }
+
+    public void setBarriers(ArrayList<org.Domain.Barrier> barriers) {
+        this.barriers = barriers;
+    }
+
+    public static void setInstance(Game instance) {
+        Game.instance = instance;
+    }
 }

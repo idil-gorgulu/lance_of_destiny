@@ -8,6 +8,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.util.ArrayList;
 
 public class RunningModePage extends Page implements KeyListener {
 
@@ -21,6 +22,7 @@ public class RunningModePage extends Page implements KeyListener {
 
     private Chance chance;
     private Score score;
+    private ArrayList<Barrier> barriers;
 
     public RunningModePage() {
         super();
@@ -58,7 +60,9 @@ public class RunningModePage extends Page implements KeyListener {
 
                 score= runningModeController.getGameSession().getScore();
                 score.setBounds(score.getCoordinate().getX(), score.getCoordinate().getY(), score.getWidth(), score.getHeight());
-
+                for (Barrier barrier : barriers) {
+                    barrier.setBounds(barrier.getCoordinates().getX(), barrier.getCoordinates().getY(), barrier.getWidth(), barrier.getHeight());
+                }
 
                 repaint();
             }
@@ -126,6 +130,13 @@ public class RunningModePage extends Page implements KeyListener {
                 score.setBounds(score.getCoordinate().getX(), score.getCoordinate().getY(), score.getPreferredSize().width, score.getPreferredSize().height);
                 score.setBackground(Color.lightGray);
                 add(score).setVisible(true);
+
+                // Initialize Barriers
+                barriers = runningModeController.getGameSession().getBarriers();
+                for (Barrier barrier : barriers) {
+                    add(barrier);
+                    barrier.setBounds(barrier.getCoordinates().getX(), barrier.getCoordinates().getY(), barrier.getPreferredSize().width, barrier.getPreferredSize().height);
+                }
 
                 repaint();
             }

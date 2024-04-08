@@ -49,6 +49,14 @@ public class BuildingModePage extends Page {
         menuContainer.add(menuBar, BorderLayout.NORTH);
 
         menuContainer.add(infoContainer, BorderLayout.CENTER);
+
+
+        //JPanel backButtonPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        //backButtonPanel.setOpaque(false); // Make the panel transparent
+        JButton playButton = new JButton("Play");
+        playButton.addActionListener(e -> Navigator.getInstance().showRunningModePage());
+        menuContainer.add(playButton, BorderLayout.SOUTH);
+
         add(menuContainer, BorderLayout.WEST);
 
         // Adding buttons that will be used to choose type of barrier
@@ -147,6 +155,7 @@ public class BuildingModePage extends Page {
 
         // Set the preferred size of the buildingContainer
         buildingContainer.setPreferredSize(new Dimension(400, 500)); // Match the size of buildingPanel
+
 
     }
 
