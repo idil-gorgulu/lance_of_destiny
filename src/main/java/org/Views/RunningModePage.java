@@ -24,6 +24,9 @@ public class RunningModePage extends Page implements KeyListener {
     private Score score;
     private ArrayList<Barrier> barriers;
 
+    private int screenWidth;
+    private int screenHeight;
+
     public RunningModePage() {
         super();
         this.runningModeController = new RunningModeController(this);
@@ -57,7 +60,6 @@ public class RunningModePage extends Page implements KeyListener {
                 //System.out.println(barrier.getCoordinates().getY());
                 chance= runningModeController.getGameSession().getChance();
                 chance.setBounds(chance.getCoordinate().getX(), chance.getCoordinate().getY(), chance.getWidth(), chance.getHeight());
-
                 score= runningModeController.getGameSession().getScore();
                 score.setBounds(score.getCoordinate().getX(), score.getCoordinate().getY(), score.getWidth(), score.getHeight());
                 for (Barrier barrier : barriers) {
@@ -79,8 +81,8 @@ public class RunningModePage extends Page implements KeyListener {
         SwingUtilities.invokeLater(new Runnable() {
             @Override
             public void run() {
-                int screenWidth = getWidth();
-                int screenHeight = getHeight();
+                screenWidth = getWidth();
+                screenHeight = getHeight();
 
                 // Initializing Fireball
                 fireball = runningModeController.getGameSession().getFireball();
@@ -153,10 +155,13 @@ public class RunningModePage extends Page implements KeyListener {
         int key = e.getKeyCode();
         switch (key) {
             case KeyEvent.VK_LEFT:
-                runningModeController.getGameSession().getMagicalStaff().slideMagicalStaff(-5, 0); // Move left
+                // Move left
+                if (runningModeController.getGameSession().getMagicalStaff().getX()>0)
+                    runningModeController.getGameSession().getMagicalStaff().slideMagicalStaff(-15, 0);
                 break;
             case KeyEvent.VK_RIGHT:
-                runningModeController.getGameSession().getMagicalStaff().slideMagicalStaff(+5, 0); // Move left
+                if (runningModeController.getGameSession().getMagicalStaff().getX()+runningModeController.getGameSession().getMagicalStaff().getPreferredSize().getWidth()<screenWidth)
+                    runningModeController.getGameSession().getMagicalStaff().slideMagicalStaff(+15, 0); // Move left
                 break;
             case KeyEvent.VK_A:
                 runningModeController.getGameSession().getMagicalStaff().rotate(-Math.toRadians(5)); // Rotate left
