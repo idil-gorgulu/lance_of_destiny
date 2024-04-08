@@ -16,7 +16,7 @@ public class MagicalStaff extends JPanel {
     private Coordinate coordinate;
 
     public MagicalStaff() {
-        this.coordinate = new Coordinate(200,200);
+        this.coordinate = new Coordinate(500,550);
         this.angle = 0;
         try {
             magicalStaffImage = ImageIO.read(new File("assets/200Player.png"));
@@ -46,6 +46,7 @@ public class MagicalStaff extends JPanel {
     }
 
     public void slideMagicalStaff(int dx, int dy) {
+        System.out.println("MAgical staff slide");
         this.getCoordinate().setX(this.getCoordinate().getX() + dx);
         this.getCoordinate().setY(this.getCoordinate().getY() + dy);
         repaint();

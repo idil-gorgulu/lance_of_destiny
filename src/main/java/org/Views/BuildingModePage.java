@@ -145,8 +145,13 @@ public class BuildingModePage extends Page {
             }
         });
 
+
         Border border = BorderFactory.createLineBorder(Color.BLACK);
         buildingPanel.setPreferredSize(new Dimension(400, 500)); // Set preferred size of buildingPanel
+        int screenWidth = buildingPanel.getWidth();
+        System.out.println("buildingPanel screenWidth"+ screenWidth);
+        int screenWidth2 = buildingContainer.getWidth();
+        System.out.println("buildingContainer screenWidth"+ screenWidth2);
         buildingPanel.setBorder(border);
         buildingContainer.add(buildingPanel, BorderLayout.CENTER);
         add(buildingContainer, BorderLayout.CENTER);

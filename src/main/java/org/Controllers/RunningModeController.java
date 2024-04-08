@@ -1,8 +1,9 @@
 package org.Controllers;
 
 import org.Domain.Game;
-import org.Domain.MagicalStaff;
 import org.Views.RunningModePage;
+import org.Domain.MagicalStaff;
+
 
 public class RunningModeController {
     private RunningModePage runningModePage;
@@ -12,6 +13,7 @@ public class RunningModeController {
         this.runningModePage = runningModePage;
         this.gameSession = Game.getInstance();
     }
+
 
     public void rotateMagicalStaff(MagicalStaff magicalStaff, double dTheta) {
         magicalStaff.rotate(dTheta);
