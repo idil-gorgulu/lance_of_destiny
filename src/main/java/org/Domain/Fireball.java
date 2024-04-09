@@ -30,6 +30,7 @@ public class Fireball extends JPanel {
         // change this so that coordinate will hande the update of the location
         this.getCoordinate().setX(this.getCoordinate().getX() + this.xVelocity);
         this.getCoordinate().setY(this.getCoordinate().getY() + this.yVelocity);
+
     }
 
     @Override

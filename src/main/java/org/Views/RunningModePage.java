@@ -4,15 +4,22 @@ import org.Controllers.MagicalStaffController;
 import org.Domain.*;
 import org.Controllers.RunningModeController;
 
+import javax.imageio.ImageIO;
 import javax.swing.*;
+import javax.swing.border.Border;
 import java.awt.*;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
+import java.awt.event.*;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 
-public class RunningModePage extends Page implements KeyListener {
+public class RunningModePage extends Page{
 
     private Fireball fireball;
+    private BufferedImage backgroundImage;
+    private JPanel gamePanel;
+    private JPanel gameContainer;
     private MagicalStaff magicalStaff;
     private Barrier barrier;
     //I dont think this is a good way
@@ -23,6 +30,7 @@ public class RunningModePage extends Page implements KeyListener {
     private Chance chance;
     private Score score;
     private ArrayList<Barrier> barriers;
+    private JPanel infoContainer;
 
     private int screenWidth;
     private int screenHeight;
@@ -32,7 +40,6 @@ public class RunningModePage extends Page implements KeyListener {
         this.runningModeController = new RunningModeController(this);
         this.magicalStaffController = new MagicalStaffController(this);
         initUI();
-        addKeyListener(this);
         setFocusable(true);
         requestFocus();
         setupTimer();
@@ -50,6 +57,7 @@ public class RunningModePage extends Page implements KeyListener {
         SwingUtilities.invokeLater(new Runnable() {
             @Override
             public void run() {
+
                 magicalStaff = runningModeController.getGameSession().getMagicalStaff();
                 magicalStaff.setBounds(magicalStaff.getCoordinate().getX(), magicalStaff.getCoordinate().getY(), magicalStaff.getPreferredSize().width, magicalStaff.getPreferredSize().height);
                 fireball = runningModeController.getGameSession().getFireball();
@@ -66,6 +74,7 @@ public class RunningModePage extends Page implements KeyListener {
                     barrier.setBounds(barrier.getCoordinates().getX(), barrier.getCoordinates().getY(), barrier.getWidth(), barrier.getHeight());
                 }
 
+                gamePanel.repaint();
                 repaint();
             }
         });
@@ -73,7 +82,7 @@ public class RunningModePage extends Page implements KeyListener {
 
     @Override
     protected void initUI() {
-        setLayout(null);
+        setLayout(new BorderLayout());
         initializeGameObjects();
     }
 
@@ -81,8 +90,57 @@ public class RunningModePage extends Page implements KeyListener {
         SwingUtilities.invokeLater(new Runnable() {
             @Override
             public void run() {
-                screenWidth = getWidth();
-                screenHeight = getHeight();
+                String hexCode = "#1D3986";
+                Color color = Color.decode(hexCode);
+                infoContainer = new JPanel(new FlowLayout());
+                infoContainer.setPreferredSize(new Dimension(200, 500));
+                JLabel info1 = new JLabel("Add at least this many more:");
+                info1.setBounds(50, 50, 70, 20); //
+                infoContainer.add(info1);
+                infoContainer.setBackground(color);
+                add(infoContainer, BorderLayout.WEST);
+
+                try {
+                    backgroundImage = ImageIO.read(new File("assets/Background.png"));
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                JLabel statusLabel = new JLabel("Running Mode", SwingConstants.CENTER);
+                add(statusLabel, BorderLayout.SOUTH);
+
+                gameContainer=new JPanel();
+                gameContainer.setLayout(null);
+
+                gamePanel= new JPanel(){
+                    @Override
+                    protected void paintComponent(Graphics g) { //to set background for panel.
+                        super.paintComponent(g);
+                        g.drawImage(backgroundImage, 0, 0, getWidth(), getHeight(), this);
+                    }
+                };
+                gamePanel.setLayout(null);
+                //gamePanel.setPreferredSize(new Dimension(400, 500)); // Set preferred size of gamePanel
+                gamePanel.addKeyListener(new MyKeyListener(runningModeController));
+                gamePanel.setFocusable(true);
+                gamePanel.requestFocus();
+                gamePanel.addMouseListener(new MouseAdapter() {
+                    @Override
+                    public void mouseClicked(MouseEvent e) {
+                        System.out.println("Mouse click coordinates:"+ e.getX()+" "+ e.getY());
+                    }
+                });
+
+
+
+                Border border = BorderFactory.createLineBorder(Color.BLACK);
+                gamePanel.setPreferredSize(new Dimension(1000, 500)); // Set preferred size of buildingPanel
+                gamePanel.addNotify();
+                gamePanel.revalidate();
+                gamePanel.setBorder(border);
+                add(gamePanel, BorderLayout.EAST);
+                int screenWidth = 1000;
+                System.out.println("screenWidth"+ screenWidth);
+                int screenHeight = 500;
 
                 // Initializing Fireball
                 fireball = runningModeController.getGameSession().getFireball();
@@ -93,8 +151,11 @@ public class RunningModePage extends Page implements KeyListener {
                 fireball.getCoordinate().setX(fireballPositionX);
                 fireball.getCoordinate().setY(fireballPositionY);
                 fireball.setBounds(fireballPositionX, fireballPositionY, fireballWidth, fireballHeight);
-                fireball.setBackground(Color.red);
-                add(fireball);
+                //fireball.setBackground(Color.red);
+                fireball.setOpaque(false);
+                gamePanel.add(fireball);
+                gamePanel.repaint();
+                gamePanel.revalidate();
                 //System.out.println(fireball.getCoordinate().getX());
                 //System.out.println(fireball.getCoordinate().getY());
 
@@ -102,14 +163,28 @@ public class RunningModePage extends Page implements KeyListener {
                 magicalStaff = runningModeController.getGameSession().getMagicalStaff();
                 int magicalStaffWidth = magicalStaff.getPreferredSize().width;
                 int magicalStaffHeight = magicalStaff.getPreferredSize().height;
-                int magicalStaffPositionX = (screenWidth - magicalStaffWidth) / 2;
-                int magicalStaffPositionY = (screenHeight - magicalStaffHeight - 50);
+                int magicalStaffPositionX = 500;
+                int magicalStaffPositionY = 550;
                 magicalStaff.getCoordinate().setX(magicalStaffPositionX);
                 magicalStaff.getCoordinate().setY(magicalStaffPositionY);
                 magicalStaff.setBounds(magicalStaffPositionX, magicalStaffPositionY, magicalStaffWidth, magicalStaffHeight);
                 magicalStaff.setBackground(Color.green);
-                requestFocus();
-                add(magicalStaff);
+                gamePanel.requestFocus();
+                gamePanel.setFocusTraversalKeysEnabled(false);
+                gamePanel.add(magicalStaff);
+                gamePanel.repaint();
+                gamePanel.revalidate();
+                gamePanel.addFocusListener(new FocusListener() {
+                    @Override
+                    public void focusGained(FocusEvent e) {
+                        System.out.println("Game panel has gained focus");
+                    }
+
+                    @Override
+                    public void focusLost(FocusEvent e) {
+                        System.out.println("Game panel has lost focus");
+                    }
+                });
 
 
                 barrier = runningModeController.getGameSession().getBarrier();
@@ -121,63 +196,41 @@ public class RunningModePage extends Page implements KeyListener {
                 barrier.getCoordinates().setY(barrierPositionY);
                 barrier.setBounds(barrierPositionX, barrierPositionY, barrierWidth, barrierHeight);
                 barrier.setBackground(Color.blue);
-                add(barrier);
+                gamePanel.add(barrier);
+                gamePanel.repaint();
+                gamePanel.revalidate();
 
                 chance= runningModeController.getGameSession().getChance();
                 chance.setBounds(chance.getCoordinate().getX(), chance.getCoordinate().getY(), chance.getPreferredSize().width, chance.getPreferredSize().height);
                 chance.setBackground(Color.lightGray);
-                add(chance).setVisible(true);
+                infoContainer.add(chance).setVisible(true);
+                infoContainer.repaint();
+                infoContainer.revalidate();
 
                 score= runningModeController.getGameSession().getScore();
                 score.setBounds(score.getCoordinate().getX(), score.getCoordinate().getY(), score.getPreferredSize().width, score.getPreferredSize().height);
                 score.setBackground(Color.lightGray);
-                add(score).setVisible(true);
+                infoContainer.setVisible(true);
+                infoContainer.repaint();
+                infoContainer.revalidate();
 
                 // Initialize Barriers
                 barriers = runningModeController.getGameSession().getBarriers();
                 for (Barrier barrier : barriers) {
-                    add(barrier);
                     barrier.setBounds(barrier.getCoordinates().getX(), barrier.getCoordinates().getY(), barrier.getPreferredSize().width, barrier.getPreferredSize().height);
+                    gamePanel.add(barrier);
+                    gamePanel.repaint();
+                    gamePanel.revalidate();
                 }
 
+                gamePanel.repaint();
                 repaint();
+                screenWidth = gameContainer.getWidth();
+                System.out.println("screenWidth2"+ screenWidth);
             }
         });
     }
 
-    @Override
-    public void keyTyped(KeyEvent e) {
-
-    }
-
-    @Override
-    public void keyPressed(KeyEvent e) {
-        int key = e.getKeyCode();
-        switch (key) {
-            case KeyEvent.VK_LEFT:
-                // Move left
-                if (runningModeController.getGameSession().getMagicalStaff().getX()>0)
-                    runningModeController.getGameSession().getMagicalStaff().slideMagicalStaff(-15, 0);
-                break;
-            case KeyEvent.VK_RIGHT:
-                if (runningModeController.getGameSession().getMagicalStaff().getX()+runningModeController.getGameSession().getMagicalStaff().getPreferredSize().getWidth()<screenWidth)
-                    runningModeController.getGameSession().getMagicalStaff().slideMagicalStaff(+15, 0); // Move left
-                break;
-            case KeyEvent.VK_A:
-                if ((runningModeController.getGameSession().getMagicalStaff().getAngle() > - Math.toRadians(45)))
-                    runningModeController.getGameSession().getMagicalStaff().rotate(-Math.toRadians(5)); // Rotate left
-                break;
-            case KeyEvent.VK_D:
-                if ((runningModeController.getGameSession().getMagicalStaff().getAngle() <  Math.toRadians(45)))
-                    runningModeController.getGameSession().getMagicalStaff().rotate(+Math.toRadians(5)); // Rotate left
-                break;
-        }
-    }
-
-    @Override
-    public void keyReleased(KeyEvent e) {
-
-    }
 
     private void checkCollision() {
         int fireballX = fireball.getCoordinate().getX();
@@ -226,18 +279,20 @@ public class RunningModePage extends Page implements KeyListener {
         int containerHeight = getHeight();
 
         // Check collision with left and right boundaries
-        if (fireballX - fireballRadius <= 0 || fireballX + fireballRadius >= containerWidth) {
+        if (fireballX - fireballRadius <= 0 || fireballX + fireballRadius >= containerWidth-200) {
             xVelocity *= -1; // Reverse X velocity
             fireball.setxVelocity(xVelocity);
         }
 
         // Check collision with top and bottom boundaries
-        if (fireballY - fireballRadius <= 0 || fireballY + fireballRadius >= containerHeight) {
+        if (fireballY - fireballRadius <=10|| fireballY + fireballRadius >= 600) {
             yVelocity *= -1; // Reverse Y velocity
             fireball.setyVelocity(yVelocity);
         }
     }
-
+    public void startGame() {
+        int screenWidth = gamePanel.getWidth();
+        System.out.println("screenWidth: " + screenWidth);
+    }
 
 }
-
