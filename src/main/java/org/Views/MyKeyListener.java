@@ -16,16 +16,17 @@ public class MyKeyListener extends KeyAdapter {
         int keyCode = e.getKeyCode();
         switch (keyCode) {
             case KeyEvent.VK_LEFT:
-                runningModeController.getGameSession().getMagicalStaff().slideMagicalStaff(-5, 0); // Move left
+                runningModeController.slideMagicalStaff(-5, 0); // Move left
                 break;
             case KeyEvent.VK_RIGHT:
-                runningModeController.getGameSession().getMagicalStaff().slideMagicalStaff(+5, 0); // Move left
+                runningModeController.slideMagicalStaff(+5, 0); // Move left
                 break;
             case KeyEvent.VK_A:
-                runningModeController.getGameSession().getMagicalStaff().rotate(-Math.toRadians(5)); // Rotate left
+                runningModeController.rotateMagicalStaff(-Math.toRadians(5)); // Rotate left
                 break;
             case KeyEvent.VK_D:
-                runningModeController.getGameSession().getMagicalStaff().rotate(+Math.toRadians(5)); // Rotate left
+                runningModeController.rotateMagicalStaff(+Math.toRadians(5)); // Rotate left
+                //runningModeController.getGameSession().getMagicalStaff().rotate(+Math.toRadians(5)); // Rotate left
                 break;
         }
     }
