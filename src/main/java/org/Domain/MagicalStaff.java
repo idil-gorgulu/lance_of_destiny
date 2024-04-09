@@ -37,6 +37,7 @@ public class MagicalStaff extends JPanel {
         }
     }
 
+
     public void rotate(double dTheta) {
         angle += dTheta;
         Dimension newSize = calculateRotatedDimensions(angle);

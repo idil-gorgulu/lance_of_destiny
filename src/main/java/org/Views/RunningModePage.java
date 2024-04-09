@@ -16,10 +16,11 @@ import java.util.ArrayList;
 
 public class RunningModePage extends Page{
 
-    private Fireball fireball;
     private BufferedImage backgroundImage;
     private JPanel gamePanel;
     private JPanel gameContainer;
+
+    private Fireball fireball;
     private MagicalStaff magicalStaff;
     private Barrier barrier;
     //I dont think this is a good way
@@ -37,14 +38,23 @@ public class RunningModePage extends Page{
 
     public RunningModePage() {
         super();
+        try {
+            backgroundImage = ImageIO.read(new File("assets/Background.png"));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
         this.runningModeController = new RunningModeController(this);
-        this.magicalStaffController = new MagicalStaffController(this);
+        //this.magicalStaffController = new MagicalStaffController(this); //not used. Is necessary? -sebnem
         initUI();
         setFocusable(true);
         requestFocus();
         setupTimer();
     }
-
+    protected void paintComponent(Graphics g) { //background for the whole frame
+        super.paintComponent(g);
+        g.drawImage(backgroundImage, 0, 0, getWidth(), getHeight(), this);
+    }
     private void setupTimer() {
         int delay = 4; // Roughly 60 FPS, adjust as needed
         Timer timer = new Timer(delay, e -> updateGame());
@@ -52,28 +62,12 @@ public class RunningModePage extends Page{
     }
 
     private void updateGame() {
-        checkCollision();
-        this.runningModeController.getGameSession().getFireball().moveFireball();
+        runningModeController.checkCollision();
+        runningModeController.moveFireball();
         SwingUtilities.invokeLater(new Runnable() {
             @Override
             public void run() {
-
-                magicalStaff = runningModeController.getGameSession().getMagicalStaff();
-                magicalStaff.setBounds(magicalStaff.getCoordinate().getX(), magicalStaff.getCoordinate().getY(), magicalStaff.getPreferredSize().width, magicalStaff.getPreferredSize().height);
-                fireball = runningModeController.getGameSession().getFireball();
-                fireball.setBounds(fireball.getCoordinate().getX(), fireball.getCoordinate().getY(), fireball.getWidth(), fireball.getPreferredSize().height);
-                barrier = runningModeController.getGameSession().getBarrier();
-                barrier.setBounds(barrier.getCoordinates().getX(), barrier.getCoordinates().getY(), barrier.getWidth(), barrier.getHeight());
-                //System.out.println(barrier.getCoordinates().getX());
-                //System.out.println(barrier.getCoordinates().getY());
-                chance= runningModeController.getGameSession().getChance();
-                chance.setBounds(chance.getCoordinate().getX(), chance.getCoordinate().getY(), chance.getWidth(), chance.getHeight());
-                score= runningModeController.getGameSession().getScore();
-                score.setBounds(score.getCoordinate().getX(), score.getCoordinate().getY(), score.getWidth(), score.getHeight());
-                for (Barrier barrier : barriers) {
-                    barrier.setBounds(barrier.getCoordinates().getX(), barrier.getCoordinates().getY(), barrier.getWidth(), barrier.getHeight());
-                }
-
+                runningModeController.run();
                 gamePanel.repaint();
                 repaint();
             }
@@ -90,34 +84,42 @@ public class RunningModePage extends Page{
         SwingUtilities.invokeLater(new Runnable() {
             @Override
             public void run() {
-                String hexCode = "#1D3986";
+                String hexCode = "#FFFFFF";
                 Color color = Color.decode(hexCode);
                 infoContainer = new JPanel(new FlowLayout());
-                infoContainer.setPreferredSize(new Dimension(200, 500));
-                JLabel info1 = new JLabel("Add at least this many more:");
+                infoContainer.setPreferredSize(new Dimension(190, 500));
+                JLabel info1 = new JLabel("<html>add labels and <br>buttons here</html>");
                 info1.setBounds(50, 50, 70, 20); //
+                info1.setForeground(Color.WHITE);
                 infoContainer.add(info1);
-                infoContainer.setBackground(color);
+                //infoContainer.setBackground(color);
+                infoContainer.setBackground(new Color(color.getRed(), color.getGreen(), color.getBlue(), 50)); // Here, 128 represents the alpha value (semi-transparent)
+                //We can add the buttons and labels in this infoContainer. I made its background a transparent white. -sebnem
                 add(infoContainer, BorderLayout.WEST);
+//                try {
+//                    backgroundImage = ImageIO.read(new File("assets/Background.png"));
+//                } catch (IOException e) {
+//                    e.printStackTrace();
+//                }
 
-                try {
-                    backgroundImage = ImageIO.read(new File("assets/Background.png"));
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
                 JLabel statusLabel = new JLabel("Running Mode", SwingConstants.CENTER);
                 add(statusLabel, BorderLayout.SOUTH);
+                statusLabel.setBackground(Color.lightGray); // Set background color
+                statusLabel.setOpaque(true);
 
                 gameContainer=new JPanel();
                 gameContainer.setLayout(null);
 
-                gamePanel= new JPanel(){
-                    @Override
-                    protected void paintComponent(Graphics g) { //to set background for panel.
-                        super.paintComponent(g);
-                        g.drawImage(backgroundImage, 0, 0, getWidth(), getHeight(), this);
-                    }
-                };
+                gamePanel= new JPanel();
+                //{
+//                    @Override
+//                    protected void paintComponent(Graphics g) { //to set background for panel.
+//                        super.paintComponent(g);
+//                        g.drawImage(backgroundImage, 0, 0, getWidth(), getHeight(), this);
+//                    }
+//                };
+                gamePanel.setBackground(new Color(color.getRed(), color.getGreen(), color.getBlue(), 0)); // Here, 128 represents the alpha value (semi-transparent)
+
                 gamePanel.setLayout(null);
                 //gamePanel.setPreferredSize(new Dimension(400, 500)); // Set preferred size of gamePanel
                 gamePanel.addKeyListener(new MyKeyListener(runningModeController));
@@ -129,8 +131,6 @@ public class RunningModePage extends Page{
                         System.out.println("Mouse click coordinates:"+ e.getX()+" "+ e.getY());
                     }
                 });
-
-
 
                 Border border = BorderFactory.createLineBorder(Color.BLACK);
                 gamePanel.setPreferredSize(new Dimension(1000, 500)); // Set preferred size of buildingPanel
@@ -163,34 +163,37 @@ public class RunningModePage extends Page{
                 magicalStaff = runningModeController.getGameSession().getMagicalStaff();
                 int magicalStaffWidth = magicalStaff.getPreferredSize().width;
                 int magicalStaffHeight = magicalStaff.getPreferredSize().height;
+
                 int magicalStaffPositionX = 500;
                 int magicalStaffPositionY = 550;
                 magicalStaff.getCoordinate().setX(magicalStaffPositionX);
                 magicalStaff.getCoordinate().setY(magicalStaffPositionY);
+
                 magicalStaff.setBounds(magicalStaffPositionX, magicalStaffPositionY, magicalStaffWidth, magicalStaffHeight);
                 magicalStaff.setBackground(Color.green);
+
                 gamePanel.requestFocus();
                 gamePanel.setFocusTraversalKeysEnabled(false);
                 gamePanel.add(magicalStaff);
                 gamePanel.repaint();
                 gamePanel.revalidate();
+
+                //to follow who has focus:
                 gamePanel.addFocusListener(new FocusListener() {
                     @Override
                     public void focusGained(FocusEvent e) {
                         System.out.println("Game panel has gained focus");
                     }
-
                     @Override
                     public void focusLost(FocusEvent e) {
                         System.out.println("Game panel has lost focus");
                     }
                 });
 
-
                 barrier = runningModeController.getGameSession().getBarrier();
                 int barrierWidth = barrier.getPreferredSize().width;
                 int barrierHeight = barrier.getPreferredSize().height;
-                int barrierPositionX =  300;
+                int barrierPositionX =  400;
                 int barrierPositionY =  300;
                 barrier.getCoordinates().setX(barrierPositionX);
                 barrier.getCoordinates().setY(barrierPositionY);
@@ -219,6 +222,7 @@ public class RunningModePage extends Page{
                 for (Barrier barrier : barriers) {
                     barrier.setBounds(barrier.getCoordinates().getX(), barrier.getCoordinates().getY(), barrier.getPreferredSize().width, barrier.getPreferredSize().height);
                     gamePanel.add(barrier);
+                    barrier.setOpaque(false);
                     gamePanel.repaint();
                     gamePanel.revalidate();
                 }
@@ -231,68 +235,5 @@ public class RunningModePage extends Page{
         });
     }
 
-
-    private void checkCollision() {
-        int fireballX = fireball.getCoordinate().getX();
-        int fireballY = fireball.getCoordinate().getY();
-        int fireballRadius = fireball.getFireballRadius();
-
-        int magicalStaffX = magicalStaff.getCoordinate().getX();
-        int magicalStaffY = magicalStaff.getCoordinate().getY();
-        int magicalStaffWidth = magicalStaff.getPreferredSize().width;
-        int magicalStaffHeight = magicalStaff.getPreferredSize().height;
-        double magicalStaffAngle = magicalStaff.getAngle();
-
-
-        int xVelocity = fireball.getxVelocity();
-        int yVelocity = fireball.getyVelocity();
-        double normalAngle = (magicalStaffAngle + 90) % 360;
-
-        Rectangle staffRect = new Rectangle(magicalStaffX, magicalStaffY, magicalStaffWidth, magicalStaffHeight);
-        Rectangle fireballRect = new Rectangle(fireballX - fireballRadius, fireballY - fireballRadius, fireballRadius * 2, fireballRadius * 2);
-        Rectangle barrierRect = new Rectangle(barrier.getCoordinates().getX(), barrier.getCoordinates().getY(), (int) barrier.getPreferredSize().getWidth(), (int) barrier.getPreferredSize().getHeight());
-
-        if (staffRect.intersects(fireballRect)) {
-            // The collision formula: Vnew = b * (-2*(V dot N)*N + V)
-            // b: 1 for elastic collision, 0 for 100% moment loss
-            // V: previous velocity vector
-            // N: normal vector of the surface collided with
-            double b = 1.0; // b = 1 for a perfect elastic collision
-            double normalAngleRadians = Math.toRadians(normalAngle);
-            Vector normal = new Vector(Math.cos(normalAngleRadians), Math.sin(normalAngleRadians));
-            Vector velocity = new Vector(xVelocity, yVelocity);
-            Vector vNew = velocity.subtract(normal.scale(2 * velocity.dot(normal))).scale(b);
-            fireball.setxVelocity((int) vNew.getX());
-            fireball.setyVelocity((int) vNew.getY());
-        } else if (barrierRect.intersects(fireballRect)) {
-
-            double b = 1.0; // b = 1 for a perfect elastic collision
-            double normalAngleRadians = Math.toRadians((double) (90%360));
-            Vector normal = new Vector(Math.cos(normalAngleRadians), Math.sin(normalAngleRadians));
-            Vector velocity = new Vector(xVelocity, yVelocity);
-            Vector vNew = velocity.subtract(normal.scale(2 * velocity.dot(normal))).scale(b);
-            fireball.setxVelocity((int) vNew.getX());
-            fireball.setyVelocity((int) vNew.getY());
-        }
-
-        int containerWidth = getWidth();
-        int containerHeight = getHeight();
-
-        // Check collision with left and right boundaries
-        if (fireballX - fireballRadius <= 0 || fireballX + fireballRadius >= containerWidth-200) {
-            xVelocity *= -1; // Reverse X velocity
-            fireball.setxVelocity(xVelocity);
-        }
-
-        // Check collision with top and bottom boundaries
-        if (fireballY - fireballRadius <=10|| fireballY + fireballRadius >= 600) {
-            yVelocity *= -1; // Reverse Y velocity
-            fireball.setyVelocity(yVelocity);
-        }
-    }
-    public void startGame() {
-        int screenWidth = gamePanel.getWidth();
-        System.out.println("screenWidth: " + screenWidth);
-    }
 
 }

@@ -6,13 +6,8 @@ public class Game {
 
     private Fireball fireball;
     private MagicalStaff magicalStaff;
-
-    // This will be a list
-
-    
     private Chance chance;
     private Score score;
-
     private Barrier Barrier; //will be removed
     private ArrayList<Barrier> barriers = new ArrayList<Barrier>(); // Could maybe be a hashmap?
     private static Game instance;
