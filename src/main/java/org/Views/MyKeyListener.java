@@ -16,10 +16,10 @@ public class MyKeyListener extends KeyAdapter {
         int keyCode = e.getKeyCode();
         switch (keyCode) {
             case KeyEvent.VK_LEFT:
-                runningModeController.slideMagicalStaff(-5, 0); // Move left
+                runningModeController.slideMagicalStaff(-8, 0); // Move left
                 break;
             case KeyEvent.VK_RIGHT:
-                runningModeController.slideMagicalStaff(+5, 0); // Move left
+                runningModeController.slideMagicalStaff(+8, 0); // Move left
                 break;
             case KeyEvent.VK_A:
                 runningModeController.rotateMagicalStaff(-Math.toRadians(5)); // Rotate left

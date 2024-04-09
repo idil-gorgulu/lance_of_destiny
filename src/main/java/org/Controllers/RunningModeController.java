@@ -73,7 +73,23 @@ public class RunningModeController {
             fireball.setxVelocity((int) vNew.getX());
             fireball.setyVelocity((int) vNew.getY());
 
-        } else if (barrierRect.intersects(fireballRect)) {
+        }
+        for(Barrier br: barriers){
+            System.out.println("size"+br.getPreferredSize().getWidth()+ (int) br.getPreferredSize().getHeight());
+            Rectangle brRect = new Rectangle(br.getCoordinates().getX(), br.getCoordinates().getY(), (int) br.getPreferredSize().getWidth(), (int) br.getPreferredSize().getHeight());
+
+            if (brRect.intersects(fireballRect)) {
+
+                double b = 1.0; // b = 1 for a perfect elastic collision
+                double normalAngleRadians = Math.toRadians((double) (90%360));
+                Vector normal = new Vector(Math.cos(normalAngleRadians), Math.sin(normalAngleRadians));
+                Vector velocity = new Vector(xVelocity, yVelocity);
+                Vector vNew = velocity.subtract(normal.scale(2 * velocity.dot(normal))).scale(b);
+                fireball.setxVelocity((int) vNew.getX());
+                fireball.setyVelocity((int) vNew.getY());
+            }
+        }
+        if (barrierRect.intersects(fireballRect)) {
 
             double b = 1.0; // b = 1 for a perfect elastic collision
             double normalAngleRadians = Math.toRadians((double) (90%360));
