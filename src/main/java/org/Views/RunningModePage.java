@@ -32,6 +32,9 @@ public class RunningModePage extends Page{
     private ArrayList<Barrier> barriers;
     private JPanel infoContainer;
 
+    private int screenWidth;
+    private int screenHeight;
+
     public RunningModePage() {
         super();
         this.runningModeController = new RunningModeController(this);
@@ -65,7 +68,6 @@ public class RunningModePage extends Page{
                 //System.out.println(barrier.getCoordinates().getY());
                 chance= runningModeController.getGameSession().getChance();
                 chance.setBounds(chance.getCoordinate().getX(), chance.getCoordinate().getY(), chance.getWidth(), chance.getHeight());
-
                 score= runningModeController.getGameSession().getScore();
                 score.setBounds(score.getCoordinate().getX(), score.getCoordinate().getY(), score.getWidth(), score.getHeight());
                 for (Barrier barrier : barriers) {
