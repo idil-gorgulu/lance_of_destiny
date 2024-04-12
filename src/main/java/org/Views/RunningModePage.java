@@ -151,8 +151,8 @@ public class RunningModePage extends Page{
                 fireball.getCoordinate().setX(fireballPositionX);
                 fireball.getCoordinate().setY(fireballPositionY);
                 fireball.setBounds(fireballPositionX, fireballPositionY, fireballWidth, fireballHeight);
-                //fireball.setBackground(Color.red);
-                fireball.setOpaque(false);
+                fireball.setBackground(Color.red);
+                fireball.setOpaque(true);
                 gamePanel.add(fireball);
                 gamePanel.repaint();
                 gamePanel.revalidate();
@@ -222,7 +222,8 @@ public class RunningModePage extends Page{
                 for (Barrier barrier : barriers) {
                     barrier.setBounds(barrier.getCoordinates().getX(), barrier.getCoordinates().getY(), barrier.getPreferredSize().width, barrier.getPreferredSize().height);
                     gamePanel.add(barrier);
-                    barrier.setOpaque(false);
+                    barrier.setBackground(Color.blue);
+                    barrier.setOpaque(true);
                     gamePanel.repaint();
                     gamePanel.revalidate();
                 }
@@ -230,7 +231,7 @@ public class RunningModePage extends Page{
                 gamePanel.repaint();
                 repaint();
                 screenWidth = gameContainer.getWidth();
-                System.out.println("screenWidth2"+ screenWidth);
+                //System.out.println("screenWidth2"+ screenWidth);
             }
         });
     }
