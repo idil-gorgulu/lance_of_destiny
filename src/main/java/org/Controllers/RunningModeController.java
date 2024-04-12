@@ -28,11 +28,24 @@ public class RunningModeController {
     }
 
 
-    public void slideMagicalStaff(int x, int y){
-        getGameSession().getMagicalStaff().slideMagicalStaff(x,y); // Move left
+    public void slideMagicalStaff(int x) {
+        if (x < 0) {
+            if (getGameSession().getMagicalStaff().getCoordinate().getX() > 0)
+                getGameSession().getMagicalStaff().slideMagicalStaff(x);   }
+        else {
+            if (getGameSession().getMagicalStaff().getCoordinate().getX() +getGameSession().getMagicalStaff().getWidth()
+                    < runningModePage.getScreenWidth()) {
+                getGameSession().getMagicalStaff().slideMagicalStaff(x);            }       }
     }
     public void rotateMagicalStaff(double dTheta){
-        getGameSession().getMagicalStaff().rotate(dTheta); // Rotate left
+        if (dTheta<0) {
+            if (getGameSession().getMagicalStaff().getAngle()> Math.toRadians(-45))
+                getGameSession().getMagicalStaff().rotate(dTheta); // Rotate right
+        }
+        else
+            if (getGameSession().getMagicalStaff().getAngle()< Math.toRadians(45))
+              getGameSession().getMagicalStaff().rotate(dTheta); // Rotate left
+
     }
 
     public void checkCollision(){
@@ -75,7 +88,7 @@ public class RunningModeController {
 
         }
         for(Barrier br: barriers){
-            System.out.println("size"+br.getPreferredSize().getWidth()+ (int) br.getPreferredSize().getHeight());
+            //System.out.println("size"+br.getPreferredSize().getWidth()+ (int) br.getPreferredSize().getHeight());
             Rectangle brRect = new Rectangle(br.getCoordinates().getX(), br.getCoordinates().getY(), (int) br.getPreferredSize().getWidth(), (int) br.getPreferredSize().getHeight());
 
             if (brRect.intersects(fireballRect)) {

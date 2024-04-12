@@ -138,9 +138,9 @@ public class RunningModePage extends Page{
                 gamePanel.revalidate();
                 gamePanel.setBorder(border);
                 add(gamePanel, BorderLayout.EAST);
-                int screenWidth = 1000;
+                screenWidth = 1000;
                 System.out.println("screenWidth"+ screenWidth);
-                int screenHeight = 500;
+                screenHeight = 500;
 
                 // Initializing Fireball
                 fireball = runningModeController.getGameSession().getFireball();
@@ -229,11 +229,14 @@ public class RunningModePage extends Page{
 
                 gamePanel.repaint();
                 repaint();
-                screenWidth = gameContainer.getWidth();
-                System.out.println("screenWidth2"+ screenWidth);
+                //screenWidth = gameContainer.getWidth();
+                System.out.println("screenWidth2: "+ screenWidth);
             }
         });
     }
 
+    public int getScreenWidth(){
+        return screenWidth;
+    }
 
 }

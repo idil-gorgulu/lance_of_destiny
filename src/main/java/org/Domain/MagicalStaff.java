@@ -13,6 +13,7 @@ import javax.imageio.ImageIO;
 public class MagicalStaff extends JPanel {
     private BufferedImage magicalStaffImage;
     private double angle;
+    private double xVelocity; // to calculate collision
     private Coordinate coordinate;
 
     public MagicalStaff() {
@@ -46,10 +47,11 @@ public class MagicalStaff extends JPanel {
         repaint();
     }
 
-    public void slideMagicalStaff(int dx, int dy) {
-        System.out.println("MAgical staff slide");
-        this.getCoordinate().setX(this.getCoordinate().getX() + dx);
-        this.getCoordinate().setY(this.getCoordinate().getY() + dy);
+    public void slideMagicalStaff(int dx) {
+        //System.out.println("MAgical staff slide");
+
+        getCoordinate().setX(this.getCoordinate().getX() + dx);
+        //getCoordinate().setY(this.getCoordinate().getY() + dy);// no need
         repaint();
     }
 
@@ -59,7 +61,11 @@ public class MagicalStaff extends JPanel {
         double cos = Math.abs(Math.cos(radians));
         int newWidth = (int) Math.floor(magicalStaffImage.getWidth() * cos + magicalStaffImage.getHeight() * sin);
         int newHeight = (int) Math.floor(magicalStaffImage.getHeight() * cos + magicalStaffImage.getWidth() * sin);
+
+        // fix rotation
+        System.out.println(newWidth + " " + newHeight);
         return new Dimension(newWidth, newHeight);
+
     }
 
     public Coordinate getCoordinate() {
@@ -69,5 +75,13 @@ public class MagicalStaff extends JPanel {
 
     public double getAngle() {
         return angle;
+    }
+
+    public double getxVelocity() {
+        return xVelocity;
+    }
+
+    public void setxVelocity(double xVelocity) {
+        this.xVelocity = xVelocity;
     }
 }
