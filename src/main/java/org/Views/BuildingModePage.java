@@ -95,12 +95,13 @@ public class BuildingModePage extends Page {
                 int finalI = i; //needed for the mouse listener appearently.
                 button.addMouseListener(new MouseAdapter() {
                     @Override
-                    public void mouseClicked(MouseEvent e) {
+                    public void mousePressed(MouseEvent e) {
                         if (selectedButtonIndex == finalI) {
                             selectedButtonIndex = -1; // Deselect the button
                         } else {
                             selectedButtonIndex = finalI; // Select the button
                         }
+
                         updateButtonState();
                         System.out.println("selected button: "+selectedButtonIndex); //To keep track on the console.
                     }
@@ -137,7 +138,7 @@ public class BuildingModePage extends Page {
         };
         buildingPanel.addMouseListener(new MouseAdapter() {
             @Override
-            public void mouseClicked(MouseEvent e) {
+            public void mousePressed(MouseEvent e) {
                 if (selectedButtonIndex != -1) { //If -1, means a button is not currently selected.
                     System.out.println("Mouse click coordinates:"+ e.getX()+" "+ e.getY());
                     addBarrierImage(new Coordinate(e.getX(), e.getY()));
