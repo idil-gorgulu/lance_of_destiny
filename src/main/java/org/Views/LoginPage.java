@@ -1,4 +1,6 @@
 package org.Views;
+import org.Controllers.LoginPageController;
+
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import javax.swing.plaf.basic.BasicButtonUI;
@@ -89,6 +91,7 @@ public class LoginPage extends Page {
         // Login Button setup
         JButton loginButton = new JButton("Login");
         customizeButton(loginButton);
+        loginButton.addActionListener(e -> LoginPageController.getInstance().authorizeUser(emailTextField.getText(), String.copyValueOf(passwordField.getPassword())));
         formPanel.add(loginButton);
         loginButton.setMaximumSize(new Dimension(Integer.MAX_VALUE, loginButton.getPreferredSize().height));
         loginButton.setAlignmentX(Component.CENTER_ALIGNMENT);

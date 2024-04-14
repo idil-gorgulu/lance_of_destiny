@@ -8,6 +8,7 @@ import com.mongodb.ServerApi;
 import com.mongodb.ServerApiVersion;
 import com.mongodb.client.MongoClient;
 import com.mongodb.client.MongoClients;
+import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
 import org.bson.Document;
 
@@ -17,10 +18,12 @@ public class Database {
     private MongoClient mongoClient;
     private MongoDatabase database;
 
-
     private static final String CONNECTION_STRING = "mongodb+srv://comp302:comp302lanceofdestiny@comp302.gwbpr53.mongodb.net/?retryWrites=true&w=majority&appName=comp302";
 
-    private static final String DATABASE_NAME = "test";
+    private static final String DATABASE_NAME = "LanceOfDestiny";
+
+    private static final String USER_COLLECTION = "Users";
+    private static final String GAME_COLLECTION = "GameSettings";
     private Database() {
         ServerApi serverApi = ServerApi.builder()
                 .version(ServerApiVersion.V1)
@@ -33,7 +36,6 @@ public class Database {
 
         mongoClient = MongoClients.create(settings);
         database = mongoClient.getDatabase(DATABASE_NAME);
-
     }
 
     public static Database getInstance() {
@@ -46,22 +48,12 @@ public class Database {
         }
         return instance;
     }
-
-    public MongoDatabase getDatabase() {
-        return database;
+    public MongoCollection<Document> getUserCollection() {
+        return database.getCollection(USER_COLLECTION);
     }
 
-    public void testConnection() {
-        try {
-            database.runCommand(new Document("ping", 1));
-            System.out.println("Connection successful!");
-        } catch (MongoException e) {
-            e.printStackTrace();
-        }
+    public MongoCollection<Document> getGameCollection() {
+        return database.getCollection(GAME_COLLECTION);
     }
 
-    public static void main(String[] args) {
-        Database dbSingleton = Database.getInstance();
-        dbSingleton.testConnection();
-    }
 }

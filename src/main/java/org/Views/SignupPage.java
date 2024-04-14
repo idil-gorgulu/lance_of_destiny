@@ -1,5 +1,7 @@
 package org.Views;
 
+import org.Controllers.SignupPageController;
+
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import javax.swing.plaf.basic.BasicButtonUI;
@@ -11,6 +13,7 @@ import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.util.Arrays;
 
 public class SignupPage extends Page {
 
@@ -88,12 +91,10 @@ public class SignupPage extends Page {
         JPasswordField passwordField = setupPasswordField("Password");
         formPanel.add(passwordField);
 
-        JPasswordField confirmPasswordField = setupPasswordField("Confirm Password");
-        formPanel.add(confirmPasswordField);
-
         // Setup for signup button, reuse customizeButton from LoginPage
         JButton signupButton = new JButton("Sign Up");
         customizeButton(signupButton); // You can reuse the customizeButton method from LoginPage
+        signupButton.addActionListener(e -> SignupPageController.getInstance().createUser(emailTextField.getText(), usernameTextField.getText(), String.copyValueOf(passwordField.getPassword())));
         formPanel.add(signupButton);
 
         GridBagConstraints gbc = new GridBagConstraints();
