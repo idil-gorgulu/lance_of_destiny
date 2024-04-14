@@ -17,12 +17,10 @@ public class Database {
     private MongoClient mongoClient;
     private MongoDatabase database;
 
-    // Connection settings
 
     private static final String CONNECTION_STRING = "mongodb+srv://comp302:comp302lanceofdestiny@comp302.gwbpr53.mongodb.net/?retryWrites=true&w=majority&appName=comp302";
 
     private static final String DATABASE_NAME = "test";
-    // Private constructor to prevent instantiation
     private Database() {
         ServerApi serverApi = ServerApi.builder()
                 .version(ServerApiVersion.V1)
@@ -38,7 +36,6 @@ public class Database {
 
     }
 
-    // Public method to get the singleton instance
     public static Database getInstance() {
         if (instance == null) {
             synchronized (Database.class) {
@@ -50,12 +47,10 @@ public class Database {
         return instance;
     }
 
-    // Method to get the database instance
     public MongoDatabase getDatabase() {
         return database;
     }
 
-    // Optional: A method to test the connection
     public void testConnection() {
         try {
             database.runCommand(new Document("ping", 1));
@@ -65,9 +60,8 @@ public class Database {
         }
     }
 
-    // Main method to demonstrate the usage
     public static void main(String[] args) {
         Database dbSingleton = Database.getInstance();
-        dbSingleton.testConnection(); // Test the connection
+        dbSingleton.testConnection();
     }
 }

@@ -2,7 +2,7 @@ package org.Views;
 
 import org.Controllers.MagicalStaffController;
 import org.Domain.*;
-import org.Controllers.RunningModeController;
+import org.Controllers.*;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
@@ -24,7 +24,7 @@ public class RunningModePage extends Page{
     private MagicalStaff magicalStaff;
     private Barrier barrier;
     //I dont think this is a good way
-    private RunningModeController runningModeController;
+    protected RunningModeController runningModeController;
 
     private MagicalStaffController magicalStaffController;
 
