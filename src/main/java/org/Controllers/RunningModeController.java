@@ -8,7 +8,7 @@ import java.util.ArrayList;
 
 
 public class RunningModeController {
-    private RunningModePage runningModePage;
+    protected RunningModePage runningModePage;
     private Game game;
 
     public RunningModeController(RunningModePage runningModePage){
