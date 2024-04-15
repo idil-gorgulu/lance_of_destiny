@@ -33,7 +33,7 @@ public class RunningModePage extends Page{
     private ArrayList<Barrier> barriers;
     private JPanel infoContainer;
 
-    private int screenWidth;
+    public static final int SCREENWIDTH =1000; // I wanna reach it from MagicalStaff class
     private int screenHeight;
 
     public RunningModePage() {
@@ -64,6 +64,7 @@ public class RunningModePage extends Page{
     private void updateGame() {
         runningModeController.checkCollision();
         runningModeController.moveFireball();
+        runningModeController.moveStaff();
         SwingUtilities.invokeLater(new Runnable() {
             @Override
             public void run() {
@@ -138,14 +139,14 @@ public class RunningModePage extends Page{
                 gamePanel.revalidate();
                 gamePanel.setBorder(border);
                 add(gamePanel, BorderLayout.EAST);
-                screenWidth = 1000;
-                System.out.println("screenWidth"+ screenWidth);
+                //screenWidth = 1000; assigned at top and finalized
+                //System.out.println("screenWidth"+ screenWidth);
                 screenHeight = 500;
 
                 // Initializing Fireball
                 fireball = runningModeController.getGameSession().getFireball();
                 int fireballWidth = fireball.getPreferredSize().width;
-                int fireballPositionX = (screenWidth - fireballWidth) / 2;
+                int fireballPositionX = (SCREENWIDTH - fireballWidth) / 2;
                 int fireballHeight = fireball.getPreferredSize().height;
                 int fireballPositionY = (screenHeight - fireballHeight - 200);
                 fireball.getCoordinate().setX(fireballPositionX);
@@ -230,15 +231,13 @@ public class RunningModePage extends Page{
 
                 gamePanel.repaint();
                 repaint();
-                screenWidth = gameContainer.getWidth();
-                System.out.println("screenWidth2: "+ screenWidth);
+                //screenWidth = gameContainer.getWidth();  sets to 0, pls remove
+                System.out.println("screenWidth2: "+ SCREENWIDTH);
 
             }
         });
     }
 
-    public int getScreenWidth(){
-        return screenWidth;
-    }
+
 
 }

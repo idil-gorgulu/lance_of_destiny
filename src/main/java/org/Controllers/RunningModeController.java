@@ -26,25 +26,20 @@ public class RunningModeController {
     public void moveFireball(){
         this.getGameSession().getFireball().moveFireball();
     }
+    public void moveStaff(){    getGameSession().getMagicalStaff().moveMagicalStaff();}
 
 
     public void slideMagicalStaff(int x) {
-        if (x < 0) {
-            if (getGameSession().getMagicalStaff().getCoordinate().getX() > 0)
-                getGameSession().getMagicalStaff().slideMagicalStaff(x);   }
-        else {
-            if (getGameSession().getMagicalStaff().getCoordinate().getX() +getGameSession().getMagicalStaff().getWidth()
-                    < runningModePage.getScreenWidth()) {
-                getGameSession().getMagicalStaff().slideMagicalStaff(x);            }       }
+        getGameSession().getMagicalStaff().setVelocity(x);
     }
-    public void rotateMagicalStaff(double dTheta){
+    public void rotateMagicalStaff(double dTheta){ // If the speed of rotation also matters, I will move this method to MagicalStaff as well. -Melih
         if (dTheta<0) {
             if (getGameSession().getMagicalStaff().getAngle()> Math.toRadians(-45))
-                getGameSession().getMagicalStaff().rotate(dTheta); // Rotate right
+                getGameSession().getMagicalStaff().rotate(dTheta); // Rotate ccw
         }
         else
             if (getGameSession().getMagicalStaff().getAngle()< Math.toRadians(45))
-              getGameSession().getMagicalStaff().rotate(dTheta); // Rotate left
+              getGameSession().getMagicalStaff().rotate(dTheta); // Rotate cw
 
     }
 
@@ -85,6 +80,7 @@ public class RunningModeController {
             Vector vNew = velocity.subtract(normal.scale(2 * velocity.dot(normal))).scale(b);
             fireball.setxVelocity((int) vNew.getX());
             fireball.setyVelocity((int) vNew.getY());
+            //System.out.println(magicalStaff.getVelocity());
 
         }
         for(Barrier br: barriers){

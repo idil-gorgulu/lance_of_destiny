@@ -30,4 +30,24 @@ public class MyKeyListener extends KeyAdapter {
                 break;
         }
     }
+    @Override
+    public void keyReleased(KeyEvent e) {
+        int keyCode = e.getKeyCode();
+        switch (keyCode) {
+            case KeyEvent.VK_LEFT:
+                runningModeController.slideMagicalStaff(0); // Move left
+                break;
+            case KeyEvent.VK_RIGHT:
+                runningModeController.slideMagicalStaff(0); // Move right
+                break;
+                /*
+            case KeyEvent.VK_A:
+                runningModeController.rotateMagicalStaff(-Math.toRadians(5)); // Rotate left
+                break;
+            case KeyEvent.VK_D:
+                runningModeController.rotateMagicalStaff(+Math.toRadians(5)); // Rotate left
+                //runningModeController.getGameSession().getMagicalStaff().rotate(+Math.toRadians(5)); // Rotate left
+                break;*/
+        }
+    }
 }

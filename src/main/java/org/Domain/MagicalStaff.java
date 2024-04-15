@@ -9,11 +9,13 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import javax.imageio.ImageIO;
+import org.Views.BuildingModePage;
+import org.Views.RunningModePage;
 
 public class MagicalStaff extends JPanel {
     private BufferedImage magicalStaffImage;
     private double angle;
-    private double xVelocity; // to calculate collision
+    private int velocity; // to calculate collision
     private Coordinate coordinate;
 
     public MagicalStaff() {
@@ -25,7 +27,7 @@ public class MagicalStaff extends JPanel {
             e.printStackTrace();
         }
         setPreferredSize(new Dimension(magicalStaffImage.getWidth(), magicalStaffImage.getHeight()));
-    }
+        }
 
     @Override
     protected void paintComponent(Graphics g) {
@@ -46,24 +48,23 @@ public class MagicalStaff extends JPanel {
         revalidate();
         repaint();
     }
-
-    public void slideMagicalStaff(int dx) {
-        //System.out.println("MAgical staff slide");
-
-        getCoordinate().setX(this.getCoordinate().getX() + dx);
-        //getCoordinate().setY(this.getCoordinate().getY() + dy);// no need
-        repaint();
+    public void moveMagicalStaff(){
+        int newpos =velocity+getCoordinate().getX();
+        if ((newpos>0) && (newpos+getPreferredSize().getWidth()<RunningModePage.SCREENWIDTH)) {
+            getCoordinate().setX(newpos);
+            //;
+        }
     }
 
     private Dimension calculateRotatedDimensions(double angle) {
-        double radians = Math.toRadians(angle);
-        double sin = Math.abs(Math.sin(radians));
-        double cos = Math.abs(Math.cos(radians));
+        double sin = Math.abs(Math.sin(angle));
+        double cos = Math.abs(Math.cos(angle));
         int newWidth = (int) Math.floor(magicalStaffImage.getWidth() * cos + magicalStaffImage.getHeight() * sin);
         int newHeight = (int) Math.floor(magicalStaffImage.getHeight() * cos + magicalStaffImage.getWidth() * sin);
 
-        // fix rotation
-        System.out.println(newWidth + " " + newHeight);
+        //System.out.println(angle + " " + sin + " " + cos); sin and cos are correct now
+
+        //System.out.println(newWidth + " " + newHeight);
         return new Dimension(newWidth, newHeight);
 
     }
@@ -77,11 +78,10 @@ public class MagicalStaff extends JPanel {
         return angle;
     }
 
-    public double getxVelocity() {
-        return xVelocity;
+    public int getVelocity() {
+        return velocity;
     }
-
-    public void setxVelocity(double xVelocity) {
-        this.xVelocity = xVelocity;
+    public void setVelocity(int velocity){
+        this.velocity=velocity;
     }
 }
