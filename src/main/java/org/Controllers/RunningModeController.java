@@ -15,9 +15,7 @@ public class RunningModeController {
         this.runningModePage = runningModePage;
         this.game= Game.getInstance();
     }
-    public void rotateMagicalStaff(MagicalStaff magicalStaff, double dTheta) {
-        magicalStaff.rotate(dTheta);
-    }
+    //public void rotateMagicalStaff(MagicalStaff magicalStaff, double dTheta) {       magicalStaff.rotate(dTheta);    }
 
     public Game getGameSession() {
         return game;
@@ -26,21 +24,19 @@ public class RunningModeController {
     public void moveFireball(){
         this.getGameSession().getFireball().moveFireball();
     }
-    public void moveStaff(){    getGameSession().getMagicalStaff().moveMagicalStaff();}
+    public void moveStaff(){
+        getGameSession().getMagicalStaff().moveMagicalStaff();
+        getGameSession().getMagicalStaff().rotateMagicalStaff();}
 
 
     public void slideMagicalStaff(int x) {
         getGameSession().getMagicalStaff().setVelocity(x);
     }
     public void rotateMagicalStaff(double dTheta){ // If the speed of rotation also matters, I will move this method to MagicalStaff as well. -Melih
-        if (dTheta<0) {
-            if (getGameSession().getMagicalStaff().getAngle()> Math.toRadians(-45))
-                getGameSession().getMagicalStaff().rotate(dTheta); // Rotate ccw
-        }
-        else
-            if (getGameSession().getMagicalStaff().getAngle()< Math.toRadians(45))
-              getGameSession().getMagicalStaff().rotate(dTheta); // Rotate cw
-
+        getGameSession().getMagicalStaff().setAngularVel(dTheta);
+    }
+    public void stabilizeMagicalStaff(boolean cw){// Work In Progress -Melih
+        getGameSession().getMagicalStaff().stabilize(cw);
     }
 
     public void checkCollision(){
@@ -57,6 +53,7 @@ public class RunningModeController {
         int magicalStaffY = magicalStaff.getCoordinate().getY();
         int magicalStaffWidth = magicalStaff.getPreferredSize().width;
         int magicalStaffHeight = magicalStaff.getPreferredSize().height;
+        int magicalStaffVelocity= magicalStaff.getVelocity();
         double magicalStaffAngle = magicalStaff.getAngle();
 
 
@@ -69,6 +66,8 @@ public class RunningModeController {
         Rectangle barrierRect = new Rectangle(barrier.getCoordinates().getX(), barrier.getCoordinates().getY(), (int) barrier.getPreferredSize().getWidth(), (int) barrier.getPreferredSize().getHeight());
 
         if (staffRect.intersects(fireballRect)) {
+            // System.out.println("Ball: "+xVelocity+" "+yVelocity+       "\nStaff: "+magicalStaffVelocity+" "+Math.toDegrees(magicalStaffAngle));
+
             // The collision formula: Vnew = b * (-2*(V dot N)*N + V)
             // b: 1 for elastic collision, 0 for 100% moment loss
             // V: previous velocity vector
@@ -78,8 +77,24 @@ public class RunningModeController {
             Vector normal = new Vector(Math.cos(normalAngleRadians), Math.sin(normalAngleRadians));
             Vector velocity = new Vector(xVelocity, yVelocity);
             Vector vNew = velocity.subtract(normal.scale(2 * velocity.dot(normal))).scale(b);
-            fireball.setxVelocity((int) vNew.getX());
-            fireball.setyVelocity((int) vNew.getY());
+
+            if (xVelocity*magicalStaffVelocity>0){ //staff & ball same direction
+                System.out.println("collision Type1");
+                fireball.setxVelocity((int) vNew.getX()+5);
+                fireball.setyVelocity((int) vNew.getY());
+            }
+            else if (magicalStaffVelocity==0){   // staff stationary
+                System.out.println("collision Type0");
+                fireball.setxVelocity((int) vNew.getX());
+                fireball.setyVelocity((int) vNew.getY());
+            }
+            else if (xVelocity*magicalStaffVelocity<0){ //opposite direction
+                System.out.println("collision Type2");
+                fireball.setxVelocity(-xVelocity);
+                fireball.setyVelocity(-yVelocity);
+            }
+
+
             //System.out.println(magicalStaff.getVelocity());
 
         }

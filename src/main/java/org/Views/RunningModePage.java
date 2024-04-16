@@ -204,6 +204,7 @@ public class RunningModePage extends Page{
                 gamePanel.repaint();
                 gamePanel.revalidate();
 
+                /* Chance and Score needs revision
                 chance= runningModeController.getGameSession().getChance();
                 chance.setBounds(chance.getCoordinate().getX(), chance.getCoordinate().getY(), chance.getPreferredSize().width, chance.getPreferredSize().height);
                 chance.setBackground(Color.lightGray);
@@ -217,7 +218,7 @@ public class RunningModePage extends Page{
                 infoContainer.setVisible(true);
                 infoContainer.repaint();
                 infoContainer.revalidate();
-
+                */
                 // Initialize Barriers
                 barriers = runningModeController.getGameSession().getBarriers();
                 for (Barrier barrier : barriers) {

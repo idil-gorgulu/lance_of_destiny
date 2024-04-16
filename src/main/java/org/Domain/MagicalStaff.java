@@ -15,6 +15,7 @@ import org.Views.RunningModePage;
 public class MagicalStaff extends JPanel {
     private BufferedImage magicalStaffImage;
     private double angle;
+    private double angularVel;
     private int velocity; // to calculate collision
     private Coordinate coordinate;
 
@@ -49,11 +50,52 @@ public class MagicalStaff extends JPanel {
         repaint();
     }
     public void moveMagicalStaff(){
-        int newpos =velocity+getCoordinate().getX();
-        if ((newpos>0) && (newpos+getPreferredSize().getWidth()<RunningModePage.SCREENWIDTH)) {
-            getCoordinate().setX(newpos);
+        int newPos =velocity+getCoordinate().getX();
+        if ((newPos>0) && (newPos+getPreferredSize().getWidth()<RunningModePage.SCREENWIDTH)) {
+            getCoordinate().setX(newPos);
             //;
         }
+    }
+    public void rotateMagicalStaff(){
+
+        double newAngle = angularVel + angle;
+
+        if ((newAngle>Math.toRadians(-45)) && newAngle<Math.toRadians(45)){
+            if (newAngle==0){
+                angularVel=0;
+            }
+            Dimension newSize = calculateRotatedDimensions(angle);
+            setPreferredSize(newSize);
+            revalidate();
+            repaint();
+            angle=newAngle;
+        }
+
+    }
+    //Work In Progress - Melih
+    public void stabilize(boolean cw){
+        System.out.println(Math.toDegrees(angle)+" "+Math.toDegrees(angularVel));
+        if (cw){
+            angularVel=Math.toRadians(-1);
+            System.out.println(Math.toDegrees(angle)+" "+Math.toDegrees(angularVel));
+            if (angularVel+angle<0){
+                angle=0;
+                angularVel=0;
+            }
+        }
+        else {
+            angularVel=Math.toRadians(1);
+            System.out.println(Math.toDegrees(angle)+" "+Math.toDegrees(angularVel));
+            if (angularVel+angle>0){
+                angle=0;
+                angularVel=0;
+            }
+        }
+        revalidate();
+        repaint();
+
+
+
     }
 
     private Dimension calculateRotatedDimensions(double angle) {
@@ -83,5 +125,11 @@ public class MagicalStaff extends JPanel {
     }
     public void setVelocity(int velocity){
         this.velocity=velocity;
+    }
+
+  //  public double getAngularVel() {       return angularVel;    }
+
+    public void setAngularVel(double angularVel) {
+        this.angularVel = angularVel;
     }
 }
