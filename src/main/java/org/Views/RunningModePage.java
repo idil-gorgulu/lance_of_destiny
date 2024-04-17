@@ -188,18 +188,7 @@ public class RunningModePage extends Page{
                     }
                 });
 
-                barrier = runningModeController.getGameSession().getBarrier();
-                int barrierWidth = barrier.getPreferredSize().width;
-                int barrierHeight = barrier.getPreferredSize().height;
-                int barrierPositionX =  400;
-                int barrierPositionY =  300;
-                barrier.getCoordinates().setX(barrierPositionX);
-                barrier.getCoordinates().setY(barrierPositionY);
-                barrier.setBounds(barrierPositionX, barrierPositionY, barrierWidth, barrierHeight);
-                barrier.setBackground(Color.blue);
-                gamePanel.add(barrier);
-                gamePanel.repaint();
-                gamePanel.revalidate();
+
 
                 // Initialize Barriers
                 barriers = runningModeController.getGameSession().getBarriers();
