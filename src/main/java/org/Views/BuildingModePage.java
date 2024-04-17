@@ -14,6 +14,7 @@ import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 
 public class BuildingModePage extends Page {
     private BuildingModeController buildingModeController;
@@ -173,39 +174,45 @@ public class BuildingModePage extends Page {
         Coordinate barrierCoordinates=BuildingModeController.addBarrier(coordinates, selectedButtonIndex);
 
         if (barrierCoordinates==null){
-            return;
-        }
-
-
-        int x = barrierCoordinates.getX();
-        int y = barrierCoordinates.getY();
-
-        ImageIcon icon = null;
-        switch (selectedButtonIndex) {
-            case 0:
-                icon = new ImageIcon("assets/iconbluegem.png");
-                break;
-            case 1:
-                icon = new ImageIcon("assets/Firm.png");
-                break;
-            case 2:
-                icon = new ImageIcon("assets/iconredgem.png");
-                break;
-            case 3:
-                icon = new ImageIcon("assets/GreenGem.png");
-                break;
-            default:
-                break;
-        }
-
-
-        if (icon != null) {
-            JLabel barrierLabel = new JLabel(icon);
-            barrierLabel.setBounds(x, y, icon.getIconWidth(), icon.getIconHeight());
-            buildingPanel.add(barrierLabel);
+            regenerate();
             buildingPanel.repaint();
             buildingPanel.revalidate();
+            return; // Exit the method after removing the barrier
+            
         }
+
+//        int x = barrierCoordinates.getX();
+//        int y = barrierCoordinates.getY();
+//
+//        ImageIcon icon = null;
+//        switch (selectedButtonIndex) {
+//            case 0:
+//                icon = new ImageIcon("assets/iconbluegem.png");
+//                break;
+//            case 1:
+//                icon = new ImageIcon("assets/Firm.png");
+//                break;
+//            case 2:
+//                icon = new ImageIcon("assets/iconredgem.png");
+//                break;
+//            case 3:
+//                icon = new ImageIcon("assets/GreenGem.png");
+//                break;
+//            default:
+//                break;
+//        }
+//
+//
+//        if (icon != null) {
+//            JLabel barrierLabel = new JLabel(icon);
+//            barrierLabel.setBounds(x, y, icon.getIconWidth(), icon.getIconHeight());
+//            buildingPanel.add(barrierLabel);
+//            buildingPanel.repaint();
+//            buildingPanel.revalidate();
+//        }
+        regenerate();
+        buildingPanel.repaint();
+        buildingPanel.revalidate();
     }
 
     private void updateButtonState() {
@@ -218,4 +225,19 @@ public class BuildingModePage extends Page {
             buttons[selectedButtonIndex].setBackground(Color.GREEN); // Make selected button green
         }
     }
+    public void regenerate(){
+        buildingPanel.removeAll();
+        ArrayList<Barrier> barriers;
+        barriers = buildingModeController.getGameSession().getBarriers();
+        for (Barrier barrier : barriers) {
+            System.out.println("Building mode barrier putting: "+ barrier.getCoordinates().getX()+ barrier.getCoordinates().getY());
+            barrier.setBounds(barrier.getCoordinates().getX(), barrier.getCoordinates().getY(), barrier.getPreferredSize().width, barrier.getPreferredSize().height);
+            buildingPanel.add(barrier);
+            barrier.setBackground(Color.blue);
+            barrier.setOpaque(true);
+            buildingPanel.repaint();
+            buildingPanel.revalidate();
+        }
+    }
+    
 }

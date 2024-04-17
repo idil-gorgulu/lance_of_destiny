@@ -8,7 +8,7 @@ public class Game {
     private MagicalStaff magicalStaff;
     private Chance chance;
     private Score score;
-    private ArrayList<Barrier> barriers = new ArrayList<Barrier>(); // Could maybe be a hashmap?
+    private ArrayList<Barrier> barriers = new ArrayList<Barrier>(0); // Could maybe be a hashmap?
     private static Game instance;
 
     public Game(){
@@ -43,16 +43,18 @@ public class Game {
     }
     public void removeBarrier(Coordinate coordinates){
         int initialSize=barriers.size();
-        for (int i = 0; i < initialSize; i++) {
-            Barrier barrier = barriers.get(i);
-            if (barrier.getCoordinates().getX()==coordinates.getX() && barrier.getCoordinates().getY() == coordinates.getY()) {
-                barriers.remove(barrier);
-                i--; // Decrease index because the size of ArrayList is reduced
+        if(initialSize!=0){
+            for (int i = 0; i < initialSize; i++) {
+                Barrier barrier = barriers.get(i);
+                if (barrier.getCoordinates().getX()==coordinates.getX() && barrier.getCoordinates().getY() == coordinates.getY()) {
+                    System.out.println("Removed");
+                    barriers.remove(barrier);
+                    i--; // Decrease index because the size of ArrayList is reduced
+                    return;
+                }
             }
         }
-        if (initialSize==barriers.size()){
-            System.out.println("No barriers in that coordinates");
-        }
+        System.out.println("No barriers in that coordinates");
 
     }
     public static Game getInstance(){
