@@ -21,14 +21,26 @@ public class MagicalStaff extends JPanel {
 
     public MagicalStaff() {
         this.coordinate = new Coordinate(500,550);
-        this.angle = 0;
         try {
             magicalStaffImage = ImageIO.read(new File("assets/200Player.png"));
+
+            // Resize the image to 100x20 pixels
+            magicalStaffImage = resizeImage(magicalStaffImage, 100, 20);
         } catch (IOException e) {
             e.printStackTrace();
         }
-        setPreferredSize(new Dimension(magicalStaffImage.getWidth(), magicalStaffImage.getHeight()));
-        }
+        setPreferredSize(new Dimension(100, 20));
+        System.out.println("Magical staff size: "+ magicalStaffImage.getWidth() + " " + magicalStaffImage.getHeight()) ;
+    }
+
+    // Method to resize the image
+    private BufferedImage resizeImage(BufferedImage originalImage, int width, int height) {
+        BufferedImage resizedImage = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
+        Graphics2D g2d = resizedImage.createGraphics();
+        g2d.drawImage(originalImage, 0, 0, width, height, null);
+        g2d.dispose();
+        return resizedImage;
+    }
 
     @Override
     protected void paintComponent(Graphics g) {
