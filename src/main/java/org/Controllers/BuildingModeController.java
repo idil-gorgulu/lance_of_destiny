@@ -1,5 +1,6 @@
 package org.Controllers;
 
+import org.Domain.BarrierType;
 import org.Domain.Coordinate;
 import org.Domain.Game;
 import org.Views.BuildingModePage;
@@ -13,7 +14,7 @@ public class BuildingModeController {
         this.gameSession = Game.getInstance();;
     }
 
-    public static void addBarrier(Coordinate coordinates, int type){
+    public static void addBarrier(Coordinate coordinates, BarrierType type){
         System.out.println("New barrier of type added:"+ type);
         gameSession.addBarrier(coordinates, type);
     }

@@ -16,12 +16,12 @@ public class Game {
         this.fireball = new Fireball();
         this.magicalStaff = new MagicalStaff();
         // Think about how to initialize it, from constuctor maybe?
-        this.Barrier = new Barrier(new Coordinate(450, 600), 0);
+        this.Barrier = new Barrier(new Coordinate(450, 600), BarrierType.SIMPLE);
 
         this.chance= new Chance(3);
         this.score= new Score();
 
-        barriers.add(new Barrier(new Coordinate(450, 600), 0));
+        barriers.add(new Barrier(new Coordinate(450, 600), BarrierType.SIMPLE));
 
     }
 
@@ -40,7 +40,7 @@ public class Game {
     public Chance getChance() { return chance;}
     public Score getScore(){return score;}
 
-    public void addBarrier(Coordinate coordinates, int type){
+    public void addBarrier(Coordinate coordinates, BarrierType type){
         Barrier newBarrier = new Barrier(coordinates, type);
         barriers.add(newBarrier);
     }
