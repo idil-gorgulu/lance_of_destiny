@@ -1,10 +1,12 @@
 package org.Views;
 
 import javax.swing.*;
+import java.util.ArrayList;
 
 public class Navigator {
     private static Navigator instance;
     private JFrame mainFrame;
+    private ArrayList pages = new ArrayList<Integer>();
 
     private Navigator() {
         mainFrame = new JFrame("Lance of Destiny");
@@ -13,6 +15,7 @@ public class Navigator {
         mainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         mainFrame.setLocationRelativeTo(null);
     }
+
 
     public static Navigator getInstance() {
         if (instance == null) {
@@ -25,6 +28,9 @@ public class Navigator {
         mainFrame.setContentPane(page);
         mainFrame.revalidate();
         mainFrame.repaint();
+    }
+    public void getPrevious() {
+
     }
 
     public void showStartPage() {
