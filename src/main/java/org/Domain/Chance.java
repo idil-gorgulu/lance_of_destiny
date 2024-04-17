@@ -9,13 +9,14 @@ public class Chance extends JPanel {
 
     int remainingChances;
 
-    public Chance(int remainingChances){
-        this.remainingChances=remainingChances;
-        this.coordinate = new Coordinate(850,50);
-        setPreferredSize(new Dimension(100, 50));
-        setLayout(new BorderLayout());
-        add(new JLabel("chances: "+String.valueOf(remainingChances)),BorderLayout.WEST);
+    public Chance(){
+        this.remainingChances = 3;
+        setPreferredSize(new Dimension(190, 50));
+        setLayout(new BoxLayout(this, BoxLayout.X_AXIS));
+        setForeground(Color.WHITE);
+        updateChanceView();
         setVisible(true);
+
     }
 
     public int getRemainingChances() {
@@ -24,13 +25,29 @@ public class Chance extends JPanel {
 
     public void incrementChance(){
         remainingChances+=1;
+        updateChanceView();
     }
-    public void decrementChance(){
-        remainingChances-=1;
+    public void decrementChance() {
+        if (remainingChances > 0) {
+            remainingChances -= 1;
+            updateChanceView();
+        }
     }
 
-    public Coordinate getCoordinate(){
-        return coordinate;
-    }
+    // Do not call this method directly, instead, call incrementChance or decrementChance.
+    private void updateChanceView() {
+        removeAll();
+        add(Box.createHorizontalGlue());
 
+        ImageIcon heartIcon = new ImageIcon("./assets/200Heart.png");
+        for (int i = 0; i < remainingChances; i++) {
+            JLabel heartLabel = new JLabel(heartIcon);
+            add(heartLabel);
+        }
+
+        add(Box.createHorizontalGlue());
+        repaint();
+        revalidate();
+        System.out.println("remaining chances: " + String.valueOf(remainingChances));
+    }
 }

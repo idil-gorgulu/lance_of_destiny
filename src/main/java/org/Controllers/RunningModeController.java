@@ -112,7 +112,6 @@ public class RunningModeController {
             }
         }
 
-
         int containerWidth = 1000;
         int containerHeight = 600;
 
@@ -140,9 +139,6 @@ public class RunningModeController {
 
         fireball.setBounds(fireball.getCoordinate().getX(), fireball.getCoordinate().getY(), fireball.getWidth(), fireball.getPreferredSize().height);
 
-
-        chance.setBounds(chance.getCoordinate().getX(), chance.getCoordinate().getY(), chance.getWidth(), chance.getHeight());
-        score.setBounds(score.getCoordinate().getX(), score.getCoordinate().getY(), score.getWidth(), score.getHeight());
         for (Barrier barrier : barriers) {
             barrier.setBounds(barrier.getCoordinates().getX(), barrier.getCoordinates().getY(), barrier.getWidth(), barrier.getHeight());
         }
