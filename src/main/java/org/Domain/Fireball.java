@@ -16,16 +16,34 @@ public class Fireball extends JPanel {
     private BufferedImage fireballImage;
 
     public Fireball() {
-        this.coordinate = new Coordinate(200,200);
+        this.coordinate = new Coordinate(200, 200);
+
+//        try {
+//            fireballImage = ImageIO.read(new File("assets/200Fireball.png"));
+//            this.fireballRadius = Math.max(fireballImage.getWidth(), fireballImage.getHeight()) / 2;
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
+//        setPreferredSize(new Dimension(getFireballRadius() * 2,getFireballRadius() * 2));
+//
+//
+
         try {
-            fireballImage = ImageIO.read(new File("assets/200Fireball.png"));
-            this.fireballRadius = Math.max(fireballImage.getWidth(), fireballImage.getHeight()) / 2;
+            // Load the original fireball image
+            BufferedImage originalImage = ImageIO.read(new File("assets/200Fireball.png"));
+            // Resize the image to 16x16 pixels
+            fireballImage = new BufferedImage(16, 16, BufferedImage.TYPE_INT_ARGB);
+            Graphics2D g2d = fireballImage.createGraphics();
+            g2d.drawImage(originalImage, 0, 0, 16, 16, null);
+            g2d.dispose();
+            // Update the fireball radius
+            this.fireballRadius = 8;
         } catch (IOException e) {
             e.printStackTrace();
-        }
-        setPreferredSize(new Dimension(getFireballRadius() * 2,getFireballRadius() * 2));
-    }
 
+            setPreferredSize(new Dimension(fireballRadius * 2, fireballRadius * 2));
+        }
+    }
     public void moveFireball(){
         // change this so that coordinate will hande the update of the location
         this.getCoordinate().setX(this.getCoordinate().getX() + this.xVelocity);

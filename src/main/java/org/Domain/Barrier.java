@@ -17,12 +17,21 @@ public class Barrier extends JPanel {
     public Barrier(Coordinate coordinates, int type) {
         this.coordinates = coordinates;
         this.type = type;
+        //Option 1:
         try {
             this.barrierImage = ImageIO.read(new File(setImageDirectory(type)));
         } catch (IOException e) {
             e.printStackTrace();
         }
         setPreferredSize(new Dimension(barrierImage.getWidth(), barrierImage.getHeight()));
+
+        //Option 2:
+//        try {
+//            this.barrierImage = resizeImage(ImageIO.read(new File(setImageDirectory(type))), 20, 20);
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
+//        setPreferredSize(new Dimension(20, 20));
     }
 
     private String setImageDirectory(int type) {
@@ -38,6 +47,14 @@ public class Barrier extends JPanel {
 
         // In here return Exception
         return null;
+    }
+
+    private BufferedImage resizeImage(BufferedImage originalImage, int targetWidth, int targetHeight) {
+        BufferedImage resizedImage = new BufferedImage(targetWidth, targetHeight, BufferedImage.TYPE_INT_ARGB);
+        Graphics2D g2d = resizedImage.createGraphics();
+        g2d.drawImage(originalImage, 0, 0, targetWidth, targetHeight, null);
+        g2d.dispose();
+        return resizedImage;
     }
 
     @Override

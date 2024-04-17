@@ -14,6 +14,7 @@ import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 
 public class BuildingModePage extends Page {
     private BuildingModeController buildingModeController;
@@ -148,7 +149,7 @@ public class BuildingModePage extends Page {
 
 
         Border border = BorderFactory.createLineBorder(Color.BLACK);
-        buildingPanel.setPreferredSize(new Dimension(400, 500)); // Set preferred size of buildingPanel
+        buildingPanel.setPreferredSize(new Dimension(1080, 500)); // Set preferred size of buildingPanel
         int screenWidth = buildingPanel.getWidth();
         System.out.println("buildingPanel screenWidth"+ screenWidth);
         int screenWidth2 = buildingContainer.getWidth();
@@ -160,7 +161,7 @@ public class BuildingModePage extends Page {
         add(statusLabel, BorderLayout.SOUTH);
 
         // Set the preferred size of the buildingContainer
-        buildingContainer.setPreferredSize(new Dimension(400, 500)); // Match the size of buildingPanel
+        buildingContainer.setPreferredSize(new Dimension(1000, 500)); // Match the size of buildingPanel
 
 
     }
@@ -170,36 +171,48 @@ public class BuildingModePage extends Page {
             // No barrier type selected, do nothing
             return;
         }
-        BuildingModeController.addBarrier(coordinates, selectedButtonIndex);
-        int x = coordinates.getX();
-        int y = coordinates.getY();
+        Coordinate barrierCoordinates=BuildingModeController.addBarrier(coordinates, selectedButtonIndex);
 
-        ImageIcon icon = null;
-        switch (selectedButtonIndex) {
-            case 0:
-                icon = new ImageIcon("assets/iconbluegem.png");
-                break;
-            case 1:
-                icon = new ImageIcon("assets/Firm.png");
-                break;
-            case 2:
-                icon = new ImageIcon("assets/iconredgem.png");
-                break;
-            case 3:
-                icon = new ImageIcon("assets/GreenGem.png");
-                break;
-            default:
-                break;
-        }
-
-
-        if (icon != null) {
-            JLabel barrierLabel = new JLabel(icon);
-            barrierLabel.setBounds(x, y, icon.getIconWidth(), icon.getIconHeight());
-            buildingPanel.add(barrierLabel);
+        if (barrierCoordinates==null){
+            regenerate();
             buildingPanel.repaint();
             buildingPanel.revalidate();
+            return; // Exit the method after removing the barrier
+            
         }
+
+//        int x = barrierCoordinates.getX();
+//        int y = barrierCoordinates.getY();
+//
+//        ImageIcon icon = null;
+//        switch (selectedButtonIndex) {
+//            case 0:
+//                icon = new ImageIcon("assets/iconbluegem.png");
+//                break;
+//            case 1:
+//                icon = new ImageIcon("assets/Firm.png");
+//                break;
+//            case 2:
+//                icon = new ImageIcon("assets/iconredgem.png");
+//                break;
+//            case 3:
+//                icon = new ImageIcon("assets/GreenGem.png");
+//                break;
+//            default:
+//                break;
+//        }
+//
+//
+//        if (icon != null) {
+//            JLabel barrierLabel = new JLabel(icon);
+//            barrierLabel.setBounds(x, y, icon.getIconWidth(), icon.getIconHeight());
+//            buildingPanel.add(barrierLabel);
+//            buildingPanel.repaint();
+//            buildingPanel.revalidate();
+//        }
+        regenerate();
+        buildingPanel.repaint();
+        buildingPanel.revalidate();
     }
 
     private void updateButtonState() {
@@ -212,4 +225,19 @@ public class BuildingModePage extends Page {
             buttons[selectedButtonIndex].setBackground(Color.GREEN); // Make selected button green
         }
     }
+    public void regenerate(){
+        buildingPanel.removeAll();
+        ArrayList<Barrier> barriers;
+        barriers = buildingModeController.getGameSession().getBarriers();
+        for (Barrier barrier : barriers) {
+            System.out.println("Building mode barrier putting: "+ barrier.getCoordinates().getX()+ barrier.getCoordinates().getY());
+            barrier.setBounds(barrier.getCoordinates().getX(), barrier.getCoordinates().getY(), barrier.getPreferredSize().width, barrier.getPreferredSize().height);
+            buildingPanel.add(barrier);
+            barrier.setBackground(Color.blue);
+            barrier.setOpaque(true);
+            buildingPanel.repaint();
+            buildingPanel.revalidate();
+        }
+    }
+    
 }
