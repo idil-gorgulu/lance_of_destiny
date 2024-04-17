@@ -172,6 +172,7 @@ public class BuildingModePage extends Page {
             // No barrier type selected, do nothing
             return;
         }
+        //
 
         BarrierType type = BarrierType.values()[selectedButtonIndex];
         BuildingModeController.addBarrier(coordinates, type);
