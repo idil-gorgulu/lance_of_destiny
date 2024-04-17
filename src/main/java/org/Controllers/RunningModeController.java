@@ -156,14 +156,40 @@ public class RunningModeController {
         if (barrier.getnHits() <= 0) {
             barrier.destroy();
             game.getBarriers().remove(barrier);
+            if(barrier.getType()==BarrierType.EXPLOSIVE){
+                Debris debris = new Debris(barrier.getCoordinates());
+                runningModePage.add(debris);
+
+            }
             runningModePage.revalidate();
             runningModePage.repaint();
         }
-        /*if(barrier.getType()==BarrierType.EXPLOSIVE){
-            //DROP DEBRIS
-        }
-        if(barrier.getType()==BarrierType.REWARDING){
+
+        /*if(barrier.getType()==BarrierType.REWARDING){
             //DROP SPELL
         }*/
+    }
+
+    private void startDebrisAnimation(Debris debris) {
+        Timer timer = new Timer(50, e -> {
+            debris.moveDebris();
+            runningModePage.repaint(); // Repaint the panel to update debris position
+            checkDebrisCollision(debris);
+        });
+        timer.start();
+    }
+
+    private void checkDebrisCollision(Debris debris) {
+        MagicalStaff magicalStaff = game.getMagicalStaff();
+        Rectangle staffRect = new Rectangle(magicalStaff.getCoordinate().getX(), magicalStaff.getCoordinate().getY(),
+                magicalStaff.getPreferredSize().width, magicalStaff.getPreferredSize().height);
+
+        Rectangle debrisRect = new Rectangle(debris.getCoordinate().getX(), debris.getCoordinate().getY(),
+                debris.getWidth(), debris.getHeight());
+
+        if (staffRect.intersects(debrisRect)) {
+            game.getChance().decrementChance();
+            runningModePage.remove(debris);
+        }
     }
 }

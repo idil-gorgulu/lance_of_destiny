@@ -40,11 +40,9 @@ public class Debris extends JPanel {
         }
     }
 
-    public void moveFireball(){
-        // change this so that coordinate will hande the update of the location
-        this.getCoordinate().setX(this.getCoordinate().getX() + this.xVelocity);
-        this.getCoordinate().setY(this.getCoordinate().getY() + this.yVelocity);
-
+    public void moveDebris() {
+        int newY = getCoordinate().getY() + 3;
+        getCoordinate().setY(newY);
     }
 
     public Coordinate getCoordinate() {
