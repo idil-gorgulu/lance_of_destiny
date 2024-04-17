@@ -19,9 +19,6 @@ public class Game {
         this.chance= new Chance();
         this.score= new Score();
 
-        barriers.add(new Barrier(new Coordinate(450, 600), BarrierType.SIMPLE));
-        //barriers.add(new Barrier(new Coordinate(450, 600), 0));
-        barriers.add(new Barrier(new Coordinate(450, 600), BarrierType.SIMPLE));
 
     }
 

@@ -3,8 +3,8 @@ package org.Views;
 import org.Controllers.BuildingModeController;
 import org.Controllers.RunningModeController;
 import org.Domain.Barrier;
-import org.Domain.BarrierType;
 import org.Domain.Coordinate;
+import org.Domain.BarrierType;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
@@ -175,9 +175,9 @@ public class BuildingModePage extends Page {
             return;
         }
         //
-
+        System.out.println(selectedButtonIndex);
         BarrierType type = BarrierType.values()[selectedButtonIndex];
-        BuildingModeController.addBarrier(coordinates, type);
+        //BuildingModeController.addBarrier(coordinates, type);
         int x = coordinates.getX();
         int y = coordinates.getY();
         Coordinate barrierCoordinates=BuildingModeController.addBarrier(coordinates,BarrierType.values()[selectedButtonIndex] );

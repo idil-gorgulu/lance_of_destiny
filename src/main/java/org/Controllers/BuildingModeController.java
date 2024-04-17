@@ -36,7 +36,7 @@ public class BuildingModeController {
         Coordinate barrierCoordinates = new Coordinate(barrierX, barrierY);
 
         for (Barrier barrier : gameSession.getBarriers()) {
-            //System.out.println("existing barrier" + " " + barrier.getCoordinates().getX() + " "+barrier.getCoordinates().getY() );
+            System.out.println("existing barrier" + " " + barrier.getCoordinates().getX() + " "+barrier.getCoordinates().getY() );
             if (barrier.getCoordinates().getX()==barrierCoordinates.getX() & barrier.getCoordinates().getY()==barrierCoordinates.getY() ) {
                 System.out.println("A barrier already exists at these coordinates.");
                 removeBarrier(barrierCoordinates);
@@ -48,8 +48,6 @@ public class BuildingModeController {
 
         gameSession.addBarrier(barrierCoordinates, type);
         return barrierCoordinates;
-
-
 
     }
     public static void removeBarrier(Coordinate coordinates){
