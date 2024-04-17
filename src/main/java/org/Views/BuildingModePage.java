@@ -177,7 +177,7 @@ public class BuildingModePage extends Page {
         BuildingModeController.addBarrier(coordinates, type);
         int x = coordinates.getX();
         int y = coordinates.getY();
-        Coordinate barrierCoordinates=BuildingModeController.addBarrier(coordinates, selectedButtonIndex);
+        Coordinate barrierCoordinates=BuildingModeController.addBarrier(coordinates,BarrierType.values()[selectedButtonIndex] );
 
         if (barrierCoordinates==null){
             regenerate();
