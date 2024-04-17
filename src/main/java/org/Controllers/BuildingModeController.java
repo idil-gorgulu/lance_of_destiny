@@ -16,11 +16,11 @@ public class BuildingModeController {
         this.gameSession = Game.getInstance();
     }
 
-    public static void addBarrier(Coordinate coordinates, BarrierType type){
+    /*public static void addBarrier(Coordinate coordinates, BarrierType type){
         System.out.println("New barrier of type added:"+ type);
         gameSession.addBarrier(coordinates, type);
-    }
-    public static Coordinate addBarrier(Coordinate mouseCoordinates, int type){
+    }*/
+    public static Coordinate addBarrier(Coordinate mouseCoordinates, BarrierType type){
         int mouseX=mouseCoordinates.getX();
         int mouseY = mouseCoordinates.getY();
 

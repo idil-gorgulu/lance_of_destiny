@@ -111,7 +111,7 @@ public class RunningModeController {
                 Vector vNew = velocity.subtract(normal.scale(2 * velocity.dot(normal))).scale(b);
                 fireball.setxVelocity((int) vNew.getX());
                 fireball.setyVelocity((int) vNew.getY());
-                hitBarrier(barrier);
+                hitBarrier(br);
             }
         }
 
