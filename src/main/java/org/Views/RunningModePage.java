@@ -88,7 +88,7 @@ public class RunningModePage extends Page{
                 String hexCode = "#FFFFFF";
                 Color color = Color.decode(hexCode);
                 infoContainer = new JPanel(new FlowLayout());
-                infoContainer.setPreferredSize(new Dimension(190, 500));
+                infoContainer.setPreferredSize(new Dimension(200, 650));
                 JLabel info1 = new JLabel("<html>add labels and <br>buttons here</html>");
                 info1.setBounds(50, 50, 70, 20); //
                 info1.setForeground(Color.WHITE);
@@ -134,14 +134,14 @@ public class RunningModePage extends Page{
                 });
 
                 Border border = BorderFactory.createLineBorder(Color.BLACK);
-                gamePanel.setPreferredSize(new Dimension(1000, 500)); // Set preferred size of buildingPanel
+                gamePanel.setPreferredSize(new Dimension(990, 650)); // Set preferred size of buildingPanel
                 gamePanel.addNotify();
                 gamePanel.revalidate();
                 gamePanel.setBorder(border);
                 add(gamePanel, BorderLayout.EAST);
                 //screenWidth = 1000; assigned at top and finalized
-                //System.out.println("screenWidth"+ screenWidth);
-                screenHeight = 500;
+                System.out.println("screenWidth"+ gamePanel.getWidth());
+                screenHeight = 650;
 
                 // Initializing Fireball
                 fireball = runningModeController.getGameSession().getFireball();
@@ -191,18 +191,18 @@ public class RunningModePage extends Page{
                     }
                 });
 
-                barrier = runningModeController.getGameSession().getBarrier();
-                int barrierWidth = barrier.getPreferredSize().width;
-                int barrierHeight = barrier.getPreferredSize().height;
-                int barrierPositionX =  400;
-                int barrierPositionY =  300;
-                barrier.getCoordinates().setX(barrierPositionX);
-                barrier.getCoordinates().setY(barrierPositionY);
-                barrier.setBounds(barrierPositionX, barrierPositionY, barrierWidth, barrierHeight);
-                barrier.setBackground(Color.blue);
-                gamePanel.add(barrier);
-                gamePanel.repaint();
-                gamePanel.revalidate();
+//                barrier = runningModeController.getGameSession().getBarrier();
+//                int barrierWidth = barrier.getPreferredSize().width;
+//                int barrierHeight = barrier.getPreferredSize().height;
+//                int barrierPositionX =  400;
+//                int barrierPositionY =  300;
+//                barrier.getCoordinates().setX(barrierPositionX);
+//                barrier.getCoordinates().setY(barrierPositionY);
+//                barrier.setBounds(barrierPositionX, barrierPositionY, barrierWidth, barrierHeight);
+//                barrier.setBackground(Color.blue);
+//                gamePanel.add(barrier);
+//                gamePanel.repaint();
+//                gamePanel.revalidate();
 
                 /* Chance and Score needs revision
                 chance= runningModeController.getGameSession().getChance();
@@ -222,6 +222,7 @@ public class RunningModePage extends Page{
                 // Initialize Barriers
                 barriers = runningModeController.getGameSession().getBarriers();
                 for (Barrier barrier : barriers) {
+                    System.out.println("Running mode barrier putting: "+ barrier.getCoordinates().getX()+ barrier.getCoordinates().getY());
                     barrier.setBounds(barrier.getCoordinates().getX(), barrier.getCoordinates().getY(), barrier.getPreferredSize().width, barrier.getPreferredSize().height);
                     gamePanel.add(barrier);
                     barrier.setBackground(Color.blue);
@@ -238,7 +239,4 @@ public class RunningModePage extends Page{
             }
         });
     }
-
-
-
 }

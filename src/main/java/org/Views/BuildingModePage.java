@@ -148,7 +148,7 @@ public class BuildingModePage extends Page {
 
 
         Border border = BorderFactory.createLineBorder(Color.BLACK);
-        buildingPanel.setPreferredSize(new Dimension(400, 500)); // Set preferred size of buildingPanel
+        buildingPanel.setPreferredSize(new Dimension(1080, 500)); // Set preferred size of buildingPanel
         int screenWidth = buildingPanel.getWidth();
         System.out.println("buildingPanel screenWidth"+ screenWidth);
         int screenWidth2 = buildingContainer.getWidth();
@@ -160,7 +160,7 @@ public class BuildingModePage extends Page {
         add(statusLabel, BorderLayout.SOUTH);
 
         // Set the preferred size of the buildingContainer
-        buildingContainer.setPreferredSize(new Dimension(400, 500)); // Match the size of buildingPanel
+        buildingContainer.setPreferredSize(new Dimension(1000, 500)); // Match the size of buildingPanel
 
 
     }
@@ -170,9 +170,15 @@ public class BuildingModePage extends Page {
             // No barrier type selected, do nothing
             return;
         }
-        BuildingModeController.addBarrier(coordinates, selectedButtonIndex);
-        int x = coordinates.getX();
-        int y = coordinates.getY();
+        Coordinate barrierCoordinates=BuildingModeController.addBarrier(coordinates, selectedButtonIndex);
+
+        if (barrierCoordinates==null){
+            return;
+        }
+
+
+        int x = barrierCoordinates.getX();
+        int y = barrierCoordinates.getY();
 
         ImageIcon icon = null;
         switch (selectedButtonIndex) {

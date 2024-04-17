@@ -42,7 +42,6 @@ public class RunningModeController {
     public void checkCollision(){
         Fireball fireball = game.getFireball();
         MagicalStaff magicalStaff = game.getMagicalStaff();
-        Barrier barrier = game.getBarrier();
         ArrayList<Barrier> barriers = game.getBarriers();
 
         int fireballX = fireball.getCoordinate().getX();
@@ -63,7 +62,6 @@ public class RunningModeController {
 
         Rectangle staffRect = new Rectangle(magicalStaffX, magicalStaffY, magicalStaffWidth, magicalStaffHeight);
         Rectangle fireballRect = new Rectangle(fireballX - fireballRadius, fireballY - fireballRadius, fireballRadius * 2, fireballRadius * 2);
-        Rectangle barrierRect = new Rectangle(barrier.getCoordinates().getX(), barrier.getCoordinates().getY(), (int) barrier.getPreferredSize().getWidth(), (int) barrier.getPreferredSize().getHeight());
 
         if (staffRect.intersects(fireballRect)) {
             // System.out.println("Ball: "+xVelocity+" "+yVelocity+       "\nStaff: "+magicalStaffVelocity+" "+Math.toDegrees(magicalStaffAngle));
@@ -113,16 +111,7 @@ public class RunningModeController {
                 fireball.setyVelocity((int) vNew.getY());
             }
         }
-        if (barrierRect.intersects(fireballRect)) {
 
-            double b = 1.0; // b = 1 for a perfect elastic collision
-            double normalAngleRadians = Math.toRadians((double) (90%360));
-            Vector normal = new Vector(Math.cos(normalAngleRadians), Math.sin(normalAngleRadians));
-            Vector velocity = new Vector(xVelocity, yVelocity);
-            Vector vNew = velocity.subtract(normal.scale(2 * velocity.dot(normal))).scale(b);
-            fireball.setxVelocity((int) vNew.getX());
-            fireball.setyVelocity((int) vNew.getY());
-        }
 
         int containerWidth = 1000;
         int containerHeight = 600;
@@ -143,7 +132,6 @@ public class RunningModeController {
     public void run(){
         Fireball fireball = game.getFireball();
         MagicalStaff magicalStaff = game.getMagicalStaff();
-        Barrier barrier1 = game.getBarrier();
         ArrayList<Barrier> barriers = game.getBarriers();
         Chance chance = getGameSession().getChance();
         Score score= getGameSession().getScore();
@@ -152,7 +140,6 @@ public class RunningModeController {
 
         fireball.setBounds(fireball.getCoordinate().getX(), fireball.getCoordinate().getY(), fireball.getWidth(), fireball.getPreferredSize().height);
 
-        barrier1.setBounds(barrier1.getCoordinates().getX(), barrier1.getCoordinates().getY(), barrier1.getWidth(), barrier1.getHeight());
 
         chance.setBounds(chance.getCoordinate().getX(), chance.getCoordinate().getY(), chance.getWidth(), chance.getHeight());
         score.setBounds(score.getCoordinate().getX(), score.getCoordinate().getY(), score.getWidth(), score.getHeight());
