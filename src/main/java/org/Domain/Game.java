@@ -19,7 +19,9 @@ public class Game {
         this.chance= new Chance();
         this.score= new Score();
 
+        barriers.add(new Barrier(new Coordinate(450, 600), BarrierType.SIMPLE));
         //barriers.add(new Barrier(new Coordinate(450, 600), 0));
+        barriers.add(new Barrier(new Coordinate(450, 600), BarrierType.SIMPLE));
 
     }
 
@@ -34,10 +36,11 @@ public class Game {
 
 
 
+
     public Chance getChance() { return chance;}
     public Score getScore(){return score;}
 
-    public void addBarrier(Coordinate coordinates, int type){
+    public void addBarrier(Coordinate coordinates, BarrierType type){
         Barrier newBarrier = new Barrier(coordinates, type);
         barriers.add(newBarrier);
     }
@@ -83,11 +86,12 @@ public class Game {
         this.score = score;
     }
 
-    public ArrayList<org.Domain.Barrier> getBarriers() {
+
+    public ArrayList<Barrier> getBarriers() {
         return barriers;
     }
 
-    public void setBarriers(ArrayList<org.Domain.Barrier> barriers) {
+    public void setBarriers(ArrayList<Barrier> barriers) {
         this.barriers = barriers;
     }
 

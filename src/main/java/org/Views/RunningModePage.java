@@ -50,7 +50,8 @@ public class RunningModePage extends Page{
     }
     protected void paintComponent(Graphics g) { //background for the whole frame
         super.paintComponent(g);
-        g.drawImage(backgroundImage, 0, 0, getWidth(), getHeight(), this);
+        g.drawImage(backgroundImage, 0, 0, this.getWidth(), this.getHeight(), this);
+        //g.drawImage(backgroundImage, 0, 0, getWidth(), getHeight(), this);
     }
     private void setupTimer() {
         int delay = 4; // 4 ms delay, approx. 60 FPS
@@ -67,7 +68,7 @@ public class RunningModePage extends Page{
         timer.start();
     }
 
-    private void updateGame() {
+    public void updateGame() {
         runningModeController.checkCollision();
         runningModeController.moveFireball();
         runningModeController.moveStaff();
@@ -79,6 +80,10 @@ public class RunningModePage extends Page{
                 repaint();
             }
         });
+    }
+
+    public JPanel getGamePanel() {
+        return this.gamePanel;
     }
 
     @Override

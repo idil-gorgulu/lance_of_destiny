@@ -3,6 +3,7 @@ package org.Views;
 import org.Controllers.BuildingModeController;
 import org.Controllers.RunningModeController;
 import org.Domain.Barrier;
+import org.Domain.BarrierType;
 import org.Domain.Coordinate;
 
 import javax.imageio.ImageIO;
@@ -173,14 +174,20 @@ public class BuildingModePage extends Page {
             // No barrier type selected, do nothing
             return;
         }
-        Coordinate barrierCoordinates=BuildingModeController.addBarrier(coordinates, selectedButtonIndex);
+        //
+
+        BarrierType type = BarrierType.values()[selectedButtonIndex];
+        BuildingModeController.addBarrier(coordinates, type);
+        int x = coordinates.getX();
+        int y = coordinates.getY();
+        Coordinate barrierCoordinates=BuildingModeController.addBarrier(coordinates,BarrierType.values()[selectedButtonIndex] );
 
         if (barrierCoordinates==null){
             regenerate();
             buildingPanel.repaint();
             buildingPanel.revalidate();
             return; // Exit the method after removing the barrier
-            
+
         }
 
 //        int x = barrierCoordinates.getX();
@@ -241,5 +248,5 @@ public class BuildingModePage extends Page {
             buildingPanel.revalidate();
         }
     }
-    
+
 }

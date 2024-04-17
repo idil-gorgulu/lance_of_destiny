@@ -8,15 +8,19 @@ import java.awt.geom.AffineTransform;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.util.Random;
 
 public class Barrier extends JPanel {
     private Coordinate coordinates;
-    private int type; //will indicate the type of the barrier
+    private BarrierType type; //will indicate the type of the barrier
     private BufferedImage barrierImage;
 
-    public Barrier(Coordinate coordinates, int type) {
+    private int nHits; //required for reinforced barrier
+
+    public Barrier(Coordinate coordinates, BarrierType type) {
         this.coordinates = coordinates;
         this.type = type;
+        this.nHits = initializenHits(type);
         //Option 1:
         try {
             this.barrierImage = ImageIO.read(new File(setImageDirectory(type)));
@@ -34,14 +38,14 @@ public class Barrier extends JPanel {
 //        setPreferredSize(new Dimension(20, 20));
     }
 
-    private String setImageDirectory(int type) {
-        if(type == 0) { //Simple barrier
+    private String setImageDirectory(BarrierType type) {
+        if(type == BarrierType.SIMPLE) { //Simple barrier
             return "assets/BlueGem.png";
-        }else if(type == 1) { //Reinforced barrier
+        }else if(type == BarrierType.REINFORCED) { //Reinforced barrier
             return "assets/Firm.png";
-        }else if(type == 2) { //Explosive barrier
+        }else if(type == BarrierType.EXPLOSIVE) { //Explosive barrier
             return "assets/RedGem.png";
-        }else if (type == 3) {
+        }else if (type == BarrierType.REWARDING) {
             return "assets/GreenGem.png";
         }
 
@@ -77,12 +81,34 @@ public class Barrier extends JPanel {
         this.coordinates = coordinates;
     }
 
-    public int getType() {
+    public BarrierType getType() {
         return type;
     }
 
-    public void setType(int type) {
+    public void setType(BarrierType type) {
         this.type = type;
+    }
+
+    public void setnHits(int nHits) {
+        this.nHits = nHits;
+    }
+
+    public int initializenHits(BarrierType type){
+        Random rand = new Random();
+        if (type== BarrierType.REINFORCED){
+            return rand.nextInt(10) + 1;
+        }
+        else{
+            return 1;
+        }
+    }
+
+    public int getnHits() {
+        return nHits;
+    }
+
+    public void destroy() {
+        setVisible(false);
     }
 
 }
