@@ -25,6 +25,8 @@ public class BuildingModePage extends Page {
     private JButton[] buttons;
     private int selectedButtonIndex = -1;
 
+    public int pageNum = 1;
+
     public BuildingModePage() {
         super();
         this.buildingModeController = new BuildingModeController(this);

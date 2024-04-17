@@ -12,6 +12,9 @@ import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
 
 public class LoginPage extends Page {
 
@@ -57,6 +60,7 @@ public class LoginPage extends Page {
 
         backgroundPanel.add(backButtonPanel, BorderLayout.NORTH);
 
+        customizeButtonback(backButton);
         JPanel centerPanel = new JPanel(new GridBagLayout()) {
             @Override
             protected void paintComponent(Graphics g) {
@@ -91,7 +95,31 @@ public class LoginPage extends Page {
         // Login Button setup
         JButton loginButton = new JButton("Login");
         customizeButton(loginButton);
-        loginButton.addActionListener(e -> LoginPageController.getInstance().authorizeUser(emailTextField.getText(), String.copyValueOf(passwordField.getPassword())));
+        loginButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                // Kullanıcı bilgilerini al
+                String email = emailTextField.getText();
+                char[] password = passwordField.getPassword();
+
+                // Kullanıcıyı doğrula
+                boolean isAuthorized = LoginPageController.getInstance().authorizeUser(email, String.copyValueOf(password));
+
+                // Doğrulama sonrası işlemler
+                if (isAuthorized) {
+                    System.out.println("Login successful!"); // Konsola loglama
+                    JOptionPane.showMessageDialog(null, "You are now logged in!"); // Kullanıcıya bilgi mesajı göster
+                    Navigator.getInstance().showStartPage();
+                    // Başka bir işlem veya ekran açabilirsiniz
+                    // Örneğin ana ekranı açabilirsiniz:
+                    // mainFrame.setVisible(true);
+                } else {
+                    System.out.println("Login failed!"); // Konsola loglama
+                    JOptionPane.showMessageDialog(null, "Invalid email or password!"); // Kullanıcıya hata mesajı göster
+                }
+            }
+        });
+
         formPanel.add(loginButton);
         loginButton.setMaximumSize(new Dimension(Integer.MAX_VALUE, loginButton.getPreferredSize().height));
         loginButton.setAlignmentX(Component.CENTER_ALIGNMENT);
@@ -209,6 +237,42 @@ public class LoginPage extends Page {
                 g.setColor(b.getBackground());
                 ((Graphics2D) g).setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
                 ((Graphics2D) g).fillRoundRect(0, 0, b.getWidth(), b.getHeight(), 30, 30); // 30, 30 defines the roundness
+                super.paint(g, c);
+            }
+        });
+    }
+
+    private void customizeButtonback(JButton button) {
+        button.setBackground(new Color(70, 130, 180)); // Set the background color of the button
+        button.setForeground(Color.WHITE); // Set text color
+        button.setFocusPainted(false); // Remove focus border
+        button.setFont(new Font("Tahoma", Font.BOLD, 18)); // Increase font size
+        button.setOpaque(true); // Set button opacity
+        button.setContentAreaFilled(false); // Set if the content area is filled
+        button.setBorderPainted(false); // Remove border painting
+        button.setBorder(BorderFactory.createEmptyBorder(20, 30, 20, 30)); // Add padding
+        button.setFocusable(false); // Remove focusability
+        button.setCursor(new Cursor(Cursor.HAND_CURSOR)); // Change cursor to hand cursor
+
+        button.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseEntered(MouseEvent e) {
+                button.setCursor(new Cursor(Cursor.HAND_CURSOR)); // Change cursor to hand cursor
+            }
+
+            @Override
+            public void mouseExited(MouseEvent e) {
+                button.setCursor(Cursor.getDefaultCursor()); // Change cursor to default
+            }
+        });
+
+        button.setUI(new BasicButtonUI() {
+            @Override
+            public void paint(Graphics g, JComponent c) {
+                JButton b = (JButton) c;
+                g.setColor(b.getBackground());
+                ((Graphics2D) g).setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+                ((Graphics2D) g).fillRoundRect(0, 0, b.getWidth(), b.getHeight(), 30, 30); // Rounded corners
                 super.paint(g, c);
             }
         });

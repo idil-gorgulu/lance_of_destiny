@@ -59,6 +59,7 @@ public class SignupPage extends Page {
         backButtonPanel.add(backButton);
         backgroundPanel.add(backButtonPanel, BorderLayout.NORTH);
 
+        customizeButtonback(backButton);
         // Central panel for form elements, reuse from LoginPage
         JPanel centerPanel = setupCenterPanel(backgroundImage);
         add(centerPanel, BorderLayout.CENTER);
@@ -208,6 +209,42 @@ public class SignupPage extends Page {
                 g.setColor(b.getBackground());
                 ((Graphics2D) g).setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
                 ((Graphics2D) g).fillRoundRect(0, 0, b.getWidth(), b.getHeight(), 30, 30); // 30, 30 defines the roundness
+                super.paint(g, c);
+            }
+        });
+    }
+
+    private void customizeButtonback(JButton button) {
+        button.setBackground(new Color(70, 130, 180)); // Set the background color of the button
+        button.setForeground(Color.WHITE); // Set text color
+        button.setFocusPainted(false); // Remove focus border
+        button.setFont(new Font("Tahoma", Font.BOLD, 18)); // Increase font size
+        button.setOpaque(true); // Set button opacity
+        button.setContentAreaFilled(false); // Set if the content area is filled
+        button.setBorderPainted(false); // Remove border painting
+        button.setBorder(BorderFactory.createEmptyBorder(20, 30, 20, 30)); // Add padding
+        button.setFocusable(false); // Remove focusability
+        button.setCursor(new Cursor(Cursor.HAND_CURSOR)); // Change cursor to hand cursor
+
+        button.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseEntered(MouseEvent e) {
+                button.setCursor(new Cursor(Cursor.HAND_CURSOR)); // Change cursor to hand cursor
+            }
+
+            @Override
+            public void mouseExited(MouseEvent e) {
+                button.setCursor(Cursor.getDefaultCursor()); // Change cursor to default
+            }
+        });
+
+        button.setUI(new BasicButtonUI() {
+            @Override
+            public void paint(Graphics g, JComponent c) {
+                JButton b = (JButton) c;
+                g.setColor(b.getBackground());
+                ((Graphics2D) g).setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+                ((Graphics2D) g).fillRoundRect(0, 0, b.getWidth(), b.getHeight(), 30, 30); // Rounded corners
                 super.paint(g, c);
             }
         });
