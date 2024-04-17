@@ -19,6 +19,7 @@ public class Game {
         this.chance= new Chance(3);
         this.score= new Score();
 
+        barriers.add(new Barrier(new Coordinate(450, 600), BarrierType.SIMPLE));
         //barriers.add(new Barrier(new Coordinate(450, 600), 0));
 
     }
@@ -37,7 +38,7 @@ public class Game {
     public Chance getChance() { return chance;}
     public Score getScore(){return score;}
 
-    public void addBarrier(Coordinate coordinates, int type){
+    public void addBarrier(Coordinate coordinates, BarrierType type){
         Barrier newBarrier = new Barrier(coordinates, type);
         barriers.add(newBarrier);
     }
