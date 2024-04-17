@@ -3,8 +3,10 @@ package org.Controllers;
 import org.Domain.*;
 import org.Views.RunningModePage;
 
+import javax.swing.*;
 import java.awt.*;
 import java.util.ArrayList;
+import java.util.Iterator;
 
 
 public class RunningModeController {
@@ -30,7 +32,7 @@ public class RunningModeController {
 
 
     public void slideMagicalStaff(int x) {
-        getGameSession().getMagicalStaff().setVelocity(x);
+       getGameSession().getMagicalStaff().setVelocity(x);
     }
     public void rotateMagicalStaff(double dTheta){ // If the speed of rotation also matters, I will move this method to MagicalStaff as well. -Melih
         getGameSession().getMagicalStaff().setAngularVel(dTheta);
@@ -111,6 +113,7 @@ public class RunningModeController {
                 Vector vNew = velocity.subtract(normal.scale(2 * velocity.dot(normal))).scale(b);
                 fireball.setxVelocity((int) vNew.getX());
                 fireball.setyVelocity((int) vNew.getY());
+                hitBarrier(barrier);
             }
         }
         if (barrierRect.intersects(fireballRect)) {
@@ -159,5 +162,21 @@ public class RunningModeController {
         for (Barrier barrier : barriers) {
             barrier.setBounds(barrier.getCoordinates().getX(), barrier.getCoordinates().getY(), barrier.getWidth(), barrier.getHeight());
         }
+    }
+
+    public void hitBarrier(Barrier barrier) {
+        barrier.setnHits(barrier.getnHits() - 1);
+        if (barrier.getnHits() <= 0) {
+            barrier.destroy();
+            game.getBarriers().remove(barrier);
+            runningModePage.revalidate();
+            runningModePage.repaint();
+        }
+        /*if(barrier.getType()==BarrierType.EXPLOSIVE){
+            //DROP DEBRIS
+        }
+        if(barrier.getType()==BarrierType.REWARDING){
+            //DROP SPELL
+        }*/
     }
 }
