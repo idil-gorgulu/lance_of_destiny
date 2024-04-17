@@ -21,6 +21,7 @@ public class Game {
 
         barriers.add(new Barrier(new Coordinate(450, 600), BarrierType.SIMPLE));
         //barriers.add(new Barrier(new Coordinate(450, 600), 0));
+        barriers.add(new Barrier(new Coordinate(450, 600), BarrierType.SIMPLE));
 
     }
 
@@ -32,6 +33,7 @@ public class Game {
     public MagicalStaff getMagicalStaff() {
         return magicalStaff;
     }
+
 
 
 
@@ -84,11 +86,12 @@ public class Game {
         this.score = score;
     }
 
-    public ArrayList<org.Domain.Barrier> getBarriers() {
+
+    public ArrayList<Barrier> getBarriers() {
         return barriers;
     }
 
-    public void setBarriers(ArrayList<org.Domain.Barrier> barriers) {
+    public void setBarriers(ArrayList<Barrier> barriers) {
         this.barriers = barriers;
     }
 
