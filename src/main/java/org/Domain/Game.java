@@ -18,7 +18,7 @@ public class Game {
         // Think about how to initialize it, from constuctor maybe?
         this.Barrier = new Barrier(new Coordinate(450, 600), 0);
 
-        this.chance= new Chance(3);
+        this.chance= new Chance();
         this.score= new Score();
 
         barriers.add(new Barrier(new Coordinate(450, 600), 0));
@@ -99,4 +99,6 @@ public class Game {
     public static void setInstance(Game instance) {
         Game.instance = instance;
     }
+
+
 }

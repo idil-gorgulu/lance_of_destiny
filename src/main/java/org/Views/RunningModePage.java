@@ -18,24 +18,21 @@ public class RunningModePage extends Page{
 
     private BufferedImage backgroundImage;
     private JPanel gamePanel;
-    private JPanel gameContainer;
-
+    private JPanel infoContainer;
     private Fireball fireball;
     private MagicalStaff magicalStaff;
     private Barrier barrier;
-    //I dont think this is a good way
     protected RunningModeController runningModeController;
-
     private MagicalStaffController magicalStaffController;
-
     private Chance chance;
     private Score score;
     private ArrayList<Barrier> barriers;
-    private JPanel infoContainer;
-
     public static final int SCREENWIDTH =1000; // I wanna reach it from MagicalStaff class
     private int screenHeight;
+    public int timeInSeconds = 0;
+    private int frameCount = 0;
 
+    private JLabel timeLabel;
     public RunningModePage() {
         super();
         try {
@@ -56,8 +53,17 @@ public class RunningModePage extends Page{
         g.drawImage(backgroundImage, 0, 0, getWidth(), getHeight(), this);
     }
     private void setupTimer() {
-        int delay = 4; // Roughly 60 FPS, adjust as needed
-        Timer timer = new Timer(delay, e -> updateGame());
+        int delay = 4; // 4 ms delay, approx. 60 FPS
+
+        Timer timer = new Timer(delay, e -> {
+            updateGame(); // Perform game updates
+            frameCount++; // Increment frame count each time the timer fires
+            if (frameCount >= 250) { // Every 250 frames is approximately one second
+                timeInSeconds++; // Increment the second counter
+                timeLabel.setText("Time: " + timeInSeconds + "s");
+                frameCount = 0; // Reset frame count
+            }
+        });
         timer.start();
     }
 
@@ -85,44 +91,30 @@ public class RunningModePage extends Page{
         SwingUtilities.invokeLater(new Runnable() {
             @Override
             public void run() {
+                // infoContainer is the container that displays chance and score information.
                 String hexCode = "#FFFFFF";
                 Color color = Color.decode(hexCode);
                 infoContainer = new JPanel(new FlowLayout());
                 infoContainer.setPreferredSize(new Dimension(190, 500));
-                JLabel info1 = new JLabel("<html>add labels and <br>buttons here</html>");
-                info1.setBounds(50, 50, 70, 20); //
-                info1.setForeground(Color.WHITE);
-                infoContainer.add(info1);
-                //infoContainer.setBackground(color);
                 infoContainer.setBackground(new Color(color.getRed(), color.getGreen(), color.getBlue(), 50)); // Here, 128 represents the alpha value (semi-transparent)
-                //We can add the buttons and labels in this infoContainer. I made its background a transparent white. -sebnem
+
+                timeLabel = new JLabel("Time: 0s", SwingConstants.CENTER);
+                infoContainer.add(timeLabel);
+
+                // Adding infoContainer the chance and score instances which are already visual JPanels.
+                infoContainer.add(runningModeController.getGameSession().getChance());
+                infoContainer.add(runningModeController.getGameSession().getScore());
+
                 add(infoContainer, BorderLayout.WEST);
-//                try {
-//                    backgroundImage = ImageIO.read(new File("assets/Background.png"));
-//                } catch (IOException e) {
-//                    e.printStackTrace();
-//                }
 
                 JLabel statusLabel = new JLabel("Running Mode", SwingConstants.CENTER);
                 add(statusLabel, BorderLayout.SOUTH);
                 statusLabel.setBackground(Color.lightGray); // Set background color
                 statusLabel.setOpaque(true);
 
-                gameContainer=new JPanel();
-                gameContainer.setLayout(null);
-
                 gamePanel= new JPanel();
-                //{
-//                    @Override
-//                    protected void paintComponent(Graphics g) { //to set background for panel.
-//                        super.paintComponent(g);
-//                        g.drawImage(backgroundImage, 0, 0, getWidth(), getHeight(), this);
-//                    }
-//                };
                 gamePanel.setBackground(new Color(color.getRed(), color.getGreen(), color.getBlue(), 0)); // Here, 128 represents the alpha value (semi-transparent)
-
                 gamePanel.setLayout(null);
-                //gamePanel.setPreferredSize(new Dimension(400, 500)); // Set preferred size of gamePanel
                 gamePanel.addKeyListener(new MyKeyListener(runningModeController));
                 gamePanel.setFocusable(true);
                 gamePanel.requestFocus();
@@ -204,21 +196,6 @@ public class RunningModePage extends Page{
                 gamePanel.repaint();
                 gamePanel.revalidate();
 
-                /* Chance and Score needs revision
-                chance= runningModeController.getGameSession().getChance();
-                chance.setBounds(chance.getCoordinate().getX(), chance.getCoordinate().getY(), chance.getPreferredSize().width, chance.getPreferredSize().height);
-                chance.setBackground(Color.lightGray);
-                infoContainer.add(chance).setVisible(true);
-                infoContainer.repaint();
-                infoContainer.revalidate();
-
-                score= runningModeController.getGameSession().getScore();
-                score.setBounds(score.getCoordinate().getX(), score.getCoordinate().getY(), score.getPreferredSize().width, score.getPreferredSize().height);
-                score.setBackground(Color.lightGray);
-                infoContainer.setVisible(true);
-                infoContainer.repaint();
-                infoContainer.revalidate();
-                */
                 // Initialize Barriers
                 barriers = runningModeController.getGameSession().getBarriers();
                 for (Barrier barrier : barriers) {
@@ -238,6 +215,7 @@ public class RunningModePage extends Page{
             }
         });
     }
+
 
 
 

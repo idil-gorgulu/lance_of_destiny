@@ -10,8 +10,8 @@ import javax.imageio.ImageIO;
 public class Fireball extends JPanel {
     // Deneme
     private Coordinate coordinate;
-    private int xVelocity = 6;
-    private int yVelocity = 6;
+    private int xVelocity = 3;
+    private int yVelocity = 3;
     private int fireballRadius = 15;
     private BufferedImage fireballImage;
 

@@ -3,18 +3,17 @@ package org.Domain;
 import javax.swing.*;
 import java.awt.*;
 
-public class Score extends JPanel{
+public class Score extends JPanel {
 
-    private Coordinate coordinate;
+    private int totalScore;
+    private JLabel scoreLabel;  // JLabel to display the score
 
-    int totalScore;
-
-    public Score(){
-        this.totalScore=0;
-        this.coordinate = new Coordinate(100,50);
-        setPreferredSize(new Dimension(100, 50));
-        setLayout(new GridLayout(1,1,0,0));
-        add(new JLabel("Score: "+String.valueOf(totalScore)));
+    public Score() {
+        this.totalScore = 0;
+        setPreferredSize(new Dimension(190, 50));
+        setLayout(new GridLayout(1, 1, 0, 0));
+        scoreLabel = new JLabel("Score: " + totalScore);
+        add(scoreLabel);
         setVisible(true);
     }
 
@@ -22,14 +21,14 @@ public class Score extends JPanel{
         return totalScore;
     }
 
-    public void addScore(int dscore){
-        totalScore+=dscore;
+    public void incrementScore(float timeInterval) {
+
+        totalScore = (int) (totalScore + (300 / timeInterval));
+        updateScoreView();
     }
 
-    public Coordinate getCoordinate(){
-        return coordinate;
+    // Do not call this method directly, instead, call incrementScore.
+    private void updateScoreView() {
+        scoreLabel.setText("Score: " + totalScore);
     }
-
 }
-
-
