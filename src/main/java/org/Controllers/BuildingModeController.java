@@ -19,11 +19,11 @@ public class BuildingModeController {
         int mouseY = mouseCoordinates.getY();
 
         // Calculate the grid cell coordinates based on mouse coordinates
-        int cellX = mouseX / 40;
-        int cellY = mouseY / 15;
+        int cellX = mouseX / 50;
+        int cellY = mouseY / 20;
 
-        int barrierX = cellX * 40;
-        int barrierY = cellY * 15;
+        int barrierX = cellX * 50;
+        int barrierY = cellY * 20;
 
         Coordinate barrierCoordinates = new Coordinate(barrierX, barrierY);
 
