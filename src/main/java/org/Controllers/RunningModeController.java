@@ -58,8 +58,8 @@ public class RunningModeController {
         double magicalStaffAngle = magicalStaff.getAngle();
 
 
-        int xVelocity = fireball.getxVelocity();
-        int yVelocity = fireball.getyVelocity();
+        double xVelocity = fireball.getxVelocity();
+        double yVelocity = fireball.getyVelocity();
         double normalAngle = (magicalStaffAngle + 90) % 360;
 
         Rectangle staffRect = new Rectangle(magicalStaffX, magicalStaffY, magicalStaffWidth, magicalStaffHeight);
@@ -72,27 +72,31 @@ public class RunningModeController {
             // b: 1 for elastic collision, 0 for 100% moment loss
             // V: previous velocity vector
             // N: normal vector of the surface collided with
+            /*
             double b = 1.0; // b = 1 for a perfect elastic collision
             double normalAngleRadians = Math.toRadians(normalAngle);
             Vector normal = new Vector(Math.cos(normalAngleRadians), Math.sin(normalAngleRadians));
             Vector velocity = new Vector(xVelocity, yVelocity);
             Vector vNew = velocity.subtract(normal.scale(2 * velocity.dot(normal))).scale(b);
-
+            */
+            System.out.println("\nBall before: "+xVelocity+" "+yVelocity+ "staff: "+magicalStaffVelocity);
             if (xVelocity*magicalStaffVelocity>0){ //staff & ball same direction
-                System.out.println("collision Type1");
-                fireball.setxVelocity((int) vNew.getX()+5);
-                fireball.setyVelocity((int) vNew.getY());
+
+                System.out.println("same direction");
+                fireball.setxVelocity(xVelocity*1.5);
+                fireball.setyVelocity(-yVelocity);
             }
             else if (magicalStaffVelocity==0){   // staff stationary
-                System.out.println("collision Type0");
-                fireball.setxVelocity((int) vNew.getX());
-                fireball.setyVelocity((int) vNew.getY());
+                System.out.println("stationary");
+               // fireball.setxVelocity(xVelocity);
+                fireball.setyVelocity(-yVelocity);
             }
             else if (xVelocity*magicalStaffVelocity<0){ //opposite direction
-                System.out.println("collision Type2");
+                System.out.println("opp direction");
                 fireball.setxVelocity(-xVelocity);
                 fireball.setyVelocity(-yVelocity);
             }
+            System.out.println("Ball after: "+fireball.getxVelocity()+" "+fireball.getyVelocity());
 
 
             //System.out.println(magicalStaff.getVelocity());
@@ -103,15 +107,18 @@ public class RunningModeController {
             Rectangle brRect = new Rectangle(br.getCoordinates().getX(), br.getCoordinates().getY(), (int) br.getPreferredSize().getWidth(), (int) br.getPreferredSize().getHeight());
 
             if (brRect.intersects(fireballRect)) {
-
+                // Barriers are always horizontal
+                /*
                 double b = 1.0; // b = 1 for a perfect elastic collision
                 double normalAngleRadians = Math.toRadians((double) (90%360));
                 Vector normal = new Vector(Math.cos(normalAngleRadians), Math.sin(normalAngleRadians));
                 Vector velocity = new Vector(xVelocity, yVelocity);
                 Vector vNew = velocity.subtract(normal.scale(2 * velocity.dot(normal))).scale(b);
-                fireball.setxVelocity((int) vNew.getX());
-                fireball.setyVelocity((int) vNew.getY());
-                hitBarrier(br);
+
+                 */
+                //fireball.setxVelocity(fireball.getyVelocity()); Ignoring collisions from sides
+                fireball.setyVelocity(-fireball.getyVelocity());
+                //hitBarrier(br);
             }
         }
 
@@ -125,6 +132,7 @@ public class RunningModeController {
         }
 
         // Check collision with top and bottom boundaries
+        //REMOVE bottom boundary and connect it to loseChance
         if (fireballY - fireballRadius <=-10|| fireballY + fireballRadius >= 600) {
             yVelocity *= -1; // Reverse Y velocity
             fireball.setyVelocity(yVelocity);
