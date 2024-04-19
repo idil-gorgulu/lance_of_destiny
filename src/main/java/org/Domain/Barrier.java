@@ -109,6 +109,8 @@ public class Barrier extends JPanel {
 
     public void destroy() {
         setVisible(false);
+        revalidate();
+        repaint();
     }
 
 }

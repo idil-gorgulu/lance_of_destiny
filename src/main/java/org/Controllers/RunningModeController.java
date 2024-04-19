@@ -123,7 +123,7 @@ public class RunningModeController {
                  */
                 //fireball.setxVelocity(fireball.getyVelocity()); Ignoring collisions from sides
                 fireball.setyVelocity(-fireball.getyVelocity());
-                //hitBarrier(br);
+                hitBarrier(br);
             }
         }
 
@@ -163,13 +163,13 @@ public class RunningModeController {
     public void hitBarrier(Barrier barrier) {
         barrier.setnHits(barrier.getnHits() - 1);
         if (barrier.getnHits() <= 0) {
+            barrier.destroy();
+            game.getBarriers().remove(barrier);
             if(barrier.getType()==BarrierType.EXPLOSIVE){
                 Debris debris = new Debris(barrier.getCoordinates());
                 runningModePage.add(debris);
 
             }
-            barrier.destroy();
-            game.getBarriers().remove(barrier);
             runningModePage.revalidate();
             runningModePage.repaint();
         }
