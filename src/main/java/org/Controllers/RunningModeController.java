@@ -166,6 +166,8 @@ public class RunningModeController {
 
     public boolean hitBarrier(Barrier barrier) {
         barrier.setnHits(barrier.getnHits() - 1);
+        barrier.revalidate();
+        barrier.repaint();
         if (barrier.getnHits() <= 0) {
             barrier.destroy();
             if(barrier.getType()==BarrierType.EXPLOSIVE){
@@ -177,6 +179,7 @@ public class RunningModeController {
             runningModePage.repaint();
             return true;
         }
+
         return false;
 
         /*if(barrier.getType()==BarrierType.REWARDING){

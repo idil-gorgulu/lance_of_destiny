@@ -61,6 +61,7 @@ public class Barrier extends JPanel {
         return resizedImage;
     }
 
+
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
@@ -68,10 +69,36 @@ public class Barrier extends JPanel {
             Graphics2D g2d = (Graphics2D) g.create();
             int x = (getWidth() - barrierImage.getWidth()) / 2;
             int y = (getHeight() - barrierImage.getHeight()) / 2;
-            g2d.drawImage(barrierImage,x ,y ,this);
+            g2d.drawImage(barrierImage, x, y, this);
+
+            if (type == BarrierType.REINFORCED) {
+                String hitsText = Integer.toString(nHits);
+                g2d.setFont(new Font("Arial", Font.BOLD, 14)); // You can adjust the font size as needed
+                FontMetrics fm = g2d.getFontMetrics();
+                int textWidth = fm.stringWidth(hitsText);
+                int textHeight = fm.getHeight();
+
+                //Adding background to improve the readability of the remaining hits
+                int rectX = x + (barrierImage.getWidth() - textWidth) / 2 - 5;
+                int rectY = y + (barrierImage.getHeight() - textHeight) / 2 - 5;
+                int rectWidth = textWidth + 10;
+                int rectHeight = textHeight + 10;
+
+                g2d.setColor(new Color(0, 90, 30));
+                g2d.fillRect(rectX, rectY, rectWidth, rectHeight);
+
+                g2d.setColor(Color.WHITE);
+                g2d.drawString(hitsText, rectX + 5, rectY + fm.getAscent() + 5);
+            }
+
             g2d.dispose();
         }
     }
+
+
+
+
+
 
     public Coordinate getCoordinates() {
         return coordinates;
