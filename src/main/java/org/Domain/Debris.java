@@ -29,6 +29,7 @@ public class Debris extends JPanel {
     private String setImageDirectory() {
             return "assets/debris.png";
     }
+    @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
         if (debrisImage != null) {
@@ -43,6 +44,8 @@ public class Debris extends JPanel {
     public void moveDebris() {
         int newY = getCoordinate().getY() + 3;
         getCoordinate().setY(newY);
+        repaint();
+        revalidate();
     }
 
     public Coordinate getCoordinate() {

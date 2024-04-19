@@ -182,7 +182,8 @@ public class RunningModeController {
     private void startDebrisAnimation(Debris debris) {
         Timer timer = new Timer(50, e -> {
             debris.moveDebris();
-            runningModePage.repaint(); // Repaint the panel to update debris position
+            runningModePage.revalidate();
+            runningModePage.repaint();
             checkDebrisCollision(debris);
         });
         timer.start();
