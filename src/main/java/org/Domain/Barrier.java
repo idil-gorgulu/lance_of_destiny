@@ -123,7 +123,7 @@ public class Barrier extends JPanel {
     public int initializenHits(BarrierType type){
         Random rand = new Random();
         if (type== BarrierType.REINFORCED){
-            return rand.nextInt(10) + 1;
+            return rand.nextInt(9) + 2;
         }
         else{
             return 1;
