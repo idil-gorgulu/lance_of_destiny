@@ -73,7 +73,7 @@ public class Barrier extends JPanel {
 
             if (type == BarrierType.REINFORCED) {
                 String hitsText = Integer.toString(nHits);
-                g2d.setFont(new Font("Arial", Font.BOLD, 14)); // You can adjust the font size as needed
+                g2d.setFont(new Font("Arial", Font.BOLD, 14));
                 FontMetrics fm = g2d.getFontMetrics();
                 int textWidth = fm.stringWidth(hitsText);
                 int textHeight = fm.getHeight();
