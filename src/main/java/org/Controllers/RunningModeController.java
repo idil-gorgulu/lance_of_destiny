@@ -60,7 +60,7 @@ public class RunningModeController {
 
         double xVelocity = fireball.getxVelocity();
         double yVelocity = fireball.getyVelocity();
-        double normalAngle = (magicalStaffAngle + 90) % 360;
+        double normalAngle = (magicalStaffAngle + Math.PI/2) % (Math.PI*2);
 
         Rectangle staffRect = new Rectangle(magicalStaffX, magicalStaffY, magicalStaffWidth, magicalStaffHeight);
         Rectangle fireballRect = new Rectangle(fireballX - fireballRadius, fireballY - fireballRadius, fireballRadius * 2, fireballRadius * 2);
@@ -72,29 +72,34 @@ public class RunningModeController {
             // b: 1 for elastic collision, 0 for 100% moment loss
             // V: previous velocity vector
             // N: normal vector of the surface collided with
-            /*
+
             double b = 1.0; // b = 1 for a perfect elastic collision
-            double normalAngleRadians = Math.toRadians(normalAngle);
-            Vector normal = new Vector(Math.cos(normalAngleRadians), Math.sin(normalAngleRadians));
+            //double normalAngleRadians = Math.toRadians(normalAngle); Already in radians
+            Vector normal = new Vector(Math.cos(normalAngle), Math.sin(normalAngle));
             Vector velocity = new Vector(xVelocity, yVelocity);
             Vector vNew = velocity.subtract(normal.scale(2 * velocity.dot(normal))).scale(b);
-            */
-            System.out.println("\nBall before: "+xVelocity+" "+yVelocity+ "staff: "+magicalStaffVelocity);
+
+            System.out.println("\nBall before: "+xVelocity+" "+yVelocity+ " staff: "+magicalStaffVelocity+" normal angle: "+Math.toDegrees(normalAngle));
             if (xVelocity*magicalStaffVelocity>0){ //staff & ball same direction
 
                 System.out.println("same direction");
+                //fireball.setxVelocity(vNew.getX()*1.5);
+                //fireball.setyVelocity(-vNew.getY());
                 fireball.setxVelocity(xVelocity*1.5);
                 fireball.setyVelocity(-yVelocity);
             }
             else if (magicalStaffVelocity==0){   // staff stationary
                 System.out.println("stationary");
-               // fireball.setxVelocity(xVelocity);
+                fireball.setxVelocity(xVelocity); // does absolutely nothing
                 fireball.setyVelocity(-yVelocity);
+                //fireball.setyVelocity(-vNew.getY());
             }
             else if (xVelocity*magicalStaffVelocity<0){ //opposite direction
                 System.out.println("opp direction");
                 fireball.setxVelocity(-xVelocity);
                 fireball.setyVelocity(-yVelocity);
+               // fireball.setxVelocity(-vNew.getX());
+                //fireball.setyVelocity(-vNew.getY());
             }
             System.out.println("Ball after: "+fireball.getxVelocity()+" "+fireball.getyVelocity());
 
