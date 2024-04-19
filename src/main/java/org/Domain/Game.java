@@ -9,6 +9,7 @@ public class Game {
     private Chance chance;
     private Score score;
     private ArrayList<Barrier> barriers = new ArrayList<Barrier>(0); // Could maybe be a hashmap?
+    private ArrayList<Debris> debris = new ArrayList<Debris>(0);
     private static Game instance;
 
     public Game(){
@@ -96,5 +97,8 @@ public class Game {
         Game.instance = instance;
     }
 
+    public ArrayList<Debris> getDebris() {
+        return debris;
+    }
 
 }
