@@ -186,63 +186,30 @@ public class RunningModeController {
     }
 
 
-
     private void explodeBarrier(Barrier barrier) {
         Debris debris = new Debris(barrier.getCoordinates());
-        runningModePage.add(debris);
-        while(debris.getCoordinate().getY()>game.getMagicalStaff().getY()){
-                debris.moveDown();
-                runningModePage.revalidate();
-                runningModePage.repaint();
-        }
-    }
-
-/*        MagicalStaff magicalStaff = game.getMagicalStaff();
+        MagicalStaff magicalStaff = game.getMagicalStaff();
         Rectangle staffRect = new Rectangle(magicalStaff.getCoordinate().getX(), magicalStaff.getCoordinate().getY(),
                 magicalStaff.getPreferredSize().width, magicalStaff.getPreferredSize().height);
 
-        Rectangle debrisRect = new Rectangle(debris.getCoordinate().getX(), debris.getCoordinate().getY(),
-                debris.getWidth(), debris.getHeight());
+        runningModePage.add(debris);
 
-        if (staffRect.intersects(debrisRect)) {
-            game.getChance().decrementChance();
-            runningModePage.remove(debris);
-        }
-        runningModePage.repaint();
-    }*/
-
-    public void updateDebrisPositions() {
-        ArrayList<Debris> debrisList = game.getDebris();
-        Iterator<Debris> it = debrisList.iterator();
-        while (it.hasNext()) {
-            Debris debris = it.next();
+        while (debris.getCoordinate().getY() > 400) {
             debris.moveDown();
-            if (debris.getCoordinate().getY() > runningModePage.getHeight()) {
-                it.remove(); // Remove debris when it goes out of bounds
-                runningModePage.remove(debris);
-            }
-        }
-        checkDebrisCollisions();
-    }
-
-    private void checkDebrisCollisions() {
-        Rectangle staffRect = new Rectangle(game.getMagicalStaff().getCoordinate().getX(),
-                game.getMagicalStaff().getCoordinate().getY(),
-                game.getMagicalStaff().getPreferredSize().width,
-                game.getMagicalStaff().getPreferredSize().height);
-
-        for (Debris debris : game.getDebris()) {
-            Rectangle debrisRect = new Rectangle(debris.getCoordinate().getX(),
-                    debris.getCoordinate().getY(),
-                    debris.getWidth(),
-                    debris.getHeight());
+            Rectangle debrisRect = new Rectangle(debris.getCoordinate().getX(), debris.getCoordinate().getY(),
+                    debris.getWidth(), debris.getHeight());
+            runningModePage.revalidate();
+            runningModePage.repaint();
 
             if (staffRect.intersects(debrisRect)) {
-                game.getChance().decrementChance(); // Lose a chance
-                runningModePage.remove(debris); // Remove debris from panel
-                game.getDebris().remove(debris); // Remove debris from game list
+                game.getChance().decrementChance();
+                runningModePage.remove(debris);
+                break;
             }
         }
+
+        runningModePage.revalidate();
+        runningModePage.repaint();
     }
 
 }
