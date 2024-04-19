@@ -45,6 +45,7 @@ public class RunningModeController {
         Fireball fireball = game.getFireball();
         MagicalStaff magicalStaff = game.getMagicalStaff();
         ArrayList<Barrier> barriers = game.getBarriers();
+        ArrayList<Barrier> toRemove = new ArrayList<>();
 
         int fireballX = fireball.getCoordinate().getX();
         int fireballY = fireball.getCoordinate().getY();
@@ -123,9 +124,12 @@ public class RunningModeController {
                  */
                 //fireball.setxVelocity(fireball.getyVelocity()); Ignoring collisions from sides
                 fireball.setyVelocity(-fireball.getyVelocity());
-                hitBarrier(br);
+                if (hitBarrier(br)) {
+                    toRemove.add(br);
+                }
             }
         }
+        barriers.removeAll(toRemove);
 
         int containerWidth = 1000;
         int containerHeight = 600;
@@ -160,11 +164,10 @@ public class RunningModeController {
         }
     }
 
-    public void hitBarrier(Barrier barrier) {
+    public boolean hitBarrier(Barrier barrier) {
         barrier.setnHits(barrier.getnHits() - 1);
         if (barrier.getnHits() <= 0) {
             barrier.destroy();
-            game.getBarriers().remove(barrier);
             if(barrier.getType()==BarrierType.EXPLOSIVE){
                 Debris debris = new Debris(barrier.getCoordinates());
                 runningModePage.add(debris);
@@ -172,7 +175,9 @@ public class RunningModeController {
             }
             runningModePage.revalidate();
             runningModePage.repaint();
+            return true;
         }
+        return false;
 
         /*if(barrier.getType()==BarrierType.REWARDING){
             //DROP SPELL
