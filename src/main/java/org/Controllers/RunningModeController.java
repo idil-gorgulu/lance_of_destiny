@@ -171,9 +171,7 @@ public class RunningModeController {
         if (barrier.getnHits() <= 0) {
             barrier.destroy();
             if(barrier.getType()==BarrierType.EXPLOSIVE){
-                Debris debris = new Debris(barrier.getCoordinates());
-                runningModePage.add(debris);
-
+                explodeBarrier(barrier);
             }
             runningModePage.revalidate();
             runningModePage.repaint();
@@ -187,18 +185,19 @@ public class RunningModeController {
         }*/
     }
 
-    private void startDebrisAnimation(Debris debris) {
-        Timer timer = new Timer(50, e -> {
-            debris.moveDebris();
-            runningModePage.revalidate();
-            runningModePage.repaint();
-            checkDebrisCollision(debris);
-        });
-        timer.start();
+
+
+    private void explodeBarrier(Barrier barrier) {
+        Debris debris = new Debris(barrier.getCoordinates());
+        runningModePage.add(debris);
+        while(debris.getCoordinate().getY()>game.getMagicalStaff().getY()){
+                debris.moveDown();
+                runningModePage.revalidate();
+                runningModePage.repaint();
+        }
     }
 
-    private void checkDebrisCollision(Debris debris) {
-        MagicalStaff magicalStaff = game.getMagicalStaff();
+/*        MagicalStaff magicalStaff = game.getMagicalStaff();
         Rectangle staffRect = new Rectangle(magicalStaff.getCoordinate().getX(), magicalStaff.getCoordinate().getY(),
                 magicalStaff.getPreferredSize().width, magicalStaff.getPreferredSize().height);
 
@@ -209,5 +208,41 @@ public class RunningModeController {
             game.getChance().decrementChance();
             runningModePage.remove(debris);
         }
+        runningModePage.repaint();
+    }*/
+
+    public void updateDebrisPositions() {
+        ArrayList<Debris> debrisList = game.getDebris();
+        Iterator<Debris> it = debrisList.iterator();
+        while (it.hasNext()) {
+            Debris debris = it.next();
+            debris.moveDown();
+            if (debris.getCoordinate().getY() > runningModePage.getHeight()) {
+                it.remove(); // Remove debris when it goes out of bounds
+                runningModePage.remove(debris);
+            }
+        }
+        checkDebrisCollisions();
     }
+
+    private void checkDebrisCollisions() {
+        Rectangle staffRect = new Rectangle(game.getMagicalStaff().getCoordinate().getX(),
+                game.getMagicalStaff().getCoordinate().getY(),
+                game.getMagicalStaff().getPreferredSize().width,
+                game.getMagicalStaff().getPreferredSize().height);
+
+        for (Debris debris : game.getDebris()) {
+            Rectangle debrisRect = new Rectangle(debris.getCoordinate().getX(),
+                    debris.getCoordinate().getY(),
+                    debris.getWidth(),
+                    debris.getHeight());
+
+            if (staffRect.intersects(debrisRect)) {
+                game.getChance().decrementChance(); // Lose a chance
+                runningModePage.remove(debris); // Remove debris from panel
+                game.getDebris().remove(debris); // Remove debris from game list
+            }
+        }
+    }
+
 }

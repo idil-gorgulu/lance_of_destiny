@@ -72,7 +72,7 @@ public class Barrier extends JPanel {
             g2d.drawImage(barrierImage, x, y, this);
 
             if (type == BarrierType.REINFORCED) {
-                String hitsText = Integer.toString(nHits);
+                String hitsText = Integer.toString(this.getnHits());
                 g2d.setFont(new Font("Arial", Font.BOLD, 14));
                 FontMetrics fm = g2d.getFontMetrics();
                 int textWidth = fm.stringWidth(hitsText);
