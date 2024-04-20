@@ -82,7 +82,9 @@ public class BuildingModePage extends Page {
 
             }
         });
-        menuContainer.add(saveButton, BorderLayout.SOUTH);
+        // TODO: This overlaps with Menu, fix it
+        // To see it comment out the below line
+        menuContainer.add(saveButton, BorderLayout.NORTH);
 
         add(menuContainer, BorderLayout.WEST);
 
