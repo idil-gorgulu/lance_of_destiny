@@ -179,10 +179,6 @@ public class RunningModeController {
                     JOptionPane.showMessageDialog(null, "You lost!");
                     Navigator.getInstance().showStartPage();
                 }
-                /*
-                yVelocity *= -1;
-                fireball.setyVelocity(yVelocity);
-                 */
             }
     }
 
