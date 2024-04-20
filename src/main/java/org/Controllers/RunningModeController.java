@@ -177,8 +177,7 @@ public class RunningModeController {
                 fireball.setOpaque(true);
                 if (this.getGameSession().getChance().getRemainingChance() == 0) {
                     JOptionPane.showMessageDialog(null, "You lost!");
-                    // this.getGameSession().getChance().setRemainingChance(1);
-                    //Navigator.getInstance().showStartPage();
+                    Navigator.getInstance().showStartPage();
                 }
                 /*
                 yVelocity *= -1;

@@ -69,17 +69,22 @@ public class RunningModePage extends Page{
     }
 
     public void updateGame() {
-        runningModeController.checkCollision();
-        runningModeController.moveFireball();
-        runningModeController.moveStaff();
-        SwingUtilities.invokeLater(new Runnable() {
-            @Override
-            public void run() {
-                runningModeController.run();
-                gamePanel.repaint();
-                repaint();
-            }
-        });
+        if (this.runningModeController.getGameSession().getChance().getRemainingChance() == 0) {
+
+        } else {
+            runningModeController.moveFireball();
+            runningModeController.moveStaff();
+            runningModeController.checkCollision();
+            SwingUtilities.invokeLater(new Runnable() {
+                @Override
+                public void run() {
+                    runningModeController.run();
+                    gamePanel.repaint();
+                    repaint();
+                }
+            });
+        }
+
     }
 
     public JPanel getGamePanel() {
