@@ -221,6 +221,7 @@ public class RunningModeController {
 
 
     private void explodeBarrier(Barrier barrier) {
+
         Debris debris = new Debris(barrier.getCoordinates());
         MagicalStaff magicalStaff = game.getMagicalStaff();
         Rectangle staffRect = new Rectangle(magicalStaff.getCoordinate().getX(), magicalStaff.getCoordinate().getY(),

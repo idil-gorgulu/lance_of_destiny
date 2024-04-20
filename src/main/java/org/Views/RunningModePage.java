@@ -70,7 +70,8 @@ public class RunningModePage extends Page{
 
     public void updateGame() {
         if (this.runningModeController.getGameSession().getChance().getRemainingChance() == 0) {
-
+            // System.out.println("here");
+            // delete this in here
         } else {
             runningModeController.moveFireball();
             runningModeController.moveStaff();

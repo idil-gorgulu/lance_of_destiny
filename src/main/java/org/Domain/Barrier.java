@@ -61,7 +61,6 @@ public class Barrier extends JPanel {
         return resizedImage;
     }
 
-
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
@@ -94,11 +93,6 @@ public class Barrier extends JPanel {
             g2d.dispose();
         }
     }
-
-
-
-
-
 
     public Coordinate getCoordinates() {
         return coordinates;
