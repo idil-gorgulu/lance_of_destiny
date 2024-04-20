@@ -27,15 +27,18 @@ public class Barrier extends JPanel {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        setPreferredSize(new Dimension(barrierImage.getWidth(), barrierImage.getHeight()));
+        System.out.println("Barrier size:" + barrierImage.getWidth() + barrierImage.getHeight());
+        //setPreferredSize(new Dimension(barrierImage.getWidth(), barrierImage.getHeight()));
 
         //Option 2:
-//        try {
-//            this.barrierImage = resizeImage(ImageIO.read(new File(setImageDirectory(type))), 20, 20);
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
-//        setPreferredSize(new Dimension(20, 20));
+        try {
+            this.barrierImage = resizeImage(ImageIO.read(new File(setImageDirectory(type))), 50, 15);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        setPreferredSize(new Dimension(50, 15));
+        System.out.println("Barrier size:" + barrierImage.getWidth() + barrierImage.getHeight());
+
     }
 
     private String setImageDirectory(BarrierType type) {

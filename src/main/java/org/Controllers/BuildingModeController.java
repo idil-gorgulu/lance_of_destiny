@@ -7,9 +7,15 @@ import org.Domain.Coordinate;
 import org.Domain.Game;
 import org.Views.BuildingModePage;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Random;
+import java.util.Scanner;
+
 public class BuildingModeController {
     private BuildingModePage buildingModePage;
     private static Game gameSession;
+    // Create a 2D array
     private static BuildingModeController instance;
 
     public BuildingModeController(BuildingModePage buildingModePage) {
@@ -71,4 +77,9 @@ public class BuildingModeController {
     public static void setGameSession(Game gameSession) {
         BuildingModeController.gameSession = gameSession;
     }
+    public static boolean initialPopulation(int simpleNum, int firmNum, int exNum, int giftNum){
+        boolean b=gameSession.initialPopulation(simpleNum,firmNum,exNum,giftNum);
+        return b;
+    }
+
 }
