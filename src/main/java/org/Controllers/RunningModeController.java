@@ -80,29 +80,39 @@ public class RunningModeController {
             Vector velocity = new Vector(xVelocity, yVelocity);
             Vector vNew = velocity.subtract(normal.scale(2 * velocity.dot(normal))).scale(b);
 
-            System.out.println("\nBall before: "+xVelocity+" "+yVelocity+ " staff: "+magicalStaffVelocity+" normal angle: "+Math.toDegrees(normalAngle));
-            if (xVelocity*magicalStaffVelocity>0){ //staff & ball same direction
+            Rectangle sideLRect=new Rectangle(magicalStaffX,magicalStaffY+1,1,18);
+            Rectangle sideRRect=new Rectangle(magicalStaffX+99,magicalStaffY+1,1,18);
 
-                System.out.println("same direction");
-                //fireball.setxVelocity(vNew.getX()*1.5);
-                //fireball.setyVelocity(-vNew.getY());
-                fireball.setxVelocity(xVelocity*1.5);
+            if (sideRRect.intersects(fireballRect) || sideLRect.intersects(fireballRect)){
+                //System.out.println("staff side");
                 fireball.setyVelocity(-yVelocity);
             }
-            else if (magicalStaffVelocity==0){   // staff stationary
-                System.out.println("stationary");
-                fireball.setxVelocity(xVelocity); // does absolutely nothing
-                fireball.setyVelocity(-yVelocity);
-                //fireball.setyVelocity(-vNew.getY());
+            else {
+                // System.out.println("\nBall before: "+xVelocity+" "+yVelocity+ " staff: "+magicalStaffVelocity+" normal angle: "+Math.toDegrees(normalAngle));
+                if (xVelocity*magicalStaffVelocity>0){ //staff & ball same direction
+
+                    //System.out.println("same direction");
+                    //fireball.setxVelocity(vNew.getX()*1.5);
+                    //fireball.setyVelocity(-
+                    if (xVelocity<0)   fireball.setxVelocity(xVelocity-1);
+                    else fireball.setxVelocity(xVelocity+1);
+                    fireball.setyVelocity(-yVelocity);
+                }
+                else if (magicalStaffVelocity==0){   // staff stationary
+                  //  System.out.println("stationary");
+                    fireball.setxVelocity(xVelocity); // does absolutely nothing
+                    fireball.setyVelocity(-yVelocity);
+                    //fireball.setyVelocity(-vNew.getY());
+                }
+                else if (xVelocity*magicalStaffVelocity<0){ //opposite direction
+                    //System.out.println("opp direction");
+                    fireball.setxVelocity(-xVelocity);
+                    fireball.setyVelocity(-yVelocity);
+                   // fireball.setxVelocity(-vNew.getX());
+                    //fireball.setyVelocity(-vNew.getY());
+                }
             }
-            else if (xVelocity*magicalStaffVelocity<0){ //opposite direction
-                System.out.println("opp direction");
-                fireball.setxVelocity(-xVelocity);
-                fireball.setyVelocity(-yVelocity);
-               // fireball.setxVelocity(-vNew.getX());
-                //fireball.setyVelocity(-vNew.getY());
-            }
-            System.out.println("Ball after: "+fireball.getxVelocity()+" "+fireball.getyVelocity());
+           // System.out.println("Ball after: "+fireball.getxVelocity()+" "+fireball.getyVelocity());
 
 
             //System.out.println(magicalStaff.getVelocity());
@@ -122,8 +132,17 @@ public class RunningModeController {
                 Vector vNew = velocity.subtract(normal.scale(2 * velocity.dot(normal))).scale(b);
 
                  */
-                //fireball.setxVelocity(fireball.getyVelocity()); Ignoring collisions from sides
-                fireball.setyVelocity(-fireball.getyVelocity());
+                //System.out.println(brRect.getX()+" "+brRect.getY()+" "+brRect.getWidth()+" "+brRect.getHeight());
+                Rectangle sideLRect=new Rectangle(br.getCoordinates().getX(),br.getCoordinates().getY()+1,1,13);
+                Rectangle sideRRect=new Rectangle(br.getCoordinates().getX()+50,br.getCoordinates().getY()+1,1,13);
+
+                if ((sideLRect.intersects(fireballRect)) || (sideRRect.intersects(fireballRect))) {
+                    fireball.setxVelocity(-xVelocity);
+                }
+                else {
+                    fireball.setyVelocity(-yVelocity);
+                }
+
                 if (hitBarrier(br)) {
                     toRemove.add(br);
                 }
