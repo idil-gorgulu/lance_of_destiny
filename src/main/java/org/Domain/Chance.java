@@ -50,4 +50,10 @@ public class Chance extends JPanel {
         revalidate();
         System.out.println("remaining chances: " + String.valueOf(remainingChances));
     }
+    public int getRemainingChance() {
+        return remainingChances;
+    }
+    public void setRemainingChance(int chance) {
+        remainingChances = chance;
+    }
 }

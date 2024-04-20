@@ -19,10 +19,7 @@ public class Game {
 
         this.chance= new Chance();
         this.score= new Score();
-
-
     }
-
 
     public Fireball getFireball() {
         return fireball;
@@ -31,9 +28,6 @@ public class Game {
     public MagicalStaff getMagicalStaff() {
         return magicalStaff;
     }
-
-
-
 
     public Chance getChance() { return chance;}
     public Score getScore(){return score;}
