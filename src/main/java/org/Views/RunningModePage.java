@@ -59,7 +59,7 @@ public class RunningModePage extends Page{
         Timer timer = new Timer(delay, e -> {
             updateGame(); // Perform game updates
             frameCount++; // Increment frame count each time the timer fires
-            if (frameCount >= 250) { // Every 250 frames is approximately one second
+            if (frameCount >= 70) { // This is not exactly 1 second
                 timeInSeconds++; // Increment the second counter
                 timeLabel.setText("Time: " + timeInSeconds + "s");
                 frameCount = 0; // Reset frame count

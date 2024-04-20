@@ -43,7 +43,7 @@ public class SignupPageController {
         user.put("username", username);
         user.put("password", password); // Güvenlik için parolayı hash'lemek önerilir
         Database.getInstance().getUserCollection().insertOne(user);
-        Navigator.getInstance().showStartPage(); // Kullanıcı başarıyla oluşturulduktan sonra ana sayfaya yönlendir
+        Navigator.getInstance().showEnterPage(); // Kullanıcı başarıyla oluşturulduktan sonra ana sayfaya yönlendir
     }
 
     private boolean isValidPassword(String password) {

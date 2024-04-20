@@ -32,7 +32,7 @@ public class Navigator {
     public void getPrevious() {
 
     }
-
+    public void showEnterPage() {showPage(new EnterPage());}
     public void showStartPage() {
         showPage(new StartPage());
     }

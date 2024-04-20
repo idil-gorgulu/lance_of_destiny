@@ -10,7 +10,7 @@ public class Main {
         Database dbSingleton = Database.getInstance();
         SwingUtilities.invokeLater(() -> {
             Navigator navigator = Navigator.getInstance();
-            navigator.showStartPage();
+            navigator.showEnterPage();
             navigator.show();
         });
     }

@@ -1,15 +1,20 @@
 package org.Views;
 
 import org.Controllers.BuildingModeController;
+import org.Controllers.LoginPageController;
 import org.Controllers.RunningModeController;
 import org.Domain.Barrier;
 import org.Domain.Coordinate;
 import org.Domain.BarrierType;
+import org.Utils.Database;
+import org.bson.Document;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import javax.swing.border.Border;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
@@ -58,8 +63,26 @@ public class BuildingModePage extends Page {
         //JPanel backButtonPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
         //backButtonPanel.setOpaque(false); // Make the panel transparent
         JButton playButton = new JButton("Play");
+        // Condition to the Play button
         playButton.addActionListener(e -> Navigator.getInstance().showRunningModePage());
         menuContainer.add(playButton, BorderLayout.SOUTH);
+
+        JButton saveButton = new JButton("Save");
+        // Create a condition wheter the game is ready to be saved
+        saveButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                ArrayList<Barrier> barriers = buildingModeController.getGameSession().getBarriers();
+                Document gameSession = new Document();
+                for (Barrier barrier : barriers) {
+                    gameSession.put(barrier.getCoordinates().toString(), barrier.getType().toString() + barrier.getnHits());
+                }
+                gameSession.put("played", "False");
+                Database.getInstance().getGameCollection().insertOne(gameSession);
+
+            }
+        });
+        menuContainer.add(saveButton, BorderLayout.SOUTH);
 
         add(menuContainer, BorderLayout.WEST);
 
@@ -239,7 +262,7 @@ public class BuildingModePage extends Page {
         ArrayList<Barrier> barriers;
         barriers = buildingModeController.getGameSession().getBarriers();
         for (Barrier barrier : barriers) {
-            System.out.println("Building mode barrier putting: "+ barrier.getCoordinates().getX()+ barrier.getCoordinates().getY());
+            System.out.println("Building mode barrier putting: "+ barrier.getCoordinates().getX() +","+ barrier.getCoordinates().getY());
             barrier.setBounds(barrier.getCoordinates().getX(), barrier.getCoordinates().getY(), barrier.getPreferredSize().width, barrier.getPreferredSize().height);
             buildingPanel.add(barrier);
             barrier.setBackground(Color.blue);

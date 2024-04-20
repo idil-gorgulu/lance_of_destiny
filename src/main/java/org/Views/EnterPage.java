@@ -70,10 +70,10 @@ import java.io.File;
 import java.io.IOException;
 import javax.imageio.ImageIO;
 
-public class StartPage extends Page {
+public class EnterPage extends Page {
     private BufferedImage backgroundImage;
 
-    public StartPage() {
+    public EnterPage() {
         super();
         initUI();
     }
@@ -94,18 +94,16 @@ public class StartPage extends Page {
         gameTitle.setAlignmentX(JComponent.CENTER_ALIGNMENT);
         add(gameTitle);
 
-        JButton buildingModeButton = createStyledButton("Open Building Mode");
-        JButton runningModeButton = createStyledButton("Open Running Mode");
-        // Exit button needed
+        JButton loginButton = createStyledButton("Login");
+        JButton signupButton = createStyledButton("Signup");
 
         // Add action listeners for buttons
-
-        buildingModeButton.addActionListener(e -> Navigator.getInstance().showBuildingModePage());
-        runningModeButton.addActionListener(e -> Navigator.getInstance().showRunningModePage());
+        loginButton.addActionListener(e -> Navigator.getInstance().showLoginPage());
+        signupButton.addActionListener(e -> Navigator.getInstance().showSignupPage());
         add(Box.createVerticalStrut(10));
-        add(buildingModeButton);
+        add(loginButton);
         add(Box.createVerticalStrut(10));
-        add(runningModeButton);
+        add(signupButton);
     }
 
     private JButton createStyledButton(String text) {

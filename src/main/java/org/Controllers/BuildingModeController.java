@@ -45,7 +45,6 @@ public class BuildingModeController {
         }
         System.out.println("New barrier of type added: " + type);
         System.out.println("Barrier coordinates: " + barrierX + " " + barrierY);
-
         gameSession.addBarrier(barrierCoordinates, type);
         return barrierCoordinates;
 
