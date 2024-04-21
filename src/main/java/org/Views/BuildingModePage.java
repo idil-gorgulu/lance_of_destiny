@@ -156,12 +156,13 @@ public class BuildingModePage extends Page {
                 }
                 gameSession.put("played", "False");
                 Database.getInstance().getGameCollection().insertOne(gameSession);
+                // TODO: Return the gameId in here, or add the user name as well in here
 
             }
         });
         // TODO: This overlaps with Menu, fix it
         // To see it comment out the below line
-        //menuContainer.add(saveButton, BorderLayout.NORTH);
+        //leftSide.add(saveButton, BorderLayout.SOUTH);
 
         add(leftSide, BorderLayout.WEST);
 

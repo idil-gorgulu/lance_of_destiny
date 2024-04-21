@@ -101,12 +101,17 @@ public class Game {
         System.out.println("No barriers in that coordinates");
     }
     public static Game getInstance(){
-        if(instance==null){
+        if (instance==null) {
             instance=new Game();
             return instance;
         }
         else{
-            return instance;
+            if (instance.getChance().getRemainingChance() != 0)
+                return instance;
+            else {
+                instance = new Game();
+                return instance;
+            }
         }
     }
 
