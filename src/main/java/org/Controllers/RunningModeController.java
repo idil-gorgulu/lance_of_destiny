@@ -227,9 +227,9 @@ public class RunningModeController {
         Rectangle staffRect = new Rectangle(magicalStaff.getCoordinate().getX(), magicalStaff.getCoordinate().getY(),
                 magicalStaff.getPreferredSize().width, magicalStaff.getPreferredSize().height);
 
-        runningModePage.add(debris);
-
-        while (debris.getCoordinate().getY() > 400) {
+        runningModePage.getGamePanel().add(debris);
+        System.out.println(debris.getCoordinate().getY());
+        while (debris.getCoordinate().getY() < 400) {
             debris.moveDown();
             Rectangle debrisRect = new Rectangle(debris.getCoordinate().getX(), debris.getCoordinate().getY(),
                     debris.getWidth(), debris.getHeight());

@@ -357,6 +357,11 @@ public class BuildingModePage extends Page {
         explosiveAmount.setText("Explosive barriers: " + buildingModeController.getGameSession().getNumExplosiveBarrier() + "/5");
         rewardingAmount.setText("Rewarding barriers: " + buildingModeController.getGameSession().getNumrewardingBarrier() + "/10");
 
+
+        infoContainer.add(saveButton, BorderLayout.SOUTH);
+        leftSide.add(playButton, BorderLayout.SOUTH);
+
+        /*
         if (getReady()){
             infoContainer.add(saveButton, BorderLayout.SOUTH);
             leftSide.add(playButton, BorderLayout.SOUTH);
@@ -366,6 +371,7 @@ public class BuildingModePage extends Page {
             leftSide.remove(playButton);
 
         }
+         */
         infoContainer.revalidate();
         infoContainer.repaint();
 
