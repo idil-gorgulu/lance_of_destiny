@@ -76,6 +76,7 @@ public class RunningModePage extends Page{
             runningModeController.moveFireball();
             runningModeController.moveStaff();
             runningModeController.checkCollision();
+            runningModeController.moveBarriers();
             SwingUtilities.invokeLater(new Runnable() {
                 @Override
                 public void run() {
@@ -199,7 +200,7 @@ public class RunningModePage extends Page{
                 // Initialize Barriers
                 barriers = runningModeController.getGameSession().getBarriers();
                 for (Barrier barrier : barriers) {
-                    barrier.setBounds(barrier.getCoordinates().getX(), barrier.getCoordinates().getY(), barrier.getPreferredSize().width, barrier.getPreferredSize().height);
+                    barrier.setBounds(barrier.getCoordinate().getX(), barrier.getCoordinate().getY(), barrier.getPreferredSize().width, barrier.getPreferredSize().height);
                     gamePanel.add(barrier);
                     barrier.setBackground(Color.blue);
                     barrier.setOpaque(true);

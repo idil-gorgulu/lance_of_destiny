@@ -48,6 +48,12 @@ public class Game {
 
     public void addBarrier(Coordinate coordinates, BarrierType type) {
         Barrier newBarrier = new Barrier(coordinates, type);
+        if (Math.random()<0.2)    {
+            newBarrier.setMoving(true);
+            if (Math.random()<0.5)  newBarrier.setVelocity(3);
+            else                    newBarrier.setVelocity(-3);
+        }
+
         barriers.add(newBarrier);
         String s="";
         if (type == BarrierType.SIMPLE) { //Simple barrier
@@ -75,7 +81,7 @@ public class Game {
         if(initialSize!=0){
             for (int i = 0; i < initialSize; i++) {
                 Barrier barrier = barriers.get(i);
-                if (barrier.getCoordinates().getX()==coordinates.getX() && barrier.getCoordinates().getY() == coordinates.getY()) {
+                if (barrier.getCoordinate().getX()==coordinates.getX() && barrier.getCoordinate().getY() == coordinates.getY()) {
                     System.out.println("Removed");
                     barriers.remove(barrier);
                     i--; // Decrease index because the size of ArrayList is reduced

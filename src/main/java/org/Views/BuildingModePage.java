@@ -155,7 +155,7 @@ public class BuildingModePage extends Page {
                 // TODO: Enter the gamename in this page somewhere
                 // gameSession.put("gameName", gameName);
                 for (Barrier barrier : barriers) {
-                    gameSession.put(barrier.getCoordinates().toString(), barrier.getType().toString() + barrier.getnHits());
+                    gameSession.put(barrier.getCoordinate().toString(), barrier.getType().toString() + barrier.getnHits());
                 }
                 gameSession.put("played", "False");
                 Database.getInstance().getGameCollection().insertOne(gameSession);
@@ -382,8 +382,8 @@ public class BuildingModePage extends Page {
         ArrayList<Barrier> barriers;
         barriers = buildingModeController.getGameSession().getBarriers();
         for (Barrier barrier : barriers) {
-            System.out.println("Building mode barrier putting: "+ barrier.getCoordinates().getX() +","+ barrier.getCoordinates().getY());
-            barrier.setBounds(barrier.getCoordinates().getX(), barrier.getCoordinates().getY(), barrier.getPreferredSize().width, barrier.getPreferredSize().height);
+            System.out.println("Building mode barrier putting: "+ barrier.getCoordinate().getX() +","+ barrier.getCoordinate().getY());
+            barrier.setBounds(barrier.getCoordinate().getX(), barrier.getCoordinate().getY(), barrier.getPreferredSize().width, barrier.getPreferredSize().height);
             buildingPanel.add(barrier);
             barrier.setBackground(Color.blue);
             barrier.setOpaque(true);
