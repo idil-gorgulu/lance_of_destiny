@@ -63,6 +63,8 @@
 
 package org.Views;
 
+import org.Domain.User;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.image.BufferedImage;
@@ -80,6 +82,7 @@ public class StartPage extends Page {
 
     @Override
     protected void initUI() {
+        System.out.println(User.getUserInstance().getEmail());
         setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 
         try {

@@ -85,6 +85,7 @@ public class GameSelectionPage extends Page {
         formPanel.setLayout(new BoxLayout(formPanel, BoxLayout.Y_AXIS));
         formPanel.setOpaque(false);
         ArrayList<Document> games = User.getUserInstance().getAllGames();
+        System.out.println(games);
         for (int  i = 0; i < games.size(); i++) {
             Document game = games.get(i);
             JButton gameButton = new JButton(String.valueOf(i));

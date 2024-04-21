@@ -109,7 +109,10 @@ public class LoginPage extends Page {
                 // Doğrulama sonrası işlemler
                 if (isAuthorized) {
                     System.out.println("Login successful!"); // Konsola loglama
-                    User.getUserInstance().setEmail(email);
+                    User user = User.getUserInstance();
+                    System.out.println(user);
+                    user.setEmail(email);
+                    System.out.println(User.getUserInstance().getEmail());
                     JOptionPane.showMessageDialog(null, "You are now logged in!"); // Kullanıcıya bilgi mesajı göster
                     Navigator.getInstance().showStartPage();
                     // Başka bir işlem veya ekran açabilirsiniz
