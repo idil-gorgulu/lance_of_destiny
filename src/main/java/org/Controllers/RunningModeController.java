@@ -157,7 +157,7 @@ public class RunningModeController {
         }
 
         // Check collision with top and bottom boundaries
-        //REMOVE bottom boundary and connect it to loseChance
+
         if (fireballY - fireballRadius <= -10) {
             // TOP
             yVelocity *= -1; // Reverse Y velocity
@@ -170,6 +170,8 @@ public class RunningModeController {
                 int fireballPositionX = (1000 - fireballWidth) / 2; // make these dynamic
                 int fireballHeight = fireball.getPreferredSize().height;
                 int fireballPositionY = (500 - fireballHeight - 200); // make these dynamic
+                fireball.setxVelocity(3);
+                fireball.setxVelocity(3);
                 fireball.getCoordinate().setX(fireballPositionX);
                 fireball.getCoordinate().setY(fireballPositionY);
                 fireball.setBounds(fireballPositionX, fireballPositionY, fireballWidth, fireballHeight);
