@@ -27,6 +27,7 @@ public class RunningModePage extends Page{
     private Chance chance;
     private Score score;
     private ArrayList<Barrier> barriers;
+    private ArrayList<Debris> activeDebris;
     public static final int SCREENWIDTH =1000; // I wanna reach it from MagicalStaff class
     private int screenHeight;
     public int timeInSeconds = 0;
@@ -35,6 +36,7 @@ public class RunningModePage extends Page{
     private JLabel timeLabel;
     public RunningModePage() {
         super();
+        activeDebris = new ArrayList<>();
         try {
             backgroundImage = ImageIO.read(new File("assets/Background.png"));
         } catch (IOException e) {
@@ -47,6 +49,9 @@ public class RunningModePage extends Page{
         setFocusable(true);
         requestFocus();
         setupTimer();
+    }
+    public ArrayList<Debris> getActiveDebris() {
+        return activeDebris;
     }
     protected void paintComponent(Graphics g) { //background for the whole frame
         super.paintComponent(g);
@@ -68,6 +73,8 @@ public class RunningModePage extends Page{
         timer.start();
     }
 
+
+
     public void updateGame() {
         if (this.runningModeController.getGameSession().getChance().getRemainingChance() == 0) {
             // System.out.println("here");
@@ -76,6 +83,8 @@ public class RunningModePage extends Page{
             runningModeController.moveFireball();
             runningModeController.moveStaff();
             runningModeController.checkCollision();
+            runningModeController.updateDebris(); // Handle debris movement
+
             SwingUtilities.invokeLater(new Runnable() {
                 @Override
                 public void run() {
@@ -158,7 +167,6 @@ public class RunningModePage extends Page{
                 fireball.setBackground(Color.red);
                 fireball.setOpaque(true);
                 gamePanel.add(fireball);
-                gamePanel.repaint();
                 gamePanel.revalidate();
                 //System.out.println(fireball.getCoordinate().getX());
                 //System.out.println(fireball.getCoordinate().getY());
@@ -179,7 +187,6 @@ public class RunningModePage extends Page{
                 gamePanel.requestFocus();
                 gamePanel.setFocusTraversalKeysEnabled(false);
                 gamePanel.add(magicalStaff);
-                gamePanel.repaint();
                 gamePanel.revalidate();
 
                 //to follow who has focus:
@@ -203,12 +210,9 @@ public class RunningModePage extends Page{
                     gamePanel.add(barrier);
                     barrier.setBackground(Color.blue);
                     barrier.setOpaque(true);
-                    gamePanel.repaint();
                     gamePanel.revalidate();
                 }
 
-                gamePanel.repaint();
-                repaint();
                 //screenWidth = gameContainer.getWidth();  sets to 0, pls remove
                 System.out.println("screenWidth2: "+ SCREENWIDTH);
 

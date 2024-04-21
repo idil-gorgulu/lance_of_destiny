@@ -207,8 +207,8 @@ public class RunningModeController {
             if(barrier.getType()==BarrierType.EXPLOSIVE){
                 explodeBarrier(barrier);
             }
-            runningModePage.revalidate();
-            runningModePage.repaint();
+            //runningModePage.revalidate();
+            //runningModePage.repaint();
             return true;
         }
 
@@ -223,28 +223,22 @@ public class RunningModeController {
     private void explodeBarrier(Barrier barrier) {
 
         Debris debris = new Debris(barrier.getCoordinates());
-        MagicalStaff magicalStaff = game.getMagicalStaff();
-        Rectangle staffRect = new Rectangle(magicalStaff.getCoordinate().getX(), magicalStaff.getCoordinate().getY(),
-                magicalStaff.getPreferredSize().width, magicalStaff.getPreferredSize().height);
-
+        runningModePage.getActiveDebris().add(debris); // Add debris to the list
         runningModePage.getGamePanel().add(debris);
-        System.out.println(debris.getCoordinate().getY());
-        while (debris.getCoordinate().getY() < 400) {
-            debris.moveDown();
-            Rectangle debrisRect = new Rectangle(debris.getCoordinate().getX(), debris.getCoordinate().getY(),
-                    debris.getWidth(), debris.getHeight());
-            runningModePage.revalidate();
-            runningModePage.repaint();
+        //runningModePage.repaint();
+    }
 
-            if (staffRect.intersects(debrisRect)) {
-                game.getChance().decrementChance();
-                runningModePage.remove(debris);
-                break;
+    public void updateDebris() {
+        Iterator<Debris> iterator = runningModePage.getActiveDebris().iterator();
+        while (iterator.hasNext()) {
+            Debris debris = iterator.next();
+            debris.moveDown(); // Assuming moveDown() properly updates the Y-coordinate
+            if (debris.getCoordinate().getY() > 600) { // Assuming 600 is the bottom of the screen
+                runningModePage.getGamePanel().remove(debris);
+                iterator.remove();
             }
         }
-
-        runningModePage.revalidate();
-        runningModePage.repaint();
     }
+
 
 }
