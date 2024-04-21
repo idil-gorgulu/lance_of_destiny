@@ -26,6 +26,7 @@ public class RunningModePage extends Page{
     private MagicalStaffController magicalStaffController;
     private Chance chance;
     private Score score;
+    public boolean pause = false;
     private ArrayList<Barrier> barriers;
     private ArrayList<Debris> activeDebris;
     public static final int SCREENWIDTH =1000; // I wanna reach it from MagicalStaff class
@@ -37,6 +38,7 @@ public class RunningModePage extends Page{
     public RunningModePage() {
         super();
         activeDebris = new ArrayList<>();
+        this.setDoubleBuffered(true);
         try {
             backgroundImage = ImageIO.read(new File("assets/Background.png"));
         } catch (IOException e) {
@@ -62,21 +64,43 @@ public class RunningModePage extends Page{
         int delay = 4; // 4 ms delay, approx. 60 FPS
 
         Timer timer = new Timer(delay, e -> {
-            updateGame(); // Perform game updates
-            frameCount++; // Increment frame count each time the timer fires
-            if (frameCount >= 70) { // This is not exactly 1 second
-                timeInSeconds++; // Increment the second counter
-                timeLabel.setText("Time: " + timeInSeconds + "s");
-                frameCount = 0; // Reset frame count
+            if (this.pause) {
+                Object[] options = {"Continue", "Quit"};
+                int choice = JOptionPane.showOptionDialog(null,
+                        "You paused",
+                        "Game Paused",
+                        JOptionPane.YES_NO_OPTION,
+                        JOptionPane.QUESTION_MESSAGE,
+                        null,
+                        options,
+                        options[0]);
+
+                if (choice == JOptionPane.YES_OPTION) {
+                    this.pause = false;
+                } else if (choice == JOptionPane.NO_OPTION) {
+                    this.pause = false;
+                    this.runningModeController.getGameSession().ended = true;
+                    Navigator.getInstance().showStartPage();
+
+                }
+            } else {
+                updateGame();
+                frameCount++;
+                if (frameCount >= 70) {
+                    timeInSeconds++;
+                    timeLabel.setText("Time: " + timeInSeconds + "s");
+                    frameCount = 0;
+                }
             }
         });
         timer.start();
+
     }
 
 
 
     public void updateGame() {
-        if (this.runningModeController.getGameSession().getChance().getRemainingChance() == 0) {
+        if (this.runningModeController.getGameSession().getChance().getRemainingChance() == 0 || this.runningModeController.getGameSession().ended) {
             // System.out.println("here");
             // delete this in here
         } else {
@@ -92,9 +116,14 @@ public class RunningModePage extends Page{
             SwingUtilities.invokeLater(new Runnable() {
                 @Override
                 public void run() {
-                    runningModeController.run();
-                    gamePanel.repaint();
-                    repaint();
+                    if (runningModeController.getGameSession().active) {
+                        runningModeController.run();
+                        //gamePanel.repaint();
+                        repaint();
+                    } else {
+                        JOptionPane.showMessageDialog(null, "You lost!");
+                        Navigator.getInstance().showStartPage();
+                    }
                 }
             });
         }
@@ -125,6 +154,12 @@ public class RunningModePage extends Page{
                 timeLabel = new JLabel("Time: 0s", SwingConstants.CENTER);
                 infoContainer.add(timeLabel);
 
+                JButton pauseButton = new JButton("Pause");
+                pauseButton.addActionListener(e -> pause = true);
+
+// Add the pause button to the info container
+                infoContainer.add(pauseButton);
+
                 // Adding infoContainer the chance and score instances which are already visual JPanels.
                 infoContainer.add(runningModeController.getGameSession().getChance());
                 infoContainer.add(runningModeController.getGameSession().getScore());
@@ -152,7 +187,7 @@ public class RunningModePage extends Page{
                 Border border = BorderFactory.createLineBorder(Color.BLACK);
                 gamePanel.setPreferredSize(new Dimension(1000, 500)); // Set preferred size of buildingPanel
                 gamePanel.addNotify();
-                gamePanel.revalidate();
+                //gamePanel.revalidate();
                 gamePanel.setBorder(border);
                 add(gamePanel, BorderLayout.EAST);
                 //screenWidth = 1000; assigned at top and finalized
@@ -171,7 +206,7 @@ public class RunningModePage extends Page{
                 fireball.setBackground(Color.red);
                 fireball.setOpaque(true);
                 gamePanel.add(fireball);
-                gamePanel.revalidate();
+                //gamePanel.revalidate();
                 //System.out.println(fireball.getCoordinate().getX());
                 //System.out.println(fireball.getCoordinate().getY());
 
@@ -191,7 +226,7 @@ public class RunningModePage extends Page{
                 gamePanel.requestFocus();
                 gamePanel.setFocusTraversalKeysEnabled(false);
                 gamePanel.add(magicalStaff);
-                gamePanel.revalidate();
+                //gamePanel.revalidate();
 
                 //to follow who has focus:
                 gamePanel.addFocusListener(new FocusListener() {
@@ -214,7 +249,7 @@ public class RunningModePage extends Page{
                     gamePanel.add(barrier);
                     barrier.setBackground(Color.blue);
                     barrier.setOpaque(true);
-                    gamePanel.revalidate();
+                    // gamePanel.revalidate();
                 }
 
                 //screenWidth = gameContainer.getWidth();  sets to 0, pls remove

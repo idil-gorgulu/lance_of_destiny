@@ -44,7 +44,7 @@ public class RunningModeController {
     public void moveBarriers(){
         int newpos;
         boolean isAvailable;
-       for (Barrier br: getGameSession().getBarriers()){
+        for (Barrier br: getGameSession().getBarriers()){
            if (br.isMoving()) {
                isAvailable=true;
                if (br.getVelocity()<0) newpos=br.getCoordinate().getX()-(int)br.getPreferredSize().getWidth();
@@ -195,8 +195,7 @@ public class RunningModeController {
                 fireball.setBackground(Color.red);
                 fireball.setOpaque(true);
                 if (this.getGameSession().getChance().getRemainingChance() == 0) {
-                    JOptionPane.showMessageDialog(null, "You lost!");
-                    Navigator.getInstance().showStartPage();
+                    game.active = false;
                 }
             }
     }
@@ -219,8 +218,8 @@ public class RunningModeController {
 
     public boolean hitBarrier(Barrier barrier) {
         barrier.setnHits(barrier.getnHits() - 1);
-        barrier.revalidate();
-        barrier.repaint();
+        //barrier.revalidate();
+        //barrier.repaint();
         if (barrier.getnHits() <= 0) {
             barrier.destroy();
             if(barrier.getType()==BarrierType.EXPLOSIVE){

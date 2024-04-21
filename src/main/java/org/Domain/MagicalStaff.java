@@ -58,8 +58,8 @@ public class MagicalStaff extends JPanel {
         angle += dTheta;
         Dimension newSize = calculateRotatedDimensions(angle);
         setPreferredSize(newSize);
-        revalidate();
-        repaint();
+        //revalidate();
+        //repaint();
     }
     public void moveMagicalStaff(){
         int newPos =velocity+getCoordinate().getX();
@@ -78,8 +78,8 @@ public class MagicalStaff extends JPanel {
             }
             Dimension newSize = calculateRotatedDimensions(angle);
             setPreferredSize(newSize);
-            revalidate();
-            repaint();
+            //revalidate();
+            //repaint();
             angle=newAngle;
         }
 
@@ -103,8 +103,8 @@ public class MagicalStaff extends JPanel {
                 angularVel=0;
             }
         }
-        revalidate();
-        repaint();
+        //revalidate();
+        //repaint();
 
 
 

@@ -19,6 +19,8 @@ public class Game {
     int numExplosiveBarrier=0;
     int numrewardingBarrier=0;
     int numTotal;
+    public boolean active = true;
+    public boolean ended = false;
     String[][] barrierBoard = new String[20][20];
 
     public Game(){
@@ -112,7 +114,7 @@ public class Game {
             return instance;
         }
         else{
-            if (instance.getChance().getRemainingChance() != 0)
+            if (instance.getChance().getRemainingChance() != 0 || instance.ended)
                 return instance;
             else {
                 instance = new Game();
