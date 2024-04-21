@@ -20,11 +20,14 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 
+import static org.Controllers.BuildingModeController.getReady;
+
 public class BuildingModePage extends Page {
     private BuildingModeController buildingModeController;
     private BufferedImage backgroundImage;
     private JPanel buildingPanel;
     private JPanel buildingContainer;
+    private JPanel leftSide;
     private JLabel leftBarriers;
     private JButton[] buttons;
     private JLabel simpleAmount;
@@ -32,8 +35,10 @@ public class BuildingModePage extends Page {
     private JLabel explosiveAmount;
     private JLabel rewardingAmount;
     private int selectedButtonIndex = -1;
-
+    private JPanel infoContainer;
+    private JButton playButton;
     public int pageNum = 1;
+    private JButton saveButton;
 
     public BuildingModePage() {
         super();
@@ -50,7 +55,7 @@ public class BuildingModePage extends Page {
         //JMenu menu = new JMenu("Menu");
         //menuBar.add(menu);
 
-        JPanel infoContainer = new JPanel(new FlowLayout());
+        infoContainer = new JPanel(new FlowLayout());
 //        leftBarriers = new JLabel("Add at least this many more:");
 //        leftBarriers.setBounds(50, 50, 70, 20); //
 //        infoContainer.add(leftBarriers);
@@ -123,7 +128,7 @@ public class BuildingModePage extends Page {
         rewardingAmount.setHorizontalAlignment(SwingConstants.LEFT);
         infoContainer.add(rewardingAmount);
 
-        JPanel leftSide = new JPanel(new BorderLayout());
+        leftSide = new JPanel(new BorderLayout());
         leftSide.setPreferredSize(new Dimension(200, 500));
 
         //menuContainer.add(menuBar, BorderLayout.NORTH);
@@ -133,13 +138,14 @@ public class BuildingModePage extends Page {
 
         //JPanel backButtonPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
         //backButtonPanel.setOpaque(false); // Make the panel transparent
-        JButton playButton = new JButton("Play");
+        playButton = new JButton("Play");
         // Condition to the Play button
         playButton.addActionListener(e -> Navigator.getInstance().showRunningModePage());
-        leftSide.add(playButton, BorderLayout.SOUTH);
+        //leftSide.add(playButton, BorderLayout.SOUTH);
 
-        JButton saveButton = new JButton("Save");
+        saveButton = new JButton("Save");
         // Create a condition wheter the game is ready to be saved
+
         saveButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -241,6 +247,7 @@ public class BuildingModePage extends Page {
             public void mousePressed(MouseEvent e) {
                 if (selectedButtonIndex != -1) { //If -1, means a button is not currently selected.
                     System.out.println("Mouse click coordinates:"+ e.getX()+" "+ e.getY());
+                    //TODO: Check borders of where we can add barriers, we should not below some level.
                     addBarrierImage(new Coordinate(e.getX(), e.getY()));
                 }
             }
@@ -347,6 +354,22 @@ public class BuildingModePage extends Page {
         firmAmount.setText("Firm barriers: " + buildingModeController.getGameSession().getNumFirmBarrier() + "/10");
         explosiveAmount.setText("Explosive barriers: " + buildingModeController.getGameSession().getNumExplosiveBarrier() + "/5");
         rewardingAmount.setText("Rewarding barriers: " + buildingModeController.getGameSession().getNumrewardingBarrier() + "/10");
+
+        if (getReady()){
+            infoContainer.add(saveButton, BorderLayout.SOUTH);
+            leftSide.add(playButton, BorderLayout.SOUTH);
+        }
+        else{
+            infoContainer.remove(saveButton);
+            leftSide.remove(playButton);
+
+        }
+        infoContainer.revalidate();
+        infoContainer.repaint();
+
+        leftSide.revalidate();
+        leftSide.repaint();
+
 
         ArrayList<Barrier> barriers;
         barriers = buildingModeController.getGameSession().getBarriers();

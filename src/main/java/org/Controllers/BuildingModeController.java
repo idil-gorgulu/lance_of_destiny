@@ -82,4 +82,13 @@ public class BuildingModeController {
         return b;
     }
 
+    public static boolean getReady(){
+        if(gameSession.getNumSimpleBarrier()>=75 && gameSession.getNumFirmBarrier()>=10 && gameSession.getNumExplosiveBarrier()>=5 && gameSession.getNumrewardingBarrier()>=10){
+            return true;
+        }
+        else{
+            return false;
+        }
+    }
+
 }
