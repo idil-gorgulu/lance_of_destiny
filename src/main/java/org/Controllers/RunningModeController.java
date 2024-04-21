@@ -27,12 +27,12 @@ public class RunningModeController {
     public void moveFireball(){
         this.getGameSession().getFireball().moveFireball();
     }
-    public void moveStaff(){
+    public void moveStaff(){ //for display
         getGameSession().getMagicalStaff().moveMagicalStaff();
         getGameSession().getMagicalStaff().rotateMagicalStaff();}
 
 
-    public void slideMagicalStaff(int x) {
+    public void slideMagicalStaff(int x) { //for calculation
        getGameSession().getMagicalStaff().setVelocity(x);
     }
     public void rotateMagicalStaff(double dTheta){ // If the speed of rotation also matters, I will move this method to MagicalStaff as well. -Melih
@@ -40,6 +40,23 @@ public class RunningModeController {
     }
     public void stabilizeMagicalStaff(boolean cw){// Work In Progress -Melih
         getGameSession().getMagicalStaff().stabilize(cw);
+    }
+    public void moveBarriers(){
+        int newpos;
+        boolean isAvailable;
+       for (Barrier br: getGameSession().getBarriers()){
+           if (br.isMoving()) {
+               isAvailable=true;
+               if (br.getVelocity()<0) newpos=br.getCoordinate().getX()-(int)br.getPreferredSize().getWidth();
+               else                    newpos=br.getCoordinate().getX()+(int)br.getPreferredSize().getWidth();
+               for (Barrier br2: getGameSession().getBarriers()){
+                   if (br2.getCoordinate().getX()==newpos){
+                       isAvailable=false;
+                       break;                       }                    }
+               if (isAvailable)
+                 br.moveBarrier();
+           }
+       }
     }
 
     public void checkCollision() {
@@ -118,7 +135,7 @@ public class RunningModeController {
         }
         for (Barrier br : barriers) {
             //System.out.println("size"+br.getPreferredSize().getWidth()+ (int) br.getPreferredSize().getHeight());
-            Rectangle brRect = new Rectangle(br.getCoordinates().getX(), br.getCoordinates().getY(), (int) br.getPreferredSize().getWidth(), (int) br.getPreferredSize().getHeight());
+            Rectangle brRect = new Rectangle(br.getCoordinate().getX(), br.getCoordinate().getY(), (int) br.getPreferredSize().getWidth(), (int) br.getPreferredSize().getHeight());
 
             if (brRect.intersects(fireballRect)) {
                 // Barriers are always horizontal
@@ -131,8 +148,8 @@ public class RunningModeController {
 
                  */
                 //System.out.println(brRect.getX()+" "+brRect.getY()+" "+brRect.getWidth()+" "+brRect.getHeight());
-                Rectangle sideLRect = new Rectangle(br.getCoordinates().getX(), br.getCoordinates().getY() + 1, 1, 13);
-                Rectangle sideRRect = new Rectangle(br.getCoordinates().getX() + 50, br.getCoordinates().getY() + 1, 1, 13);
+                Rectangle sideLRect = new Rectangle(br.getCoordinate().getX(), br.getCoordinate().getY() + 1, 1, 13);
+                Rectangle sideRRect = new Rectangle(br.getCoordinate().getX() + 50, br.getCoordinate().getY() + 1, 1, 13);
 
                 if ((sideLRect.intersects(fireballRect)) || (sideRRect.intersects(fireballRect))) {
                     fireball.setxVelocity(-xVelocity);
@@ -157,7 +174,7 @@ public class RunningModeController {
         }
 
         // Check collision with top and bottom boundaries
-        //REMOVE bottom boundary and connect it to loseChance
+
         if (fireballY - fireballRadius <= -10) {
             // TOP
             yVelocity *= -1; // Reverse Y velocity
@@ -170,6 +187,8 @@ public class RunningModeController {
                 int fireballPositionX = (1000 - fireballWidth) / 2; // make these dynamic
                 int fireballHeight = fireball.getPreferredSize().height;
                 int fireballPositionY = (500 - fireballHeight - 200); // make these dynamic
+                fireball.setxVelocity(3);
+                fireball.setxVelocity(3);
                 fireball.getCoordinate().setX(fireballPositionX);
                 fireball.getCoordinate().setY(fireballPositionY);
                 fireball.setBounds(fireballPositionX, fireballPositionY, fireballWidth, fireballHeight);
@@ -194,7 +213,7 @@ public class RunningModeController {
         fireball.setBounds(fireball.getCoordinate().getX(), fireball.getCoordinate().getY(), fireball.getWidth(), fireball.getPreferredSize().height);
 
         for (Barrier barrier : barriers) {
-            barrier.setBounds(barrier.getCoordinates().getX(), barrier.getCoordinates().getY(), barrier.getWidth(), barrier.getHeight());
+            barrier.setBounds(barrier.getCoordinate().getX(), barrier.getCoordinate().getY(), barrier.getWidth(), barrier.getHeight());
         }
     }
 
@@ -222,8 +241,10 @@ public class RunningModeController {
 
     private void explodeBarrier(Barrier barrier) {
 
-        Debris debris = new Debris(barrier.getCoordinates());
+
+        Debris debris = new Debris(barrier.getCoordinate());
         runningModePage.getActiveDebris().add(debris); // Add debris to the list
+
         runningModePage.getGamePanel().add(debris);
         //runningModePage.repaint();
     }

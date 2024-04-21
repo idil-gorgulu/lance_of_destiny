@@ -1,6 +1,8 @@
 package org.Domain;
 
 
+import org.Views.RunningModePage;
+
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
@@ -11,16 +13,19 @@ import java.io.IOException;
 import java.util.Random;
 
 public class Barrier extends JPanel {
-    private Coordinate coordinates;
+    private Coordinate coordinate;
     private BarrierType type; //will indicate the type of the barrier
     private BufferedImage barrierImage;
 
     private int nHits; //required for reinforced barrier
+    private int velocity; //+-3 for moving, 0 for stiff barriers
+    private boolean isMoving;
 
-    public Barrier(Coordinate coordinates, BarrierType type) {
-        this.coordinates = coordinates;
+    public Barrier(Coordinate coordinate, BarrierType type) {
+        this.coordinate = coordinate;
         this.type = type;
         this.nHits = initializenHits(type);
+        this.isMoving=false;
         //Option 1:
         try {
             this.barrierImage = ImageIO.read(new File(setImageDirectory(type)));
@@ -97,12 +102,12 @@ public class Barrier extends JPanel {
         }
     }
 
-    public Coordinate getCoordinates() {
-        return coordinates;
+    public Coordinate getCoordinate() {
+        return coordinate;
     }
 
-    public void setCoordinates(Coordinate coordinates) {
-        this.coordinates = coordinates;
+    public void setCoordinates(Coordinate coordinate) {
+        this.coordinate = coordinate;
     }
 
     public BarrierType getType() {
@@ -136,5 +141,32 @@ public class Barrier extends JPanel {
         revalidate();
         repaint();
     }
+
+    public void moveBarrier(){
+
+            int newPos =velocity+getCoordinate().getX();
+            if ((newPos>0) && (newPos+getPreferredSize().getWidth()< RunningModePage.SCREENWIDTH)) {
+                getCoordinate().setX(newPos);
+                //;
+
+        }
+    }
+
+    public int getVelocity() {
+        return velocity;
+    }
+
+    public void setVelocity(int velocity) {
+        this.velocity = velocity;
+    }
+
+    public boolean isMoving() {
+        return isMoving;
+    }
+
+    public void setMoving(boolean moving) {
+        isMoving = moving;
+    }
+
 
 }
