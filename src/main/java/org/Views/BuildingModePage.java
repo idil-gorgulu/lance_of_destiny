@@ -27,6 +27,10 @@ public class BuildingModePage extends Page {
     private JPanel buildingContainer;
     private JLabel leftBarriers;
     private JButton[] buttons;
+    private JLabel simpleAmount;
+    private JLabel firmAmount;
+    private JLabel explosiveAmount;
+    private JLabel rewardingAmount;
     private int selectedButtonIndex = -1;
 
     public int pageNum = 1;
@@ -95,11 +99,29 @@ public class BuildingModePage extends Page {
                 }
                 else{
                     regenerate();
+                    // Clear input fields
+                    inputField1.setText("");
+                    inputField2.setText("");
+                    inputField3.setText("");
+                    inputField4.setText("");
                 }
-
             }
         });
         infoContainer.add(submitButton);
+        JLabel line = new JLabel("-----------------------------------");
+        infoContainer.add(line);
+        simpleAmount = new JLabel("Simple barriers: "+ buildingModeController.getGameSession().getNumSimpleBarrier()+ "/75");
+        simpleAmount.setHorizontalAlignment(SwingConstants.LEFT);
+        infoContainer.add(simpleAmount);
+        firmAmount = new JLabel("Firm barriers: "+ buildingModeController.getGameSession().getNumFirmBarrier()+ "/10");
+        firmAmount.setHorizontalAlignment(SwingConstants.LEFT);
+        infoContainer.add(firmAmount);
+        explosiveAmount = new JLabel("Explosive barriers: "+ buildingModeController.getGameSession().getNumExplosiveBarrier()+ "/5");
+        explosiveAmount.setHorizontalAlignment(SwingConstants.LEFT);
+        infoContainer.add(explosiveAmount);
+        rewardingAmount = new JLabel("Rewarding barriers: "+ buildingModeController.getGameSession().getNumrewardingBarrier()+ "/10");
+        rewardingAmount.setHorizontalAlignment(SwingConstants.LEFT);
+        infoContainer.add(rewardingAmount);
 
         JPanel leftSide = new JPanel(new BorderLayout());
         leftSide.setPreferredSize(new Dimension(200, 500));
@@ -231,7 +253,7 @@ public class BuildingModePage extends Page {
         int screenWidth2 = buildingContainer.getWidth();
         //System.out.println("buildingContainer screenWidth"+ screenWidth2);
         buildingPanel.setBorder(border);
-        regenerate();
+        //regenerate();
         buildingContainer.add(buildingPanel, BorderLayout.CENTER);
         add(buildingContainer, BorderLayout.CENTER);
         JLabel statusLabel = new JLabel("Building Mode", SwingConstants.CENTER);
@@ -320,6 +342,11 @@ public class BuildingModePage extends Page {
         magicalStaff.setBounds(magicalStaffPositionX, magicalStaffPositionY, magicalStaffWidth, magicalStaffHeight);
         magicalStaff.setBackground(Color.green);
         buildingPanel.add(magicalStaff);
+
+        simpleAmount.setText("Simple barriers: " + buildingModeController.getGameSession().getNumSimpleBarrier() + "/75");
+        firmAmount.setText("Firm barriers: " + buildingModeController.getGameSession().getNumFirmBarrier() + "/10");
+        explosiveAmount.setText("Explosive barriers: " + buildingModeController.getGameSession().getNumExplosiveBarrier() + "/5");
+        rewardingAmount.setText("Rewarding barriers: " + buildingModeController.getGameSession().getNumrewardingBarrier() + "/10");
 
         ArrayList<Barrier> barriers;
         barriers = buildingModeController.getGameSession().getBarriers();

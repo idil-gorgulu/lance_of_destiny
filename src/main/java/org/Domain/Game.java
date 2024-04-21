@@ -14,10 +14,10 @@ public class Game {
     private ArrayList<Barrier> barriers = new ArrayList<Barrier>(0); // Could maybe be a hashmap?
     private ArrayList<Debris> debris = new ArrayList<Debris>(0);
     private static Game instance;
-    int numSimpleBarrier;
-    int numFirmBarrier;
-    int numExplosiveBarrier;
-    int numrewardingBarrier;
+    int numSimpleBarrier=0;
+    int numFirmBarrier=0;
+    int numExplosiveBarrier=0;
+    int numrewardingBarrier=0;
     int numTotal;
     String[][] barrierBoard = new String[20][20];
 
@@ -59,21 +59,18 @@ public class Game {
         } else if (type == BarrierType.EXPLOSIVE) { //Explosive barrier
             numExplosiveBarrier++;
             s="x";
-
         } else if (type == BarrierType.REWARDING) {
             numrewardingBarrier++;
             s="r";
         }
         numTotal++;
-        int boardX= coordinates.getY()/20;
-        int boardY= coordinates.getX()/50;
-        barrierBoard[boardX][boardY]=s;
+        int boardX = coordinates.getX() / 50; // Adjust the indexing here
+        int boardY = coordinates.getY() / 20; // Adjust the indexing here
+        barrierBoard[boardY][boardX] = s; // Adjusted the indexing here
         printBoard();
     }
 
-    public void removeBarrier(Coordinate coordinates){
-
-
+    public void removeBarrier(Coordinate coordinates, BarrierType type){
         int initialSize=barriers.size();
         if(initialSize!=0){
             for (int i = 0; i < initialSize; i++) {
@@ -82,20 +79,26 @@ public class Game {
                     System.out.println("Removed");
                     barriers.remove(barrier);
                     i--; // Decrease index because the size of ArrayList is reduced
+                    System.out.println("After removal, board:");
+                    int boardX= coordinates.getY()/20;
+                    int boardY= coordinates.getX()/50;
+                    barrierBoard[boardX][boardY]=null;
+                    printBoard();
+                    numTotal--;
+                    if (type == BarrierType.SIMPLE) { //Simple barrier
+                        numSimpleBarrier--;
+                    } else if (type == BarrierType.REINFORCED) { //Reinforced barrier
+                        numFirmBarrier--;
+                    } else if (type == BarrierType.EXPLOSIVE) { //Explosive barrier
+                        numExplosiveBarrier--;
+                    } else if (type == BarrierType.REWARDING) {
+                        numrewardingBarrier--;
+                    }
                     return;
                 }
             }
-            int boardX= coordinates.getY()/20;
-            int boardY= coordinates.getX()/50;
-            //TODO removing from board is problematic
-            barrierBoard[boardX][boardY]="!";
-            printBoard();
-            numTotal--;
-
         }
         System.out.println("No barriers in that coordinates");
-
-
     }
     public static Game getInstance(){
         if(instance==null){
@@ -141,73 +144,43 @@ public class Game {
     }
 
     public boolean initialPopulation(int simpleNum, int firmNum, int exNum, int giftNum){
-        int count=0;
-        for (String[] row : barrierBoard) {
-            for (String element : row) {
-                if (element == null) {
-                    count++;
+        int tot = numSimpleBarrier + numExplosiveBarrier + numFirmBarrier + numrewardingBarrier;
+        System.out.println("numtotal " + tot);
+        if (400 - tot < simpleNum + firmNum + exNum + giftNum){
+            return false;
+        }
+        Random random = new Random();
+        int simpleCount = 0;
+        int firmCount = 0;
+        int exCount = 0;
+        int giftCount = 0;
+
+        while (simpleCount < simpleNum || firmCount < firmNum || exCount < exNum || giftCount < giftNum) {
+            int randomRow = random.nextInt(20);
+            int randomCol = random.nextInt(20);
+
+            if (barrierBoard[randomRow][randomCol] == null) {
+                if (simpleCount < simpleNum) {
+                    Coordinate newCoord = new Coordinate( randomCol * 50,randomRow * 20);
+                    addBarrier(newCoord, BarrierType.SIMPLE);
+                    simpleCount++;
+                } else if (firmCount < firmNum) {
+                    Coordinate newCoord = new Coordinate(randomCol * 50,randomRow * 20);
+                    addBarrier(newCoord, BarrierType.REINFORCED);
+                    firmCount++;
+                } else if (exCount < exNum) {
+                    Coordinate newCoord = new Coordinate(randomCol * 50,randomRow * 20);
+                    addBarrier(newCoord, BarrierType.EXPLOSIVE);
+                    exCount++;
+                } else if (giftCount < giftNum) {
+                    Coordinate newCoord = new Coordinate(randomCol * 50,randomRow * 20);
+                    addBarrier(newCoord, BarrierType.REWARDING);
+                    giftCount++;
                 }
             }
         }
-        if (count<simpleNum+firmNum+exNum+giftNum){
-            return false;
-        }
 
-        Random random = new Random();
-        // Choose a random element
-
-        for (int k = 0; k < simpleNum; k++) {
-            int randomRow = random.nextInt(20);
-            int randomCol = random.nextInt(20);
-            if (barrierBoard[randomRow][randomCol] == null){
-                barrierBoard[randomRow][randomCol] += "s";
-                Coordinate newCoord= new Coordinate(randomRow*50,randomCol*20);
-                addBarrier(newCoord, BarrierType.SIMPLE);
-            }
-            else{
-                k--;
-            }
-
-        }
-        for (int k = 0; k < firmNum; k++) {
-            int randomRow = random.nextInt(20);
-            int randomCol = random.nextInt(20);
-            if (barrierBoard[randomRow][randomCol] == null){
-                barrierBoard[randomRow][randomCol] += "f";
-                Coordinate newCoord= new Coordinate(randomRow*50,randomCol*20);
-                addBarrier(newCoord, BarrierType.REINFORCED);
-            }
-            else{
-                k--;
-            }
-
-        }
-        for (int k = 0; k < exNum; k++) {
-            int randomRow = random.nextInt(20);
-            int randomCol = random.nextInt(20);
-            if (barrierBoard[randomRow][randomCol] == null){
-                barrierBoard[randomRow][randomCol] += "x";
-                Coordinate newCoord= new Coordinate(randomRow*50,randomCol*20);
-                addBarrier(newCoord, BarrierType.EXPLOSIVE);
-            }
-            else{
-                k--;
-            }
-
-        }
-        for (int k = 0; k < giftNum; k++) {
-            int randomRow = random.nextInt(20);
-            int randomCol = random.nextInt(20);
-            if (barrierBoard[randomRow][randomCol] == null){
-                barrierBoard[randomRow][randomCol] += "r";
-                Coordinate newCoord= new Coordinate(randomRow*50,randomCol*20);
-                addBarrier(newCoord, BarrierType.REWARDING);
-            }
-            else{
-                k--;
-            }
-
-        }
+        System.out.println("Adding Completed");
         return true;
     }
     public void printBoard(){
@@ -222,7 +195,29 @@ public class Game {
             }
             System.out.println();
         }
-
     }
 
+    public int getNumSimpleBarrier() {
+        return numSimpleBarrier;
+    }
+
+    public int getNumFirmBarrier() {
+        return numFirmBarrier;
+    }
+
+    public int getNumExplosiveBarrier() {
+        return numExplosiveBarrier;
+    }
+
+    public int getNumrewardingBarrier() {
+        return numrewardingBarrier;
+    }
+
+    public int getNumTotal() {
+        return numTotal;
+    }
+
+    public String[][] getBarrierBoard() {
+        return barrierBoard;
+    }
 }
