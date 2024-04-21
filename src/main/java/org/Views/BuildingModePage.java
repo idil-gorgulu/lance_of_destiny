@@ -151,13 +151,14 @@ public class BuildingModePage extends Page {
             public void actionPerformed(ActionEvent e) {
                 ArrayList<Barrier> barriers = buildingModeController.getGameSession().getBarriers();
                 Document gameSession = new Document();
+                gameSession.put("email", User.getUserInstance().getEmail());
+                // TODO: Enter the gamename in this page somewhere
+                // gameSession.put("gameName", gameName);
                 for (Barrier barrier : barriers) {
                     gameSession.put(barrier.getCoordinates().toString(), barrier.getType().toString() + barrier.getnHits());
                 }
                 gameSession.put("played", "False");
                 Database.getInstance().getGameCollection().insertOne(gameSession);
-                // TODO: Return the gameId in here, or add the user name as well in here
-
             }
         });
         // TODO: This overlaps with Menu, fix it

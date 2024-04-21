@@ -101,7 +101,7 @@ public class StartPage extends Page {
         // Add action listeners for buttons
 
         buildingModeButton.addActionListener(e -> Navigator.getInstance().showBuildingModePage());
-        runningModeButton.addActionListener(e -> Navigator.getInstance().showRunningModePage());
+        runningModeButton.addActionListener(e -> Navigator.getInstance().showGameSelectionPage());
         add(Box.createVerticalStrut(10));
         add(buildingModeButton);
         add(Box.createVerticalStrut(10));

@@ -44,6 +44,7 @@ public class Navigator {
     }
     public void showBuildingModePage() { showPage(new BuildingModePage()); }
     public void showRunningModePage() { showPage(new RunningModePage()); }
+    public void showGameSelectionPage() {showPage(new GameSelectionPage()); }
 
     public void show() {
         mainFrame.setVisible(true);

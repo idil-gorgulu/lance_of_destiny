@@ -1,6 +1,7 @@
 package org.Views;
 import org.Controllers.LoginPageController;
 import org.Domain.User;
+import org.bson.Document;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
@@ -15,15 +16,16 @@ import java.io.File;
 import java.io.IOException;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
 
 
-public class LoginPage extends Page {
+public class GameSelectionPage extends Page {
 
     private BufferedImage backgroundImage;
 
-    public LoginPage() {
+    public GameSelectionPage() {
         super();
-        this.setOpaque(false); // Ana panel için opaklık ayarı
+        this.setOpaque(false);
         loadBackgroundImage();
         initUI();
     }
@@ -38,8 +40,6 @@ public class LoginPage extends Page {
 
     protected void initUI() {
         setLayout(new BorderLayout());
-
-
         JPanel backgroundPanel = new JPanel(new BorderLayout()) {
             @Override
             protected void paintComponent(Graphics g) {
@@ -56,7 +56,7 @@ public class LoginPage extends Page {
         JPanel backButtonPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
         backButtonPanel.setOpaque(false); // Make the panel transparent
         JButton backButton = new JButton("Back");
-        backButton.addActionListener(e -> Navigator.getInstance().showEnterPage());
+        backButton.addActionListener(e -> Navigator.getInstance().showStartPage());
         backButtonPanel.add(backButton);
 
         backgroundPanel.add(backButtonPanel, BorderLayout.NORTH);
@@ -84,47 +84,27 @@ public class LoginPage extends Page {
         JPanel formPanel = new JPanel();
         formPanel.setLayout(new BoxLayout(formPanel, BoxLayout.Y_AXIS));
         formPanel.setOpaque(false);
+        ArrayList<Document> games = User.getUserInstance().getAllGames();
+        for (int  i = 0; i < games.size(); i++) {
+            Document game = games.get(i);
+            JButton gameButton = new JButton(String.valueOf(i));
+            customizeButton(gameButton);
+            gameButton.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    // TODO: Create the game according to the specs that comes from the game
 
-        // Setup for email text field
-        JTextField emailTextField = setupTextField("email");
-        formPanel.add(emailTextField);
-
-        // Setup for password field
-        JPasswordField passwordField = setupPasswordField("password");
-        formPanel.add(passwordField);
-
-        // Login Button setup
-        JButton loginButton = new JButton("Login");
-        customizeButton(loginButton);
-        loginButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                // Kullanıcı bilgilerini al
-                String email = emailTextField.getText();
-                char[] password = passwordField.getPassword();
-
-                // Kullanıcıyı doğrula
-                boolean isAuthorized = LoginPageController.getInstance().authorizeUser(email, String.copyValueOf(password));
-
-                // Doğrulama sonrası işlemler
-                if (isAuthorized) {
-                    System.out.println("Login successful!"); // Konsola loglama
-                    User.getUserInstance().setEmail(email);
-                    JOptionPane.showMessageDialog(null, "You are now logged in!"); // Kullanıcıya bilgi mesajı göster
-                    Navigator.getInstance().showStartPage();
-                    // Başka bir işlem veya ekran açabilirsiniz
-                    // Örneğin ana ekranı açabilirsiniz:
-                    // mainFrame.setVisible(true);
-                } else {
-                    System.out.println("Login failed!"); // Konsola loglama
-                    JOptionPane.showMessageDialog(null, "Invalid email or password!"); // Kullanıcıya hata mesajı göster
+                    // Final statement will be this
+                    Navigator.getInstance().showRunningModePage();
                 }
-            }
-        });
+            });
+            formPanel.add(gameButton);
+            gameButton.setMaximumSize(new Dimension(Integer.MAX_VALUE, gameButton.getPreferredSize().height));
+            gameButton.setAlignmentX(Component.CENTER_ALIGNMENT);
 
-        formPanel.add(loginButton);
-        loginButton.setMaximumSize(new Dimension(Integer.MAX_VALUE, loginButton.getPreferredSize().height));
-        loginButton.setAlignmentX(Component.CENTER_ALIGNMENT);
+
+        }
+
 
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.gridwidth = GridBagConstraints.REMAINDER;
@@ -138,75 +118,6 @@ public class LoginPage extends Page {
         add(centerPanel, BorderLayout.CENTER);
     }
 
-    private JTextField setupTextField(String placeholder) {
-        JTextField textField = new JTextField("", 15) {
-            @Override
-            protected void paintComponent(Graphics g) {
-                super.paintComponent(g);
-                if (getText().isEmpty() && !(isFocusOwner())) {
-                    Graphics2D g2 = (Graphics2D) g.create();
-                    g2.setColor(Color.GRAY);
-                    g2.setFont(getFont().deriveFont(Font.ITALIC));
-                    g2.drawString(placeholder, 5, 20); // position the text
-                    g2.dispose();
-                }
-            }
-        };
-        textField.addFocusListener(new FocusAdapter() {
-            public void focusGained(FocusEvent e) {
-                if (textField.getText().isEmpty() || textField.getText().equals(placeholder)) {
-                    textField.setText("");
-                    textField.setForeground(Color.BLACK);
-                }
-            }
-            public void focusLost(FocusEvent e) {
-                if (textField.getText().isEmpty()) {
-                    textField.setForeground(Color.GRAY);
-                }
-            }
-        });
-        textField.setForeground(Color.GRAY);
-        textField.setFont(new Font("Tahoma", Font.PLAIN, 18)); // Increased font size
-        textField.setMaximumSize(new Dimension(Integer.MAX_VALUE, textField.getPreferredSize().height));
-        textField.setAlignmentX(Component.CENTER_ALIGNMENT);
-        return textField;
-    }
-
-
-    private JPasswordField setupPasswordField(String placeholder) {
-        JPasswordField passwordField = new JPasswordField(placeholder, 15) {
-            @Override
-            protected void paintComponent(Graphics g) {
-                super.paintComponent(g);
-                if (getPassword().length == 0 && !(FocusManager.getCurrentKeyboardFocusManager().getFocusOwner() == this)) {
-                    Graphics2D g2 = (Graphics2D) g.create();
-                    g2.setColor(Color.GRAY);
-                    g2.setFont(getFont().deriveFont(Font.ITALIC));
-                    g2.drawString(placeholder, 5, 20); // position the text
-                    g2.dispose();
-                }
-            }
-        };
-        passwordField.addFocusListener(new FocusAdapter() {
-            public void focusGained(FocusEvent e) {
-                if (String.valueOf(passwordField.getPassword()).equals(placeholder)) {
-                    passwordField.setText("");
-                    passwordField.setForeground(Color.BLACK);
-                }
-            }
-            public void focusLost(FocusEvent e) {
-                if (String.valueOf(passwordField.getPassword()).isEmpty()) {
-                    passwordField.setForeground(Color.GRAY);
-                    passwordField.setText(placeholder);
-                }
-            }
-        });
-        passwordField.setForeground(Color.GRAY);
-        passwordField.setFont(new Font("Tahoma", Font.PLAIN, 18)); // Increased font size
-        passwordField.setMaximumSize(new Dimension(Integer.MAX_VALUE, passwordField.getPreferredSize().height));
-        passwordField.setAlignmentX(Component.CENTER_ALIGNMENT);
-        return passwordField;
-    }
 
     private void customizeButton(JButton button) {
         button.setBackground(new Color(100, 149, 237)); // Cornflower blue
@@ -290,8 +201,4 @@ public class LoginPage extends Page {
         }
     }
 
-    private boolean authorizeUser() {
-        // TODO Kagan: implement authorize user.
-        return true;
-    }
 }
