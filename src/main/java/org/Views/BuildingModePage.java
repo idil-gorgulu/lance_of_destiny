@@ -3,9 +3,7 @@ package org.Views;
 import org.Controllers.BuildingModeController;
 import org.Controllers.LoginPageController;
 import org.Controllers.RunningModeController;
-import org.Domain.Barrier;
-import org.Domain.Coordinate;
-import org.Domain.BarrierType;
+import org.Domain.*;
 import org.Utils.Database;
 import org.bson.Document;
 
@@ -29,6 +27,10 @@ public class BuildingModePage extends Page {
     private JPanel buildingContainer;
     private JLabel leftBarriers;
     private JButton[] buttons;
+    private JLabel simpleAmount;
+    private JLabel firmAmount;
+    private JLabel explosiveAmount;
+    private JLabel rewardingAmount;
     private int selectedButtonIndex = -1;
 
     public int pageNum = 1;
@@ -36,6 +38,7 @@ public class BuildingModePage extends Page {
     public BuildingModePage() {
         super();
         this.buildingModeController = new BuildingModeController(this);
+
         initUI();
     }
 
@@ -43,21 +46,89 @@ public class BuildingModePage extends Page {
     protected void initUI() {
         setLayout(new BorderLayout());
 
-        JMenuBar menuBar = new JMenuBar();
-        JMenu menu = new JMenu("Menu");
-        menuBar.add(menu);
+        //JMenuBar menuBar = new JMenuBar();
+        //JMenu menu = new JMenu("Menu");
+        //menuBar.add(menu);
 
         JPanel infoContainer = new JPanel(new FlowLayout());
-        leftBarriers = new JLabel("Add at least this many more:");
-        leftBarriers.setBounds(50, 50, 70, 20); //
-        infoContainer.add(leftBarriers);
+//        leftBarriers = new JLabel("Add at least this many more:");
+//        leftBarriers.setBounds(50, 50, 70, 20); //
+//        infoContainer.add(leftBarriers);
 
-        JPanel menuContainer = new JPanel(new BorderLayout());
-        menuContainer.setPreferredSize(new Dimension(200, 500));
+        JLabel s = new JLabel("Add simple barrier:");
+        s.setHorizontalAlignment(SwingConstants.LEFT);
+        infoContainer.add(s);
+        JTextField inputField1 = new JTextField(4);
+        infoContainer.add(inputField1);
 
-        menuContainer.add(menuBar, BorderLayout.NORTH);
+        JLabel f = new JLabel("Add firm barrier:");
+        f.setHorizontalAlignment(SwingConstants.LEFT);
+        infoContainer.add(f);
+        JTextField inputField2 = new JTextField(4);
+        infoContainer.add(inputField2);
 
-        menuContainer.add(infoContainer, BorderLayout.CENTER);
+        JLabel x = new JLabel("Add explosive barrier:");
+        x.setHorizontalAlignment(SwingConstants.LEFT);
+        infoContainer.add(x);
+        JTextField inputField3 = new JTextField(4);
+        infoContainer.add(inputField3);
+
+        JLabel g = new JLabel("Add gift barrier:");
+        g.setHorizontalAlignment(SwingConstants.LEFT);
+        infoContainer.add(g);
+        JTextField inputField4 = new JTextField(4);
+        infoContainer.add(inputField4);
+
+        // Add button
+        JButton submitButton = new JButton("Submit");
+        submitButton.setPreferredSize(new Dimension(150, 50));
+        submitButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                String inputText1 = inputField1.getText();
+                int num1 = Integer.parseInt(inputText1);
+                String inputText2 = inputField2.getText();
+                int num2 = Integer.parseInt(inputText2);
+                String inputText3 = inputField3.getText();
+                int num3 = Integer.parseInt(inputText3);
+                String inputText4 = inputField4.getText();
+                int num4 = Integer.parseInt(inputText4);
+                boolean b = buildingModeController.initialPopulation(num1, num2, num3, num4);
+                if(b==false){
+                    JOptionPane.showMessageDialog(null, "Not enough places!");
+                }
+                else{
+                    regenerate();
+                    // Clear input fields
+                    inputField1.setText("");
+                    inputField2.setText("");
+                    inputField3.setText("");
+                    inputField4.setText("");
+                }
+            }
+        });
+        infoContainer.add(submitButton);
+        JLabel line = new JLabel("-----------------------------------");
+        infoContainer.add(line);
+        simpleAmount = new JLabel("Simple barriers: "+ buildingModeController.getGameSession().getNumSimpleBarrier()+ "/75");
+        simpleAmount.setHorizontalAlignment(SwingConstants.LEFT);
+        infoContainer.add(simpleAmount);
+        firmAmount = new JLabel("Firm barriers: "+ buildingModeController.getGameSession().getNumFirmBarrier()+ "/10");
+        firmAmount.setHorizontalAlignment(SwingConstants.LEFT);
+        infoContainer.add(firmAmount);
+        explosiveAmount = new JLabel("Explosive barriers: "+ buildingModeController.getGameSession().getNumExplosiveBarrier()+ "/5");
+        explosiveAmount.setHorizontalAlignment(SwingConstants.LEFT);
+        infoContainer.add(explosiveAmount);
+        rewardingAmount = new JLabel("Rewarding barriers: "+ buildingModeController.getGameSession().getNumrewardingBarrier()+ "/10");
+        rewardingAmount.setHorizontalAlignment(SwingConstants.LEFT);
+        infoContainer.add(rewardingAmount);
+
+        JPanel leftSide = new JPanel(new BorderLayout());
+        leftSide.setPreferredSize(new Dimension(200, 500));
+
+        //menuContainer.add(menuBar, BorderLayout.NORTH);
+
+        leftSide.add(infoContainer, BorderLayout.CENTER);
 
 
         //JPanel backButtonPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
@@ -65,7 +136,7 @@ public class BuildingModePage extends Page {
         JButton playButton = new JButton("Play");
         // Condition to the Play button
         playButton.addActionListener(e -> Navigator.getInstance().showRunningModePage());
-        menuContainer.add(playButton, BorderLayout.SOUTH);
+        leftSide.add(playButton, BorderLayout.SOUTH);
 
         JButton saveButton = new JButton("Save");
         // Create a condition wheter the game is ready to be saved
@@ -84,9 +155,9 @@ public class BuildingModePage extends Page {
         });
         // TODO: This overlaps with Menu, fix it
         // To see it comment out the below line
-        menuContainer.add(saveButton, BorderLayout.NORTH);
+        //menuContainer.add(saveButton, BorderLayout.NORTH);
 
-        add(menuContainer, BorderLayout.WEST);
+        add(leftSide, BorderLayout.WEST);
 
         // Adding buttons that will be used to choose type of barrier
         JPanel buttonPanel = new JPanel(new FlowLayout());
@@ -175,14 +246,14 @@ public class BuildingModePage extends Page {
             }
         });
 
-
         Border border = BorderFactory.createLineBorder(Color.BLACK);
         buildingPanel.setPreferredSize(new Dimension(1080, 500)); // Set preferred size of buildingPanel
         int screenWidth = buildingPanel.getWidth();
-        System.out.println("buildingPanel screenWidth"+ screenWidth);
+        //System.out.println("buildingPanel screenWidth"+ screenWidth);
         int screenWidth2 = buildingContainer.getWidth();
-        System.out.println("buildingContainer screenWidth"+ screenWidth2);
+        //System.out.println("buildingContainer screenWidth"+ screenWidth2);
         buildingPanel.setBorder(border);
+        //regenerate();
         buildingContainer.add(buildingPanel, BorderLayout.CENTER);
         add(buildingContainer, BorderLayout.CENTER);
         JLabel statusLabel = new JLabel("Building Mode", SwingConstants.CENTER);
@@ -261,6 +332,22 @@ public class BuildingModePage extends Page {
     }
     public void regenerate(){
         buildingPanel.removeAll();
+        MagicalStaff magicalStaff = BuildingModeController.getGameSession().getMagicalStaff();
+        int magicalStaffWidth = magicalStaff.getPreferredSize().width;
+        int magicalStaffHeight = magicalStaff.getPreferredSize().height;
+
+        int magicalStaffPositionX = 480;
+        int magicalStaffPositionY = 500;
+
+        magicalStaff.setBounds(magicalStaffPositionX, magicalStaffPositionY, magicalStaffWidth, magicalStaffHeight);
+        magicalStaff.setBackground(Color.green);
+        buildingPanel.add(magicalStaff);
+
+        simpleAmount.setText("Simple barriers: " + buildingModeController.getGameSession().getNumSimpleBarrier() + "/75");
+        firmAmount.setText("Firm barriers: " + buildingModeController.getGameSession().getNumFirmBarrier() + "/10");
+        explosiveAmount.setText("Explosive barriers: " + buildingModeController.getGameSession().getNumExplosiveBarrier() + "/5");
+        rewardingAmount.setText("Rewarding barriers: " + buildingModeController.getGameSession().getNumrewardingBarrier() + "/10");
+
         ArrayList<Barrier> barriers;
         barriers = buildingModeController.getGameSession().getBarriers();
         for (Barrier barrier : barriers) {

@@ -7,9 +7,15 @@ import org.Domain.Coordinate;
 import org.Domain.Game;
 import org.Views.BuildingModePage;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Random;
+import java.util.Scanner;
+
 public class BuildingModeController {
     private BuildingModePage buildingModePage;
     private static Game gameSession;
+    // Create a 2D array
     private static BuildingModeController instance;
 
     public BuildingModeController(BuildingModePage buildingModePage) {
@@ -39,7 +45,7 @@ public class BuildingModeController {
             System.out.println("existing barrier" + " " + barrier.getCoordinates().getX() + " "+barrier.getCoordinates().getY() );
             if (barrier.getCoordinates().getX()==barrierCoordinates.getX() & barrier.getCoordinates().getY()==barrierCoordinates.getY() ) {
                 System.out.println("A barrier already exists at these coordinates.");
-                removeBarrier(barrierCoordinates);
+                removeBarrier(barrierCoordinates,barrier.getType());
                 return null; // Exit the function without adding a new barrier
             }
         }
@@ -49,8 +55,8 @@ public class BuildingModeController {
         return barrierCoordinates;
 
     }
-    public static void removeBarrier(Coordinate coordinates){
-        gameSession.removeBarrier(coordinates);
+    public static void removeBarrier(Coordinate coordinates, BarrierType type){
+        gameSession.removeBarrier(coordinates, type);
     }
 
 //    public static BuildingModeController getInstance(){
@@ -71,4 +77,9 @@ public class BuildingModeController {
     public static void setGameSession(Game gameSession) {
         BuildingModeController.gameSession = gameSession;
     }
+    public static boolean initialPopulation(int simpleNum, int firmNum, int exNum, int giftNum){
+        boolean b=gameSession.initialPopulation(simpleNum,firmNum,exNum,giftNum);
+        return b;
+    }
+
 }

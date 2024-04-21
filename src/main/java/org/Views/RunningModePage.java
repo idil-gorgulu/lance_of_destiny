@@ -107,7 +107,7 @@ public class RunningModePage extends Page{
                 Color color = Color.decode(hexCode);
                 infoContainer = new JPanel(new FlowLayout());
                 infoContainer.setPreferredSize(new Dimension(190, 500));
-                infoContainer.setBackground(new Color(color.getRed(), color.getGreen(), color.getBlue(), 50)); // Here, 128 represents the alpha value (semi-transparent)
+                infoContainer.setBackground(new Color(color.getRed(), color.getGreen(), color.getBlue(), 50));
 
                 timeLabel = new JLabel("Time: 0s", SwingConstants.CENTER);
                 infoContainer.add(timeLabel);
