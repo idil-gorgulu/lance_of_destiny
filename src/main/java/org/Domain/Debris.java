@@ -51,7 +51,6 @@ public class Debris extends JComponent {
                 this.coordinate.getY() - debrisImage.getHeight() / 2,
                 debrisImage.getWidth(),
                 debrisImage.getHeight());
-        repaint();
     }
 
     public Coordinate getCoordinate() {
