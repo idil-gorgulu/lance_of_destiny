@@ -146,12 +146,21 @@ public class Barrier extends JPanel {
     }
 
     public void moveCircular() {
-        double angle = (double)velocity / RADIUS_FACTOR;
+        /*double angle = (double)velocity / RADIUS_FACTOR;
         int newX = (int) (coordinate.getX() + RADIUS_FACTOR * Math.cos(angle));
         int newY = (int) (coordinate.getY() - RADIUS_FACTOR * Math.sin(angle));
 
         if (newX >= 0 && newX + getPreferredSize().getWidth() <= RunningModePage.SCREENWIDTH &&
                 newY >= 0 && newY + getPreferredSize().getHeight() <= 500 ){
+            coordinate.setX(newX);
+            coordinate.setY(newY);
+        }*/
+        double angle = velocity * ANGULAR_SPEED * (Math.PI / 180);
+        int newX = (int) (coordinate.getX() + RADIUS_FACTOR * Math.cos(angle));
+        int newY = (int) (coordinate.getY() + RADIUS_FACTOR * Math.sin(angle));
+
+        if (newX >= 0 && newX + getPreferredSize().getWidth() <= RunningModePage.SCREENWIDTH &&
+                newY >= 0 && newY + getPreferredSize().getHeight() <= 500) {
             coordinate.setX(newX);
             coordinate.setY(newY);
         }
