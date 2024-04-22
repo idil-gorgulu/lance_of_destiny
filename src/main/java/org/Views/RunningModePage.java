@@ -30,7 +30,7 @@ public class RunningModePage extends Page{
     private ArrayList<Barrier> barriers;
     private ArrayList<Debris> activeDebris;
     public static final int SCREENWIDTH =1000; // I wanna reach it from MagicalStaff class
-    private int screenHeight;
+    public int screenHeight;
     public int timeInSeconds = 0;
     private int frameCount = 0;
 
@@ -258,8 +258,4 @@ public class RunningModePage extends Page{
             }
         });
     }
-
-
-
-
 }

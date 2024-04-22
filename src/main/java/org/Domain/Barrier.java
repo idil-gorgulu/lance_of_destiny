@@ -21,6 +21,9 @@ public class Barrier extends JPanel {
     private int velocity; //+-3 for moving, 0 for stiff barriers
     private boolean isMoving;
 
+    private static final int RADIUS_FACTOR = 3; // 1.5 * L
+    private static final double ANGULAR_SPEED = Math.PI / 2;
+
     public Barrier(Coordinate coordinate, BarrierType type) {
         this.coordinate = coordinate;
         this.type = type;
@@ -142,13 +145,28 @@ public class Barrier extends JPanel {
         repaint();
     }
 
-    public void moveBarrier(){
+    public void moveCircular() {
+        double angle = (double)velocity / RADIUS_FACTOR;
+        int newX = (int) (coordinate.getX() + RADIUS_FACTOR * Math.cos(angle));
+        int newY = (int) (coordinate.getY() - RADIUS_FACTOR * Math.sin(angle));
 
-            int newPos =velocity+getCoordinate().getX();
-            if ((newPos>0) && (newPos+getPreferredSize().getWidth()< RunningModePage.SCREENWIDTH)) {
+        if (newX >= 0 && newX + getPreferredSize().getWidth() <= RunningModePage.SCREENWIDTH &&
+                newY >= 0 && newY + getPreferredSize().getHeight() <= 500 ){
+            coordinate.setX(newX);
+            coordinate.setY(newY);
+        }
+    }
+
+    public void moveBarrier(){
+        if (type == BarrierType.EXPLOSIVE && isMoving) {
+            moveCircular();
+        } else {
+            int newPos = velocity + getCoordinate().getX();
+            if ((newPos > 0) && (newPos + getPreferredSize().getWidth() < RunningModePage.SCREENWIDTH)) {
                 getCoordinate().setX(newPos);
                 //;
 
+            }
         }
     }
 
