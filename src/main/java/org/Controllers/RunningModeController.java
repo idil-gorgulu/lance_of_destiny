@@ -46,15 +46,26 @@ public class RunningModeController {
         boolean isAvailable;
         for (Barrier br: getGameSession().getBarriers()){
            if (br.isMoving()) {
-               isAvailable=true;
-               if (br.getVelocity()<0) newpos=br.getCoordinate().getX()-(int)br.getPreferredSize().getWidth();
-               else                    newpos=br.getCoordinate().getX()+(int)br.getPreferredSize().getWidth();
-               for (Barrier br2: getGameSession().getBarriers()){
-                   if (br2.getCoordinate().getX()==newpos){
-                       isAvailable=false;
-                       break;                       }                    }
-               if (isAvailable)
-                 br.moveBarrier();
+               if (br.getType() == BarrierType.EXPLOSIVE) {
+                   if (br.getVelocity() != 0) {
+                       br.moveBarrier();
+                   }
+               }
+               else {
+                   isAvailable = true;
+                   if (br.getVelocity() < 0)
+                       newpos = br.getCoordinate().getX() - (int) br.getPreferredSize().getWidth();
+                   else newpos = br.getCoordinate().getX() + (int) br.getPreferredSize().getWidth();
+                   for (Barrier br2 : getGameSession().getBarriers()) {
+                       if (br2.getCoordinate().getX() == newpos) {
+                           isAvailable = false;
+                           break;
+                       }
+                   }
+                   if (isAvailable) {
+                       br.moveBarrier();
+                   }
+               }
            }
        }
     }
