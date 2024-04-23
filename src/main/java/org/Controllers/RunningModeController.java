@@ -21,7 +21,7 @@ public class RunningModeController {
     //public void rotateMagicalStaff(MagicalStaff magicalStaff, double dTheta) {       magicalStaff.rotate(dTheta);    }
 
     public Game getGameSession() {
-        return game;
+        return Game.getInstance();
     }
 
     public void moveFireball(){

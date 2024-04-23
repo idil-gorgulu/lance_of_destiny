@@ -1,5 +1,8 @@
 package org.Views;
 import org.Controllers.LoginPageController;
+import org.Domain.BarrierType;
+import org.Domain.Coordinate;
+import org.Domain.Game;
 import org.Domain.User;
 import org.bson.Document;
 
@@ -88,12 +91,31 @@ public class GameSelectionPage extends Page {
         System.out.println(games);
         for (int  i = 0; i < games.size(); i++) {
             Document game = games.get(i);
-            JButton gameButton = new JButton(String.valueOf(i));
+            JButton gameButton = new JButton(game.getString("gameName"));
             customizeButton(gameButton);
             gameButton.addActionListener(new ActionListener() {
+
                 @Override
                 public void actionPerformed(ActionEvent e) {
                     // TODO: Create the game according to the specs that comes from the game
+                    Game gameInstance = Game.getInstance();
+                    gameInstance.reset();
+
+                    String templateName = game.getString("gameName");
+                    int barrierAmount=game.getInteger("barrierAmount");
+                    for(int j=0; j<barrierAmount; j++) {
+                        String barrierInfo = game.getString("barrier_" + j);
+                        String[] parts = barrierInfo.split("-");
+
+                        // Extracting information from parts array
+                        int xCoordinate = Integer.parseInt(parts[0]);
+                        int yCoordinate = Integer.parseInt(parts[1]);
+                        BarrierType barrierType = BarrierType.valueOf(parts[2]);
+                        int numHits = Integer.parseInt(parts[3]);
+                        Coordinate co  =new Coordinate(xCoordinate, yCoordinate);
+                        gameInstance.addDetailedBarrier(co, barrierType, numHits);
+                    }
+                    // Iterate over the barriers data and create Barrier instances
 
                     // Final statement will be this
                     Navigator.getInstance().showRunningModePage();

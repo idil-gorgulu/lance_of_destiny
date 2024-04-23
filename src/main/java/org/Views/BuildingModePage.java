@@ -157,13 +157,19 @@ public class BuildingModePage extends Page {
                 Document gameSession = new Document();
                 gameSession.put("email", User.getUserInstance().getEmail());
                 // TODO: Enter the gamename in this page somewhere
-                gameSession.put("gameName", templateName);
-                for (Barrier barrier : barriers) {
-                    gameSession.put(barrier.getCoordinate().toString(), barrier.getType().toString() + barrier.getnHits());
+                gameSession.put("gameName", templateNameInput.getText());
+//                for (Barrier barrier : barriers) {
+//                    gameSession.put(barrier.getCoordinate().toString(), barrier.getType().toString() + barrier.getnHits());
+//                }
+                gameSession.put("barrierAmount", barriers.size());
+                for(int i=0; i<barriers.size(); i++){
+                    gameSession.put("barrier_"+i, barriers.get(i).getCoordinate().getX() + "-"+barriers.get(i).getCoordinate().getY() +
+                            "-"+ barriers.get(i).getType().toString()+ "-" + barriers.get(i).getnHits());
                 }
 
                 gameSession.put("played", "False");
                 Database.getInstance().getGameCollection().insertOne(gameSession);
+                System.out.println("Saved");
             }
         });
         // TODO: This overlaps with Menu, fix it
@@ -262,12 +268,15 @@ public class BuildingModePage extends Page {
 
         Border border = BorderFactory.createLineBorder(Color.BLACK);
         buildingPanel.setPreferredSize(new Dimension(1080, 500)); // Set preferred size of buildingPanel
-        int screenWidth = buildingPanel.getWidth();
-        //System.out.println("buildingPanel screenWidth"+ screenWidth);
-        int screenWidth2 = buildingContainer.getWidth();
-        //System.out.println("buildingContainer screenWidth"+ screenWidth2);
+
         buildingPanel.setBorder(border);
-        //regenerate();
+        MagicalStaff magicalStaff = BuildingModeController.getGameSession().getMagicalStaff();
+        int magicalStaffWidth = magicalStaff.getPreferredSize().width;
+        int magicalStaffHeight = magicalStaff.getPreferredSize().height;
+        magicalStaff.setBounds(480, 500, magicalStaffWidth, magicalStaffHeight);
+        //magicalStaff.setBackground(Color.green);
+        buildingPanel.add(magicalStaff);
+
         buildingContainer.add(buildingPanel, BorderLayout.CENTER);
         add(buildingContainer, BorderLayout.CENTER);
         JLabel statusLabel = new JLabel("Building Mode", SwingConstants.CENTER);
@@ -299,36 +308,6 @@ public class BuildingModePage extends Page {
             return; // Exit the method after removing the barrier
 
         }
-
-//        int x = barrierCoordinates.getX();
-//        int y = barrierCoordinates.getY();
-//
-//        ImageIcon icon = null;
-//        switch (selectedButtonIndex) {
-//            case 0:
-//                icon = new ImageIcon("assets/iconbluegem.png");
-//                break;
-//            case 1:
-//                icon = new ImageIcon("assets/Firm.png");
-//                break;
-//            case 2:
-//                icon = new ImageIcon("assets/iconredgem.png");
-//                break;
-//            case 3:
-//                icon = new ImageIcon("assets/GreenGem.png");
-//                break;
-//            default:
-//                break;
-//        }
-//
-//
-//        if (icon != null) {
-//            JLabel barrierLabel = new JLabel(icon);
-//            barrierLabel.setBounds(x, y, icon.getIconWidth(), icon.getIconHeight());
-//            buildingPanel.add(barrierLabel);
-//            buildingPanel.repaint();
-//            buildingPanel.revalidate();
-//        }
         regenerate();
         buildingPanel.repaint();
         buildingPanel.revalidate();
@@ -395,7 +374,7 @@ public class BuildingModePage extends Page {
             barrier.setBounds(barrier.getCoordinate().getX(), barrier.getCoordinate().getY(), barrier.getPreferredSize().width, barrier.getPreferredSize().height);
             buildingPanel.add(barrier);
             barrier.setBackground(Color.blue);
-            barrier.setOpaque(true);
+            barrier.setOpaque(false);
             buildingPanel.repaint();
             buildingPanel.revalidate();
         }
