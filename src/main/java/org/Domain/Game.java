@@ -27,7 +27,6 @@ public class Game {
         this.fireball = new Fireball();
         this.magicalStaff = new MagicalStaff();
         // Think about how to initialize it, from constructor maybe?
-
         this.chance= new Chance();
         this.score= new Score();
         numSimpleBarrier=0;
