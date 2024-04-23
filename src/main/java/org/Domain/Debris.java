@@ -29,7 +29,6 @@ public class Debris extends JComponent {
         setLocation(coordinate.getX() - debrisImage.getWidth() / 2, coordinate.getY() - debrisImage.getHeight() / 2);
     }
 
-
     private String setImageDirectory() {
             return "assets/debris.png";
     }
@@ -51,8 +50,6 @@ public class Debris extends JComponent {
                 this.coordinate.getY() - debrisImage.getHeight() / 2,
                 debrisImage.getWidth(),
                 debrisImage.getHeight());
-
-
     }
 
     public Coordinate getCoordinate() {

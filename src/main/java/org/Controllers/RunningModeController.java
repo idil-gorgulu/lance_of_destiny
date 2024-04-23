@@ -21,7 +21,7 @@ public class RunningModeController {
     //public void rotateMagicalStaff(MagicalStaff magicalStaff, double dTheta) {       magicalStaff.rotate(dTheta);    }
 
     public Game getGameSession() {
-        return game;
+        return Game.getInstance();
     }
 
     public void moveFireball(){
@@ -194,6 +194,11 @@ public class RunningModeController {
         else if (fireballY + fireballRadius >= 600) {
                 // BOTTOM
                 this.getGameSession().getChance().decrementChance();
+                if (this.getGameSession().getChance().getRemainingChance() == 0) {
+                    game.active = false;
+                    System.out.println("Not active");
+                    return;
+                }
                 int fireballWidth = fireball.getPreferredSize().width;
                 int fireballPositionX = (1000 - fireballWidth) / 2; // make these dynamic
                 int fireballHeight = fireball.getPreferredSize().height;
@@ -203,14 +208,12 @@ public class RunningModeController {
                 fireball.getCoordinate().setX(fireballPositionX);
                 fireball.getCoordinate().setY(fireballPositionY);
                 fireball.setBounds(fireballPositionX, fireballPositionY, fireballWidth, fireballHeight);
-                fireball.setBackground(Color.red);
+                //fireball.setBackground(Color.red);
+                fireball.setBackground(new Color(0, 0, 0, 0)); // Transparent background
                 fireball.setOpaque(true);
-                if (this.getGameSession().getChance().getRemainingChance() == 0) {
-                    game.active = false;
-                }
+
             }
     }
-
     public void run(){
         Fireball fireball = game.getFireball();
         MagicalStaff magicalStaff = game.getMagicalStaff();
@@ -250,9 +253,8 @@ public class RunningModeController {
 
 
     private void explodeBarrier(Barrier barrier) {
-
-
         Debris debris = new Debris(barrier.getCoordinate());
+        debris.setBackground(new Color(0, 0, 0, 0)); // Transparent background
         runningModePage.getActiveDebris().add(debris); // Add debris to the list
 
         runningModePage.getGamePanel().add(debris);
@@ -269,7 +271,6 @@ public class RunningModeController {
                 iterator.remove();
             }
         }
+        //runningModePage.repaint(); // Repaint game panel after updating debris
     }
-
-
 }

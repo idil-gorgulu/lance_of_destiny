@@ -27,7 +27,6 @@ public class Game {
         this.fireball = new Fireball();
         this.magicalStaff = new MagicalStaff();
         // Think about how to initialize it, from constructor maybe?
-
         this.chance= new Chance();
         this.score= new Score();
         numSimpleBarrier=0;
@@ -114,12 +113,7 @@ public class Game {
             return instance;
         }
         else{
-            if (instance.getChance().getRemainingChance() != 0 || instance.ended)
-                return instance;
-            else {
-                instance = new Game();
-                return instance;
-            }
+            return instance;
         }
     }
 
@@ -232,5 +226,47 @@ public class Game {
 
     public String[][] getBarrierBoard() {
         return barrierBoard;
+    }
+
+    public void addDetailedBarrier(Coordinate coordinates, BarrierType type, int numHits) {
+        Barrier newBarrier = new Barrier(coordinates, type);
+        newBarrier.setnHits(numHits);
+        barriers.add(newBarrier);
+        String s="";
+        if (type == BarrierType.SIMPLE) { //Simple barrier
+            numSimpleBarrier++;
+            s="s";
+        } else if (type == BarrierType.REINFORCED) { //Reinforced barrier
+            numFirmBarrier++;
+            s="f";
+        } else if (type == BarrierType.EXPLOSIVE) { //Explosive barrier
+            numExplosiveBarrier++;
+            s="x";
+        } else if (type == BarrierType.REWARDING) {
+            numrewardingBarrier++;
+            s="r";
+        }
+        numTotal++;
+        int boardX = coordinates.getX() / 50; // Adjust the indexing here
+        int boardY = coordinates.getY() / 20; // Adjust the indexing here
+        barrierBoard[boardY][boardX] = s; // Adjusted the indexing here
+        printBoard();
+    }
+
+    public void reset() {
+        this.fireball = new Fireball();
+        this.magicalStaff = new MagicalStaff();
+        this.chance = new Chance();
+        this.score = new Score();
+        this.barriers.clear();
+        this.debris.clear();
+        this.numSimpleBarrier = 0;
+        this.numFirmBarrier = 0;
+        this.numExplosiveBarrier = 0;
+        this.numrewardingBarrier = 0;
+        this.numTotal = 0;
+        this.active = true;
+        this.ended = false;
+        this.barrierBoard = new String[20][20];
     }
 }

@@ -29,7 +29,7 @@ public class Chance extends JPanel {
     }
     public void decrementChance() {
         if (remainingChances > 0) {
-            remainingChances -= 1;
+            remainingChances = remainingChances-1;
             updateChanceView();
         }
     }

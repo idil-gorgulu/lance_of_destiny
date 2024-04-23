@@ -16,7 +16,6 @@ public class Barrier extends JPanel {
     private Coordinate coordinate;
     private BarrierType type; //will indicate the type of the barrier
     private BufferedImage barrierImage;
-
     private int nHits; //required for reinforced barrier
     private int velocity; //+-3 for moving, 0 for stiff barriers
     private boolean isMoving;
@@ -194,6 +193,7 @@ public class Barrier extends JPanel {
     public void setMoving(boolean moving) {
         isMoving = moving;
     }
+
 
 
 }

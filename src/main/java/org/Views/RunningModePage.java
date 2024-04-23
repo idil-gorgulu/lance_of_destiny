@@ -111,8 +111,7 @@ public class RunningModePage extends Page{
             runningModeController.moveBarriers();
 
             runningModeController.updateDebris(); // Handle debris movement
-
-
+            repaint();  //TO SOLVE DEBRIS BUG -sebnem
             SwingUtilities.invokeLater(new Runnable() {
                 @Override
                 public void run() {
@@ -203,8 +202,8 @@ public class RunningModePage extends Page{
                 fireball.getCoordinate().setX(fireballPositionX);
                 fireball.getCoordinate().setY(fireballPositionY);
                 fireball.setBounds(fireballPositionX, fireballPositionY, fireballWidth, fireballHeight);
-                fireball.setBackground(Color.red);
-                fireball.setOpaque(true);
+                //fireball.setBackground(Color.red);
+                //fireball.setOpaque(true);
                 gamePanel.add(fireball);
                 //gamePanel.revalidate();
                 //System.out.println(fireball.getCoordinate().getX());
@@ -241,14 +240,13 @@ public class RunningModePage extends Page{
                 });
 
 
-
                 // Initialize Barriers
                 barriers = runningModeController.getGameSession().getBarriers();
                 for (Barrier barrier : barriers) {
                     barrier.setBounds(barrier.getCoordinate().getX(), barrier.getCoordinate().getY(), barrier.getPreferredSize().width, barrier.getPreferredSize().height);
                     gamePanel.add(barrier);
-                    barrier.setBackground(Color.blue);
-                    barrier.setOpaque(true);
+                    //barrier.setBackground(Color.blue);
+                    //barrier.setOpaque(true);
                     // gamePanel.revalidate();
                 }
 
