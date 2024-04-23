@@ -39,6 +39,8 @@ public class BuildingModePage extends Page {
     private JButton playButton;
     public int pageNum = 1;
     private JButton saveButton;
+    private JLabel templateName;
+    private JTextField templateNameInput;
 
     public BuildingModePage() {
         super();
@@ -56,9 +58,6 @@ public class BuildingModePage extends Page {
         //menuBar.add(menu);
 
         infoContainer = new JPanel(new FlowLayout());
-//        leftBarriers = new JLabel("Add at least this many more:");
-//        leftBarriers.setBounds(50, 50, 70, 20); //
-//        infoContainer.add(leftBarriers);
 
         JLabel s = new JLabel("Add simple barrier:");
         s.setHorizontalAlignment(SwingConstants.LEFT);
@@ -85,7 +84,7 @@ public class BuildingModePage extends Page {
         infoContainer.add(inputField4);
 
         // Add button
-        JButton submitButton = new JButton("Submit");
+        JButton submitButton = new JButton("Create");
         submitButton.setPreferredSize(new Dimension(150, 50));
         submitButton.addActionListener(new ActionListener() {
             @Override
@@ -127,7 +126,8 @@ public class BuildingModePage extends Page {
         rewardingAmount = new JLabel("Rewarding barriers: "+ buildingModeController.getGameSession().getNumrewardingBarrier()+ "/10");
         rewardingAmount.setHorizontalAlignment(SwingConstants.LEFT);
         infoContainer.add(rewardingAmount);
-
+        JLabel line2 = new JLabel("-----------------------------------");
+        infoContainer.add(line2);
         leftSide = new JPanel(new BorderLayout());
         leftSide.setPreferredSize(new Dimension(200, 500));
 
@@ -143,8 +143,12 @@ public class BuildingModePage extends Page {
         playButton.addActionListener(e -> Navigator.getInstance().showRunningModePage());
         //leftSide.add(playButton, BorderLayout.SOUTH);
 
+        templateName = new JLabel("Name your template:");
+        g.setHorizontalAlignment(SwingConstants.LEFT);
+        templateNameInput = new JTextField(20);
+
+
         saveButton = new JButton("Save");
-        // Create a condition wheter the game is ready to be saved
 
         saveButton.addActionListener(new ActionListener() {
             @Override
@@ -153,7 +157,7 @@ public class BuildingModePage extends Page {
                 Document gameSession = new Document();
                 gameSession.put("email", User.getUserInstance().getEmail());
                 // TODO: Enter the gamename in this page somewhere
-                // gameSession.put("gameName", gameName);
+                gameSession.put("gameName", templateName);
                 for (Barrier barrier : barriers) {
                     gameSession.put(barrier.getCoordinate().toString(), barrier.getType().toString() + barrier.getnHits());
                 }
@@ -357,12 +361,16 @@ public class BuildingModePage extends Page {
         explosiveAmount.setText("Explosive barriers: " + buildingModeController.getGameSession().getNumExplosiveBarrier() + "/5");
         rewardingAmount.setText("Rewarding barriers: " + buildingModeController.getGameSession().getNumrewardingBarrier() + "/10");
 
-
+        infoContainer.add(templateName);
+        infoContainer.add(templateNameInput);
         infoContainer.add(saveButton, BorderLayout.SOUTH);
         leftSide.add(playButton, BorderLayout.SOUTH);
 
+        //TODO: MAKE BELOW CODE ACTIVE BEFORE DEMO.
         /*
         if (getReady()){
+            infoContainer.add(templateName);
+            infoContainer.add(templateNameInput);
             infoContainer.add(saveButton, BorderLayout.SOUTH);
             leftSide.add(playButton, BorderLayout.SOUTH);
         }
