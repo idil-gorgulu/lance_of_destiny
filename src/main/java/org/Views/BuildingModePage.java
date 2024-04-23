@@ -161,6 +161,7 @@ public class BuildingModePage extends Page {
                 for (Barrier barrier : barriers) {
                     gameSession.put(barrier.getCoordinate().toString(), barrier.getType().toString() + barrier.getnHits());
                 }
+
                 gameSession.put("played", "False");
                 Database.getInstance().getGameCollection().insertOne(gameSession);
             }
