@@ -113,12 +113,7 @@ public class Game {
             return instance;
         }
         else{
-            if (instance.getChance().getRemainingChance() != 0 || instance.ended)
-                return instance;
-            else {
-                instance = new Game();
-                return instance;
-            }
+            return instance;
         }
     }
 

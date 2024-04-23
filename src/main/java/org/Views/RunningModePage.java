@@ -198,7 +198,7 @@ public class RunningModePage extends Page{
                 int fireballWidth = fireball.getPreferredSize().width;
                 int fireballPositionX = (SCREENWIDTH - fireballWidth) / 2;
                 int fireballHeight = fireball.getPreferredSize().height;
-                int fireballPositionY = (screenHeight - fireballHeight - 100);
+                int fireballPositionY = (screenHeight - fireballHeight - 200);
                 fireball.getCoordinate().setX(fireballPositionX);
                 fireball.getCoordinate().setY(fireballPositionY);
                 fireball.setBounds(fireballPositionX, fireballPositionY, fireballWidth, fireballHeight);
