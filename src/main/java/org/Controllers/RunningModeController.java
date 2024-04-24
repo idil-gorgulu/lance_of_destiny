@@ -286,6 +286,8 @@ public class RunningModeController {
                     //System.out.println("opp direction");
                     fireball.setxVelocity(-xVelocity);
                     fireball.setyVelocity(-yVelocity);
+                    fireball.getCoordinate().setY(fireball.getCoordinate().getY()-10); //to prevent multiple calls to intersect func.
+
 
                 }
             }
@@ -324,10 +326,16 @@ public class RunningModeController {
         int containerWidth = 1000;
         int containerHeight = 600;
 
-        // Check collision with left and right boundaries
-        if (fireballX - fireballRadius <= 0 || fireballX + fireballRadius >= containerWidth) {
+        /// Check collision with left and right boundaries
+        if (fireballX - fireballRadius <= 0 ) {
             xVelocity *= -1; // Reverse X velocity
             fireball.setxVelocity(xVelocity);
+        }
+        if ( fireballX + fireballRadius >= 1000) {
+            xVelocity *= -1; // Reverse X velocity
+            fireball.getCoordinate().setX(990); //to block getting in this if again
+            fireball.setxVelocity(xVelocity);
+            System.out.println("leftright boundary");
         }
 
         // Check collision with top and bottom boundaries
