@@ -19,15 +19,21 @@ public class Barrier extends JPanel {
     private int nHits; //required for reinforced barrier
     private int velocity; //+-3 for moving, 0 for stiff barriers
     private boolean isMoving;
+    private double radius; // Set an appropriate radius for visible movement
+    private double centerX; // X center of the circle
+    private double centerY;
 
     private static final int RADIUS_FACTOR = 3; // 1.5 * L
-    private static final double ANGULAR_SPEED = Math.PI / 2;
+    private static final double ANGULAR_SPEED = Math.PI / 10;
 
     public Barrier(Coordinate coordinate, BarrierType type) {
         this.coordinate = coordinate;
         this.type = type;
         this.nHits = initializenHits(type);
         this.isMoving=false;
+        this.radius = 150; // Example radius, adjust based on your screen size and desired movement scale
+        this.centerX = coordinate.getX() + radius; // Center based on initial position
+        this.centerY = coordinate.getY();
         //Option 1:
         try {
             this.barrierImage = ImageIO.read(new File(setImageDirectory(type)));
@@ -144,24 +150,22 @@ public class Barrier extends JPanel {
         repaint();
     }
 
+    private double currentAngle = 0; // Maintain the current angle as a member variable
+
     public void moveCircular() {
-        /*double angle = (double)velocity / RADIUS_FACTOR;
-        int newX = (int) (coordinate.getX() + RADIUS_FACTOR * Math.cos(angle));
-        int newY = (int) (coordinate.getY() - RADIUS_FACTOR * Math.sin(angle));
+        currentAngle += getVelocity() * ANGULAR_SPEED * (Math.PI / 180);
 
-        if (newX >= 0 && newX + getPreferredSize().getWidth() <= RunningModePage.SCREENWIDTH &&
-                newY >= 0 && newY + getPreferredSize().getHeight() <= 500 ){
+        //new Position Calculation
+        int newX = (int) (centerX + radius * Math.cos(currentAngle));
+        int newY = (int) (centerY + radius * Math.sin(currentAngle));
+
+        //Boundary check
+        if (newX >= 0 && newX + getWidth() <= RunningModePage.SCREENWIDTH &&
+                newY >= 0 && newY + getHeight() <= 500) {
             coordinate.setX(newX);
             coordinate.setY(newY);
-        }*/
-        double angle = velocity * ANGULAR_SPEED * (Math.PI / 180);
-        int newX = (int) (coordinate.getX() + RADIUS_FACTOR * Math.cos(angle));
-        int newY = (int) (coordinate.getY() + RADIUS_FACTOR * Math.sin(angle));
-
-        if (newX >= 0 && newX + getPreferredSize().getWidth() <= RunningModePage.SCREENWIDTH &&
-                newY >= 0 && newY + getPreferredSize().getHeight() <= 500) {
-            coordinate.setX(newX);
-            coordinate.setY(newY);
+        } else {
+            currentAngle -= getVelocity() * ANGULAR_SPEED * (Math.PI / 180); //TO BE CHANGED
         }
     }
 
