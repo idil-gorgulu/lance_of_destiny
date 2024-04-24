@@ -94,7 +94,7 @@ public class GameSelectionPage extends Page {
             JButton gameButton = new JButton(game.getString("gameName"));
             customizeButton(gameButton);
             gameButton.addActionListener(new ActionListener() {
-
+                //TODO: Create a database controller and add methods below there
                 @Override
                 public void actionPerformed(ActionEvent e) {
                     // TODO: Create the game according to the specs that comes from the game

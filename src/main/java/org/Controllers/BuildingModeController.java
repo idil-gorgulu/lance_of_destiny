@@ -21,6 +21,7 @@ public class BuildingModeController {
     public BuildingModeController(BuildingModePage buildingModePage) {
         this.buildingModePage = buildingModePage;
         this.gameSession = Game.getInstance();
+        //gameSession.reset(); needed for being able to create a new template.
     }
 
     /*public static void addBarrier(Coordinate coordinates, BarrierType type){
