@@ -1,36 +1,35 @@
 package org.Domain;
-
-import org.Domain.Coordinate;
-
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.geom.AffineTransform;
+import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
-import javax.imageio.ImageIO;
-import org.Views.BuildingModePage;
-import org.Views.RunningModePage;
+
 
 public class MagicalStaff extends JPanel {
     private BufferedImage magicalStaffImage;
-    private double angle;
-    private double angularVel;
+    private Rectangle2D.Double magicalStaffRectangle;
+    private double angle = 0; // degrees
     private int velocity; // to calculate collision
     private Coordinate coordinate;
 
     public MagicalStaff() {
-        this.coordinate = new Coordinate(500,550);
+        this.coordinate = new Coordinate(0,450);
+        this.magicalStaffRectangle = new Rectangle2D.Double(450, 90, 100, 20);
+
         try {
             magicalStaffImage = ImageIO.read(new File("assets/200Player.png"));
-
             // Resize the image to 100x20 pixels
             magicalStaffImage = resizeImage(magicalStaffImage, 100, 20);
         } catch (IOException e) {
             e.printStackTrace();
         }
-        setPreferredSize(new Dimension(100, 20));
-        System.out.println("Magical staff size: "+ magicalStaffImage.getWidth() + " " + magicalStaffImage.getHeight()) ;
+        setPreferredSize(new Dimension(1000, 400));
+        this.setOpaque(false);
+        this.setVisible(true);
     }
 
     // Method to resize the image
@@ -45,45 +44,28 @@ public class MagicalStaff extends JPanel {
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
+        Graphics2D g2d = (Graphics2D) g;
+        g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+        AffineTransform old = g2d.getTransform();
+        AffineTransform transform = new AffineTransform();
+        transform.rotate(Math.toRadians(angle), this.magicalStaffRectangle.getCenterX(), this.magicalStaffRectangle.getCenterY());
+        g2d.transform(transform);
         if (magicalStaffImage != null) {
-            Graphics2D g2d = (Graphics2D) g.create();
-            AffineTransform at = AffineTransform.getRotateInstance(angle, getWidth() / 2.0, getHeight() / 2.0);
-            g2d.drawImage(magicalStaffImage, at, this);
-            g2d.dispose();
+            g2d.drawImage(magicalStaffImage, (int) magicalStaffRectangle.x, (int) magicalStaffRectangle.y, null);
         }
+        g2d.setColor(Color.RED);
+        g2d.draw(magicalStaffRectangle);
+        g2d.setTransform(old);
     }
 
 
-    public void rotate(double dTheta) {
-        angle += dTheta;
-        Dimension newSize = calculateRotatedDimensions(angle);
-        setPreferredSize(newSize);
-        //revalidate();
-        //repaint();
+    public void updateMagicalStaffView(){
+        double newX = this.magicalStaffRectangle.x + this.velocity;
+        this.magicalStaffRectangle.setRect(newX, this.magicalStaffRectangle.y, this.magicalStaffRectangle.width, this.magicalStaffRectangle.height);
+        repaint();
     }
-    public void moveMagicalStaff(){
-        int newPos =velocity+getCoordinate().getX();
-        if ((newPos>0) && (newPos+getPreferredSize().getWidth()<RunningModePage.SCREENWIDTH)) {
-            getCoordinate().setX(newPos);
-            //;
-        }
-    }
-    public void rotateMagicalStaff(){
 
-        double newAngle = angularVel + angle;
-
-        if ((newAngle>Math.toRadians(-45)) && newAngle<Math.toRadians(45)){
-            if (newAngle==0){
-                angularVel=0;
-            }
-            Dimension newSize = calculateRotatedDimensions(angle);
-            setPreferredSize(newSize);
-            //revalidate();
-            //repaint();
-            angle=newAngle;
-        }
-
-    }
+    /*
     //Work In Progress - Melih
     public void stabilize(boolean cw){
         System.out.println(Math.toDegrees(angle)+" "+Math.toDegrees(angularVel));
@@ -105,9 +87,6 @@ public class MagicalStaff extends JPanel {
         }
         //revalidate();
         //repaint();
-
-
-
     }
 
     private Dimension calculateRotatedDimensions(double angle) {
@@ -120,8 +99,8 @@ public class MagicalStaff extends JPanel {
 
         //System.out.println(newWidth + " " + newHeight);
         return new Dimension(newWidth, newHeight);
-
     }
+    */
 
     public Coordinate getCoordinate() {
         return coordinate;
@@ -136,12 +115,17 @@ public class MagicalStaff extends JPanel {
         return velocity;
     }
     public void setVelocity(int velocity){
-        this.velocity=velocity;
+        this.velocity = velocity;
+    }
+    public void setAngle(double angle) {
+        this.angle = angle;
     }
 
-  //  public double getAngularVel() {       return angularVel;    }
-
-    public void setAngularVel(double angularVel) {
-        this.angularVel = angularVel;
+    public Coordinate getTopLeftCornerOfMagicalStaff(){
+        return new Coordinate(
+                        (int) (getCoordinate().getX() + this.magicalStaffRectangle.x),
+                        (int) (getCoordinate().getY() + this.magicalStaffRectangle.y));
     }
+
+
 }
