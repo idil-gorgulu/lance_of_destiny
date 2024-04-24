@@ -22,11 +22,10 @@ public class MyKeyListener extends KeyAdapter {
                 runningModeController.slideMagicalStaff(+8); // Move right
                 break;
             case KeyEvent.VK_A:
-                runningModeController.rotateMagicalStaff(-Math.toRadians(1)); // Rotate left
+                runningModeController.rotateMagicalStaff(-5); // Rotate counterclockwise (degrees)
                 break;
             case KeyEvent.VK_D:
-                runningModeController.rotateMagicalStaff(+Math.toRadians(1)); // Rotate left
-                //runningModeController.getGameSession().getMagicalStaff().rotate(+Math.toRadians(5)); // Rotate left
+                runningModeController.rotateMagicalStaff(+5); // Rotate clockwise (degrees)
                 break;
         }
     }
@@ -40,14 +39,11 @@ public class MyKeyListener extends KeyAdapter {
             case KeyEvent.VK_RIGHT:
                 runningModeController.slideMagicalStaff(0); // Move right
                 break;
-
             case KeyEvent.VK_A:
-                //runningModeController.stabilizeMagicalStaff(false); // Rotate left
-                runningModeController.rotateMagicalStaff(+Math.toRadians(0));
+                runningModeController.rotateMagicalStaff(0); // Rotate counterclockwise
                 break;
             case KeyEvent.VK_D:
-                //runningModeController.stabilizeMagicalStaff(true); // Rotate left
-                runningModeController.rotateMagicalStaff(+Math.toRadians(0));
+                runningModeController.rotateMagicalStaff(0); // Rotate clockwise
                 break;
         }
     }
