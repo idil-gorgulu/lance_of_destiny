@@ -33,6 +33,8 @@ public class RunningModePage extends Page{
     public int screenHeight;
     public int timeInSeconds = 0;
     private int frameCount = 0;
+    public static final long COLLISION_COOLDOWN = 1000; // Cooldown period in milliseconds
+
 
     private JLabel timeLabel;
     public RunningModePage() {
@@ -62,7 +64,6 @@ public class RunningModePage extends Page{
     }
     private void setupTimer() {
         int delay = 4; // 4 ms delay, approx. 60 FPS
-
         Timer timer = new Timer(delay, e -> {
             if (this.pause) {
                 Object[] options = {"Continue", "Quit"};
@@ -84,7 +85,7 @@ public class RunningModePage extends Page{
 
                 }
             } else {
-                updateGame();
+                updateGameFrame();
                 frameCount++;
                 if (frameCount >= 70) {
                     timeInSeconds++;
@@ -94,22 +95,19 @@ public class RunningModePage extends Page{
             }
         });
         timer.start();
-
     }
 
 
 
-    public void updateGame() {
+    public void updateGameFrame() {
         if (this.runningModeController.getGameSession().getChance().getRemainingChance() == 0 || this.runningModeController.getGameSession().ended) {
-            // System.out.println("here");
-            // delete this in here
         } else {
-            runningModeController.moveFireball();
-            runningModeController.moveStaff();
-            runningModeController.checkCollision();
-
+            runningModeController.updateFireballView();
+            runningModeController.updateMagicalStaffView();
+            runningModeController.checkMagicalStaffFireballCollision();
+            runningModeController.checkScreenBordersFireballCollision();
+            runningModeController.checkBarrierFireballCollision();
             runningModeController.moveBarriers();
-
             runningModeController.updateDebris(); // Handle debris movement
             repaint();  //TO SOLVE DEBRIS BUG -sebnem
             SwingUtilities.invokeLater(new Runnable() {
@@ -202,30 +200,19 @@ public class RunningModePage extends Page{
                 fireball.getCoordinate().setX(fireballPositionX);
                 fireball.getCoordinate().setY(fireballPositionY);
                 fireball.setBounds(fireballPositionX, fireballPositionY, fireballWidth, fireballHeight);
-                //fireball.setBackground(Color.red);
-                //fireball.setOpaque(true);
                 gamePanel.add(fireball);
-                //gamePanel.revalidate();
-                //System.out.println(fireball.getCoordinate().getX());
-                //System.out.println(fireball.getCoordinate().getY());
 
                 // Initializing MagicalStaff
                 magicalStaff = runningModeController.getGameSession().getMagicalStaff();
                 int magicalStaffWidth = magicalStaff.getPreferredSize().width;
                 int magicalStaffHeight = magicalStaff.getPreferredSize().height;
-
-                int magicalStaffPositionX = 500;
-                int magicalStaffPositionY = 550;
-                magicalStaff.getCoordinate().setX(magicalStaffPositionX);
-                magicalStaff.getCoordinate().setY(magicalStaffPositionY);
-
+                int magicalStaffPositionX = magicalStaff.getCoordinate().getX();
+                int magicalStaffPositionY = magicalStaff.getCoordinate().getY();
                 magicalStaff.setBounds(magicalStaffPositionX, magicalStaffPositionY, magicalStaffWidth, magicalStaffHeight);
-                magicalStaff.setBackground(Color.green);
 
                 gamePanel.requestFocus();
                 gamePanel.setFocusTraversalKeysEnabled(false);
                 gamePanel.add(magicalStaff);
-                //gamePanel.revalidate();
 
                 //to follow who has focus:
                 gamePanel.addFocusListener(new FocusListener() {
