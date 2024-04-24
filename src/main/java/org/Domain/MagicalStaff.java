@@ -68,7 +68,7 @@ public class MagicalStaff extends JPanel {
             this.magicalStaffRectangle.setRect(newX, this.magicalStaffRectangle.y, this.magicalStaffRectangle.width, this.magicalStaffRectangle.height);
         }
         double newAngle = angVelocity + angle;
-        System.out.println(angle+" "+angVelocity);
+        //System.out.println(angle+" "+angVelocity);
         if ((newAngle>-45) && newAngle<45)//check angle
             this.angle=newAngle;
 
