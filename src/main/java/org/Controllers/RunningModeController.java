@@ -49,23 +49,24 @@ public class RunningModeController {
     public void moveBarriers(){
         int newpos;
         boolean isAvailable;
+        int width= 10;
         for (Barrier br: getGameSession().getBarriers()){
            if (br.isMoving()) {
                if (br.getType() == BarrierType.EXPLOSIVE) {
                    if (br.getVelocity() != 0) {
-                       br.moveBarrier();
-                   }
-               }
+                       br.moveBarrier();                   }               }
                else {
                    isAvailable = true;
-                   if (br.getVelocity() < 0)
-                       newpos = br.getCoordinate().getX() - (int) br.getPreferredSize().getWidth();
-                   else newpos = br.getCoordinate().getX() + (int) br.getPreferredSize().getWidth();
+                   newpos = br.getCoordinate().getX() +  br.getVelocity();
                    for (Barrier br2 : getGameSession().getBarriers()) {
-                       if (br2.getCoordinate().getX() == newpos) {
-                           isAvailable = false;
-                           break;
-                       }
+                       if ((!br2.equals(br)) && (br.getCoordinate().getY()==br2.getCoordinate().getY())){
+                           //System.out.println("Space between : "+ (br2.getCoordinate().getX() - newpos));
+                           if (width+10>Math.abs(br2.getCoordinate().getX() - newpos)) {
+                               isAvailable = false;
+                               //br2.setVelocity(-1*br2.getVelocity());
+                               br.setVelocity(-1*br.getVelocity());
+                               break;
+                       }}
                    }
                    if (isAvailable) {
                        br.moveBarrier();
@@ -87,7 +88,6 @@ public class RunningModeController {
 
         double xVelocity = fireball.getxVelocity();
         double yVelocity = fireball.getyVelocity();
-
 
         double msAngle = magicalStaff.getAngle();
         double angleRadians = Math.toRadians(msAngle);
@@ -113,23 +113,21 @@ public class RunningModeController {
         Shape transformedRectangle = transform.createTransformedShape(magicalStaffRectangle);
 
         if (transformedRectangle.intersects(fireballRectangle)) {
-            System.out.println("Collision detected");
+           // System.out.println("\nCollision detected");
             lastCollisionTime = currentTime;
-            System.out.println(-msAngle);
+           // System.out.println("Magical Staff angle: "+-msAngle);
             double normalAngle = Math.toRadians((-msAngle + 90));
-            System.out.println(normalAngle);
-            Vector normal = new Vector(Math.cos(normalAngle), Math.sin(normalAngle));
-            System.out.println("Cos and sin");
-            System.out.println(Math.cos(normalAngle));
-            System.out.println(Math.sin(normalAngle));
+            //    System.out.println(normalAngle);
+            Vector normal = new Vector(Math.cos(normalAngle), Math.abs(Math.sin(normalAngle)));
+            //   System.out.println("Cos and sin "+Math.cos(normalAngle)+" "+Math.sin(normalAngle));
             Vector velocity = new Vector(xVelocity, yVelocity);
             Vector vNew = velocity.subtract(normal.scale(2 * velocity.dot(normal)));
-            System.out.println(fireball.getxVelocity());
-            System.out.println(fireball.getyVelocity());
-            System.out.println(vNew.getX());
-            System.out.println(vNew.getY());
-            fireball.setxVelocity(-1*vNew.getX());
+            //  System.out.println("old: "+fireball.getxVelocity()+" "+fireball.getyVelocity());
+           // System.out.println(vNew.getX());
+           // System.out.println(vNew.getY());
+            fireball.setxVelocity(vNew.getX());
             fireball.setyVelocity(vNew.getY());
+            //  System.out.println("new: "+fireball.getxVelocity()+" "+fireball.getyVelocity());
         }
 
     }

@@ -175,6 +175,8 @@ public class Barrier extends JPanel {
                 //;
 
             }
+            else
+                setVelocity(-1*velocity);
         }
     }
 
