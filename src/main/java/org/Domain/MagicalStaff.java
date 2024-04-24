@@ -13,6 +13,7 @@ public class MagicalStaff extends JPanel {
     private BufferedImage magicalStaffImage;
     private Rectangle2D.Double magicalStaffRectangle;
     private double angle = 0; // degrees
+    private double angVelocity=0;
     private int velocity; // to calculate collision
     private Coordinate coordinate;
 
@@ -60,8 +61,17 @@ public class MagicalStaff extends JPanel {
 
 
     public void updateMagicalStaffView(){
+
         double newX = this.magicalStaffRectangle.x + this.velocity;
-        this.magicalStaffRectangle.setRect(newX, this.magicalStaffRectangle.y, this.magicalStaffRectangle.width, this.magicalStaffRectangle.height);
+        //RunningModePage.SCREENWIDTH=1000 cant reach bc of removed import
+        if ((newX>0) && (newX+magicalStaffRectangle.getWidth()<1000)) {// check borders
+            this.magicalStaffRectangle.setRect(newX, this.magicalStaffRectangle.y, this.magicalStaffRectangle.width, this.magicalStaffRectangle.height);
+        }
+        double newAngle = angVelocity + angle;
+        System.out.println(angle+" "+angVelocity);
+        if ((newAngle>-45) && newAngle<45)//check angle
+            this.angle=newAngle;
+
         repaint();
     }
 
@@ -128,4 +138,11 @@ public class MagicalStaff extends JPanel {
     }
 
 
+    public double getAngVelocity() {
+        return angVelocity;
+    }
+
+    public void setAngVelocity(double angVelocity) {
+        this.angVelocity = angVelocity;
+    }
 }
