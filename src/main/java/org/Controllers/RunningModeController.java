@@ -415,12 +415,45 @@ public class RunningModeController {
         Iterator<Debris> iterator = runningModePage.getActiveDebris().iterator();
         while (iterator.hasNext()) {
             Debris debris = iterator.next();
-            debris.moveDown(); // Assuming moveDown() properly updates the Y-coordinate
-            if (debris.getCoordinate().getY() > 600) { // Assuming 600 is the bottom of the screen
+            debris.moveDown();
+            if (debris.getCoordinate().getY() > 600) {
+                runningModePage.getGamePanel().remove(debris);
+                iterator.remove();
+            }
+            // For debris collision with magical staff
+
+            MagicalStaff magicalStaff = game.getMagicalStaff();
+
+            double msAngle = magicalStaff.getAngle();
+            double angleRadians = Math.toRadians(msAngle);
+
+            Rectangle2D.Double magicalStaffRectangle = new Rectangle2D.Double(
+                    magicalStaff.getTopLeftCornerOfMagicalStaff().getX(),
+                    magicalStaff.getTopLeftCornerOfMagicalStaff().getY(),
+                    100,
+                    20
+            );
+
+            Rectangle2D.Double debrisRectangle = new Rectangle2D.Double(
+                    debris.getCoordinate().getX() - debris.debrisImage.getWidth()/2 ,
+                    debris.getCoordinate().getY() - debris.debrisImage.getHeight()/2,
+                    debris.debrisImage.getWidth(),
+                    debris.debrisImage.getHeight()
+            );
+
+
+
+            AffineTransform transform = new AffineTransform();
+            double centerX = magicalStaffRectangle.getCenterX();
+            double centerY = magicalStaffRectangle.getCenterY();
+            transform.rotate(angleRadians, centerX, centerY);
+            Shape transformedRectangle = transform.createTransformedShape(magicalStaffRectangle);
+
+            if (transformedRectangle.intersects(debrisRectangle)) {
+                this.getGameSession().getChance().decrementChance();
                 runningModePage.getGamePanel().remove(debris);
                 iterator.remove();
             }
         }
-        //runningModePage.repaint(); // Repaint game panel after updating debris
     }
 }

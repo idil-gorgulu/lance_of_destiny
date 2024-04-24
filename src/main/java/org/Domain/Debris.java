@@ -11,7 +11,7 @@ import java.util.ArrayList;
 
 public class Debris extends JComponent {
 
-    private BufferedImage debrisImage;
+    public BufferedImage debrisImage;
 
     private Coordinate coordinate;
 
