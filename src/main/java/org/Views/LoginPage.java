@@ -56,7 +56,8 @@ public class LoginPage extends Page {
         JPanel backButtonPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
         backButtonPanel.setOpaque(false); // Make the panel transparent
         JButton backButton = new JButton("Back");
-        backButton.addActionListener(e -> Navigator.getInstance().showEnterPage());
+        backButton.addActionListener(e -> Navigator.getInstance().getPrevious());
+
         backButtonPanel.add(backButton);
 
         backgroundPanel.add(backButtonPanel, BorderLayout.NORTH);

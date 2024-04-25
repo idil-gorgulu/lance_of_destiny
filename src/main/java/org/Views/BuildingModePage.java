@@ -109,12 +109,9 @@ public class BuildingModePage extends Page {
         infoContainer.add(barrierPanel);
 
 
-        backButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                Navigator.getInstance().showStartPage();
-            }
-        });
+        backButton.addActionListener(e -> Navigator.getInstance().getPrevious());
+
+
 
 
         createButton.addActionListener(new ActionListener() {

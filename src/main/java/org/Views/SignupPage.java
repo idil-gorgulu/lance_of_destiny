@@ -55,7 +55,7 @@ public class SignupPage extends Page {
         JPanel backButtonPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
         backButtonPanel.setOpaque(false);
         JButton backButton = new JButton("Back");
-        backButton.addActionListener(e -> Navigator.getInstance().showEnterPage());
+        backButton.addActionListener(e -> Navigator.getInstance().getPrevious());
         backButtonPanel.add(backButton);
         backgroundPanel.add(backButtonPanel, BorderLayout.NORTH);
 
@@ -249,7 +249,7 @@ public class SignupPage extends Page {
             }
         });
     }
-    
+
 
     // Additional methods from LoginPage (like setupTextField, setupPasswordField, customizeButton, etc.) should be either reused directly if they're not private, or copied into this class if they are.
 }
