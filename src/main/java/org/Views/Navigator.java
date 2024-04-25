@@ -34,7 +34,6 @@ public class Navigator {
         if (pageStack.isEmpty() || !pageStack.peek().getClass().equals(page.getClass())) {
             pageStack.push(page);
         }
-
         mainFrame.setContentPane(page);
         mainFrame.revalidate();
         mainFrame.repaint();

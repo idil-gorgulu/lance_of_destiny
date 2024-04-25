@@ -14,6 +14,9 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.TimerTask;
+import java.util.Timer;
+
 
 public class RunningModePage extends Page{
 
@@ -58,45 +61,52 @@ public class RunningModePage extends Page{
         //g.drawImage(backgroundImage, 0, 0, getWidth(), getHeight(), this);
     }
     private void setupTimer() {
-        int delay = 1; // 4 ms delay, approx. 60 FPS
-        Timer timer = new Timer(delay, e -> {
-            // For Pausing the game
-            if (this.pause) {
-                Object[] options = {"Continue", "Quit", "Save"};
-                int choice = JOptionPane.showOptionDialog(null,
-                        "You paused",
-                        "Game Paused",
-                        JOptionPane.YES_NO_CANCEL_OPTION,
-                        JOptionPane.QUESTION_MESSAGE,
-                        null,
-                        options,
-                        options[0]);
-                if (choice == JOptionPane.YES_OPTION) {
-                    this.pause = false;
-                } else if (choice == JOptionPane.NO_OPTION) {
-                    this.pause = false;
-                    this.runningModeController.getGameSession().ended = true;
+        int delay = 0;  // start immediately
+        int period = 16; // 16 ms period for approx. 60 FPS
+
+        Timer timer = new Timer();
+        TimerTask task = new TimerTask() {
+            public void run() {
+                // For Pausing the game
+                if (pause) {
+                    Object[] options = {"Continue", "Quit", "Save"};
+                    int choice = JOptionPane.showOptionDialog(null,
+                            "You paused",
+                            "Game Paused",
+                            JOptionPane.YES_NO_OPTION,
+                            JOptionPane.QUESTION_MESSAGE,
+                            null,
+                            options,
+                            options[0]);
+                    if (choice == JOptionPane.YES_OPTION) {
+                        pause = false;
+                    } else if (choice == JOptionPane.NO_OPTION) {
+                        pause = false;
+                        runningModeController.getGameSession().ended = true;
+                        Navigator.getInstance().showStartPage();
+                    }
+                }
+                else if (runningModeController.getGameSession().ended) {
+                    JOptionPane.showMessageDialog(null, "You lost!");
+                    runningModeController = null;
                     Navigator.getInstance().showStartPage();
-                } else if (choice == JOptionPane.CANCEL_OPTION) {
-                    saveGame();
+                }
+                else {
+                    // Update the game frame
+                    SwingUtilities.invokeLater(() -> updateGameFrame());
+
+                    // Manage time and frames
+                    frameCount++;
+                    if (frameCount >= 70) {
+                        timeInSeconds++;
+                        SwingUtilities.invokeLater(() -> timeLabel.setText("Time: " + timeInSeconds + "s"));
+                        frameCount = 0;
+                    }
                 }
             }
-            else if (this.runningModeController.getGameSession().ended) {
-                JOptionPane.showMessageDialog(null, "You lost!");
-                this.runningModeController = null;
-                Navigator.getInstance().showStartPage();
-            }
-            else {
-                updateGameFrame();
-                frameCount++;
-                if (frameCount >= 70) {
-                    timeInSeconds++;
-                    timeLabel.setText("Time: " + timeInSeconds + "s");
-                    frameCount = 0;
-                }
-            }
-        });
-        timer.start();
+        };
+
+        timer.scheduleAtFixedRate(task, delay, period);
     }
 
 
