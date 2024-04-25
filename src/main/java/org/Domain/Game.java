@@ -1,9 +1,6 @@
 package org.Domain;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Random;
-
-import org.Controllers.RunningModeController;
 
 public class Game {
 
@@ -19,7 +16,7 @@ public class Game {
     int numExplosiveBarrier=0;
     int numrewardingBarrier=0;
     int numTotal;
-    public boolean active = true;
+    public boolean started = false;
     public boolean ended = false;
     String[][] barrierBoard = new String[20][20];
 
@@ -265,13 +262,14 @@ public class Game {
         this.numExplosiveBarrier = 0;
         this.numrewardingBarrier = 0;
         this.numTotal = 0;
-        this.active = true;
+        this.started = true;
         this.ended = false;
         this.barrierBoard = new String[20][20];
     }
 
     public static Game createNewGame() {
         instance = new Game();
+        instance.started = false;
         return instance;
     }
 }

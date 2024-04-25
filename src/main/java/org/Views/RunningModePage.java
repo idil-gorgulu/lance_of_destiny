@@ -1,6 +1,5 @@
 package org.Views;
 
-import org.Controllers.MagicalStaffController;
 import org.Domain.*;
 import org.Controllers.*;
 
@@ -22,7 +21,7 @@ public class RunningModePage extends Page{
     protected RunningModeController runningModeController;
     public boolean pause = false;
     private ArrayList<Barrier> barriers = new ArrayList<>();
-    private ArrayList<Debris> activeDebris = new ArrayList<>();
+    private ArrayList<Debris> activeDebris;
     public static final int SCREENWIDTH =1000;
     public int screenHeight;
     public int timeInSeconds = 0;
@@ -42,7 +41,7 @@ public class RunningModePage extends Page{
         }
 
         this.runningModeController = new RunningModeController(this);
-        //this.magicalStaffController = new MagicalStaffController(this); //not used. Is necessary? -sebnem
+        this.runningModeController.getGameSession().started = true;
         initUI();
         setFocusable(true);
         requestFocus();
@@ -59,6 +58,7 @@ public class RunningModePage extends Page{
     private void setupTimer() {
         int delay = 4; // 4 ms delay, approx. 60 FPS
         Timer timer = new Timer(delay, e -> {
+            // For Pausing the game
             if (this.pause) {
                 Object[] options = {"Continue", "Quit"};
                 int choice = JOptionPane.showOptionDialog(null,
@@ -69,7 +69,6 @@ public class RunningModePage extends Page{
                         null,
                         options,
                         options[0]);
-
                 if (choice == JOptionPane.YES_OPTION) {
                     this.pause = false;
                 } else if (choice == JOptionPane.NO_OPTION) {
@@ -78,7 +77,13 @@ public class RunningModePage extends Page{
                     Navigator.getInstance().showStartPage();
 
                 }
-            } else {
+            }
+            else if (this.runningModeController.getGameSession().ended) {
+                JOptionPane.showMessageDialog(null, "You lost!");
+                this.runningModeController = null;
+                Navigator.getInstance().showStartPage();
+            }
+            else {
                 updateGameFrame();
                 frameCount++;
                 if (frameCount >= 70) {
@@ -94,31 +99,24 @@ public class RunningModePage extends Page{
 
 
     public void updateGameFrame() {
-        if (this.runningModeController.getGameSession().getChance().getRemainingChance() == 0 || this.runningModeController.getGameSession().ended) {
-        } else {
-            runningModeController.updateFireballView();
-            runningModeController.updateMagicalStaffView();
-            runningModeController.checkMagicalStaffFireballCollision();
-            runningModeController.checkScreenBordersFireballCollision();
-            runningModeController.checkBarrierFireballCollision();
-            runningModeController.moveBarriers();
-            runningModeController.updateDebris(); // Handle debris movement
-            repaint();  //TO SOLVE DEBRIS BUG -sebnem
-            SwingUtilities.invokeLater(new Runnable() {
-                @Override
-                public void run() {
-                    if (runningModeController.getGameSession().active) {
-                        runningModeController.run();
-                        //gamePanel.repaint();
-                        repaint();
-                    } else {
-                        JOptionPane.showMessageDialog(null, "You lost!");
-                        Navigator.getInstance().showStartPage();
-                    }
-                }
-            });
+        runningModeController.updateFireballView();
+        runningModeController.updateMagicalStaffView();
+        runningModeController.checkMagicalStaffFireballCollision();
+        runningModeController.checkScreenBordersFireballCollision();
+        runningModeController.checkBarrierFireballCollision();
+        runningModeController.moveBarriers();
+        runningModeController.updateDebris(); // Handle debris movement
+        repaint();  //TO SOLVE DEBRIS BUG -sebnem
+        if (this.runningModeController.getGameSession().getChance().getRemainingChance() == 0) {
+            this.runningModeController.getGameSession().ended = true;
         }
-
+        SwingUtilities.invokeLater(new Runnable() {
+            @Override
+            public void run() {
+                    runningModeController.run();
+                    repaint();
+            }
+        });
     }
 
     public JPanel getGamePanel() {

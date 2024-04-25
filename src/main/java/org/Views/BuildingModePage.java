@@ -44,7 +44,7 @@ public class BuildingModePage extends Page {
 
     public BuildingModePage() {
         super();
-        this.buildingModeController = new BuildingModeController(this);
+        this.buildingModeController = new BuildingModeController();
         initUI();
     }
 

@@ -1,14 +1,11 @@
 package org.Controllers;
 
 import org.Domain.*;
-import org.Views.Navigator;
 import org.Views.RunningModePage;
 
-import javax.swing.*;
 import java.awt.*;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.Rectangle2D;
-import java.awt.geom.RectangularShape;
 import java.util.ArrayList;
 import java.util.Iterator;
 
@@ -145,7 +142,7 @@ public class RunningModeController {
         int containerHeight = 600;
 
         // Check collision with left and right boundaries
-        if (fireballX - fireballRadius <= 0 || fireballX + fireballRadius >= containerWidth) {
+        if (fireballX - fireballRadius <= 0 || fireballX + fireballRadius > containerWidth - 10) {
             xVelocity *= -1; // Reverse X velocity
             fireball.setxVelocity(xVelocity);
         }
@@ -162,7 +159,7 @@ public class RunningModeController {
             // BOTTOM
             this.getGameSession().getChance().decrementChance();
             if (this.getGameSession().getChance().getRemainingChance() == 0) {
-                game.active = false;
+                game.started = false;
                 System.out.println("Not active");
                 return;
             }
@@ -350,7 +347,7 @@ public class RunningModeController {
             // BOTTOM
             this.getGameSession().getChance().decrementChance();
             if (this.getGameSession().getChance().getRemainingChance() == 0) {
-                game.active = false;
+                game.started = false;
                 System.out.println("Not active");
                 return;
             }

@@ -13,13 +13,11 @@ import java.util.Random;
 import java.util.Scanner;
 
 public class BuildingModeController {
-    private BuildingModePage buildingModePage;
     private static Game gameSession;
     // Create a 2D array
     private static BuildingModeController instance;
 
-    public BuildingModeController(BuildingModePage buildingModePage) {
-        this.buildingModePage = buildingModePage;
+    public BuildingModeController() {
         this.gameSession = Game.createNewGame();
         //gameSession.reset(); needed for being able to create a new template.
     }
