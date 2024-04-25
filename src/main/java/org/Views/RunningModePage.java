@@ -73,7 +73,7 @@ public class RunningModePage extends Page{
                     int choice = JOptionPane.showOptionDialog(null,
                             "You paused",
                             "Game Paused",
-                            JOptionPane.YES_NO_OPTION,
+                            JOptionPane.YES_NO_CANCEL_OPTION,
                             JOptionPane.QUESTION_MESSAGE,
                             null,
                             options,
@@ -84,6 +84,8 @@ public class RunningModePage extends Page{
                         pause = false;
                         runningModeController.getGameSession().ended = true;
                         Navigator.getInstance().showStartPage();
+                    } else if (choice == JOptionPane.CANCEL_OPTION) {
+                        saveGame();
                     }
                 }
                 else if (runningModeController.getGameSession().ended) {
