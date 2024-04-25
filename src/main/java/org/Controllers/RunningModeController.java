@@ -110,21 +110,21 @@ public class RunningModeController {
         Shape transformedRectangle = transform.createTransformedShape(magicalStaffRectangle);
 
         if (transformedRectangle.intersects(fireballRectangle)) {
-            // System.out.println("\nCollision detected");
             lastCollisionTime = currentTime;
-            // System.out.println("Magical Staff angle: "+-msAngle);
             double normalAngle = Math.toRadians((-msAngle + 90));
-            //    System.out.println(normalAngle);
             Vector normal = new Vector(Math.cos(normalAngle), Math.abs(Math.sin(normalAngle)));
-            //   System.out.println("Cos and sin "+Math.cos(normalAngle)+" "+Math.sin(normalAngle));
+
             Vector velocity = new Vector(xVelocity, yVelocity);
+            double originalMagnitude = Math.sqrt(velocity.getX() * velocity.getX() + velocity.getY() * velocity.getY());  // Calculate the original magnitude
             Vector vNew = velocity.subtract(normal.scale(2 * velocity.dot(normal)));
-            //  System.out.println("old: "+fireball.getxVelocity()+" "+fireball.getyVelocity());
-            // System.out.println(vNew.getX());
-            // System.out.println(vNew.getY());
+
+            double newMagnitude = Math.sqrt(vNew.getX() * vNew.getX() + vNew.getY() * vNew.getY());
+            if (newMagnitude != 0) {
+                double scale = originalMagnitude / newMagnitude;
+                vNew = new Vector(vNew.getX() * scale, vNew.getY() * scale);
+            }
             fireball.setxVelocity(vNew.getX());
             fireball.setyVelocity(vNew.getY());
-            //  System.out.println("new: "+fireball.getxVelocity()+" "+fireball.getyVelocity());
         }
 
     }

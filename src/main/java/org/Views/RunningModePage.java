@@ -56,7 +56,7 @@ public class RunningModePage extends Page{
         //g.drawImage(backgroundImage, 0, 0, getWidth(), getHeight(), this);
     }
     private void setupTimer() {
-        int delay = 4; // 4 ms delay, approx. 60 FPS
+        int delay = 1; // 4 ms delay, approx. 60 FPS
         Timer timer = new Timer(delay, e -> {
             // For Pausing the game
             if (this.pause) {
