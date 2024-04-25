@@ -65,37 +65,39 @@ public class RunningModePage extends Page{
         int period = 16; // 16 ms period for approx. 60 FPS
 
         Timer timer = new Timer();
+        // TimerTask içinde, 'Quit' butonuna basıldığında oyunu sonlandırmadan ana sayfaya yönlendirecek şekilde kodu güncelleyin.
         TimerTask task = new TimerTask() {
             public void run() {
-                // For Pausing the game
                 if (pause) {
                     Object[] options = {"Continue", "Quit", "Save"};
-                    int choice = JOptionPane.showOptionDialog(null,
+                    int choice = JOptionPane.showOptionDialog(
+                            null,
                             "You paused",
                             "Game Paused",
                             JOptionPane.YES_NO_OPTION,
                             JOptionPane.QUESTION_MESSAGE,
                             null,
                             options,
-                            options[0]);
+                            options[0]
+                    );
+
                     if (choice == JOptionPane.YES_OPTION) {
-                        pause = false;
+                        pause = false; // Oyunu devam ettir
                     } else if (choice == JOptionPane.NO_OPTION) {
-                        pause = false;
-                        runningModeController.getGameSession().ended = true;
-                        Navigator.getInstance().showStartPage();
+                        pause = false; // Duraklamayı kaldır
+                        Navigator.getInstance().showStartPage(); // Ana sayfaya yönlendir
+                    } else if (choice == JOptionPane.CANCEL_OPTION) {
+                        saveGame(); // Oyunu kaydet
                     }
-                }
-                else if (runningModeController.getGameSession().ended) {
+                } else if (runningModeController.getGameSession().ended) {
+                    // Oyun gerçekten sona erdiğinde "You lost" mesajını gösterin
                     JOptionPane.showMessageDialog(null, "You lost!");
-                    runningModeController = null;
-                    Navigator.getInstance().showStartPage();
-                }
-                else {
-                    // Update the game frame
+                    runningModeController = null; // Controller'ı temizle
+                    Navigator.getInstance().showStartPage(); // Ana sayfaya yönlendir
+                } else {
+                    // Oyunu güncelle
                     SwingUtilities.invokeLater(() -> updateGameFrame());
 
-                    // Manage time and frames
                     frameCount++;
                     if (frameCount >= 70) {
                         timeInSeconds++;
@@ -105,6 +107,7 @@ public class RunningModePage extends Page{
                 }
             }
         };
+
 
         timer.scheduleAtFixedRate(task, delay, period);
     }
