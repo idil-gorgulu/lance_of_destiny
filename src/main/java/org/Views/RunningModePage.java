@@ -2,10 +2,12 @@ package org.Views;
 
 import org.Domain.*;
 import org.Controllers.*;
+import org.Utils.Database;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import javax.swing.border.Border;
+import org.bson.Document;
 import java.awt.*;
 import java.awt.event.*;
 import java.awt.image.BufferedImage;
@@ -60,11 +62,11 @@ public class RunningModePage extends Page{
         Timer timer = new Timer(delay, e -> {
             // For Pausing the game
             if (this.pause) {
-                Object[] options = {"Continue", "Quit"};
+                Object[] options = {"Continue", "Quit", "Save"};
                 int choice = JOptionPane.showOptionDialog(null,
                         "You paused",
                         "Game Paused",
-                        JOptionPane.YES_NO_OPTION,
+                        JOptionPane.YES_NO_CANCEL_OPTION,
                         JOptionPane.QUESTION_MESSAGE,
                         null,
                         options,
@@ -75,7 +77,8 @@ public class RunningModePage extends Page{
                     this.pause = false;
                     this.runningModeController.getGameSession().ended = true;
                     Navigator.getInstance().showStartPage();
-
+                } else if (choice == JOptionPane.CANCEL_OPTION) {
+                    saveGame();
                 }
             }
             else if (this.runningModeController.getGameSession().ended) {
@@ -233,6 +236,49 @@ public class RunningModePage extends Page{
 
             }
         });
+    }
+
+    private void saveGame() {
+        Document gameSession = new Document();
+        gameSession.put("email", User.getUserInstance().getEmail());
+        gameSession.put("gameName", "RunningModeGame"); // Use a dynamic name if required
+        gameSession.put("score", runningModeController.getGameSession().getScore().getScore());
+        gameSession.put("timeElapsed", timeInSeconds);
+
+        ArrayList<Document> barrierList = new ArrayList<>();
+        for (Barrier barrier : barriers) {
+            Document barrierDoc = new Document();
+            barrierDoc.put("type", barrier.getType().toString());
+            barrierDoc.put("x", barrier.getCoordinate().getX());
+            barrierDoc.put("y", barrier.getCoordinate().getY());
+            barrierDoc.put("hits", barrier.getnHits());
+            barrierDoc.put("velocity", barrier.getVelocity());
+            barrierList.add(barrierDoc);
+        }
+        gameSession.put("barriers", barrierList);
+        ArrayList<Document> debrisList = new ArrayList<>();
+        for (Debris debris : activeDebris) {
+            Document debrisDoc = new Document();
+            debrisDoc.put("x", debris.getCoordinate().getX());
+            debrisDoc.put("y", debris.getCoordinate().getY());
+            debrisList.add(debrisDoc);
+        }
+        gameSession.put("debris", debrisList);
+        gameSession.put("played", "True");
+
+        Coordinate staffCoord = runningModeController.getGameSession().getMagicalStaff().getCoordinate();
+        gameSession.put("magicalStaff", new Document("x", staffCoord.getX()).append("y", staffCoord.getY()));
+
+        // Save fireball details
+        Fireball fireball = runningModeController.getGameSession().getFireball();
+        gameSession.put("fireball", new Document("x", fireball.getCoordinate().getX())
+                .append("y", fireball.getCoordinate().getY())
+                .append("velocityX", fireball.getxVelocity())
+                .append("velocityY", fireball.getyVelocity()));
+
+
+        Database.getInstance().getGameCollection().insertOne(gameSession);
+        JOptionPane.showMessageDialog(null, "Game saved successfully!");
     }
 
 }
