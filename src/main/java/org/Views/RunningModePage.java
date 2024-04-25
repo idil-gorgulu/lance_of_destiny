@@ -242,7 +242,7 @@ public class RunningModePage extends Page{
 
         String gameName = JOptionPane.showInputDialog(this, "Enter a name for your save file:", "Save Game", JOptionPane.PLAIN_MESSAGE);
         if (gameName == null || gameName.trim().isEmpty()) {
-            JOptionPane.showMessageDialog(null, "Save cancelled. No name provided.");
+            JOptionPane.showMessageDialog(null, "Please provide a name to save the game.");
             return;
         }
 
