@@ -82,7 +82,7 @@ public class RunningModePage extends Page{
                         pause = false; // Oyunu devam ettir
                     } else if (choice == JOptionPane.NO_OPTION) {
                         pause = false;
-                        runningModeController.getGameSession().ended = true;
+                        runningModeController = null;
                         Navigator.getInstance().showStartPage();
                     }
                 }
