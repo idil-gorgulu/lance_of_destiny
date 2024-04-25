@@ -51,29 +51,29 @@ public class RunningModeController {
         boolean isAvailable;
         int width= 10;
         for (Barrier br: getGameSession().getBarriers()){
-           if (br.isMoving()) {
-               if (br.getType() == BarrierType.EXPLOSIVE) {
-                   if (br.getVelocity() != 0) {
-                       br.moveBarrier();                   }               }
-               else {
-                   isAvailable = true;
-                   newpos = br.getCoordinate().getX() +  br.getVelocity();
-                   for (Barrier br2 : getGameSession().getBarriers()) {
-                       if ((!br2.equals(br)) && (br.getCoordinate().getY()==br2.getCoordinate().getY())){
-                           //System.out.println("Space between : "+ (br2.getCoordinate().getX() - newpos));
-                           if (width+10>Math.abs(br2.getCoordinate().getX() - newpos)) {
-                               isAvailable = false;
-                               //br2.setVelocity(-1*br2.getVelocity());
-                               br.setVelocity(-1*br.getVelocity());
-                               break;
-                       }}
-                   }
-                   if (isAvailable) {
-                       br.moveBarrier();
-                   }
-               }
-           }
-       }
+            if (br.isMoving()) {
+                if (br.getType() == BarrierType.EXPLOSIVE) {
+                    if (br.getVelocity() != 0) {
+                        br.moveBarrier();                   }               }
+                else {
+                    isAvailable = true;
+                    newpos = br.getCoordinate().getX() +  br.getVelocity();
+                    for (Barrier br2 : getGameSession().getBarriers()) {
+                        if ((!br2.equals(br)) && (br.getCoordinate().getY()==br2.getCoordinate().getY())){
+                            //System.out.println("Space between : "+ (br2.getCoordinate().getX() - newpos));
+                            if (width+10>Math.abs(br2.getCoordinate().getX() - newpos)) {
+                                isAvailable = false;
+                                //br2.setVelocity(-1*br2.getVelocity());
+                                br.setVelocity(-1*br.getVelocity());
+                                break;
+                            }}
+                    }
+                    if (isAvailable) {
+                        br.moveBarrier();
+                    }
+                }
+            }
+        }
     }
 
     public void checkMagicalStaffFireballCollision() {
@@ -113,9 +113,9 @@ public class RunningModeController {
         Shape transformedRectangle = transform.createTransformedShape(magicalStaffRectangle);
 
         if (transformedRectangle.intersects(fireballRectangle)) {
-           // System.out.println("\nCollision detected");
+            // System.out.println("\nCollision detected");
             lastCollisionTime = currentTime;
-           // System.out.println("Magical Staff angle: "+-msAngle);
+            // System.out.println("Magical Staff angle: "+-msAngle);
             double normalAngle = Math.toRadians((-msAngle + 90));
             //    System.out.println(normalAngle);
             Vector normal = new Vector(Math.cos(normalAngle), Math.abs(Math.sin(normalAngle)));
@@ -123,8 +123,8 @@ public class RunningModeController {
             Vector velocity = new Vector(xVelocity, yVelocity);
             Vector vNew = velocity.subtract(normal.scale(2 * velocity.dot(normal)));
             //  System.out.println("old: "+fireball.getxVelocity()+" "+fireball.getyVelocity());
-           // System.out.println(vNew.getX());
-           // System.out.println(vNew.getY());
+            // System.out.println(vNew.getX());
+            // System.out.println(vNew.getY());
             fireball.setxVelocity(vNew.getX());
             fireball.setyVelocity(vNew.getY());
             //  System.out.println("new: "+fireball.getxVelocity()+" "+fireball.getyVelocity());
@@ -347,27 +347,27 @@ public class RunningModeController {
         }
 
         else if (fireballY + fireballRadius >= 600) {
-                // BOTTOM
-                this.getGameSession().getChance().decrementChance();
-                if (this.getGameSession().getChance().getRemainingChance() == 0) {
-                    game.active = false;
-                    System.out.println("Not active");
-                    return;
-                }
-                int fireballWidth = fireball.getPreferredSize().width;
-                int fireballPositionX = (1000 - fireballWidth) / 2; // make these dynamic
-                int fireballHeight = fireball.getPreferredSize().height;
-                int fireballPositionY = (500 - fireballHeight - 200); // make these dynamic
-                fireball.setxVelocity(3);
-                fireball.setxVelocity(3);
-                fireball.getCoordinate().setX(fireballPositionX);
-                fireball.getCoordinate().setY(fireballPositionY);
-                fireball.setBounds(fireballPositionX, fireballPositionY, fireballWidth, fireballHeight);
-                //fireball.setBackground(Color.red);
-                fireball.setBackground(new Color(0, 0, 0, 0)); // Transparent background
-                fireball.setOpaque(true);
-
+            // BOTTOM
+            this.getGameSession().getChance().decrementChance();
+            if (this.getGameSession().getChance().getRemainingChance() == 0) {
+                game.active = false;
+                System.out.println("Not active");
+                return;
             }
+            int fireballWidth = fireball.getPreferredSize().width;
+            int fireballPositionX = (1000 - fireballWidth) / 2; // make these dynamic
+            int fireballHeight = fireball.getPreferredSize().height;
+            int fireballPositionY = (500 - fireballHeight - 200); // make these dynamic
+            fireball.setxVelocity(3);
+            fireball.setxVelocity(3);
+            fireball.getCoordinate().setX(fireballPositionX);
+            fireball.getCoordinate().setY(fireballPositionY);
+            fireball.setBounds(fireballPositionX, fireballPositionY, fireballWidth, fireballHeight);
+            //fireball.setBackground(Color.red);
+            fireball.setBackground(new Color(0, 0, 0, 0)); // Transparent background
+            fireball.setOpaque(true);
+
+        }
 
     }
 

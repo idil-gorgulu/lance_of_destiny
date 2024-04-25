@@ -88,6 +88,4 @@ public class Fireball extends JPanel {
     public void setyVelocity(double yVelocity) {
         this.yVelocity = yVelocity;
     }
-
-
 }

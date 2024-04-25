@@ -17,18 +17,12 @@ import java.util.ArrayList;
 public class RunningModePage extends Page{
 
     private BufferedImage backgroundImage;
-    private JPanel gamePanel;
-    private JPanel infoContainer;
-    private Fireball fireball;
-    private MagicalStaff magicalStaff;
-    private Barrier barrier;
+    private JPanel gamePanel =  new JPanel();
+    private JPanel infoContainer =  new JPanel();
     protected RunningModeController runningModeController;
-    private MagicalStaffController magicalStaffController;
-    private Chance chance;
-    private Score score;
     public boolean pause = false;
-    private ArrayList<Barrier> barriers;
-    private ArrayList<Debris> activeDebris;
+    private ArrayList<Barrier> barriers = new ArrayList<>();
+    private ArrayList<Debris> activeDebris = new ArrayList<>();
     public static final int SCREENWIDTH =1000;
     public int screenHeight;
     public int timeInSeconds = 0;
@@ -192,27 +186,25 @@ public class RunningModePage extends Page{
                 screenHeight = 500;
 
                 // Initializing Fireball
-                fireball = runningModeController.getGameSession().getFireball();
-                int fireballWidth = fireball.getPreferredSize().width;
+                int fireballWidth = runningModeController.getGameSession().getFireball().getPreferredSize().width;
                 int fireballPositionX = (SCREENWIDTH - fireballWidth) / 2;
-                int fireballHeight = fireball.getPreferredSize().height;
+                int fireballHeight = runningModeController.getGameSession().getFireball().getPreferredSize().height;
                 int fireballPositionY = (screenHeight - fireballHeight - 200);
-                fireball.getCoordinate().setX(fireballPositionX);
-                fireball.getCoordinate().setY(fireballPositionY);
-                fireball.setBounds(fireballPositionX, fireballPositionY, fireballWidth, fireballHeight);
-                gamePanel.add(fireball);
+                runningModeController.getGameSession().getFireball().getCoordinate().setX(fireballPositionX);
+                runningModeController.getGameSession().getFireball().getCoordinate().setY(fireballPositionY);
+                runningModeController.getGameSession().getFireball().setBounds(fireballPositionX, fireballPositionY, fireballWidth, fireballHeight);
+                gamePanel.add(runningModeController.getGameSession().getFireball());
 
                 // Initializing MagicalStaff
-                magicalStaff = runningModeController.getGameSession().getMagicalStaff();
-                int magicalStaffWidth = magicalStaff.getPreferredSize().width;
-                int magicalStaffHeight = magicalStaff.getPreferredSize().height;
-                int magicalStaffPositionX = magicalStaff.getCoordinate().getX();
-                int magicalStaffPositionY = magicalStaff.getCoordinate().getY();
-                magicalStaff.setBounds(magicalStaffPositionX, magicalStaffPositionY, magicalStaffWidth, magicalStaffHeight);
+                int magicalStaffWidth = runningModeController.getGameSession().getMagicalStaff().getPreferredSize().width;
+                int magicalStaffHeight = runningModeController.getGameSession().getMagicalStaff().getPreferredSize().height;
+                int magicalStaffPositionX = runningModeController.getGameSession().getMagicalStaff().getCoordinate().getX();
+                int magicalStaffPositionY = runningModeController.getGameSession().getMagicalStaff().getCoordinate().getY();
+                runningModeController.getGameSession().getMagicalStaff().setBounds(magicalStaffPositionX, magicalStaffPositionY, magicalStaffWidth, magicalStaffHeight);
 
                 gamePanel.requestFocus();
                 gamePanel.setFocusTraversalKeysEnabled(false);
-                gamePanel.add(magicalStaff);
+                gamePanel.add(runningModeController.getGameSession().getMagicalStaff());
 
                 //to follow who has focus:
                 gamePanel.addFocusListener(new FocusListener() {
@@ -244,4 +236,5 @@ public class RunningModePage extends Page{
             }
         });
     }
+
 }

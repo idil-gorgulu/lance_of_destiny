@@ -269,4 +269,9 @@ public class Game {
         this.ended = false;
         this.barrierBoard = new String[20][20];
     }
+
+    public static Game createNewGame() {
+        instance = new Game();
+        return instance;
+    }
 }

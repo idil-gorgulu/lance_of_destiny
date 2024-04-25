@@ -20,7 +20,7 @@ public class BuildingModeController {
 
     public BuildingModeController(BuildingModePage buildingModePage) {
         this.buildingModePage = buildingModePage;
-        this.gameSession = Game.getInstance();
+        this.gameSession = Game.createNewGame();
         //gameSession.reset(); needed for being able to create a new template.
     }
 
@@ -75,16 +75,16 @@ public class BuildingModeController {
         return gameSession;
     }
 
-    public static void setGameSession(Game gameSession) {
-        BuildingModeController.gameSession = gameSession;
-    }
     public static boolean initialPopulation(int simpleNum, int firmNum, int exNum, int giftNum){
         boolean b=gameSession.initialPopulation(simpleNum,firmNum,exNum,giftNum);
         return b;
     }
 
     public static boolean getReady(){
-        if(gameSession.getNumSimpleBarrier()>=75 && gameSession.getNumFirmBarrier()>=10 && gameSession.getNumExplosiveBarrier()>=5 && gameSession.getNumrewardingBarrier()>=10){
+        if (gameSession.getNumSimpleBarrier() >= 75 &&
+                gameSession.getNumFirmBarrier() >= 10 &&
+                gameSession.getNumExplosiveBarrier()>=5 &&
+                gameSession.getNumrewardingBarrier()>=10){
             return true;
         }
         else{
