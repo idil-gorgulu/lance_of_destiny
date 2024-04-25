@@ -239,9 +239,16 @@ public class RunningModePage extends Page{
     }
 
     private void saveGame() {
+
+        String gameName = JOptionPane.showInputDialog(this, "Enter a name for your save file:", "Save Game", JOptionPane.PLAIN_MESSAGE);
+        if (gameName == null || gameName.trim().isEmpty()) {
+            JOptionPane.showMessageDialog(null, "Save cancelled. No name provided.");
+            return;
+        }
+
         Document gameSession = new Document();
         gameSession.put("email", User.getUserInstance().getEmail());
-        gameSession.put("gameName", "RunningModeGame"); // Use a dynamic name if required
+        gameSession.put("gameName", gameName);
         gameSession.put("score", runningModeController.getGameSession().getScore().getScore());
         gameSession.put("timeElapsed", timeInSeconds);
 
