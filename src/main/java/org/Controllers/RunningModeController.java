@@ -110,21 +110,43 @@ public class RunningModeController {
         Shape transformedRectangle = transform.createTransformedShape(magicalStaffRectangle);
 
         if (transformedRectangle.intersects(fireballRectangle)) {
+            System.out.println("\nCollision detected");
             lastCollisionTime = currentTime;
-            double normalAngle = Math.toRadians((-msAngle + 90));
-            Vector normal = new Vector(Math.cos(normalAngle), Math.abs(Math.sin(normalAngle)));
+            if (Math.abs(msAngle)<1e-5){
 
-            Vector velocity = new Vector(xVelocity, yVelocity);
-            double originalMagnitude = Math.sqrt(velocity.getX() * velocity.getX() + velocity.getY() * velocity.getY());  // Calculate the original magnitude
-            Vector vNew = velocity.subtract(normal.scale(2 * velocity.dot(normal)));
-
-            double newMagnitude = Math.sqrt(vNew.getX() * vNew.getX() + vNew.getY() * vNew.getY());
-            if (newMagnitude != 0) {
-                double scale = originalMagnitude / newMagnitude;
-                vNew = new Vector(vNew.getX() * scale, vNew.getY() * scale);
+                fireball.setxVelocity(fireball.getxVelocity());
+                fireball.setyVelocity(-fireball.getyVelocity());
             }
-            fireball.setxVelocity(vNew.getX());
-            fireball.setyVelocity(vNew.getY());
+            else {
+
+
+
+                System.out.println("Magical Staff angle: " + -msAngle);
+
+                double normalAngle = Math.toRadians((-msAngle + 90));
+                System.out.println(normalAngle);
+                Vector normal = new Vector(Math.cos(normalAngle), Math.sin(normalAngle));
+                System.out.println("Cos and sin " + Math.cos(normalAngle) + " " + Math.sin(normalAngle));
+                Vector velocity = new Vector(xVelocity, yVelocity);
+
+                double dProd = normal.dot(velocity);
+
+                // Step 3: Calculate the reflection vector components
+                double reflectionX = velocity.getX() - 2 * dProd * normal.getX();
+                double reflectionY = velocity.getY() - 2 * dProd * normal.getY();
+
+                // Step 4: Create the reflection vector
+                Vector reflectionVector = new Vector(reflectionX, reflectionY);
+
+
+                //Vector vNew = velocity.subtract(normal.scale(2 * velocity.dot(normal)));
+                System.out.println("old: " + fireball.getxVelocity() + " " + fireball.getyVelocity());
+
+
+                fireball.setxVelocity(-reflectionX);
+                fireball.setyVelocity(reflectionY);
+                System.out.println("new: " + fireball.getxVelocity() + " " + fireball.getyVelocity());
+            }
         }
 
     }
@@ -168,7 +190,7 @@ public class RunningModeController {
             int fireballHeight = fireball.getPreferredSize().height;
             int fireballPositionY = (500 - fireballHeight - 200); // make these dynamic
             fireball.setxVelocity(3);
-            fireball.setxVelocity(3);
+            fireball.setyVelocity(3);
             fireball.getCoordinate().setX(fireballPositionX);
             fireball.getCoordinate().setY(fireballPositionY);
             fireball.setBounds(fireballPositionX, fireballPositionY, fireballWidth, fireballHeight);
