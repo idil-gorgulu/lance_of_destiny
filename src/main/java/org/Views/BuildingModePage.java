@@ -39,12 +39,13 @@ public class BuildingModePage extends Page {
     private JButton playButton;
     public int pageNum = 1;
     private JButton saveButton;
-    private JLabel templateName;
-    private JTextField templateNameInput;
+    private JLabel templateGameName;
+    private JTextField templateGameNameInput;
 
     public BuildingModePage() {
         super();
-        this.buildingModeController = new BuildingModeController();
+        this.buildingModeController = new BuildingModeController(this);
+
         initUI();
     }
 
@@ -52,42 +53,71 @@ public class BuildingModePage extends Page {
     protected void initUI() {
         setLayout(new BorderLayout());
 
-        //JMenuBar menuBar = new JMenuBar();
-        //JMenu menu = new JMenu("Menu");
-        //menuBar.add(menu);
-
         infoContainer = new JPanel(new FlowLayout());
 
+        JButton backButton = new JButton("Back");
+        JButton createButton = new JButton("Create");
+        createButton.setPreferredSize(new Dimension(150, 50));
+
+
+
+        infoContainer.add(backButton);
+
+        JPanel barrierPanel = new JPanel(new GridBagLayout());
+        GridBagConstraints gbc = new GridBagConstraints();
+
+        // Common settings for labels
+        gbc.insets = new Insets(4, 0, 4, 0); // padding
+        gbc.anchor = GridBagConstraints.WEST;
+
+        // Add simple barrier label and textfield
         JLabel s = new JLabel("Add simple barrier:");
-        s.setHorizontalAlignment(SwingConstants.LEFT);
-        infoContainer.add(s);
         JTextField inputField1 = new JTextField(4);
-        infoContainer.add(inputField1);
+        gbc.gridx = 0;
+        gbc.gridy = 0;
+        barrierPanel.add(s, gbc);
+        gbc.gridx = 1;
+        barrierPanel.add(inputField1, gbc);
 
+        // Add firm barrier label and textfield
         JLabel f = new JLabel("Add firm barrier:");
-        f.setHorizontalAlignment(SwingConstants.LEFT);
-        infoContainer.add(f);
         JTextField inputField2 = new JTextField(4);
-        infoContainer.add(inputField2);
+        gbc.gridx = 0;
+        gbc.gridy = 1;
+        barrierPanel.add(f, gbc);
+        gbc.gridx = 1;
+        barrierPanel.add(inputField2, gbc);
 
+        // Add explosive barrier label and textfield
         JLabel x = new JLabel("Add explosive barrier:");
-        x.setHorizontalAlignment(SwingConstants.LEFT);
-        infoContainer.add(x);
         JTextField inputField3 = new JTextField(4);
-        infoContainer.add(inputField3);
+        gbc.gridx = 0;
+        gbc.gridy = 2;
+        barrierPanel.add(x, gbc);
+        gbc.gridx = 1;
+        barrierPanel.add(inputField3, gbc);
 
+        // Add gift barrier label and textfield
         JLabel g = new JLabel("Add gift barrier:");
-        g.setHorizontalAlignment(SwingConstants.LEFT);
-        infoContainer.add(g);
         JTextField inputField4 = new JTextField(4);
-        infoContainer.add(inputField4);
-        inputField1.setText("0");
-        inputField2.setText("0");
-        inputField3.setText("0");
-        inputField4.setText("0");
-        JButton submitButton = new JButton("Create");
-        submitButton.setPreferredSize(new Dimension(80, 30));
-        submitButton.addActionListener(new ActionListener() {
+        gbc.gridx = 0;
+        gbc.gridy = 3;
+        barrierPanel.add(g, gbc);
+        gbc.gridx = 1;
+        barrierPanel.add(inputField4, gbc);
+
+        infoContainer.add(barrierPanel);
+
+
+        backButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                Navigator.getInstance().showStartPage();
+            }
+        });
+
+
+        createButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 String inputText1 = inputField1.getText();
@@ -112,7 +142,9 @@ public class BuildingModePage extends Page {
                 }
             }
         });
-        infoContainer.add(submitButton);
+
+
+        infoContainer.add(createButton);
         JLabel line = new JLabel("-----------------------------------");
         infoContainer.add(line);
         simpleAmount = new JLabel("Simple barriers: "+ buildingModeController.getGameSession().getNumSimpleBarrier()+ "/75");
@@ -133,6 +165,7 @@ public class BuildingModePage extends Page {
         leftSide.setPreferredSize(new Dimension(200, 500));
 
         //menuContainer.add(menuBar, BorderLayout.NORTH);
+
         leftSide.add(infoContainer, BorderLayout.CENTER);
 
 
@@ -143,9 +176,9 @@ public class BuildingModePage extends Page {
         playButton.addActionListener(e -> Navigator.getInstance().showRunningModePage());
         //leftSide.add(playButton, BorderLayout.SOUTH);
 
-        templateName = new JLabel("Name your template:");
-        g.setHorizontalAlignment(SwingConstants.LEFT);
-        templateNameInput = new JTextField(20);
+        templateGameName = new JLabel("Name your game template:");
+        g.setHorizontalAlignment(SwingConstants.CENTER);
+        templateGameNameInput = new JTextField(20);
 
 
         saveButton = new JButton("Save");
@@ -156,8 +189,7 @@ public class BuildingModePage extends Page {
                 ArrayList<Barrier> barriers = buildingModeController.getGameSession().getBarriers();
                 Document gameSession = new Document();
                 gameSession.put("email", User.getUserInstance().getEmail());
-                // TODO: Enter the gamename in this page somewhere
-                gameSession.put("gameName", templateNameInput.getText());
+                gameSession.put("gameName", templateGameNameInput.getText());
 //                for (Barrier barrier : barriers) {
 //                    gameSession.put(barrier.getCoordinate().toString(), barrier.getType().toString() + barrier.getnHits());
 //                }
@@ -253,12 +285,6 @@ public class BuildingModePage extends Page {
             protected void paintComponent(Graphics g) { //to set background for panel.
                 super.paintComponent(g);
                 g.drawImage(backgroundImage, 0, 0, getWidth(), getHeight(), this);
-                Graphics2D g2d = (Graphics2D) g;
-                g2d.drawImage(backgroundImage, 0, 0, getWidth(), getHeight(), this);
-
-                // Draw a line at y=400
-                g2d.setColor(Color.BLACK);
-                g2d.drawLine(0, 400, getWidth(), 400);
             }
         };
         buildingPanel.addMouseListener(new MouseAdapter() {
@@ -295,7 +321,7 @@ public class BuildingModePage extends Page {
     }
 
     private void addBarrierImage(Coordinate coordinates) {
-        if (selectedButtonIndex == -1 || coordinates.getY()>=399) {
+        if (selectedButtonIndex == -1) {
             // No barrier type selected, do nothing
             return;
         }
@@ -347,8 +373,8 @@ public class BuildingModePage extends Page {
         explosiveAmount.setText("Explosive barriers: " + buildingModeController.getGameSession().getNumExplosiveBarrier() + "/5");
         rewardingAmount.setText("Rewarding barriers: " + buildingModeController.getGameSession().getNumrewardingBarrier() + "/10");
 
-        infoContainer.add(templateName);
-        infoContainer.add(templateNameInput);
+        infoContainer.add(templateGameName);
+        infoContainer.add(templateGameNameInput);
         infoContainer.add(saveButton, BorderLayout.SOUTH);
         leftSide.add(playButton, BorderLayout.SOUTH);
 
@@ -381,9 +407,9 @@ public class BuildingModePage extends Page {
             buildingPanel.add(barrier);
             barrier.setBackground(Color.blue);
             barrier.setOpaque(false);
+            buildingPanel.repaint();
+            buildingPanel.revalidate();
         }
-        buildingPanel.repaint();
-        buildingPanel.revalidate();
     }
 
 }

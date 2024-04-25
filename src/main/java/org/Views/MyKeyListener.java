@@ -22,10 +22,10 @@ public class MyKeyListener extends KeyAdapter {
                 runningModeController.slideMagicalStaff(+8); // Move right
                 break;
             case KeyEvent.VK_A:
-                runningModeController.rotateMagicalStaff(-5); // Rotate counterclockwise (degrees)
+                runningModeController.rotateMagicalStaff(-3); // Rotate counterclockwise (degrees)
                 break;
             case KeyEvent.VK_D:
-                runningModeController.rotateMagicalStaff(+5); // Rotate clockwise (degrees)
+                runningModeController.rotateMagicalStaff(+3); // Rotate clockwise (degrees)
                 break;
         }
     }

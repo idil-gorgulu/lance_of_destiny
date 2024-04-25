@@ -99,6 +99,7 @@ public class StartPage extends Page {
 
         JButton buildingModeButton = createStyledButton("Open Building Mode");
         JButton runningModeButton = createStyledButton("Open Running Mode");
+        JButton developmentModeButton = createStyledButton("Open Development Mode");
         // Exit button needed
 
         // Add action listeners for buttons
@@ -109,6 +110,7 @@ public class StartPage extends Page {
         add(buildingModeButton);
         add(Box.createVerticalStrut(10));
         add(runningModeButton);
+
     }
 
     private JButton createStyledButton(String text) {
