@@ -29,7 +29,7 @@ public class RunningModePage extends Page{
     public boolean pause = false;
     private ArrayList<Barrier> barriers;
     private ArrayList<Debris> activeDebris;
-    public static final int SCREENWIDTH =1000; // I wanna reach it from MagicalStaff class
+    public static final int SCREENWIDTH =1000;
     public int screenHeight;
     public int timeInSeconds = 0;
     private int frameCount = 0;
@@ -231,6 +231,7 @@ public class RunningModePage extends Page{
                 barriers = runningModeController.getGameSession().getBarriers();
                 for (Barrier barrier : barriers) {
                     barrier.setBounds(barrier.getCoordinate().getX(), barrier.getCoordinate().getY(), barrier.getPreferredSize().width, barrier.getPreferredSize().height);
+                    barrier.setBackground(new Color(color.getRed(), color.getGreen(), color.getBlue(), 0));
                     gamePanel.add(barrier);
                     //barrier.setBackground(Color.blue);
                     //barrier.setOpaque(true);

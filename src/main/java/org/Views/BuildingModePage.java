@@ -45,7 +45,6 @@ public class BuildingModePage extends Page {
     public BuildingModePage() {
         super();
         this.buildingModeController = new BuildingModeController(this);
-
         initUI();
     }
 
@@ -82,10 +81,12 @@ public class BuildingModePage extends Page {
         infoContainer.add(g);
         JTextField inputField4 = new JTextField(4);
         infoContainer.add(inputField4);
-
-        // Add button
+        inputField1.setText("0");
+        inputField2.setText("0");
+        inputField3.setText("0");
+        inputField4.setText("0");
         JButton submitButton = new JButton("Create");
-        submitButton.setPreferredSize(new Dimension(150, 50));
+        submitButton.setPreferredSize(new Dimension(80, 30));
         submitButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -132,7 +133,6 @@ public class BuildingModePage extends Page {
         leftSide.setPreferredSize(new Dimension(200, 500));
 
         //menuContainer.add(menuBar, BorderLayout.NORTH);
-
         leftSide.add(infoContainer, BorderLayout.CENTER);
 
 
@@ -253,6 +253,12 @@ public class BuildingModePage extends Page {
             protected void paintComponent(Graphics g) { //to set background for panel.
                 super.paintComponent(g);
                 g.drawImage(backgroundImage, 0, 0, getWidth(), getHeight(), this);
+                Graphics2D g2d = (Graphics2D) g;
+                g2d.drawImage(backgroundImage, 0, 0, getWidth(), getHeight(), this);
+
+                // Draw a line at y=400
+                g2d.setColor(Color.BLACK);
+                g2d.drawLine(0, 400, getWidth(), 400);
             }
         };
         buildingPanel.addMouseListener(new MouseAdapter() {
@@ -289,7 +295,7 @@ public class BuildingModePage extends Page {
     }
 
     private void addBarrierImage(Coordinate coordinates) {
-        if (selectedButtonIndex == -1) {
+        if (selectedButtonIndex == -1 || coordinates.getY()>=399) {
             // No barrier type selected, do nothing
             return;
         }
@@ -375,9 +381,9 @@ public class BuildingModePage extends Page {
             buildingPanel.add(barrier);
             barrier.setBackground(Color.blue);
             barrier.setOpaque(false);
-            buildingPanel.repaint();
-            buildingPanel.revalidate();
         }
+        buildingPanel.repaint();
+        buildingPanel.revalidate();
     }
 
 }
