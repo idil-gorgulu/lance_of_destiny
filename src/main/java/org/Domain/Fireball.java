@@ -11,7 +11,7 @@ public class Fireball extends JPanel {
     // Deneme
     private Coordinate coordinate;
     private double xVelocity = 0;
-    private double yVelocity = 3;
+    private double yVelocity = -3;
     private int fireballRadius = 15;
     private BufferedImage fireballImage;
 
