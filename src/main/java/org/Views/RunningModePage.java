@@ -29,6 +29,8 @@ public class RunningModePage extends Page{
     public int screenHeight;
     public int timeInSeconds = 0;
     private int frameCount = 0;
+    private Timer gameTimer =  new Timer();
+
     public static final long COLLISION_COOLDOWN = 1000; // Cooldown period in milliseconds
 
     private JLabel timeLabel;
@@ -60,7 +62,6 @@ public class RunningModePage extends Page{
         int delay = 0;  // start immediately
         int period = 16; // 16 ms period for approx. 60 FPS
 
-        Timer timer = new Timer();
         TimerTask task = new TimerTask() {
             public void run() {
                 // For Pausing the game
@@ -76,7 +77,7 @@ public class RunningModePage extends Page{
                             options,
                             options[0]);
                     if (choice == JOptionPane.YES_OPTION) {
-                        pause = false; // Oyunu devam ettir
+                        pause = false;
                         gamePanel.requestFocus();
                     } else if (choice == JOptionPane.NO_OPTION) {
                         pause = false;
@@ -92,7 +93,6 @@ public class RunningModePage extends Page{
                 else {
                     // Update the game frame
                     SwingUtilities.invokeLater(() -> updateGameFrame());
-
                     // Manage time and frames
                     frameCount++;
                     if (frameCount >= 70) {
@@ -103,7 +103,7 @@ public class RunningModePage extends Page{
                 }
             }
         };
-        timer.scheduleAtFixedRate(task, delay, period);
+        gameTimer.scheduleAtFixedRate(task, delay, period);
     }
 
     public void updateGameFrame() {
