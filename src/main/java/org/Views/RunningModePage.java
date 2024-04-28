@@ -3,7 +3,6 @@ package org.Views;
 import org.Domain.*;
 import org.Controllers.*;
 import org.Utils.Database;
-
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import javax.swing.border.Border;
@@ -17,9 +16,7 @@ import java.util.ArrayList;
 import java.util.TimerTask;
 import java.util.Timer;
 
-
 public class RunningModePage extends Page{
-
     private BufferedImage backgroundImage;
     private JPanel gamePanel =  new JPanel();
     private JPanel infoContainer =  new JPanel();
@@ -31,8 +28,9 @@ public class RunningModePage extends Page{
     public int screenHeight;
     public int timeInSeconds = 0;
     private int frameCount = 0;
-    public static final long COLLISION_COOLDOWN = 1000; // Cooldown period in milliseconds
+    private Timer gameTimer =  new Timer();
 
+    public static final long COLLISION_COOLDOWN = 1000; // Cooldown period in milliseconds
 
     private JLabel timeLabel;
     public RunningModePage() {
@@ -58,18 +56,17 @@ public class RunningModePage extends Page{
     protected void paintComponent(Graphics g) { //background for the whole frame
         super.paintComponent(g);
         g.drawImage(backgroundImage, 0, 0, this.getWidth(), this.getHeight(), this);
-        //g.drawImage(backgroundImage, 0, 0, getWidth(), getHeight(), this);
     }
     private void setupTimer() {
         int delay = 0;  // start immediately
         int period = 16; // 16 ms period for approx. 60 FPS
 
-        Timer timer = new Timer();
         TimerTask task = new TimerTask() {
             public void run() {
                 // For Pausing the game
                 if (pause) {
-                    Object[] options = {"Continue", "Quit", "Save"};
+                    //Object[] options = {"Continue", "Quit", "Save"};
+                    Object[] options = {"Continue", "Quit"};
                     int choice = JOptionPane.showOptionDialog(null,
                             "You paused",
                             "Game Paused",
@@ -79,7 +76,8 @@ public class RunningModePage extends Page{
                             options,
                             options[0]);
                     if (choice == JOptionPane.YES_OPTION) {
-                        pause = false; // Oyunu devam ettir
+                        pause = false;
+                        gamePanel.requestFocus();
                     } else if (choice == JOptionPane.NO_OPTION) {
                         pause = false;
                         runningModeController = null;
@@ -94,7 +92,6 @@ public class RunningModePage extends Page{
                 else {
                     // Update the game frame
                     SwingUtilities.invokeLater(() -> updateGameFrame());
-
                     // Manage time and frames
                     frameCount++;
                     if (frameCount >= 70) {
@@ -105,11 +102,8 @@ public class RunningModePage extends Page{
                 }
             }
         };
-
-        timer.scheduleAtFixedRate(task, delay, period);
+        gameTimer.scheduleAtFixedRate(task, delay, period);
     }
-
-
 
     public void updateGameFrame() {
         runningModeController.updateFireballView();
@@ -119,7 +113,7 @@ public class RunningModePage extends Page{
         runningModeController.checkBarrierFireballCollision();
         runningModeController.moveBarriers();
         runningModeController.updateDebris(); // Handle debris movement
-        repaint();  //TO SOLVE DEBRIS BUG -sebnem
+        repaint();
         if (this.runningModeController.getGameSession().getChance().getRemainingChance() == 0) {
             this.runningModeController.getGameSession().ended = true;
         }
@@ -217,7 +211,7 @@ public class RunningModePage extends Page{
                 gamePanel.setFocusTraversalKeysEnabled(false);
                 gamePanel.add(runningModeController.getGameSession().getMagicalStaff());
 
-                //to follow who has focus:
+                //to follow if view has focus:
                 gamePanel.addFocusListener(new FocusListener() {
                     @Override
                     public void focusGained(FocusEvent e) {
@@ -229,73 +223,25 @@ public class RunningModePage extends Page{
                     }
                 });
 
-
                 // Initialize Barriers
                 barriers = runningModeController.getGameSession().getBarriers();
                 for (Barrier barrier : barriers) {
                     barrier.setBounds(barrier.getCoordinate().getX(), barrier.getCoordinate().getY(), barrier.getPreferredSize().width, barrier.getPreferredSize().height);
                     barrier.setBackground(new Color(color.getRed(), color.getGreen(), color.getBlue(), 0));
                     gamePanel.add(barrier);
-                    //barrier.setBackground(Color.blue);
-                    //barrier.setOpaque(true);
-                    // gamePanel.revalidate();
                 }
-
-                //screenWidth = gameContainer.getWidth();  sets to 0, pls remove
-                System.out.println("screenWidth2: "+ SCREENWIDTH);
-
             }
         });
     }
 
     private void saveGame() {
-
         String gameName = JOptionPane.showInputDialog(this, "Enter a name for your save file:", "Save Game", JOptionPane.PLAIN_MESSAGE);
         if (gameName == null || gameName.trim().isEmpty()) {
             JOptionPane.showMessageDialog(null, "Please provide a name to save the game.");
             return;
         }
-
-        Document gameSession = new Document();
-        gameSession.put("email", User.getUserInstance().getEmail());
-        gameSession.put("gameName", gameName);
-        gameSession.put("score", runningModeController.getGameSession().getScore().getScore());
-        gameSession.put("timeElapsed", timeInSeconds);
-
-        ArrayList<Document> barrierList = new ArrayList<>();
-        for (Barrier barrier : barriers) {
-            Document barrierDoc = new Document();
-            barrierDoc.put("type", barrier.getType().toString());
-            barrierDoc.put("x", barrier.getCoordinate().getX());
-            barrierDoc.put("y", barrier.getCoordinate().getY());
-            barrierDoc.put("hits", barrier.getnHits());
-            barrierDoc.put("velocity", barrier.getVelocity());
-            barrierList.add(barrierDoc);
-        }
-        gameSession.put("barriers", barrierList);
-        ArrayList<Document> debrisList = new ArrayList<>();
-        for (Debris debris : activeDebris) {
-            Document debrisDoc = new Document();
-            debrisDoc.put("x", debris.getCoordinate().getX());
-            debrisDoc.put("y", debris.getCoordinate().getY());
-            debrisList.add(debrisDoc);
-        }
-        gameSession.put("debris", debrisList);
-        gameSession.put("played", "True");
-
-        Coordinate staffCoord = runningModeController.getGameSession().getMagicalStaff().getCoordinate();
-        gameSession.put("magicalStaff", new Document("x", staffCoord.getX()).append("y", staffCoord.getY()));
-
-        // Save fireball details
-        Fireball fireball = runningModeController.getGameSession().getFireball();
-        gameSession.put("fireball", new Document("x", fireball.getCoordinate().getX())
-                .append("y", fireball.getCoordinate().getY())
-                .append("velocityX", fireball.getxVelocity())
-                .append("velocityY", fireball.getyVelocity()));
-
-
-        Database.getInstance().getGameCollection().insertOne(gameSession);
-        JOptionPane.showMessageDialog(null, "Game saved successfully!");
+        int timeElapsed=timeInSeconds;
+        runningModeController.saveGame(gameName,timeElapsed, activeDebris);
     }
 
 }

@@ -10,11 +10,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 public class Debris extends JComponent {
-
     public BufferedImage debrisImage;
-
     private Coordinate coordinate;
-
     private int yVelocity = 3;
 
     public Debris(Coordinate coordinate) {
@@ -55,6 +52,5 @@ public class Debris extends JComponent {
     public Coordinate getCoordinate() {
         return coordinate;
     }
-
 
 }

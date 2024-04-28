@@ -176,8 +176,6 @@ public class Barrier extends JPanel {
             int newPos = velocity + getCoordinate().getX();
             if ((newPos > 0) && (newPos + getPreferredSize().getWidth() < RunningModePage.SCREENWIDTH)) {
                 getCoordinate().setX(newPos);
-                //;
-
             }
             else
                 setVelocity(-1*velocity);
@@ -199,7 +197,4 @@ public class Barrier extends JPanel {
     public void setMoving(boolean moving) {
         isMoving = moving;
     }
-
-
-
 }

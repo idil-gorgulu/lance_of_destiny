@@ -1,8 +1,6 @@
 package org.Views;
 
 import org.Controllers.BuildingModeController;
-import org.Controllers.LoginPageController;
-import org.Controllers.RunningModeController;
 import org.Domain.*;
 import org.Utils.Database;
 import org.bson.Document;
@@ -20,8 +18,6 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 
-import static org.Controllers.BuildingModeController.getReady;
-
 public class BuildingModePage extends Page {
     private BuildingModeController buildingModeController;
     private BufferedImage backgroundImage;
@@ -34,6 +30,7 @@ public class BuildingModePage extends Page {
     private JLabel firmAmount;
     private JLabel explosiveAmount;
     private JLabel rewardingAmount;
+    private JLabel lowerBoundInfo;
     private int selectedButtonIndex = -1;
     private JPanel infoContainer;
     private JButton playButton;
@@ -100,11 +97,7 @@ public class BuildingModePage extends Page {
         barrierPanel.add(inputField4, gbc);
         infoContainer.add(barrierPanel);
 
-
         backButton.addActionListener(e -> Navigator.getInstance().getPrevious());
-
-
-
 
         createButton.addActionListener(new ActionListener() {
             @Override
@@ -117,16 +110,17 @@ public class BuildingModePage extends Page {
                 int num3 = Integer.parseInt(inputText3);
                 String inputText4 = inputField4.getText();
                 int num4 = Integer.parseInt(inputText4);
+                //populating game:
                 boolean b = buildingModeController.initialPopulation(num1, num2, num3, num4);
                 if(!b){
                     JOptionPane.showMessageDialog(null, "Not enough places!");
                 }
                 else{
                     regenerate();
-                    inputField1.setText("");
-                    inputField2.setText("");
-                    inputField3.setText("");
-                    inputField4.setText("");
+                    inputField1.setText("0");
+                    inputField2.setText("0");
+                    inputField3.setText("0");
+                    inputField4.setText("0");
                 }
             }
         });
@@ -134,7 +128,7 @@ public class BuildingModePage extends Page {
 
         JLabel line = new JLabel("-----------------------------------");
         infoContainer.add(line);
-
+        //displaying current number of barriers:
         simpleAmount = new JLabel("Simple barriers: "+ buildingModeController.getGameSession().getNumSimpleBarrier()+ "/75");
         simpleAmount.setHorizontalAlignment(SwingConstants.LEFT);
         infoContainer.add(simpleAmount);
@@ -151,6 +145,7 @@ public class BuildingModePage extends Page {
         rewardingAmount.setHorizontalAlignment(SwingConstants.LEFT);
         infoContainer.add(rewardingAmount);
 
+
         JLabel line2 = new JLabel("-----------------------------------");
         infoContainer.add(line2);
         leftSide = new JPanel(new BorderLayout());
@@ -164,6 +159,10 @@ public class BuildingModePage extends Page {
         templateGameName = new JLabel("Name your game template:");
         g.setHorizontalAlignment(SwingConstants.CENTER);
         templateGameNameInput = new JTextField(20);
+
+        lowerBoundInfo = new JLabel("<html>Meet the criteria to be <br>able to save and play!</html>");
+        lowerBoundInfo.setHorizontalAlignment(SwingConstants.LEFT);
+        infoContainer.add(lowerBoundInfo);
 
         saveButton = new JButton("Save");
         saveButton.addActionListener(e -> buildingModeController.saveGameToDatabase(templateGameNameInput.getText()));
@@ -202,6 +201,7 @@ public class BuildingModePage extends Page {
                 maxHeight = Math.max(maxHeight, button.getPreferredSize().height);
 
                 int finalI = i;
+                //changing currently selected button index:
                 button.addMouseListener(new MouseAdapter() {
                     @Override
                     public void mousePressed(MouseEvent e) {
@@ -210,15 +210,13 @@ public class BuildingModePage extends Page {
                         } else {
                             selectedButtonIndex = finalI;
                         }
-
                         updateButtonState();
-                        System.out.println("selected button: "+selectedButtonIndex);
+                        //System.out.println("selected button: "+selectedButtonIndex);
                     }
                 });
                 button.setBorder(BorderFactory.createRaisedBevelBorder());
                 buttonPanel.add(button);
                 buttons[i] = button;
-
             }
             Dimension buttonSize = new Dimension(maxWidth, maxHeight);
             for (JButton button : buttons) {
@@ -229,28 +227,29 @@ public class BuildingModePage extends Page {
         }
         add(buttonPanel, BorderLayout.NORTH);
 
+        buildingContainer = new JPanel();
+        buildingContainer.setLayout(new BorderLayout());
+
         try {
             backgroundImage = ImageIO.read(new File("assets/Background.png"));
         } catch (IOException e) {
             e.printStackTrace();
         }
-
-        buildingContainer = new JPanel();
-        buildingContainer.setLayout(new BorderLayout());
-
         buildingPanel = new JPanel(null) {
             @Override
             protected void paintComponent(Graphics g) {
                 super.paintComponent(g);
                 g.drawImage(backgroundImage, 0, 0, getWidth(), getHeight(), this);
+                // Draw a line at y=400
+                g.setColor(Color.BLACK);
+                g.drawLine(0, 400, getWidth(), 400);
             }
         };
         buildingPanel.addMouseListener(new MouseAdapter() {
             @Override
             public void mousePressed(MouseEvent e) {
                 if (selectedButtonIndex != -1) {
-                    System.out.println("Mouse click coordinates:"+ e.getX()+" "+ e.getY());
-                    //TODO: Check borders of where we can add barriers, we should not below some level.
+                    System.out.println("Mouse click coordinates:"+ e.getX()+" "+ e.getY()); //to debug
                     addBarrierImage(new Coordinate(e.getX(), e.getY()));
                 }
             }
@@ -259,11 +258,6 @@ public class BuildingModePage extends Page {
         Border border = BorderFactory.createLineBorder(Color.BLACK);
         buildingPanel.setPreferredSize(new Dimension(1080, 500));
         buildingPanel.setBorder(border);
-        MagicalStaff magicalStaff = buildingModeController.getGameSession().getMagicalStaff();
-        int magicalStaffWidth = magicalStaff.getPreferredSize().width;
-        int magicalStaffHeight = magicalStaff.getPreferredSize().height;
-        magicalStaff.setBounds(480, 500, magicalStaffWidth, magicalStaffHeight);
-        buildingPanel.add(magicalStaff);
 
         buildingContainer.add(buildingPanel, BorderLayout.CENTER);
         add(buildingContainer, BorderLayout.CENTER);
@@ -273,12 +267,12 @@ public class BuildingModePage extends Page {
     }
 
     private void addBarrierImage(Coordinate coordinates) {
-        if (selectedButtonIndex == -1) {
+        if (selectedButtonIndex == -1  || coordinates.getY()>=399) {
             return;
         }
         Coordinate barrierCoordinates=BuildingModeController.addBarrier(coordinates,BarrierType.values()[selectedButtonIndex] );
 
-        if (barrierCoordinates==null){
+        if (barrierCoordinates==null){ //barrier already exists in those coordinates
             regenerate();
             buildingPanel.repaint();
             buildingPanel.revalidate();
@@ -301,17 +295,6 @@ public class BuildingModePage extends Page {
     }
     public void regenerate(){
         buildingPanel.removeAll();
-        MagicalStaff magicalStaff = buildingModeController.getGameSession().getMagicalStaff();
-        int magicalStaffWidth = magicalStaff.getPreferredSize().width;
-        int magicalStaffHeight = magicalStaff.getPreferredSize().height;
-
-        int magicalStaffPositionX = 480;
-        int magicalStaffPositionY = 500;
-
-        magicalStaff.setBounds(magicalStaffPositionX, magicalStaffPositionY, magicalStaffWidth, magicalStaffHeight);
-        magicalStaff.setBackground(Color.green);
-        buildingPanel.add(magicalStaff);
-
         simpleAmount.setText("Simple barriers: " + buildingModeController.getGameSession().getNumSimpleBarrier() + "/75");
         firmAmount.setText("Firm barriers: " + buildingModeController.getGameSession().getNumFirmBarrier() + "/10");
         explosiveAmount.setText("Explosive barriers: " + buildingModeController.getGameSession().getNumExplosiveBarrier() + "/5");
@@ -319,34 +302,29 @@ public class BuildingModePage extends Page {
 
         infoContainer.add(templateGameName);
         infoContainer.add(templateGameNameInput);
-        infoContainer.add(saveButton, BorderLayout.SOUTH);
-        leftSide.add(playButton, BorderLayout.SOUTH);
+        //infoContainer.add(saveButton, BorderLayout.SOUTH);
+        //leftSide.add(playButton, BorderLayout.SOUTH);
 
-        //TODO: MAKE BELOW CODE ACTIVE BEFORE DEMO.
-        /*
-        if (getReady()){
-            infoContainer.add(templateName);
-            infoContainer.add(templateNameInput);
+        if (buildingModeController.getReady()){
             infoContainer.add(saveButton, BorderLayout.SOUTH);
             leftSide.add(playButton, BorderLayout.SOUTH);
+            infoContainer.remove(lowerBoundInfo);
         }
         else{
             infoContainer.remove(saveButton);
             leftSide.remove(playButton);
+            lowerBoundInfo.setHorizontalAlignment(SwingConstants.LEFT);
+            infoContainer.add(lowerBoundInfo); }
 
-        }
-         */
         infoContainer.revalidate();
         infoContainer.repaint();
 
         leftSide.revalidate();
         leftSide.repaint();
 
-
         ArrayList<Barrier> barriers;
         barriers = buildingModeController.getGameSession().getBarriers();
         for (Barrier barrier : barriers) {
-            System.out.println("Building mode barrier putting: "+ barrier.getCoordinate().getX() +","+ barrier.getCoordinate().getY());
             barrier.setBounds(barrier.getCoordinate().getX(), barrier.getCoordinate().getY(), barrier.getPreferredSize().width, barrier.getPreferredSize().height);
             buildingPanel.add(barrier);
             barrier.setBackground(Color.blue);
@@ -355,5 +333,4 @@ public class BuildingModePage extends Page {
             buildingPanel.revalidate();
         }
     }
-
 }
