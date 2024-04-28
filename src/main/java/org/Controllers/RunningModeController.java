@@ -82,6 +82,7 @@ public class RunningModeController {
 
         Fireball fireball = game.getFireball();
         MagicalStaff magicalStaff = game.getMagicalStaff();
+        int magicalStaffVelocity = magicalStaff.getVelocity();
 
         double xVelocity = fireball.getxVelocity();
         double yVelocity = fireball.getyVelocity();
@@ -110,39 +111,32 @@ public class RunningModeController {
         Shape transformedRectangle = transform.createTransformedShape(magicalStaffRectangle);
 
         if (transformedRectangle.intersects(fireballRectangle)) {
-            System.out.println("\nCollision detected");
+            //System.out.println("\nCollision detected");
             lastCollisionTime = currentTime;
             if (Math.abs(msAngle)<1e-5){
-
-                fireball.setxVelocity(fireball.getxVelocity());
+                if (xVelocity*magicalStaffVelocity>0){ //staff & ball same direction
+                   // System.out.println("same direction");
+                    fireball.setxVelocity( xVelocity+ (int) Math.signum(xVelocity) * 2);
+                }
+                else if (xVelocity*magicalStaffVelocity<0){ //opposite direction
+                    //System.out.println("opp direction");
+                    fireball.setxVelocity(-xVelocity);
+                }
                 fireball.setyVelocity(-fireball.getyVelocity());
+
             }
             else {
-
-
-
                 System.out.println("Magical Staff angle: " + -msAngle);
-
                 double normalAngle = Math.toRadians((-msAngle + 90));
                 System.out.println(normalAngle);
                 Vector normal = new Vector(Math.cos(normalAngle), Math.sin(normalAngle));
                 System.out.println("Cos and sin " + Math.cos(normalAngle) + " " + Math.sin(normalAngle));
                 Vector velocity = new Vector(xVelocity, yVelocity);
-
                 double dProd = normal.dot(velocity);
-
-                // Step 3: Calculate the reflection vector components
                 double reflectionX = velocity.getX() - 2 * dProd * normal.getX();
                 double reflectionY = velocity.getY() - 2 * dProd * normal.getY();
-
-                // Step 4: Create the reflection vector
-                Vector reflectionVector = new Vector(reflectionX, reflectionY);
-
-
                 //Vector vNew = velocity.subtract(normal.scale(2 * velocity.dot(normal)));
                 System.out.println("old: " + fireball.getxVelocity() + " " + fireball.getyVelocity());
-
-
                 fireball.setxVelocity(-reflectionX);
                 fireball.setyVelocity(reflectionY);
                 System.out.println("new: " + fireball.getxVelocity() + " " + fireball.getyVelocity());
@@ -164,20 +158,17 @@ public class RunningModeController {
         int containerHeight = 600;
 
         // Check collision with left and right boundaries
-        if (fireballX - fireballRadius <= 0 || fireballX + fireballRadius > containerWidth - 10) {
-            xVelocity *= -1; // Reverse X velocity
-            fireball.setxVelocity(xVelocity);
-        }
+        if ((fireballX - fireballRadius <= 0) || (fireballX + fireballRadius > containerWidth - 10)) {
+            fireball.setCoordinate(new Coordinate((int) (fireballX+-1*(Math.signum(xVelocity)*10)),fireballY));
+            //Shift the ball 10 pixels to prevent additional collisions
 
+            fireball.setxVelocity(-xVelocity);// Reverse X velocity
+
+        }
         // Check collision with top and bottom boundaries
+        if (fireballY - fireballRadius <= -10)  fireball.setyVelocity(-yVelocity);// TOP
 
-        if (fireballY - fireballRadius <= -10) {
-            // TOP
-            yVelocity *= -1; // Reverse Y velocity
-            fireball.setyVelocity(yVelocity);
-        }
-
-        else if (fireballY + fireballRadius >= 600) {
+        else if (fireballY + fireballRadius >= containerHeight) {
             // BOTTOM
             this.getGameSession().getChance().decrementChance();
             if (this.getGameSession().getChance().getRemainingChance() == 0) {
@@ -190,7 +181,7 @@ public class RunningModeController {
             int fireballHeight = fireball.getPreferredSize().height;
             int fireballPositionY = (500 - fireballHeight - 200); // make these dynamic
             fireball.setxVelocity(3);
-            fireball.setyVelocity(3);
+            fireball.setyVelocity(-3);
             fireball.getCoordinate().setX(fireballPositionX);
             fireball.getCoordinate().setY(fireballPositionY);
             fireball.setBounds(fireballPositionX, fireballPositionY, fireballWidth, fireballHeight);
@@ -217,28 +208,24 @@ public class RunningModeController {
         );
 
         for (Barrier br : barriers) {
-            //System.out.println("size"+br.getPreferredSize().getWidth()+ (int) br.getPreferredSize().getHeight());
             Rectangle brRect = new Rectangle(br.getCoordinate().getX(), br.getCoordinate().getY(), (int) br.getPreferredSize().getWidth(), (int) br.getPreferredSize().getHeight());
 
             if (brRect.intersects(fireballRectangle)) {
-                // Barriers are always horizontal
-                /*
-                double b = 1.0; // b = 1 for a perfect elastic collision
-                double normalAngleRadians = Math.toRadians((double) (90%360));
-                Vector normal = new Vector(Math.cos(normalAngleRadians), Math.sin(normalAngleRadians));
-                Vector velocity = new Vector(xVelocity, yVelocity);
-                Vector vNew = velocity.subtract(normal.scale(2 * velocity.dot(normal))).scale(b);
+                //print lines are for debugging
+                //System.out.println("\nbarrier collision");
+                Rectangle sideLRect = new Rectangle(br.getCoordinate().getX(), br.getCoordinate().getY() + 5, 1, 5);
+                Rectangle sideRRect = new Rectangle(br.getCoordinate().getX() + 50, br.getCoordinate().getY() + 5, 1, 5);
 
-                 */
-                //System.out.println(brRect.getX()+" "+brRect.getY()+" "+brRect.getWidth()+" "+brRect.getHeight());
-                Rectangle sideLRect = new Rectangle(br.getCoordinate().getX(), br.getCoordinate().getY() + 1, 1, 13);
-                Rectangle sideRRect = new Rectangle(br.getCoordinate().getX() + 50, br.getCoordinate().getY() + 1, 1, 13);
-
+                //System.out.println("old: "+xVelocity+" "+ yVelocity);
                 if ((sideLRect.intersects(fireballRectangle)) || (sideRRect.intersects(fireballRectangle))) {
+                    // System.out.println("side collision");
                     fireball.setxVelocity(-xVelocity);
                 } else {
+                    //System.out.println("top bottom collision");
                     fireball.setyVelocity(-yVelocity);
                 }
+                // System.out.println("new: "+xVelocity+" "+ yVelocity);
+
 
                 if (hitBarrier(br)) {
                     toRemove.add(br);
