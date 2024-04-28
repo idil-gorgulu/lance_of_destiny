@@ -9,7 +9,6 @@ import javax.swing.JOptionPane;
 
 public class SignupPageController {
     private static SignupPageController instance;
-
     public static SignupPageController getInstance() {
         if (instance != null) {
             return instance;
@@ -20,13 +19,13 @@ public class SignupPageController {
     }
 
     public void createUser(String email, String username, String password) {
-        // Parola geçerlilik kontrolü
+        // Check if password is suitable
         if (!isValidPassword(password)) {
             JOptionPane.showMessageDialog(null, "Password must be at least 6 characters long and contain at least one digit.");
             return;
         }
 
-        // Kullanıcı adı ve e-posta adresi benzersizlik kontrolü
+        // Check if already exists
         if (emailExists(email)) {
             JOptionPane.showMessageDialog(null, "Email already exists.");
             return;
@@ -37,13 +36,13 @@ public class SignupPageController {
             return;
         }
 
-        // Kullanıcı kaydı
+        // Save user
         Document user = new Document();
         user.put("email", email);
         user.put("username", username);
-        user.put("password", password); // Güvenlik için parolayı hash'lemek önerilir
+        user.put("password", password);
         Database.getInstance().getUserCollection().insertOne(user);
-        Navigator.getInstance().showEnterPage(); // Kullanıcı başarıyla oluşturulduktan sonra ana sayfaya yönlendir
+        Navigator.getInstance().showEnterPage();
     }
 
     private boolean isValidPassword(String password) {

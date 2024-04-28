@@ -3,7 +3,6 @@ package org.Views;
 import org.Domain.*;
 import org.Controllers.*;
 import org.Utils.Database;
-
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import javax.swing.border.Border;

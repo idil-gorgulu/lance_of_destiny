@@ -8,7 +8,6 @@ import java.io.IOException;
 import javax.imageio.ImageIO;
 
 public class Fireball extends JPanel {
-    // Deneme
     private Coordinate coordinate;
     private double xVelocity = 1;
     private double yVelocity = -3;
@@ -17,16 +16,6 @@ public class Fireball extends JPanel {
 
     public Fireball() {
         this.coordinate = new Coordinate(200, 200);
-
-//        try {
-//            fireballImage = ImageIO.read(new File("assets/200Fireball.png"));
-//            this.fireballRadius = Math.max(fireballImage.getWidth(), fireballImage.getHeight()) / 2;
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
-//        setPreferredSize(new Dimension(getFireballRadius() * 2,getFireballRadius() * 2));
-//
-//
 
         try {
             // Load the original fireball image
@@ -40,7 +29,6 @@ public class Fireball extends JPanel {
             this.fireballRadius = 8;
         } catch (IOException e) {
             e.printStackTrace();
-
             setPreferredSize(new Dimension(fireballRadius * 2, fireballRadius * 2));
         }
     }

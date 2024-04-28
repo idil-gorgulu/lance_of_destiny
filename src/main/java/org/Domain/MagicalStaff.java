@@ -59,11 +59,7 @@ public class MagicalStaff extends JPanel {
         g2d.setTransform(old);
     }
 
-
     public void updateMagicalStaffView(){
-
-
-
         double newX = this.magicalStaffRectangle.x + this.velocity;
         //RunningModePage.SCREENWIDTH=1000 cant reach bc of removed import
         if ((newX>0) && (newX+magicalStaffRectangle.getWidth()<1000)) {// check borders
@@ -73,7 +69,6 @@ public class MagicalStaff extends JPanel {
         //System.out.println(angle+" "+angVelocity);
         if ((newAngle>=-45) && newAngle<=45)//check angle
             this.angle=newAngle;
-
         repaint();
     }
 

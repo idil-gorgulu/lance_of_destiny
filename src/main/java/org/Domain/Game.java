@@ -3,7 +3,6 @@ import java.util.ArrayList;
 import java.util.Random;
 
 public class Game {
-
     private Fireball fireball;
     private MagicalStaff magicalStaff;
     private Chance chance;
@@ -149,7 +148,6 @@ public class Game {
 
     public boolean initialPopulation(int simpleNum, int firmNum, int exNum, int giftNum){
         int tot = numSimpleBarrier + numExplosiveBarrier + numFirmBarrier + numrewardingBarrier;
-        System.out.println("numtotal " + tot);
         if (400 - tot < simpleNum + firmNum + exNum + giftNum){
             return false;
         }
@@ -164,26 +162,22 @@ public class Game {
             int randomCol = random.nextInt(20);
 
             if (barrierBoard[randomRow][randomCol] == null) {
+                Coordinate newCoord = new Coordinate( randomCol * 50,randomRow * 20);
                 if (simpleCount < simpleNum) {
-                    Coordinate newCoord = new Coordinate( randomCol * 50,randomRow * 20);
                     addBarrier(newCoord, BarrierType.SIMPLE);
                     simpleCount++;
                 } else if (firmCount < firmNum) {
-                    Coordinate newCoord = new Coordinate(randomCol * 50,randomRow * 20);
                     addBarrier(newCoord, BarrierType.REINFORCED);
                     firmCount++;
                 } else if (exCount < exNum) {
-                    Coordinate newCoord = new Coordinate(randomCol * 50,randomRow * 20);
                     addBarrier(newCoord, BarrierType.EXPLOSIVE);
                     exCount++;
                 } else if (giftCount < giftNum) {
-                    Coordinate newCoord = new Coordinate(randomCol * 50,randomRow * 20);
                     addBarrier(newCoord, BarrierType.REWARDING);
                     giftCount++;
                 }
             }
         }
-
         System.out.println("Adding Completed");
         return true;
     }

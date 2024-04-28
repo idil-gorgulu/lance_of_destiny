@@ -13,13 +13,11 @@ import com.mongodb.client.MongoDatabase;
 import org.bson.Document;
 
 public class Database {
-
     private static Database instance;
     private MongoClient mongoClient;
     private MongoDatabase database;
 
     private static final String CONNECTION_STRING = "mongodb+srv://comp302:comp302lanceofdestiny@comp302.gwbpr53.mongodb.net/?retryWrites=true&w=majority&appName=comp302";
-
     private static final String DATABASE_NAME = "LanceOfDestiny";
 
     private static final String USER_COLLECTION = "Users";
@@ -55,7 +53,5 @@ public class Database {
     public MongoCollection<Document> getGameCollection() {
         return database.getCollection(GAME_COLLECTION);
     }
-
-
 
 }

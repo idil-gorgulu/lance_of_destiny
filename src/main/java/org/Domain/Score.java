@@ -4,10 +4,8 @@ import javax.swing.*;
 import java.awt.*;
 
 public class Score extends JPanel {
-
     private int totalScore;
     private JLabel scoreLabel;  // JLabel to display the score
-
     public Score() {
         this.totalScore = 0;
         setPreferredSize(new Dimension(190, 50));
