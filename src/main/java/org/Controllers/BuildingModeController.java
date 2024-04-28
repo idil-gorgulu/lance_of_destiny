@@ -1,11 +1,10 @@
 package org.Controllers;
 
+import org.Domain.*;
 import org.Domain.BarrierType;
-import org.Domain.Barrier;
-import org.Domain.BarrierType;
-import org.Domain.Coordinate;
-import org.Domain.Game;
+import org.Utils.Database;
 import org.Views.BuildingModePage;
+import org.bson.Document;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -14,24 +13,16 @@ import java.util.Scanner;
 
 public class BuildingModeController {
     private static Game gameSession;
-    // Create a 2D array
-    private static BuildingModeController instance;
 
     public BuildingModeController() {
         this.gameSession = Game.createNewGame();
         //gameSession.reset(); needed for being able to create a new template.
     }
 
-    /*public static void addBarrier(Coordinate coordinates, BarrierType type){
-    public static void addBarrier(Coordinate coordinates, BarrierType type){
-        System.out.println("New barrier of type added:"+ type);
-        gameSession.addBarrier(coordinates, type);
-    }*/
     public static Coordinate addBarrier(Coordinate mouseCoordinates, BarrierType type){
         int mouseX=mouseCoordinates.getX();
         int mouseY = mouseCoordinates.getY();
 
-        // Calculate the grid cell coordinates based on mouse coordinates
         int cellX = mouseX / 50;
         int cellY = mouseY / 20;
 
@@ -45,7 +36,7 @@ public class BuildingModeController {
             if (barrier.getCoordinate().getX()==barrierCoordinates.getX() & barrier.getCoordinate().getY()==barrierCoordinates.getY() ) {
                 System.out.println("A barrier already exists at these coordinates.");
                 removeBarrier(barrierCoordinates,barrier.getType());
-                return null; // Exit the function without adding a new barrier
+                return null;
             }
         }
         System.out.println("New barrier of type added: " + type);
@@ -58,23 +49,12 @@ public class BuildingModeController {
         gameSession.removeBarrier(coordinates, type);
     }
 
-//    public static BuildingModeController getInstance(){
-//        if(instance==null){
-//            instance=new BuildingModeController();
-//            return instance;
-//        }
-//        else{
-//            return instance;
-//        }
-//    }
-
-
-    public static Game getGameSession() {
+    public Game getGameSession() {
         return gameSession;
     }
 
-    public static boolean initialPopulation(int simpleNum, int firmNum, int exNum, int giftNum){
-        boolean b=gameSession.initialPopulation(simpleNum,firmNum,exNum,giftNum);
+    public boolean initialPopulation(int simpleNum, int firmNum, int exNum, int giftNum){
+        boolean b = gameSession.initialPopulation(simpleNum,firmNum,exNum,giftNum);
         return b;
     }
 
@@ -88,6 +68,21 @@ public class BuildingModeController {
         else{
             return false;
         }
+    }
+
+    public void saveGameToDatabase(String gameName) {
+        ArrayList<Barrier> barriers = gameSession.getBarriers();
+        Document gameSession = new Document();
+        gameSession.put("email", User.getUserInstance().getEmail());
+        gameSession.put("gameName", gameName);
+        gameSession.put("barrierAmount", barriers.size());
+        for(int i=0; i<barriers.size(); i++){
+            gameSession.put("barrier_"+i, barriers.get(i).getCoordinate().getX() + "-"+barriers.get(i).getCoordinate().getY() +
+                    "-"+ barriers.get(i).getType().toString()+ "-" + barriers.get(i).getnHits());
+        }
+        gameSession.put("played", "False");
+        Database.getInstance().getGameCollection().insertOne(gameSession);
+        System.out.println("Saved");
     }
 
 }
