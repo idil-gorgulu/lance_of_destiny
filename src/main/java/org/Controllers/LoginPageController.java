@@ -2,10 +2,13 @@ package org.Controllers;
 
 import com.mongodb.client.FindIterable;
 import com.mongodb.client.MongoCursor;
+import org.Domain.User;
 import org.Utils.Database;
 import org.Views.Navigator;
 import org.bson.Document;
 import com.mongodb.client.MongoCollection;
+
+import javax.swing.*;
 
 public class LoginPageController {
     private static LoginPageController instance;
@@ -19,7 +22,8 @@ public class LoginPageController {
         }
     }
 
-    public boolean authorizeUser(String email, String password) {
+    public void authorizeUser(String email, String password) {
+        boolean isAuthorized = false;
         Document userQuery = new Document();
         userQuery.put("email", email);
         userQuery.put("password", password);
@@ -29,12 +33,19 @@ public class LoginPageController {
 
         try (final MongoCursor<Document> cursorIterator = cursor.cursor()) {
             if (cursorIterator.hasNext()) {
-                System.out.println(cursorIterator.next());
-                return true;
+                isAuthorized = true;
             }
-            else {
-                return false;
-            }
+        }
+
+        if (isAuthorized) {
+            System.out.println("Login successful!");
+            User user = User.getUserInstance();
+            user.setEmail(email);
+            JOptionPane.showMessageDialog(null, "You are now logged in!");
+            Navigator.getInstance().showStartPage();
+        } else {
+            System.out.println("Login failed!");
+            JOptionPane.showMessageDialog(null, "Invalid email or password!");
         }
     }
 }

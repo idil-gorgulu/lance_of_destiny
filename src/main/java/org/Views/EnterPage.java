@@ -70,6 +70,8 @@ import java.io.File;
 import java.io.IOException;
 import javax.imageio.ImageIO;
 
+import org.Utils.ComponentStyling;
+
 public class EnterPage extends Page {
     private BufferedImage backgroundImage;
 
@@ -80,42 +82,35 @@ public class EnterPage extends Page {
 
     @Override
     protected void initUI() {
+        // Setting the layout
         setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 
+        // Setting the background
         try {
             backgroundImage = ImageIO.read(new File("assets/Background.png"));
         } catch (IOException e) {
             e.printStackTrace();
         }
+
+        // Game Title
         add(Box.createVerticalStrut(50));
         JLabel gameTitle = new JLabel("Lance of Destiny");
         gameTitle.setForeground(Color.WHITE);
-        gameTitle.setFont(new Font("Arial", Font.BOLD, 24)); // You can adjust the font size and style
+        gameTitle.setFont(new Font("Arial", Font.BOLD, 24));
         gameTitle.setAlignmentX(JComponent.CENTER_ALIGNMENT);
         add(gameTitle);
 
-        JButton loginButton = createStyledButton("Login");
-        JButton signupButton = createStyledButton("Signup");
+        JButton loginButton = ComponentStyling.createStyledButton("Login");
+        JButton signupButton = ComponentStyling.createStyledButton("Signup");
 
-        // Add action listeners for buttons
+        // Action listeners for buttons
         loginButton.addActionListener(e -> Navigator.getInstance().showLoginPage());
         signupButton.addActionListener(e -> Navigator.getInstance().showSignupPage());
+
         add(Box.createVerticalStrut(10));
         add(loginButton);
         add(Box.createVerticalStrut(10));
         add(signupButton);
-    }
-
-    private JButton createStyledButton(String text) {
-        JButton button = new JButton(text);
-        button.setFont(new Font("Arial", Font.BOLD, 18));
-        button.setAlignmentX(JComponent.CENTER_ALIGNMENT);
-        button.setBackground(Color.DARK_GRAY);
-        button.setForeground(Color.WHITE);
-        button.setFocusPainted(false);
-        button.setBorder(BorderFactory.createEmptyBorder(10, 25, 10, 25));
-        button.setCursor(new Cursor(Cursor.HAND_CURSOR));
-        return button;
     }
 
     @Override
