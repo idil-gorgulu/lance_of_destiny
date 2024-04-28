@@ -76,7 +76,8 @@ public class RunningModePage extends Page{
                             options,
                             options[0]);
                     if (choice == JOptionPane.YES_OPTION) {
-                        pause = false; // Continue game
+                        pause = false; // Oyunu devam ettir
+                        gamePanel.requestFocus();
                     } else if (choice == JOptionPane.NO_OPTION) {
                         pause = false;
                         runningModeController = null;
