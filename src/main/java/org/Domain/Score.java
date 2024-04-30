@@ -19,9 +19,8 @@ public class Score extends JPanel {
         return totalScore;
     }
 
-    public void incrementScore(float timeInterval) {
-
-        totalScore = (int) (totalScore + (300 / timeInterval));
+    public void incrementScore(int barrierCount,float time) {
+        totalScore = (int) (totalScore + (barrierCount * (300 / time)));
         updateScoreView();
     }
 
