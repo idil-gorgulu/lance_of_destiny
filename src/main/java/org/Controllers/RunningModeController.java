@@ -237,7 +237,6 @@ public class RunningModeController {
         }
         barriers.removeAll(toRemove);
         // Updating the score.
-        System.out.println(this.runningModePage.timeInSeconds);
         this.getGameSession().getScore().incrementScore(toRemove.size(), this.runningModePage.timeInSeconds);
     }
 
