@@ -61,7 +61,7 @@ public class RunningModeController {
                     for (Barrier br2 : getGameSession().getBarriers()) {
                         if ((!br2.equals(br)) && (br.getCoordinate().getY()==br2.getCoordinate().getY())){
                             //System.out.println("Space between : "+ (br2.getCoordinate().getX() - newpos));
-                            if (width+10>Math.abs(br2.getCoordinate().getX() - newpos)) {
+                            if (width*4.5>Math.abs(br2.getCoordinate().getX() - newpos)) {
                                 isAvailable = false;
                                 //br2.setVelocity(-1*br2.getVelocity());
                                 br.setVelocity(-1*br.getVelocity());
