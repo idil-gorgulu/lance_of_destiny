@@ -61,7 +61,7 @@ public class RunningModeController {
                     for (Barrier br2 : getGameSession().getBarriers()) {
                         if ((!br2.equals(br)) && (br.getCoordinate().getY()==br2.getCoordinate().getY())){
                             //System.out.println("Space between : "+ (br2.getCoordinate().getX() - newpos));
-                            if (width+10>Math.abs(br2.getCoordinate().getX() - newpos)) {
+                            if (width*4.5>Math.abs(br2.getCoordinate().getX() - newpos)) {
                                 isAvailable = false;
                                 //br2.setVelocity(-1*br2.getVelocity());
                                 br.setVelocity(-1*br.getVelocity());
@@ -103,8 +103,8 @@ public class RunningModeController {
         Rectangle2D.Double magicalStaffRectangle = new Rectangle2D.Double(
                 magicalStaff.getTopLeftCornerOfMagicalStaff().getX(),
                 magicalStaff.getTopLeftCornerOfMagicalStaff().getY(),
-                100,
-                20
+                magicalStaff.getStaffWidth(),
+                magicalStaff.getStaffHeight()
         );
 
         AffineTransform transform = new AffineTransform();
@@ -512,5 +512,13 @@ public class RunningModeController {
         Database.getInstance().getGameCollection().insertOne(gameSession);
         JOptionPane.showMessageDialog(null, "Game saved successfully!");
 
+    }
+
+    public void useSpell1(){ // I will move these methods to Inventory later, this is for testing -Melih
+        getGameSession().getChance().incrementChance();
+    }
+    public void useSpell2(){
+        getGameSession().getMagicalStaff().setStaffWidth(200);
+        System.out.println("check2");
     }
 }
