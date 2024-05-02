@@ -52,4 +52,8 @@ public class Spell extends JComponent {
     public Coordinate getCoordinate() {
         return coordinate;
     }
+
+    public void setSpellImage(BufferedImage spellImage) {
+        this.spellImage = spellImage;
+    }
 }
