@@ -103,8 +103,8 @@ public class RunningModeController {
         Rectangle2D.Double magicalStaffRectangle = new Rectangle2D.Double(
                 magicalStaff.getTopLeftCornerOfMagicalStaff().getX(),
                 magicalStaff.getTopLeftCornerOfMagicalStaff().getY(),
-                100,
-                20
+                magicalStaff.getStaffWidth(),
+                magicalStaff.getStaffHeight()
         );
 
         AffineTransform transform = new AffineTransform();
@@ -512,5 +512,13 @@ public class RunningModeController {
         Database.getInstance().getGameCollection().insertOne(gameSession);
         JOptionPane.showMessageDialog(null, "Game saved successfully!");
 
+    }
+
+    public void useSpell1(){ // I will move these methods to Inventory later, this is for testing -Melih
+        getGameSession().getChance().incrementChance();
+    }
+    public void useSpell2(){
+        getGameSession().getMagicalStaff().setStaffWidth(200);
+        System.out.println("check2");
     }
 }

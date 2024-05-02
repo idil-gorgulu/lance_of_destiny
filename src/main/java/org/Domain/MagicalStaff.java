@@ -16,15 +16,17 @@ public class MagicalStaff extends JPanel {
     private double angVelocity=0;
     private int velocity; // to calculate collision
     private Coordinate coordinate;
+    private int staffWidth=100;
+    private int staffHeight=20;
 
     public MagicalStaff() {
         this.coordinate = new Coordinate(0,450);
-        this.magicalStaffRectangle = new Rectangle2D.Double(450, 90, 100, 20);
+        this.magicalStaffRectangle = new Rectangle2D.Double(450, 90, staffWidth, staffHeight);
 
         try {
             magicalStaffImage = ImageIO.read(new File("assets/200Player.png"));
             // Resize the image to 100x20 pixels
-            magicalStaffImage = resizeImage(magicalStaffImage, 100, 20);
+            magicalStaffImage = resizeImage(magicalStaffImage, staffWidth,staffHeight);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -109,6 +111,7 @@ public class MagicalStaff extends JPanel {
     }
     */
 
+
     public Coordinate getCoordinate() {
         return coordinate;
     }
@@ -141,5 +144,31 @@ public class MagicalStaff extends JPanel {
 
     public void setAngVelocity(double angVelocity) {
         this.angVelocity = angVelocity;
+    }
+
+
+
+    public int getStaffHeight() {
+        return staffHeight;
+    }
+
+    public int getStaffWidth() {
+        return staffWidth;
+    }
+
+    public void setStaffWidth(int staffWidth) {
+        this.staffWidth = staffWidth;
+        try {
+            magicalStaffImage = ImageIO.read(new File("assets/200Player.png"));
+            // Resize the image to 100x20 pixels
+            magicalStaffImage = resizeImage(magicalStaffImage, staffWidth,staffHeight);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        setPreferredSize(new Dimension(1000, 400));
+        this.setOpaque(false);
+        this.setVisible(true);
+         repaint();
+        System.out.println("check3");
     }
 }
