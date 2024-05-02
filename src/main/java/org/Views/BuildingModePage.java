@@ -302,17 +302,17 @@ public class BuildingModePage extends Page {
 
         infoContainer.add(templateGameName);
         infoContainer.add(templateGameNameInput);
-        //infoContainer.add(saveButton, BorderLayout.SOUTH);
-        //leftSide.add(playButton, BorderLayout.SOUTH);
+        infoContainer.add(saveButton, BorderLayout.SOUTH);
+        leftSide.add(playButton, BorderLayout.SOUTH);
 
         if (buildingModeController.getReady()){
-            infoContainer.add(saveButton, BorderLayout.SOUTH);
-            leftSide.add(playButton, BorderLayout.SOUTH);
+//            infoContainer.add(saveButton, BorderLayout.SOUTH);
+//            leftSide.add(playButton, BorderLayout.SOUTH);
             infoContainer.remove(lowerBoundInfo);
         }
         else{
-            infoContainer.remove(saveButton);
-            leftSide.remove(playButton);
+//            infoContainer.remove(saveButton);
+//            leftSide.remove(playButton);
             lowerBoundInfo.setHorizontalAlignment(SwingConstants.LEFT);
             infoContainer.add(lowerBoundInfo); }
 
