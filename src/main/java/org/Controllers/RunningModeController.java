@@ -523,6 +523,13 @@ public class RunningModeController {
 
             //THIS WILL BE UPDATED SO THAT THE SPELL APPEARS IN THE INVENTORY
             if (transformedRectangle.intersects(spellRectangle)) {
+                SpellType type = spell.getSpellType();
+                if(runningModePage.getInventory().containsKey(type)) {
+                    runningModePage.getInventory().put(type,runningModePage.getInventory().get(type)+1);
+                }
+                else{
+                    runningModePage.getInventory().put(type,1);
+                }
                 runningModePage.getGamePanel().remove(spell);
                 iterator.remove();
             }

@@ -26,8 +26,7 @@ public class RunningModePage extends Page{
     private ArrayList<Barrier> barriers = new ArrayList<>();
     private ArrayList<Debris> activeDebris;
     private ArrayList<Spell> droppingSpells;
-
-    private HashMap<Spell,Integer> inventory = new HashMap<>();
+    private HashMap<SpellType,Integer> inventory;
     public static final int SCREENWIDTH =1000;
     public int screenHeight;
     public int timeInSeconds = 0;
@@ -41,6 +40,7 @@ public class RunningModePage extends Page{
         super();
         activeDebris = new ArrayList<>();
         droppingSpells = new ArrayList<>();
+        inventory = new HashMap<>();
         this.setDoubleBuffered(true);
         try {
             backgroundImage = ImageIO.read(new File("assets/Background.png"));
@@ -255,4 +255,7 @@ public class RunningModePage extends Page{
         runningModeController.saveGame(gameName,timeElapsed, activeDebris);
     }
 
+    public HashMap<SpellType, Integer> getInventory() {
+        return inventory;
+    }
 }

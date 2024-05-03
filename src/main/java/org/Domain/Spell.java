@@ -68,4 +68,8 @@ public class Spell extends JComponent {
         int randomSpellTypeIndex = rand.nextInt(SpellType.values().length);
         return SpellType.values()[randomSpellTypeIndex];
     }
+
+    public SpellType getSpellType() {
+        return spellType;
+    }
 }
