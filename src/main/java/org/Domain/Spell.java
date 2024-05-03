@@ -27,7 +27,7 @@ public class Spell extends JComponent {
     }
 
     private String setImageDirectory() {
-        return "assets/debris.png";
+        return "assets/treasure.png";
     }
     @Override
     protected void paintComponent(Graphics g) {
@@ -55,5 +55,9 @@ public class Spell extends JComponent {
 
     public void setSpellImage(BufferedImage spellImage) {
         this.spellImage = spellImage;
+    }
+
+    public BufferedImage getSpellImage() {
+        return spellImage;
     }
 }

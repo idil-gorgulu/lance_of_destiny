@@ -407,8 +407,9 @@ public class RunningModeController {
             if(barrier.getType()==BarrierType.EXPLOSIVE){
                 explodeBarrier(barrier);
             }
-            //runningModePage.revalidate();
-            //runningModePage.repaint();
+            else if(barrier.getType()==BarrierType.REWARDING){
+                dropSpell(barrier);
+            }
             return true;
         }
 
@@ -427,6 +428,13 @@ public class RunningModeController {
 
         runningModePage.getGamePanel().add(debris);
         //runningModePage.repaint();
+    }
+
+    private void dropSpell(Barrier barrier){
+        Spell spell = new Spell(barrier.getCoordinate());
+        spell.setBackground(new Color(0, 0, 0, 0)); // Transparent background
+        runningModePage.getDroppingSpells().add(spell); // Add spells to the list
+        runningModePage.getGamePanel().add(spell);
     }
 
     public void updateDebris() {
@@ -474,6 +482,51 @@ public class RunningModeController {
             }
         }
     }
+
+    public void updateDroppingSpells() {
+        Iterator<Spell> iterator = runningModePage.getDroppingSpells().iterator();
+        while (iterator.hasNext()) {
+            Spell spell = iterator.next();
+            spell.moveDown();
+            if (spell.getCoordinate().getY() > 600) {
+                runningModePage.getGamePanel().remove(spell);
+                iterator.remove();
+            }
+            // For spell collision with magical staff
+            MagicalStaff magicalStaff = game.getMagicalStaff();
+
+            double msAngle = magicalStaff.getAngle();
+            double angleRadians = Math.toRadians(msAngle);
+
+            Rectangle2D.Double magicalStaffRectangle = new Rectangle2D.Double(
+                    magicalStaff.getTopLeftCornerOfMagicalStaff().getX(),
+                    magicalStaff.getTopLeftCornerOfMagicalStaff().getY(),
+                    100,
+                    20
+            );
+
+            Rectangle2D.Double spellRectangle = new Rectangle2D.Double(
+                    spell.getCoordinate().getX() - spell.spellImage.getWidth()/2 ,
+                    spell.getCoordinate().getY() - spell.spellImage.getHeight()/2,
+                    spell.spellImage.getWidth(),
+                    spell.spellImage.getHeight()
+            );
+
+
+            AffineTransform transform = new AffineTransform();
+            double centerX = magicalStaffRectangle.getCenterX();
+            double centerY = magicalStaffRectangle.getCenterY();
+            transform.rotate(angleRadians, centerX, centerY);
+            Shape transformedRectangle = transform.createTransformedShape(magicalStaffRectangle);
+
+            //THIS WILL BE UPDATED SO THAT THE SPELL APPEARS IN THE INVENTORY
+            if (transformedRectangle.intersects(spellRectangle)) {
+                runningModePage.getGamePanel().remove(spell);
+                iterator.remove();
+            }
+        }
+    }
+
     //Not used yet:
     public void saveGame(String gameName, int timeInSeconds, ArrayList<Debris> activeDebris){
         ArrayList<Barrier> barriers = game.getBarriers();
