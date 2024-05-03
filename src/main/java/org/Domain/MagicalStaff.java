@@ -63,12 +63,10 @@ public class MagicalStaff extends JPanel {
 
     public void updateMagicalStaffView(){
         double newX = this.magicalStaffRectangle.x + this.velocity;
-        //RunningModePage.SCREENWIDTH=1000 cant reach bc of removed import
         if ((newX>0) && (newX+magicalStaffRectangle.getWidth()<1000)) {// check borders
             this.magicalStaffRectangle.setRect(newX, this.magicalStaffRectangle.y, this.magicalStaffRectangle.width, this.magicalStaffRectangle.height);
         }
         double newAngle = angVelocity + angle;
-        //System.out.println(angle+" "+angVelocity);
         if ((newAngle>=-45) && newAngle<=45)//check angle
             this.angle=newAngle;
         repaint();
@@ -158,17 +156,37 @@ public class MagicalStaff extends JPanel {
 
     public void setStaffWidth(int staffWidth) {
         this.staffWidth = staffWidth;
-        try {
-            magicalStaffImage = ImageIO.read(new File("assets/200Player.png"));
-            // Resize the image to 100x20 pixels
-            magicalStaffImage = resizeImage(magicalStaffImage, staffWidth,staffHeight);
-        } catch (IOException e) {
-            e.printStackTrace();
+        this.magicalStaffRectangle.setRect(
+                this.magicalStaffRectangle.x, this.magicalStaffRectangle.y,
+                this.staffWidth, this.staffHeight);
+        if (staffWidth==200){
+            if (magicalStaffRectangle.x+200>1000){ //when expanded staff is stuck beyond border
+                this.magicalStaffRectangle.setRect
+                        (795, this.magicalStaffRectangle.y,
+                                this.magicalStaffRectangle.width, this.magicalStaffRectangle.height);
+
+            }
+            try {
+                magicalStaffImage = ImageIO.read(new File("assets/200Player_extended.png"));
+                // Resize the image to 200x20 pixels
+                magicalStaffImage = resizeImage(magicalStaffImage, staffWidth,staffHeight);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
+        else {
+            try {
+                magicalStaffImage = ImageIO.read(new File("assets/200Player.png"));
+                // Resize the image to 200x20 pixels
+                magicalStaffImage = resizeImage(magicalStaffImage, staffWidth,staffHeight);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+
         setPreferredSize(new Dimension(1000, 400));
         this.setOpaque(false);
         this.setVisible(true);
-         repaint();
-        System.out.println("check3");
+        repaint();
     }
 }

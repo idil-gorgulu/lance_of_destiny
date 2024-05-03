@@ -119,7 +119,7 @@ public class RunningModeController {
             if (Math.abs(msAngle)<1e-5){
                 if (xVelocity*magicalStaffVelocity>0){ //staff & ball same direction
                    // System.out.println("same direction");
-                    fireball.setxVelocity( xVelocity+ (int) Math.signum(xVelocity) * 2);
+                    fireball.setxVelocity( xVelocity+  Math.signum(xVelocity) * 0.5);
                 }
                 else if (xVelocity*magicalStaffVelocity<0){ //opposite direction
                     //System.out.println("opp direction");
@@ -567,11 +567,15 @@ public class RunningModeController {
 
     }
 
+    //Temporarily here - melih
     public void useSpell1(){ // I will move these methods to Inventory later, this is for testing -Melih
         getGameSession().getChance().incrementChance();
     }
     public void useSpell2(){
         getGameSession().getMagicalStaff().setStaffWidth(200);
+           }
+    public void redoSpell2(){
+        getGameSession().getMagicalStaff().setStaffWidth(100);
         System.out.println("check2");
     }
 }

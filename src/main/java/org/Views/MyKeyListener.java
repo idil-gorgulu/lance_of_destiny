@@ -46,12 +46,16 @@ public class MyKeyListener extends KeyAdapter {
                 runningModeController.rotateMagicalStaff(0); // Rotate clockwise
                 break;
 
+                //Temporarily here -melih
             case KeyEvent.VK_Q:
                 runningModeController.useSpell1();
                 break;
             case KeyEvent.VK_W:
                 runningModeController.useSpell2();
-                System.out.println("check 1");
+                break;
+            case KeyEvent.VK_S:
+                runningModeController.redoSpell2();
+                break;
         }
     }
 }
