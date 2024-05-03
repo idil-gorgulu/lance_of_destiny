@@ -27,7 +27,7 @@ public class RunningModePage extends Page{
     private ArrayList<Debris> activeDebris;
     private ArrayList<Spell> droppingSpells;
 
-    private HashMap<Spell,Integer> obtainedSpells = new HashMap<>();
+    private HashMap<Spell,Integer> inventory = new HashMap<>();
     public static final int SCREENWIDTH =1000;
     public int screenHeight;
     public int timeInSeconds = 0;
