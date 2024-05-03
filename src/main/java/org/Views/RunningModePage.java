@@ -24,6 +24,7 @@ public class RunningModePage extends Page{
     public boolean pause = false;
     private ArrayList<Barrier> barriers = new ArrayList<>();
     private ArrayList<Debris> activeDebris;
+    private ArrayList<Spell> droppingSpells;
     public static final int SCREENWIDTH =1000;
     public int screenHeight;
     public int timeInSeconds = 0;
@@ -36,6 +37,7 @@ public class RunningModePage extends Page{
     public RunningModePage() {
         super();
         activeDebris = new ArrayList<>();
+        droppingSpells = new ArrayList<>();
         this.setDoubleBuffered(true);
         try {
             backgroundImage = ImageIO.read(new File("assets/Background.png"));
@@ -53,6 +55,11 @@ public class RunningModePage extends Page{
     public ArrayList<Debris> getActiveDebris() {
         return activeDebris;
     }
+    public ArrayList<Spell> getDroppingSpells() {
+        return droppingSpells;
+    }
+
+
     protected void paintComponent(Graphics g) { //background for the whole frame
         super.paintComponent(g);
         g.drawImage(backgroundImage, 0, 0, this.getWidth(), this.getHeight(), this);
