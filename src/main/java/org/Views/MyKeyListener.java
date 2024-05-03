@@ -46,12 +46,22 @@ public class MyKeyListener extends KeyAdapter {
                 runningModeController.rotateMagicalStaff(0); // Rotate clockwise
                 break;
 
+                //Temporarily here -melih
             case KeyEvent.VK_Q:
                 runningModeController.useSpell1();
                 break;
             case KeyEvent.VK_W:
                 runningModeController.useSpell2();
-                System.out.println("check 1");
+                break;
+            case KeyEvent.VK_S:
+                runningModeController.redoSpell2();
+                break;
+            case KeyEvent.VK_E: // I AM TALKING TO STRANGERS HERE, WILL REVISE LATER - melih
+                runningModeController.getGameSession().getFireball().setOverwhelming(true);
+                break;
+            case KeyEvent.VK_F:
+                runningModeController.getGameSession().getFireball().setOverwhelming(false);
+                break;
         }
     }
 }

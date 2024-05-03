@@ -119,7 +119,7 @@ public class RunningModeController {
             if (Math.abs(msAngle)<1e-5){
                 if (xVelocity*magicalStaffVelocity>0){ //staff & ball same direction
                    // System.out.println("same direction");
-                    fireball.setxVelocity( xVelocity+ (int) Math.signum(xVelocity) * 2);
+                    fireball.setxVelocity( xVelocity+  Math.signum(xVelocity) * 0.5);
                 }
                 else if (xVelocity*magicalStaffVelocity<0){ //opposite direction
                     //System.out.println("opp direction");
@@ -214,21 +214,23 @@ public class RunningModeController {
             Rectangle brRect = new Rectangle(br.getCoordinate().getX(), br.getCoordinate().getY(), (int) br.getPreferredSize().getWidth(), (int) br.getPreferredSize().getHeight());
 
             if (brRect.intersects(fireballRectangle)) {
-                //print lines are for debugging
-                //System.out.println("\nbarrier collision");
+
+                if (!fireball.isOverwhelming()){ // no collision if it is
                 Rectangle sideLRect = new Rectangle(br.getCoordinate().getX(), br.getCoordinate().getY() + 5, 1, 5);
                 Rectangle sideRRect = new Rectangle(br.getCoordinate().getX() + 50, br.getCoordinate().getY() + 5, 1, 5);
 
-                //System.out.println("old: "+xVelocity+" "+ yVelocity);
                 if ((sideLRect.intersects(fireballRectangle)) || (sideRRect.intersects(fireballRectangle))) {
                     // System.out.println("side collision");
                     fireball.setxVelocity(-xVelocity);
                 } else {
-                    //System.out.println("top bottom collision");
+                    if (xVelocity*br.getVelocity()>0){ //barrier & ball same direction
+                        fireball.setxVelocity( xVelocity+  Math.signum(xVelocity) * 0.5);
+                    }
+                    else if (xVelocity*br.getVelocity()<0){ //opposite direction
+                        fireball.setxVelocity(-xVelocity);
+                    }
                     fireball.setyVelocity(-yVelocity);
-                }
-                // System.out.println("new: "+xVelocity+" "+ yVelocity);
-
+                }}
 
                 if (hitBarrier(br)) {
                     toRemove.add(br);
@@ -567,11 +569,15 @@ public class RunningModeController {
 
     }
 
+    //Temporarily here - melih
     public void useSpell1(){ // I will move these methods to Inventory later, this is for testing -Melih
         getGameSession().getChance().incrementChance();
     }
     public void useSpell2(){
         getGameSession().getMagicalStaff().setStaffWidth(200);
+           }
+    public void redoSpell2(){
+        getGameSession().getMagicalStaff().setStaffWidth(100);
         System.out.println("check2");
     }
 }
