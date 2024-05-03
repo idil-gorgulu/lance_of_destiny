@@ -15,6 +15,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.TimerTask;
 import java.util.Timer;
+import java.util.HashMap;
 
 public class RunningModePage extends Page{
     private BufferedImage backgroundImage;
@@ -25,6 +26,8 @@ public class RunningModePage extends Page{
     private ArrayList<Barrier> barriers = new ArrayList<>();
     private ArrayList<Debris> activeDebris;
     private ArrayList<Spell> droppingSpells;
+
+    private HashMap<Spell,Integer> obtainedSpells = new HashMap<>();
     public static final int SCREENWIDTH =1000;
     public int screenHeight;
     public int timeInSeconds = 0;
