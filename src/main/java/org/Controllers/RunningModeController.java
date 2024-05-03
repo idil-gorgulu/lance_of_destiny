@@ -214,26 +214,23 @@ public class RunningModeController {
             Rectangle brRect = new Rectangle(br.getCoordinate().getX(), br.getCoordinate().getY(), (int) br.getPreferredSize().getWidth(), (int) br.getPreferredSize().getHeight());
 
             if (brRect.intersects(fireballRectangle)) {
-                //print lines are for debugging
-                //System.out.println("\nbarrier collision");
+
+                if (!fireball.isOverwhelming()){ // no collision if it is
                 Rectangle sideLRect = new Rectangle(br.getCoordinate().getX(), br.getCoordinate().getY() + 5, 1, 5);
                 Rectangle sideRRect = new Rectangle(br.getCoordinate().getX() + 50, br.getCoordinate().getY() + 5, 1, 5);
 
-                //System.out.println("old: "+xVelocity+" "+ yVelocity);
                 if ((sideLRect.intersects(fireballRectangle)) || (sideRRect.intersects(fireballRectangle))) {
                     // System.out.println("side collision");
                     fireball.setxVelocity(-xVelocity);
                 } else {
                     if (xVelocity*br.getVelocity()>0){ //barrier & ball same direction
-                        // System.out.println("same direction");
                         fireball.setxVelocity( xVelocity+  Math.signum(xVelocity) * 0.5);
                     }
                     else if (xVelocity*br.getVelocity()<0){ //opposite direction
-                        //System.out.println("opp direction");
                         fireball.setxVelocity(-xVelocity);
                     }
                     fireball.setyVelocity(-yVelocity);
-                }
+                }}
 
                 if (hitBarrier(br)) {
                     toRemove.add(br);

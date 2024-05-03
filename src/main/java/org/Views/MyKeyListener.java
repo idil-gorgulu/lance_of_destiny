@@ -56,6 +56,12 @@ public class MyKeyListener extends KeyAdapter {
             case KeyEvent.VK_S:
                 runningModeController.redoSpell2();
                 break;
+            case KeyEvent.VK_E: // I AM TALKING TO STRANGERS HERE, WILL REVISE LATER - melih
+                runningModeController.getGameSession().getFireball().setOverwhelming(true);
+                break;
+            case KeyEvent.VK_F:
+                runningModeController.getGameSession().getFireball().setOverwhelming(false);
+                break;
         }
     }
 }
