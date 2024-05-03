@@ -13,6 +13,7 @@ public class Fireball extends JPanel {
     private double yVelocity = -3;
     private int fireballRadius = 15;
     private BufferedImage fireballImage;
+    boolean isOverwhelming=false;
 
     public Fireball() {
         this.coordinate = new Coordinate(200, 200);
@@ -76,4 +77,45 @@ public class Fireball extends JPanel {
     public void setyVelocity(double yVelocity) {
         this.yVelocity = yVelocity;
     }
+    public void setOverwhelming(boolean b){
+        isOverwhelming=b;
+
+        if (isOverwhelming){
+            try {
+                // Load the overwhelming fireball image
+                BufferedImage originalImage = ImageIO.read(new File("assets/Overwhelming_Fireball.png"));
+                // Resize the image to 16x16 pixels
+                fireballImage = new BufferedImage(16, 16, BufferedImage.TYPE_INT_ARGB);
+                Graphics2D g2d = fireballImage.createGraphics();
+                g2d.drawImage(originalImage, 0, 0, 16, 16, null);
+                g2d.dispose();
+                // Update the fireball radius
+                this.fireballRadius = 8;
+            } catch (IOException e) {
+                e.printStackTrace();
+                setPreferredSize(new Dimension(fireballRadius * 2, fireballRadius * 2));
+            }
+        }
+        else {
+            try {
+                // Load the original fireball image
+                BufferedImage originalImage = ImageIO.read(new File("assets/200Fireball.png"));
+                // Resize the image to 16x16 pixels
+                fireballImage = new BufferedImage(16, 16, BufferedImage.TYPE_INT_ARGB);
+                Graphics2D g2d = fireballImage.createGraphics();
+                g2d.drawImage(originalImage, 0, 0, 16, 16, null);
+                g2d.dispose();
+                // Update the fireball radius
+                this.fireballRadius = 8;
+            } catch (IOException e) {
+                e.printStackTrace();
+                setPreferredSize(new Dimension(fireballRadius * 2, fireballRadius * 2));
+            }
+        }
+
+    }
+    public boolean isOverwhelming(){
+        return isOverwhelming;
+    }
+
 }
