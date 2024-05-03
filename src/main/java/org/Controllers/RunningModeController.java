@@ -224,11 +224,16 @@ public class RunningModeController {
                     // System.out.println("side collision");
                     fireball.setxVelocity(-xVelocity);
                 } else {
-                    //System.out.println("top bottom collision");
+                    if (xVelocity*br.getVelocity()>0){ //barrier & ball same direction
+                        // System.out.println("same direction");
+                        fireball.setxVelocity( xVelocity+  Math.signum(xVelocity) * 0.5);
+                    }
+                    else if (xVelocity*br.getVelocity()<0){ //opposite direction
+                        //System.out.println("opp direction");
+                        fireball.setxVelocity(-xVelocity);
+                    }
                     fireball.setyVelocity(-yVelocity);
                 }
-                // System.out.println("new: "+xVelocity+" "+ yVelocity);
-
 
                 if (hitBarrier(br)) {
                     toRemove.add(br);
