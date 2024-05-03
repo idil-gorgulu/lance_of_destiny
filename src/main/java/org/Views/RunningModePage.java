@@ -21,6 +21,7 @@ public class RunningModePage extends Page{
     private BufferedImage backgroundImage;
     private JPanel gamePanel =  new JPanel();
     private JPanel infoContainer =  new JPanel();
+    private JPanel inventoryContainer = new JPanel();
     protected RunningModeController runningModeController;
     public boolean pause = false;
     private ArrayList<Barrier> barriers = new ArrayList<>();
@@ -155,9 +156,8 @@ public class RunningModePage extends Page{
                 String hexCode = "#FFFFFF";
                 Color color = Color.decode(hexCode);
                 infoContainer = new JPanel(new FlowLayout());
-                infoContainer.setPreferredSize(new Dimension(190, 500));
+                infoContainer.setPreferredSize(new Dimension(190, 200));
                 infoContainer.setBackground(new Color(color.getRed(), color.getGreen(), color.getBlue(), 50));
-
                 timeLabel = new JLabel("Time: 0s", SwingConstants.CENTER);
                 infoContainer.add(timeLabel);
 
@@ -171,7 +171,27 @@ public class RunningModePage extends Page{
                 infoContainer.add(runningModeController.getGameSession().getChance());
                 infoContainer.add(runningModeController.getGameSession().getScore());
 
-                add(infoContainer, BorderLayout.WEST);
+                JPanel mainPanel = new JPanel();
+                mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.Y_AXIS));
+
+                mainPanel.add(infoContainer);
+                //add(infoContainer, BorderLayout.WEST);
+
+                JPanel separatorPanel = new JPanel();
+                separatorPanel.setPreferredSize(new Dimension(190, 10));
+                mainPanel.add(separatorPanel);
+
+                inventoryContainer = new JPanel();
+                inventoryContainer.setLayout(new BorderLayout());
+
+                JLabel inventoryTitleLabel = new JLabel("Inventory", SwingConstants.CENTER);
+                inventoryContainer.add(inventoryTitleLabel, BorderLayout.NORTH);
+
+                inventoryContainer.setPreferredSize(new Dimension(190, 100));
+                inventoryContainer.setBackground(new Color(color.getRed(), color.getGreen(), color.getBlue(), 50));
+                mainPanel.add(inventoryContainer);
+
+                add(mainPanel, BorderLayout.WEST);
 
                 JLabel statusLabel = new JLabel("Running Mode", SwingConstants.CENTER);
                 add(statusLabel, BorderLayout.SOUTH);
