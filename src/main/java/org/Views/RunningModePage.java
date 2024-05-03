@@ -119,7 +119,8 @@ public class RunningModePage extends Page{
         runningModeController.checkScreenBordersFireballCollision();
         runningModeController.checkBarrierFireballCollision();
         runningModeController.moveBarriers();
-        runningModeController.updateDebris(); // Handle debris movement
+        runningModeController.updateDebris();// Handle debris movement
+        runningModeController.updateDroppingSpells();// Hande spell dropping
         repaint();
         if (this.runningModeController.getGameSession().getChance().getRemainingChance() == 0) {
             this.runningModeController.getGameSession().ended = true;
