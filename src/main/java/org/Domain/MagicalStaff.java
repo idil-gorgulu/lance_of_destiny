@@ -18,6 +18,7 @@ public class MagicalStaff extends JPanel {
     private Coordinate coordinate;
     private int staffWidth=100;
     private int staffHeight=20;
+    private boolean isReleased;
 
     public MagicalStaff() {
         this.coordinate = new Coordinate(0,450);
@@ -69,6 +70,10 @@ public class MagicalStaff extends JPanel {
         double newAngle = angVelocity + angle;
         if ((newAngle>=-45) && newAngle<=45)//check angle
             this.angle=newAngle;
+        if ((isReleased) && (newAngle<3) && (newAngle>-3)){
+            this.angle=0;
+            this.angVelocity=0;
+        }
         repaint();
     }
 
@@ -152,6 +157,9 @@ public class MagicalStaff extends JPanel {
 
     public int getStaffWidth() {
         return staffWidth;
+    }
+    public void setReleased(boolean b){
+        isReleased=b;
     }
 
     public void setStaffWidth(int staffWidth) {
