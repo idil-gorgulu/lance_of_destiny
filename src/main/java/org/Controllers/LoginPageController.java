@@ -42,7 +42,7 @@ public class LoginPageController {
             User user = User.getUserInstance();
             user.setEmail(email);
             JOptionPane.showMessageDialog(null, "You are now logged in!");
-            Navigator.getInstance().showStartPage();
+            Navigator.getInstance().showGameModePage();
         } else {
             System.out.println("Login failed!");
             JOptionPane.showMessageDialog(null, "Invalid email or password!");

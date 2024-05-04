@@ -2,17 +2,17 @@ package org.Views;
 
 import org.Utils.ComponentStyling;
 
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
-import javax.imageio.ImageIO;
 
-public class StartPage extends Page {
+public class StartMultiplayerPage extends Page{
     private BufferedImage backgroundImage;
 
-    public StartPage() {
+    public StartMultiplayerPage() {
         super();
         initUI();
     }
@@ -32,15 +32,15 @@ public class StartPage extends Page {
         gameTitle.setAlignmentX(JComponent.CENTER_ALIGNMENT);
         add(gameTitle);
 
-        JButton buildingModeButton = ComponentStyling.createStyledButton("Open Building Mode");
-        JButton runningModeButton = ComponentStyling.createStyledButton("Open Running Mode");
+        JButton createMultiplayerGameButton = ComponentStyling.createStyledButton("Host a Game");
+        JButton joinMultiplayerGameButton = ComponentStyling.createStyledButton("Join a Game");
 
-        buildingModeButton.addActionListener(e -> Navigator.getInstance().showBuildingModePage());
-        runningModeButton.addActionListener(e -> Navigator.getInstance().showGameSelectionPage());
+        createMultiplayerGameButton.addActionListener(e -> Navigator.getInstance().showBuildingModePage());
+        joinMultiplayerGameButton.addActionListener(e -> Navigator.getInstance().showJoinMultiplayerGamePage());
         add(Box.createVerticalStrut(10));
-        add(buildingModeButton);
+        add(createMultiplayerGameButton);
         add(Box.createVerticalStrut(10));
-        add(runningModeButton);
+        add(joinMultiplayerGameButton);
     }
 
     @Override
@@ -51,4 +51,3 @@ public class StartPage extends Page {
         }
     }
 }
-
