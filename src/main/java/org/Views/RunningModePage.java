@@ -88,13 +88,13 @@ public class RunningModePage extends Page{
                     } else if (choice == JOptionPane.NO_OPTION) {
                         pause = false;
                         runningModeController = null;
-                        Navigator.getInstance().showStartPage();
+                        Navigator.getInstance().showStartSingleplayerPage();
                     }
                 }
                 else if (runningModeController.getGameSession().ended) {
                     JOptionPane.showMessageDialog(null, "You lost!");
                     runningModeController = null;
-                    Navigator.getInstance().showStartPage();
+                    Navigator.getInstance().showStartSingleplayerPage();
                 }
                 else {
                     // Update the game frame

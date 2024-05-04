@@ -1,7 +1,6 @@
 package org.Views;
 
 import javax.swing.*;
-import java.util.ArrayList;
 import java.util.Stack;
 
 public class Navigator {
@@ -50,8 +49,11 @@ public class Navigator {
         }
     }
     public void showEnterPage() {showPage(new EnterPage());}
-    public void showStartPage() {
-        showPage(new StartPage());
+    public void showStartSingleplayerPage() {
+        showPage(new StartSingleplayerPage());
+    }
+    public void showStartMultiplayerPage() {
+        showPage(new StartMultiplayerPage());
     }
     public void showLoginPage() {
         showPage(new LoginPage());
@@ -62,8 +64,12 @@ public class Navigator {
     public void showBuildingModePage() { showPage(new BuildingModePage()); }
     public void showRunningModePage() { showPage(new RunningModePage()); }
     public void showGameSelectionPage() {showPage(new GameSelectionPage()); }
+    public void showGameModePage() {showPage(new GameModePage()); }
+    public void showJoinMultiplayerGamePage() {showPage(new JoinMultiplayerGamePage()); }
 
     public void show() {
         mainFrame.setVisible(true);
     }
+
+
 }
