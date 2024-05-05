@@ -25,6 +25,7 @@ public class Barrier extends JPanel {
 
     private static final int RADIUS_FACTOR = 3; // 1.5 * L
     private static final double ANGULAR_SPEED = Math.PI / 10;
+    private long lastCollisionTime=-5; //-inf, initially barriers are able to collide, is updated after collision
 
     public Barrier(Coordinate coordinate, BarrierType type) {
         this.coordinate = coordinate;
@@ -197,4 +198,5 @@ public class Barrier extends JPanel {
     public void setMoving(boolean moving) {
         isMoving = moving;
     }
+
 }

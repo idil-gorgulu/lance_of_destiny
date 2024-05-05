@@ -161,6 +161,9 @@ public class MagicalStaff extends JPanel {
     public void setReleased(boolean b){
         isReleased=b;
     }
+    public void addCannon(){
+
+    }
 
     public void setStaffWidth(int staffWidth) {
         this.staffWidth = staffWidth;
@@ -197,4 +200,5 @@ public class MagicalStaff extends JPanel {
         this.setVisible(true);
         repaint();
     }
+
 }

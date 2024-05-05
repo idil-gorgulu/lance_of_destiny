@@ -114,6 +114,7 @@ public class RunningModeController {
         Shape transformedRectangle = transform.createTransformedShape(magicalStaffRectangle);
 
         if (transformedRectangle.intersects(fireballRectangle)) {
+            fireball.setLastCollided(null);
             //System.out.println("\nCollision detected");
             lastCollisionTime = currentTime;
             if (Math.abs(msAngle)<1e-5){
@@ -162,6 +163,7 @@ public class RunningModeController {
 
         // Check collision with left and right boundaries
         if ((fireballX - fireballRadius <= 0) || (fireballX + fireballRadius > containerWidth - 10)) {
+            fireball.setLastCollided(null);
             fireball.setCoordinate(new Coordinate((int) (fireballX+-1*(Math.signum(xVelocity)*10)),fireballY));
             //Shift the ball 10 pixels to prevent additional collisions
 
@@ -169,10 +171,14 @@ public class RunningModeController {
 
         }
         // Check collision with top and bottom boundaries
-        if (fireballY - fireballRadius <= -10)  fireball.setyVelocity(-yVelocity);// TOP
+        if (fireballY - fireballRadius <= -10)  {
+            fireball.setyVelocity(-yVelocity);// TOP
+            fireball.setLastCollided(null);
+        }
 
         else if (fireballY + fireballRadius >= containerHeight) {
             // BOTTOM
+            fireball.setLastCollided(null);
             this.getGameSession().getChance().decrementChance();
             if (this.getGameSession().getChance().getRemainingChance() == 0) {
                 game.started = false;
@@ -215,7 +221,12 @@ public class RunningModeController {
 
             if (brRect.intersects(fireballRectangle)) {
 
-                if (!fireball.isOverwhelming()){ // no collision if it is
+                if (fireball.isOverwhelming()) return; // no collision if it is
+
+                if (br==fireball.getLastCollided()) return;
+
+                fireball.setLastCollided(br);
+
                 Rectangle sideLRect = new Rectangle(br.getCoordinate().getX(), br.getCoordinate().getY() + 5, 1, 5);
                 Rectangle sideRRect = new Rectangle(br.getCoordinate().getX() + 50, br.getCoordinate().getY() + 5, 1, 5);
 
@@ -230,7 +241,7 @@ public class RunningModeController {
                         fireball.setxVelocity(-xVelocity);
                     }
                     fireball.setyVelocity(-yVelocity);
-                }}
+                }
 
                 if (hitBarrier(br)) {
                     toRemove.add(br);
@@ -458,7 +469,7 @@ public class RunningModeController {
             Rectangle2D.Double magicalStaffRectangle = new Rectangle2D.Double(
                     magicalStaff.getTopLeftCornerOfMagicalStaff().getX(),
                     magicalStaff.getTopLeftCornerOfMagicalStaff().getY(),
-                    100,
+                    magicalStaff.getStaffWidth(),
                     20
             );
 
@@ -503,7 +514,7 @@ public class RunningModeController {
             Rectangle2D.Double magicalStaffRectangle = new Rectangle2D.Double(
                     magicalStaff.getTopLeftCornerOfMagicalStaff().getX(),
                     magicalStaff.getTopLeftCornerOfMagicalStaff().getY(),
-                    100,
+                    magicalStaff.getStaffWidth(),
                     20
             );
 
