@@ -13,7 +13,8 @@ public class Fireball extends JPanel {
     private double yVelocity = -3;
     private int fireballRadius = 15;
     private BufferedImage fireballImage;
-    boolean isOverwhelming=false;
+    private boolean isOverwhelming=false;
+    private Barrier lastCollided=null;
 
     public Fireball() {
         this.coordinate = new Coordinate(200, 200);
@@ -118,4 +119,11 @@ public class Fireball extends JPanel {
         return isOverwhelming;
     }
 
+    public Barrier getLastCollided() {
+        return lastCollided;
+    }
+
+    public void setLastCollided(Barrier lastCollided) {
+        this.lastCollided = lastCollided;
+    }
 }
