@@ -219,6 +219,7 @@ public class Game {
         return barrierBoard;
     }
 
+    //TODO: Update this according to new database saving
     public void addDetailedBarrier(Coordinate coordinates, BarrierType type, int numHits) {
         Barrier newBarrier = new Barrier(coordinates, type);
         newBarrier.setnHits(numHits);

@@ -76,9 +76,12 @@ public class BuildingModeController {
         gameSession.put("email", User.getUserInstance().getEmail());
         gameSession.put("gameName", gameName);
         gameSession.put("barrierAmount", barriers.size());
+        gameSession.put("chancesLeft", 3);
+        gameSession.put("newlyCreated", "Yes");
         for(int i=0; i<barriers.size(); i++){
             gameSession.put("barrier_"+i, barriers.get(i).getCoordinate().getX() + "-"+barriers.get(i).getCoordinate().getY() +
-                    "-"+ barriers.get(i).getType().toString()+ "-" + barriers.get(i).getnHits());
+            "-"+ barriers.get(i).getType().toString()+ "-" + barriers.get(i).getnHits() +
+                    "-"+ barriers.get(i).isMoving() + "-"+barriers.get(i).getVelocity() );
         }
         gameSession.put("played", "False");
         Database.getInstance().getGameCollection().insertOne(gameSession);
