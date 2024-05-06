@@ -23,16 +23,17 @@ public class DataBaseController {
         int barrierAmount=game.getInteger("barrierAmount");
         for(int j=0; j<barrierAmount; j++) {
             String barrierInfo = game.getString("barrier_" + j);
-            String[] parts = barrierInfo.split("-");
+            String[] parts = barrierInfo.split("/");
             // Extracting information from parts array
             int xCoordinate = Integer.parseInt(parts[0]);
             int yCoordinate = Integer.parseInt(parts[1]);
             BarrierType barrierType = BarrierType.valueOf(parts[2]);
             int numHits = Integer.parseInt(parts[3]);
+            boolean isMoving= Boolean.parseBoolean(parts[4]);
+            int velocity = Integer.parseInt(parts[5]);
             Coordinate co  =new Coordinate(xCoordinate, yCoordinate);
-            gameInstance.addDetailedBarrier(co, barrierType, numHits);
+            gameInstance.addDetailedBarrier(co, barrierType, numHits, isMoving, velocity);
         }
-
     }
     public void saveGameToDatabase(String gameName, Game game) {
         ArrayList<Barrier> barriers = game.getBarriers();
@@ -43,9 +44,9 @@ public class DataBaseController {
         gameSession.put("chancesLeft", 3);
         gameSession.put("newlyCreated", "Yes");
         for(int i=0; i<barriers.size(); i++){
-            gameSession.put("barrier_"+i, barriers.get(i).getCoordinate().getX() + "-"+barriers.get(i).getCoordinate().getY() +
-                    "-"+ barriers.get(i).getType().toString()+ "-" + barriers.get(i).getnHits() +
-                    "-"+ barriers.get(i).isMoving() + "-"+barriers.get(i).getVelocity() );
+            gameSession.put("barrier_"+i, barriers.get(i).getCoordinate().getX() + "/"+barriers.get(i).getCoordinate().getY() +
+                    "/"+ barriers.get(i).getType().toString()+ "/" + barriers.get(i).getnHits() +
+                    "/"+ barriers.get(i).isMoving() + "/"+barriers.get(i).getVelocity() );
         }
         gameSession.put("played", "False");
         Database.getInstance().getGameCollection().insertOne(gameSession);
