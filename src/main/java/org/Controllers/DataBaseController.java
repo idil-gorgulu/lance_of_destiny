@@ -13,7 +13,6 @@ public class DataBaseController {
     private static Game gameSession;
     private static DataBaseController instance;
     public DataBaseController(){
-
         this.gameSession = Game.getInstance();
     }
 
