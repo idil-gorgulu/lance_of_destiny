@@ -32,6 +32,7 @@ public class GameSelectionPage extends Page {
         this.setOpaque(false);
         loadBackgroundImage();
         initUI();
+        this.dataBaseController=DataBaseController.getInstance();
     }
 
     private void loadBackgroundImage() {
@@ -55,7 +56,6 @@ public class GameSelectionPage extends Page {
         };
         backgroundPanel.setOpaque(false);
         add(backgroundPanel, BorderLayout.NORTH);
-
 
         JPanel backButtonPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
         backButtonPanel.setOpaque(false); // Make the panel transparent
@@ -95,7 +95,6 @@ public class GameSelectionPage extends Page {
             JButton gameButton = new JButton(game.getString("gameName"));
             customizeButton(gameButton);
             gameButton.addActionListener(new ActionListener() {
-                //TODO: Create a database controller and add methods below there
                 @Override
                 public void actionPerformed(ActionEvent e) {
                     dataBaseController.openFromDatabase(game);
@@ -106,10 +105,7 @@ public class GameSelectionPage extends Page {
             formPanel.add(gameButton);
             gameButton.setMaximumSize(new Dimension(Integer.MAX_VALUE, gameButton.getPreferredSize().height));
             gameButton.setAlignmentX(Component.CENTER_ALIGNMENT);
-
-
         }
-
 
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.gridwidth = GridBagConstraints.REMAINDER;
@@ -195,8 +191,6 @@ public class GameSelectionPage extends Page {
             }
         });
     }
-
-
 
     @Override
     protected void paintComponent(Graphics g) {
