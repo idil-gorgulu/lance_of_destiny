@@ -435,11 +435,25 @@ public class RunningModeController {
         Debris debris = new Debris(barrier.getCoordinate());
         debris.setBackground(new Color(0, 0, 0, 0)); // Transparent background
         runningModePage.getActiveDebris().add(debris); // Add debris to the list
-
         runningModePage.getGamePanel().add(debris);
         //runningModePage.repaint();
     }
 
+    public void fireBullet(){
+        MagicalStaff magicalStaff=game.getMagicalStaff();
+        Bullet bullet=new Bullet(new Coordinate(magicalStaff.getTopLeftCornerOfMagicalStaff().getX(),
+                                                magicalStaff.getTopLeftCornerOfMagicalStaff().getY()));
+        bullet.setBackground(new Color(0, 0, 0, 0));
+
+        Bullet bullet2=new Bullet(new Coordinate(magicalStaff.getTopLeftCornerOfMagicalStaff().getX()+magicalStaff.getStaffWidth(),
+                                                    magicalStaff.getTopLeftCornerOfMagicalStaff().getY()));
+        bullet2.setBackground(new Color(0, 0, 0, 0));
+
+        runningModePage.getGamePanel().add(bullet);
+        runningModePage.getGamePanel().add(bullet2);
+        runningModePage.getActiveBullets().add(bullet);
+        runningModePage.getActiveBullets().add(bullet2);
+    }
     private void dropSpell(Barrier barrier){
         Spell spell = new Spell(barrier.getCoordinate());
         spell.setBackground(new Color(0, 0, 0, 0)); // Transparent background
@@ -537,6 +551,40 @@ public class RunningModeController {
         }
     }
 
+    public void updateHexBullets(){
+        ArrayList<Barrier> barriers = game.getBarriers();
+        ArrayList<Barrier> toRemove = new ArrayList<>();
+
+
+        Iterator<Bullet> iterator = runningModePage.getActiveBullets().iterator();
+        while (iterator.hasNext()) {
+
+            Bullet bullet = iterator.next();
+            bullet.moveUp();
+            if (bullet.getCoordinate().getY() < 0) { //Out of Screen Top Border
+                runningModePage.getGamePanel().remove(bullet);
+                iterator.remove();
+            }
+
+            Rectangle2D.Double bulletRectangle = new Rectangle2D.Double( // Barrier collision
+                    bullet.getCoordinate().getX()  ,  bullet.getCoordinate().getY(),20,20);
+
+            for (Barrier br : barriers) {
+                Rectangle brRect = new Rectangle(br.getCoordinate().getX(), br.getCoordinate().getY(),
+                        (int) br.getPreferredSize().getWidth(), (int) br.getPreferredSize().getHeight());
+                if (brRect.intersects(bulletRectangle)) {
+                    if (hitBarrier(br,1))  toRemove.add(br);
+                    runningModePage.getGamePanel().remove(bullet);
+                    iterator.remove();
+                }
+            }
+            barriers.removeAll(toRemove);
+            // Updating the score.
+            this.getGameSession().getScore().incrementScore(toRemove.size(), this.runningModePage.timeInSeconds);
+        }
+
+    }
+
     //Not used yet:
     public void saveGame(String gameName, int timeInSeconds, ArrayList<Debris> activeDebris){
         ArrayList<Barrier> barriers = game.getBarriers();
@@ -578,7 +626,7 @@ public class RunningModeController {
     }
 
     //Temporarily here - melih
-    public void useSpell1(){ // I will move these methods to Inventory later, this is for testing -Melih
+    public void useSpell1(){ // I will move these methods to somewhere else later, this is for testing -Melih
         getGameSession().getChance().incrementChance();
     }
     public void useSpell2(){
@@ -586,6 +634,5 @@ public class RunningModeController {
            }
     public void redoSpell2(){
         getGameSession().getMagicalStaff().setStaffWidth(100);
-        System.out.println("check2");
     }
 }

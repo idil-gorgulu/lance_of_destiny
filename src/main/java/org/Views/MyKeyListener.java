@@ -66,6 +66,9 @@ public class MyKeyListener extends KeyAdapter {
             case KeyEvent.VK_F:
                 runningModeController.getGameSession().getFireball().setOverwhelming(false);
                 break;
+            case KeyEvent.VK_T:
+                runningModeController.fireBullet();
+                break;
         }
     }
 }
