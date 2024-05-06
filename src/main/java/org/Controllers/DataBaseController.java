@@ -14,7 +14,7 @@ public class DataBaseController {
     private static DataBaseController instance;
     public DataBaseController(){
 
-        this.gameSession = Game.createNewGame();
+        this.gameSession = Game.getInstance();
     }
 
     public void openFromDatabase(Document game){
