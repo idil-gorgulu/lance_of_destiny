@@ -1,4 +1,5 @@
 package org.Views;
+import org.Controllers.DataBaseController;
 import org.Controllers.LoginPageController;
 import org.Domain.BarrierType;
 import org.Domain.Coordinate;
@@ -25,12 +26,13 @@ import java.util.ArrayList;
 public class GameSelectionPage extends Page {
 
     private BufferedImage backgroundImage;
-
+    private DataBaseController dataBaseController;
     public GameSelectionPage() {
         super();
         this.setOpaque(false);
         loadBackgroundImage();
         initUI();
+        this.dataBaseController=DataBaseController.getInstance();
     }
 
     private void loadBackgroundImage() {
@@ -54,7 +56,6 @@ public class GameSelectionPage extends Page {
         };
         backgroundPanel.setOpaque(false);
         add(backgroundPanel, BorderLayout.NORTH);
-
 
         JPanel backButtonPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
         backButtonPanel.setOpaque(false); // Make the panel transparent
@@ -94,29 +95,9 @@ public class GameSelectionPage extends Page {
             JButton gameButton = new JButton(game.getString("gameName"));
             customizeButton(gameButton);
             gameButton.addActionListener(new ActionListener() {
-                //TODO: Create a database controller and add methods below there
                 @Override
                 public void actionPerformed(ActionEvent e) {
-                    // TODO: Create the game according to the specs that comes from the game
-                    Game gameInstance = Game.getInstance();
-                    gameInstance.reset();
-
-                    String templateName = game.getString("gameName");
-                    int barrierAmount=game.getInteger("barrierAmount");
-                    for(int j=0; j<barrierAmount; j++) {
-                        String barrierInfo = game.getString("barrier_" + j);
-                        String[] parts = barrierInfo.split("-");
-
-                        // Extracting information from parts array
-                        int xCoordinate = Integer.parseInt(parts[0]);
-                        int yCoordinate = Integer.parseInt(parts[1]);
-                        BarrierType barrierType = BarrierType.valueOf(parts[2]);
-                        int numHits = Integer.parseInt(parts[3]);
-                        Coordinate co  =new Coordinate(xCoordinate, yCoordinate);
-                        gameInstance.addDetailedBarrier(co, barrierType, numHits);
-                    }
-                    // Iterate over the barriers data and create Barrier instances
-
+                    dataBaseController.openFromDatabase(game);
                     // Final statement will be this
                     Navigator.getInstance().showRunningModePage();
                 }
@@ -124,10 +105,7 @@ public class GameSelectionPage extends Page {
             formPanel.add(gameButton);
             gameButton.setMaximumSize(new Dimension(Integer.MAX_VALUE, gameButton.getPreferredSize().height));
             gameButton.setAlignmentX(Component.CENTER_ALIGNMENT);
-
-
         }
-
 
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.gridwidth = GridBagConstraints.REMAINDER;
@@ -213,8 +191,6 @@ public class GameSelectionPage extends Page {
             }
         });
     }
-
-
 
     @Override
     protected void paintComponent(Graphics g) {

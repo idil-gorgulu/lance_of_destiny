@@ -43,7 +43,6 @@ public class RunningModeController {
 
     public void rotateMagicalStaff(double dTheta){
         this.getGameSession().getMagicalStaff().setAngVelocity(dTheta);
-        //getGameSession().getMagicalStaff().setAngle(getGameSession().getMagicalStaff().getAngle() + dTheta);
     }
 
     public void moveBarriers(){

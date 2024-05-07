@@ -13,9 +13,10 @@ import java.util.Scanner;
 
 public class BuildingModeController {
     private static Game gameSession;
-
+    private DataBaseController dataBaseController;
     public BuildingModeController() {
         this.gameSession = Game.createNewGame();
+        this.dataBaseController=DataBaseController.getInstance();
         //gameSession.reset(); needed for being able to create a new template.
     }
 
@@ -71,18 +72,7 @@ public class BuildingModeController {
     }
 
     public void saveGameToDatabase(String gameName) {
-        ArrayList<Barrier> barriers = gameSession.getBarriers();
-        Document gameSession = new Document();
-        gameSession.put("email", User.getUserInstance().getEmail());
-        gameSession.put("gameName", gameName);
-        gameSession.put("barrierAmount", barriers.size());
-        for(int i=0; i<barriers.size(); i++){
-            gameSession.put("barrier_"+i, barriers.get(i).getCoordinate().getX() + "-"+barriers.get(i).getCoordinate().getY() +
-                    "-"+ barriers.get(i).getType().toString()+ "-" + barriers.get(i).getnHits());
-        }
-        gameSession.put("played", "False");
-        Database.getInstance().getGameCollection().insertOne(gameSession);
-        System.out.println("Saved");
+        dataBaseController.saveGameToDatabase(gameName, gameSession);
     }
 
 }
