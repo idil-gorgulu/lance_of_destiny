@@ -116,6 +116,7 @@ public class RunningModeController {
         if (transformedRectangle.intersects(fireballRectangle)) {
             fireball.setLastCollided(null);
             //System.out.println("\nCollision detected");
+            runningModePage.playSoundEffect(1);
             lastCollisionTime = currentTime;
             if (Math.abs(msAngle)<1e-5){
                 if (xVelocity*magicalStaffVelocity>0){ //staff & ball same direction
@@ -163,6 +164,7 @@ public class RunningModeController {
 
         // Check collision with left and right boundaries
         if ((fireballX - fireballRadius <= 0) || (fireballX + fireballRadius > containerWidth - 10)) {
+            runningModePage.playSoundEffect(1);
             fireball.setLastCollided(null);
             fireball.setCoordinate(new Coordinate((int) (fireballX+-1*(Math.signum(xVelocity)*10)),fireballY));
             //Shift the ball 10 pixels to prevent additional collisions
@@ -172,6 +174,7 @@ public class RunningModeController {
         }
         // Check collision with top and bottom boundaries
         if (fireballY - fireballRadius <= -10)  {
+            runningModePage.playSoundEffect(1);
             fireball.setyVelocity(-yVelocity);// TOP
             fireball.setLastCollided(null);
         }
@@ -180,6 +183,7 @@ public class RunningModeController {
             // BOTTOM
             fireball.setLastCollided(null);
             this.getGameSession().getChance().decrementChance();
+            runningModePage.playSoundEffect(2);
             if (this.getGameSession().getChance().getRemainingChance() == 0) {
                 game.started = false;
                 System.out.println("Not active");
@@ -222,7 +226,7 @@ public class RunningModeController {
 
             if (brRect.intersects(fireballRectangle)) {
 
-
+                runningModePage.playSoundEffect(1);
 
                 if (br==fireball.getLastCollided()) return;
 
@@ -453,6 +457,7 @@ public class RunningModeController {
         runningModePage.getGamePanel().add(bullet2);
         runningModePage.getActiveBullets().add(bullet);
         runningModePage.getActiveBullets().add(bullet2);
+        runningModePage.playSoundEffect(4);
     }
     private void dropSpell(Barrier barrier){
         Spell spell = new Spell(barrier.getCoordinate());
@@ -631,8 +636,10 @@ public class RunningModeController {
     }
     public void useSpell2(){
         getGameSession().getMagicalStaff().setStaffWidth(200);
+        runningModePage.playSoundEffect(3);
            }
     public void redoSpell2(){
         getGameSession().getMagicalStaff().setStaffWidth(100);
+        runningModePage.playSoundEffect(3);
     }
 }

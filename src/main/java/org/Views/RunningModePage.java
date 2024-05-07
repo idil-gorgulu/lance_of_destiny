@@ -31,6 +31,7 @@ public class RunningModePage extends Page{
     public int timeInSeconds = 0;
     private int frameCount = 0;
     private Timer gameTimer =  new Timer();
+    private Sound sound=new Sound();
 
     public static final long COLLISION_COOLDOWN = 1000; // Cooldown period in milliseconds
 
@@ -124,6 +125,8 @@ public class RunningModePage extends Page{
         repaint();
         if (this.runningModeController.getGameSession().getChance().getRemainingChance() == 0) {
             this.runningModeController.getGameSession().ended = true;
+
+
         }
         SwingUtilities.invokeLater(new Runnable() {
             @Override
@@ -142,6 +145,8 @@ public class RunningModePage extends Page{
     protected void initUI() {
         setLayout(new BorderLayout());
         initializeGameObjects();
+        playMusic(0);
+
     }
 
     private void initializeGameObjects() {
@@ -251,5 +256,17 @@ public class RunningModePage extends Page{
         int timeElapsed=timeInSeconds;
         runningModeController.saveGame(gameName,timeElapsed, activeDebris);
     }
+    public void playMusic(int i){
+        sound.setFile(i);
+        sound.play();
+        sound.loop();
+    }
+    public void stopMusic(){
+        sound.stop();
+    }
 
+    public void playSoundEffect(int i){
+        sound.setFile(i);
+        sound.play();
+    }
 }
