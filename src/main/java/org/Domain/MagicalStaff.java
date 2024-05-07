@@ -77,30 +77,7 @@ public class MagicalStaff extends JPanel {
         repaint();
     }
 
-    /*
-    //Work In Progress - Melih
-    public void stabilize(boolean cw){
-        System.out.println(Math.toDegrees(angle)+" "+Math.toDegrees(angularVel));
-        if (cw){
-            angularVel=Math.toRadians(-1);
-            System.out.println(Math.toDegrees(angle)+" "+Math.toDegrees(angularVel));
-            if (angularVel+angle<0){
-                angle=0;
-                angularVel=0;
-            }
-        }
-        else {
-            angularVel=Math.toRadians(1);
-            System.out.println(Math.toDegrees(angle)+" "+Math.toDegrees(angularVel));
-            if (angularVel+angle>0){
-                angle=0;
-                angularVel=0;
-            }
-        }
-        //revalidate();
-        //repaint();
-    }
-
+/*
     private Dimension calculateRotatedDimensions(double angle) {
         double sin = Math.abs(Math.sin(angle));
         double cos = Math.abs(Math.cos(angle));

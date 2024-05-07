@@ -25,6 +25,7 @@ public class RunningModePage extends Page{
     private ArrayList<Barrier> barriers = new ArrayList<>();
     private ArrayList<Debris> activeDebris;
     private ArrayList<Spell> droppingSpells;
+    private ArrayList<Bullet> activeBullets;
     public static final int SCREENWIDTH =1000;
     public int screenHeight;
     public int timeInSeconds = 0;
@@ -38,6 +39,7 @@ public class RunningModePage extends Page{
         super();
         activeDebris = new ArrayList<>();
         droppingSpells = new ArrayList<>();
+        activeBullets=new ArrayList<>();
         this.setDoubleBuffered(true);
         try {
             backgroundImage = ImageIO.read(new File("assets/Background.png"));
@@ -52,12 +54,9 @@ public class RunningModePage extends Page{
         requestFocus();
         setupTimer();
     }
-    public ArrayList<Debris> getActiveDebris() {
-        return activeDebris;
-    }
-    public ArrayList<Spell> getDroppingSpells() {
-        return droppingSpells;
-    }
+    public ArrayList<Debris> getActiveDebris() {  return activeDebris;   }
+    public ArrayList<Spell> getDroppingSpells() { return droppingSpells; }
+    public ArrayList<Bullet> getActiveBullets(){ return activeBullets;}
 
 
     protected void paintComponent(Graphics g) { //background for the whole frame
@@ -121,6 +120,7 @@ public class RunningModePage extends Page{
         runningModeController.moveBarriers();
         runningModeController.updateDebris();// Handle debris movement
         runningModeController.updateDroppingSpells();// Hande spell dropping
+        runningModeController.updateHexBullets();
         repaint();
         if (this.runningModeController.getGameSession().getChance().getRemainingChance() == 0) {
             this.runningModeController.getGameSession().ended = true;

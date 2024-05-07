@@ -60,13 +60,13 @@ public class RunningModeController {
                     newpos = br.getCoordinate().getX() +  br.getVelocity();
                     for (Barrier br2 : getGameSession().getBarriers()) {
                         if ((!br2.equals(br)) && (br.getCoordinate().getY()==br2.getCoordinate().getY())){
-                            //System.out.println("Space between : "+ (br2.getCoordinate().getX() - newpos));
                             if (width*4.5>Math.abs(br2.getCoordinate().getX() - newpos)) {
                                 isAvailable = false;
-                                //br2.setVelocity(-1*br2.getVelocity());
                                 br.setVelocity(-1*br.getVelocity());
                                 break;
-                            }}
+                            }
+
+                        }
                     }
                     if (isAvailable) {
                         br.moveBarrier();
@@ -194,6 +194,7 @@ public class RunningModeController {
             fireball.getCoordinate().setX(fireballPositionX);
             fireball.getCoordinate().setY(fireballPositionY);
             fireball.setBounds(fireballPositionX, fireballPositionY, fireballWidth, fireballHeight);
+            fireball.setOverwhelming(false);
             //fireball.setBackground(Color.red);
             fireball.setBackground(new Color(0, 0, 0, 0)); // Transparent background
             fireball.setOpaque(true);
@@ -221,11 +222,12 @@ public class RunningModeController {
 
             if (brRect.intersects(fireballRectangle)) {
 
-                if (fireball.isOverwhelming()) return; // no collision if it is
+
 
                 if (br==fireball.getLastCollided()) return;
 
                 fireball.setLastCollided(br);
+                if (!fireball.isOverwhelming()){ // no collision if it is
 
                 Rectangle sideLRect = new Rectangle(br.getCoordinate().getX(), br.getCoordinate().getY() + 5, 1, 5);
                 Rectangle sideRRect = new Rectangle(br.getCoordinate().getX() + 50, br.getCoordinate().getY() + 5, 1, 5);
@@ -242,9 +244,13 @@ public class RunningModeController {
                     }
                     fireball.setyVelocity(-yVelocity);
                 }
-
-                if (hitBarrier(br)) {
+                if (hitBarrier(br,1)) {
                     toRemove.add(br);
+                }}
+                else {
+                    if (hitBarrier(br,10)){ //This is always true
+                        toRemove.add(br);
+                    }
                 }
             }
         }
@@ -254,6 +260,7 @@ public class RunningModeController {
     }
 
 
+    /*
     public void checkCollision() {
         Fireball fireball = game.getFireball();
         MagicalStaff magicalStaff = game.getMagicalStaff();
@@ -321,17 +328,7 @@ public class RunningModeController {
             Rectangle brRect = new Rectangle(br.getCoordinate().getX(), br.getCoordinate().getY(), (int) br.getPreferredSize().getWidth(), (int) br.getPreferredSize().getHeight());
 
             if (brRect.intersects(fireballRect)) {
-                // Barriers are always horizontal
-                /*
-                double b = 1.0; // b = 1 for a perfect elastic collision
-                double normalAngleRadians = Math.toRadians((double) (90%360));
-                Vector normal = new Vector(Math.cos(normalAngleRadians), Math.sin(normalAngleRadians));
-                Vector velocity = new Vector(xVelocity, yVelocity);
-                Vector vNew = velocity.subtract(normal.scale(2 * velocity.dot(normal))).scale(b);
-
-                 */
-                //System.out.println(brRect.getX()+" "+brRect.getY()+" "+brRect.getWidth()+" "+brRect.getHeight());
-                Rectangle sideLRect = new Rectangle(br.getCoordinate().getX(), br.getCoordinate().getY() + 1, 1, 13);
+                 Rectangle sideLRect = new Rectangle(br.getCoordinate().getX(), br.getCoordinate().getY() + 1, 1, 13);
                 Rectangle sideRRect = new Rectangle(br.getCoordinate().getX() + 50, br.getCoordinate().getY() + 1, 1, 13);
 
                 if ((sideLRect.intersects(fireballRect)) || (sideRRect.intersects(fireballRect))) {
@@ -340,9 +337,9 @@ public class RunningModeController {
                     fireball.setyVelocity(-yVelocity);
                 }
 
-                if (hitBarrier(br)) {
+               // if (hitBarrier(br)) {
                     toRemove.add(br);
-                }
+                //}
             }
         }
         barriers.removeAll(toRemove);
@@ -394,7 +391,7 @@ public class RunningModeController {
         }
 
     }
-
+*/
     public void run(){
         Fireball fireball = game.getFireball();
         MagicalStaff magicalStaff = game.getMagicalStaff();
@@ -411,8 +408,8 @@ public class RunningModeController {
         }
     }
 
-    public boolean hitBarrier(Barrier barrier) {
-        barrier.setnHits(barrier.getnHits() - 1);
+    public boolean hitBarrier(Barrier barrier, int hitTimes) {
+        barrier.setnHits(barrier.getnHits() - hitTimes);
         //barrier.revalidate();
         //barrier.repaint();
         if (barrier.getnHits() <= 0) {
@@ -438,11 +435,25 @@ public class RunningModeController {
         Debris debris = new Debris(barrier.getCoordinate());
         debris.setBackground(new Color(0, 0, 0, 0)); // Transparent background
         runningModePage.getActiveDebris().add(debris); // Add debris to the list
-
         runningModePage.getGamePanel().add(debris);
         //runningModePage.repaint();
     }
 
+    public void fireBullet(){
+        MagicalStaff magicalStaff=game.getMagicalStaff();
+        Bullet bullet=new Bullet(new Coordinate(magicalStaff.getTopLeftCornerOfMagicalStaff().getX(),
+                                                magicalStaff.getTopLeftCornerOfMagicalStaff().getY()));
+        bullet.setBackground(new Color(0, 0, 0, 0));
+
+        Bullet bullet2=new Bullet(new Coordinate(magicalStaff.getTopLeftCornerOfMagicalStaff().getX()+magicalStaff.getStaffWidth(),
+                                                    magicalStaff.getTopLeftCornerOfMagicalStaff().getY()));
+        bullet2.setBackground(new Color(0, 0, 0, 0));
+
+        runningModePage.getGamePanel().add(bullet);
+        runningModePage.getGamePanel().add(bullet2);
+        runningModePage.getActiveBullets().add(bullet);
+        runningModePage.getActiveBullets().add(bullet2);
+    }
     private void dropSpell(Barrier barrier){
         Spell spell = new Spell(barrier.getCoordinate());
         spell.setBackground(new Color(0, 0, 0, 0)); // Transparent background
@@ -540,6 +551,40 @@ public class RunningModeController {
         }
     }
 
+    public void updateHexBullets(){
+        ArrayList<Barrier> barriers = game.getBarriers();
+        ArrayList<Barrier> toRemove = new ArrayList<>();
+
+
+        Iterator<Bullet> iterator = runningModePage.getActiveBullets().iterator();
+        while (iterator.hasNext()) {
+
+            Bullet bullet = iterator.next();
+            bullet.moveUp();
+            if (bullet.getCoordinate().getY() < 0) { //Out of Screen Top Border
+                runningModePage.getGamePanel().remove(bullet);
+                iterator.remove();
+            }
+
+            Rectangle2D.Double bulletRectangle = new Rectangle2D.Double( // Barrier collision
+                    bullet.getCoordinate().getX()  ,  bullet.getCoordinate().getY(),20,20);
+
+            for (Barrier br : barriers) {
+                Rectangle brRect = new Rectangle(br.getCoordinate().getX(), br.getCoordinate().getY(),
+                        (int) br.getPreferredSize().getWidth(), (int) br.getPreferredSize().getHeight());
+                if (brRect.intersects(bulletRectangle)) {
+                    if (hitBarrier(br,1))  toRemove.add(br);
+                    runningModePage.getGamePanel().remove(bullet);
+                    iterator.remove();
+                }
+            }
+            barriers.removeAll(toRemove);
+            // Updating the score.
+            this.getGameSession().getScore().incrementScore(toRemove.size(), this.runningModePage.timeInSeconds);
+        }
+
+    }
+
     //Not used yet:
     public void saveGame(String gameName, int timeInSeconds, ArrayList<Debris> activeDebris){
         ArrayList<Barrier> barriers = game.getBarriers();
@@ -581,7 +626,7 @@ public class RunningModeController {
     }
 
     //Temporarily here - melih
-    public void useSpell1(){ // I will move these methods to Inventory later, this is for testing -Melih
+    public void useSpell1(){ // I will move these methods to somewhere else later, this is for testing -Melih
         getGameSession().getChance().incrementChance();
     }
     public void useSpell2(){
@@ -589,6 +634,5 @@ public class RunningModeController {
            }
     public void redoSpell2(){
         getGameSession().getMagicalStaff().setStaffWidth(100);
-        System.out.println("check2");
     }
 }
