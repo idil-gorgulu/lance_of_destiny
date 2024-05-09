@@ -117,6 +117,21 @@ public class RunningModeController {
             //System.out.println("\nCollision detected");
             runningModePage.playSoundEffect(1);
             lastCollisionTime = currentTime;
+
+            double energy=xVelocity*xVelocity+yVelocity*yVelocity;
+            System.out.println("\nold: " + fireball.getxVelocity() + " " + fireball.getyVelocity()+" "+energy);
+
+            double u=xVelocity*Math.cos(angleRadians)+yVelocity*Math.sin(angleRadians);
+            double v=xVelocity*Math.sin(angleRadians)-yVelocity*Math.cos(angleRadians);
+
+            double reflectionX=u*Math.cos(angleRadians)-v*Math.sin(angleRadians);
+            double reflectionY=u*Math.sin(angleRadians)+v*Math.cos(angleRadians);
+            fireball.setxVelocity(reflectionX);
+            fireball.setyVelocity(reflectionY);
+            energy=reflectionX*reflectionX+reflectionY*reflectionY;
+            System.out.println("new: " + fireball.getxVelocity() + " " + fireball.getyVelocity()+" "+energy);
+
+            /*
             if (Math.abs(msAngle)<1e-5){
                 if (xVelocity*magicalStaffVelocity>0){ //staff & ball same direction
                    // System.out.println("same direction");
@@ -145,6 +160,8 @@ public class RunningModeController {
                 fireball.setyVelocity(reflectionY);
                 System.out.println("new: " + fireball.getxVelocity() + " " + fireball.getyVelocity());
             }
+
+            */
         }
 
     }
