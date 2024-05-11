@@ -258,7 +258,7 @@ public class RunningModePage extends Page{
     }
     public void playMusic(int i){
         sound.setFile(i);
-        sound.play();
+        sound.playMusic();
         sound.loop();
     }
     public void stopMusic(){
@@ -268,5 +268,8 @@ public class RunningModePage extends Page{
     public void playSoundEffect(int i){
         sound.setFile(i);
         sound.play();
+    }
+    public void volume(float i){
+        sound.setVolume(sound.getVolume()+i);
     }
 }

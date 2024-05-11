@@ -69,6 +69,13 @@ public class MyKeyListener extends KeyAdapter {
             case KeyEvent.VK_T:
                 runningModeController.fireBullet();
                 break;
+            case KeyEvent.VK_P:
+                runningModeController.volume(1);
+                break;
+            case KeyEvent.VK_O:
+                runningModeController.volume(-1);
+                break;
         }
+
     }
 }

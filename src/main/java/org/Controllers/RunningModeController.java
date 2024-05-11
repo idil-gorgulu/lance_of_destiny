@@ -203,6 +203,7 @@ public class RunningModeController {
             if (this.getGameSession().getChance().getRemainingChance() == 0) {
                 game.started = false;
                 System.out.println("Not active");
+                runningModePage.stopMusic();
                 return;
             }
             int fireballWidth = fireball.getPreferredSize().width;
@@ -657,5 +658,8 @@ public class RunningModeController {
     public void redoSpell2(){
         getGameSession().getMagicalStaff().setStaffWidth(100);
         runningModePage.playSoundEffect(3);
+    }
+    public void volume(int i){
+        runningModePage.volume((float) (0.1*i));
     }
 }
