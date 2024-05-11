@@ -1,18 +1,17 @@
 package org.Domain;
 
-import javax.sound.sampled.AudioInputStream;
-import javax.sound.sampled.AudioSystem;
-import javax.sound.sampled.Clip;
+import javax.sound.sampled.*;
 import java.io.File;
+import java.io.IOException;
 import java.net.URL;
 
 public class Sound {
     Clip clip;
+    Clip clip2;
     File[] files=new File[20];
     //File file1;
 
     public Sound(){
-        //soundURL[0]=getClass().getResource("assets/sound/mainMenu.wav");
         files[0]= new File("assets/sound/gameTheme.wav");
         files[1]=new File("assets/sound/collision.wav");
         files[2]=new File("assets/sound/explosiveBarrier.wav");
@@ -23,22 +22,33 @@ public class Sound {
     }
 
     public void setFile(int i){
+
         try {
             AudioInputStream ais= AudioSystem.getAudioInputStream(files[i]);
-            clip=AudioSystem.getClip();
-            clip.open(ais);
+            if (i==0){
+                clip=AudioSystem.getClip();
+                clip.open(ais);
+            }
+            else {
+                clip2=AudioSystem.getClip();
+                clip2.open(ais);
+            }
+
         }catch (Exception e){
             System.err.println("!!!!!!!!!!!");
         }
     }
-    public void play(){
+    public void playMusic(){
         clip.start();
+    }
+    public void play(){
+        clip2.start();
     }
 
     public void loop(){
         clip.loop(Clip.LOOP_CONTINUOUSLY);
     }
     public void stop(){
-        clip.stop();
+        clip.close();
     }
 }

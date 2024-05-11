@@ -258,7 +258,7 @@ public class RunningModePage extends Page{
     }
     public void playMusic(int i){
         sound.setFile(i);
-        sound.play();
+        sound.playMusic();
         sound.loop();
     }
     public void stopMusic(){

@@ -203,6 +203,7 @@ public class RunningModeController {
             if (this.getGameSession().getChance().getRemainingChance() == 0) {
                 game.started = false;
                 System.out.println("Not active");
+                runningModePage.stopMusic();
                 return;
             }
             int fireballWidth = fireball.getPreferredSize().width;
