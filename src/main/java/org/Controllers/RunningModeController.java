@@ -659,4 +659,7 @@ public class RunningModeController {
         getGameSession().getMagicalStaff().setStaffWidth(100);
         runningModePage.playSoundEffect(3);
     }
+    public void volume(int i){
+        runningModePage.volume((float) (0.1*i));
+    }
 }

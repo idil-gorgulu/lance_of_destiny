@@ -38,6 +38,19 @@ public class Sound {
             System.err.println("!!!!!!!!!!!");
         }
     }
+
+    public float getVolume() {
+        FloatControl gainControl = (FloatControl) clip.getControl(FloatControl.Type.MASTER_GAIN);
+        return (float) Math.pow(10f, gainControl.getValue() / 20f);
+    }
+
+    public void setVolume(float volume) {
+        if (volume < 0f) volume=0;
+        else if ( volume > 1f) volume=1;
+        FloatControl gainControl = (FloatControl) clip.getControl(FloatControl.Type.MASTER_GAIN);
+        gainControl.setValue(20f * (float) Math.log10(volume));
+    }
+
     public void playMusic(){
         clip.start();
     }

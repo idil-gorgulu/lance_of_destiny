@@ -269,4 +269,7 @@ public class RunningModePage extends Page{
         sound.setFile(i);
         sound.play();
     }
+    public void volume(float i){
+        sound.setVolume(sound.getVolume()+i);
+    }
 }
