@@ -291,6 +291,7 @@ public class RunningModePage extends Page{
 
     public HashMap<SpellType, Integer> getInventory() {
         return inventory;
+    }
 
     public void playSoundEffect(int i){
         sound.setFile(i);
