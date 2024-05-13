@@ -59,6 +59,9 @@ public class RunningModePage extends Page{
         setFocusable(true);
         requestFocus();
         setupTimer();
+        for (SpellType type : SpellType.values()) {
+            inventory.put(type, 0);
+        }
     }
     public ArrayList<Debris> getActiveDebris() {  return activeDebris;   }
     public ArrayList<Spell> getDroppingSpells() { return droppingSpells; }
@@ -127,6 +130,7 @@ public class RunningModePage extends Page{
         runningModeController.updateDebris();// Handle debris movement
         runningModeController.updateDroppingSpells();// Hande spell dropping
         runningModeController.updateHexBullets();
+        updateInventoryDisplay();
         repaint();
         if (this.runningModeController.getGameSession().getChance().getRemainingChance() == 0) {
             this.runningModeController.getGameSession().ended = true;
@@ -195,6 +199,7 @@ public class RunningModePage extends Page{
 
                 inventoryContainer.setPreferredSize(new Dimension(190, 100));
                 inventoryContainer.setBackground(new Color(color.getRed(), color.getGreen(), color.getBlue(), 50));
+                updateInventoryDisplay();
                 mainPanel.add(inventoryContainer);
 
                 add(mainPanel, BorderLayout.WEST);
@@ -270,6 +275,27 @@ public class RunningModePage extends Page{
             }
         });
     }
+    private void updateInventoryDisplay() {
+        /*inventoryContainer.removeAll();
+        for (HashMap.Entry<SpellType, Integer> entry : inventory.entrySet()) {
+            JLabel label = new JLabel(entry.getKey().name() + ": " + entry.getValue());
+            inventoryContainer.add(label);
+        }
+        inventoryContainer.revalidate();
+        inventoryContainer.repaint();
+    }*/
+        inventoryContainer.removeAll();  // Remove all components first
+        inventoryContainer.setLayout(new GridLayout(0, 1));  // Set layout to GridLayout for dynamic adjustment
+
+        for (HashMap.Entry<SpellType, Integer> entry : inventory.entrySet()) {
+            JLabel label = new JLabel(entry.getKey().name() + ": " + entry.getValue());
+            inventoryContainer.add(label);
+        }
+
+        inventoryContainer.revalidate();  // Revalidate to layout the components in the container
+        inventoryContainer.repaint();  // Repaint to display the changes
+    }
+
 
     private void saveGame() {
         String gameName = JOptionPane.showInputDialog(this, "Enter a name for your save file:", "Save Game", JOptionPane.PLAIN_MESSAGE);

@@ -655,8 +655,8 @@ public class RunningModeController {
     //Temporarily here - melih
     public void useSpell1(){ // I will move these methods to somewhere else later, this is for testing -Melih
         getGameSession().getChance().incrementChance();
-    }
-    public void useSpell2(){
+    } //CHANCE: FELIX_FELICIS
+    public void useSpell2(){ //STAFF_EXPANSION
         getGameSession().getMagicalStaff().setStaffWidth(200);
         runningModePage.playSoundEffect(3);
            }
