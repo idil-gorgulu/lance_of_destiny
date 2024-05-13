@@ -18,6 +18,7 @@ public class MagicalStaff extends JPanel {
     private Coordinate coordinate;
     private int staffWidth=100;
     private int staffHeight=20;
+    private boolean isReleased;
 
     public MagicalStaff() {
         this.coordinate = new Coordinate(0,450);
@@ -69,33 +70,14 @@ public class MagicalStaff extends JPanel {
         double newAngle = angVelocity + angle;
         if ((newAngle>=-45) && newAngle<=45)//check angle
             this.angle=newAngle;
+        if ((isReleased) && (newAngle<3) && (newAngle>-3)){
+            this.angle=0;
+            this.angVelocity=0;
+        }
         repaint();
     }
 
-    /*
-    //Work In Progress - Melih
-    public void stabilize(boolean cw){
-        System.out.println(Math.toDegrees(angle)+" "+Math.toDegrees(angularVel));
-        if (cw){
-            angularVel=Math.toRadians(-1);
-            System.out.println(Math.toDegrees(angle)+" "+Math.toDegrees(angularVel));
-            if (angularVel+angle<0){
-                angle=0;
-                angularVel=0;
-            }
-        }
-        else {
-            angularVel=Math.toRadians(1);
-            System.out.println(Math.toDegrees(angle)+" "+Math.toDegrees(angularVel));
-            if (angularVel+angle>0){
-                angle=0;
-                angularVel=0;
-            }
-        }
-        //revalidate();
-        //repaint();
-    }
-
+/*
     private Dimension calculateRotatedDimensions(double angle) {
         double sin = Math.abs(Math.sin(angle));
         double cos = Math.abs(Math.cos(angle));
@@ -153,6 +135,12 @@ public class MagicalStaff extends JPanel {
     public int getStaffWidth() {
         return staffWidth;
     }
+    public void setReleased(boolean b){
+        isReleased=b;
+    }
+    public void addCannon(){
+
+    }
 
     public void setStaffWidth(int staffWidth) {
         this.staffWidth = staffWidth;
@@ -189,4 +177,5 @@ public class MagicalStaff extends JPanel {
         this.setVisible(true);
         repaint();
     }
+
 }

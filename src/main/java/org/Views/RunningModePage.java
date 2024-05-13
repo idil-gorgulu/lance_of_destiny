@@ -28,11 +28,14 @@ public class RunningModePage extends Page{
     private ArrayList<Debris> activeDebris;
     private ArrayList<Spell> droppingSpells;
     private HashMap<SpellType,Integer> inventory;
+
+    private ArrayList<Bullet> activeBullets;
     public static final int SCREENWIDTH =1000;
     public int screenHeight;
     public int timeInSeconds = 0;
     private int frameCount = 0;
     private Timer gameTimer =  new Timer();
+    private Sound sound=new Sound();
 
     public static final long COLLISION_COOLDOWN = 1000; // Cooldown period in milliseconds
 
@@ -42,6 +45,7 @@ public class RunningModePage extends Page{
         activeDebris = new ArrayList<>();
         droppingSpells = new ArrayList<>();
         inventory = new HashMap<>();
+        activeBullets=new ArrayList<>();
         this.setDoubleBuffered(true);
         try {
             backgroundImage = ImageIO.read(new File("assets/Background.png"));
@@ -56,12 +60,9 @@ public class RunningModePage extends Page{
         requestFocus();
         setupTimer();
     }
-    public ArrayList<Debris> getActiveDebris() {
-        return activeDebris;
-    }
-    public ArrayList<Spell> getDroppingSpells() {
-        return droppingSpells;
-    }
+    public ArrayList<Debris> getActiveDebris() {  return activeDebris;   }
+    public ArrayList<Spell> getDroppingSpells() { return droppingSpells; }
+    public ArrayList<Bullet> getActiveBullets(){ return activeBullets;}
 
 
     protected void paintComponent(Graphics g) { //background for the whole frame
@@ -92,13 +93,13 @@ public class RunningModePage extends Page{
                     } else if (choice == JOptionPane.NO_OPTION) {
                         pause = false;
                         runningModeController = null;
-                        Navigator.getInstance().showStartPage();
+                        Navigator.getInstance().showStartSingleplayerPage();
                     }
                 }
                 else if (runningModeController.getGameSession().ended) {
                     JOptionPane.showMessageDialog(null, "You lost!");
                     runningModeController = null;
-                    Navigator.getInstance().showStartPage();
+                    Navigator.getInstance().showStartSingleplayerPage();
                 }
                 else {
                     // Update the game frame
@@ -125,9 +126,12 @@ public class RunningModePage extends Page{
         runningModeController.moveBarriers();
         runningModeController.updateDebris();// Handle debris movement
         runningModeController.updateDroppingSpells();// Hande spell dropping
+        runningModeController.updateHexBullets();
         repaint();
         if (this.runningModeController.getGameSession().getChance().getRemainingChance() == 0) {
             this.runningModeController.getGameSession().ended = true;
+
+
         }
         SwingUtilities.invokeLater(new Runnable() {
             @Override
@@ -146,6 +150,8 @@ public class RunningModePage extends Page{
     protected void initUI() {
         setLayout(new BorderLayout());
         initializeGameObjects();
+        playMusic(0);
+
     }
 
     private void initializeGameObjects() {
@@ -274,8 +280,23 @@ public class RunningModePage extends Page{
         int timeElapsed=timeInSeconds;
         runningModeController.saveGame(gameName,timeElapsed, activeDebris);
     }
+    public void playMusic(int i){
+        sound.setFile(i);
+        sound.playMusic();
+        sound.loop();
+    }
+    public void stopMusic(){
+        sound.stop();
+    }
 
     public HashMap<SpellType, Integer> getInventory() {
         return inventory;
+
+    public void playSoundEffect(int i){
+        sound.setFile(i);
+        sound.play();
+    }
+    public void volume(float i){
+        sound.setVolume(sound.getVolume()+i);
     }
 }

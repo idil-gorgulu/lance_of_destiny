@@ -23,9 +23,11 @@ public class MyKeyListener extends KeyAdapter {
                 break;
             case KeyEvent.VK_A:
                 runningModeController.rotateMagicalStaff(-3); // Rotate counterclockwise (degrees)
+                runningModeController.getGameSession().getMagicalStaff().setReleased(false);
                 break;
             case KeyEvent.VK_D:
                 runningModeController.rotateMagicalStaff(+3); // Rotate clockwise (degrees)
+                runningModeController.getGameSession().getMagicalStaff().setReleased(false);
                 break;
         }
     }
@@ -40,10 +42,12 @@ public class MyKeyListener extends KeyAdapter {
                 runningModeController.slideMagicalStaff(0); // Move right
                 break;
             case KeyEvent.VK_A:
-                runningModeController.rotateMagicalStaff(0); // Rotate counterclockwise
+                runningModeController.rotateMagicalStaff(3); // Rotate counterclockwise
+                runningModeController.getGameSession().getMagicalStaff().setReleased(true);
                 break;
             case KeyEvent.VK_D:
-                runningModeController.rotateMagicalStaff(0); // Rotate clockwise
+                runningModeController.rotateMagicalStaff(-3); // Rotate clockwise
+                runningModeController.getGameSession().getMagicalStaff().setReleased(true);
                 break;
 
                 //Temporarily here -melih
@@ -62,6 +66,16 @@ public class MyKeyListener extends KeyAdapter {
             case KeyEvent.VK_F:
                 runningModeController.getGameSession().getFireball().setOverwhelming(false);
                 break;
+            case KeyEvent.VK_T:
+                runningModeController.fireBullet();
+                break;
+            case KeyEvent.VK_P:
+                runningModeController.volume(1);
+                break;
+            case KeyEvent.VK_O:
+                runningModeController.volume(-1);
+                break;
         }
+
     }
 }

@@ -219,9 +219,12 @@ public class Game {
         return barrierBoard;
     }
 
-    public void addDetailedBarrier(Coordinate coordinates, BarrierType type, int numHits) {
+    //TODO: Update this according to new database saving
+    public void addDetailedBarrier(Coordinate coordinates, BarrierType type, int numHits, boolean isMoving, int velocity) {
         Barrier newBarrier = new Barrier(coordinates, type);
         newBarrier.setnHits(numHits);
+        newBarrier.setMoving(isMoving);
+        newBarrier.setVelocity(velocity);
         barriers.add(newBarrier);
         String s="";
         if (type == BarrierType.SIMPLE) { //Simple barrier
