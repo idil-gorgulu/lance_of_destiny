@@ -4,58 +4,55 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
-import java.net.ServerSocket;
 import java.net.Socket;
+import java.net.SocketTimeoutException;
 import java.util.Scanner;
+
 
 public class GameHost {
 
+    private String serverAddress;
     private int serverPort;
-    private ServerSocket serverSocket;
-    private Socket clientSocket;
-    private BufferedReader inputStreamFromClient;
-    private PrintWriter outputStreamToClient;
+    private Socket socket;
+    private BufferedReader inputStreamFromServer;
+    private PrintWriter outputStreamToServer;
 
-    public GameHost(int serverPort) {
+    public GameHost(String serverAddress, int serverPort) {
+        this.serverAddress = serverAddress;
         this.serverPort = serverPort;
-        waitForConnection();
+        connectToServer();
     }
 
-    private void waitForConnection() {
+    private void connectToServer() {
         try {
-            serverSocket = new ServerSocket(serverPort);
-            System.out.println("Waiting for a client to connect...");
-            clientSocket = serverSocket.accept();
-            System.out.println("Client connected: " + clientSocket.getRemoteSocketAddress());
-
-            inputStreamFromClient = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
-            outputStreamToClient = new PrintWriter(clientSocket.getOutputStream(), true);
-
-            Thread inputHandler = new Thread(this::handleClientInput);
-            inputHandler.start();
-
-            handleServerOutput();
+            socket = new Socket(serverAddress, serverPort);
+            socket.setSoTimeout(10000); // Set timeout as needed
+            inputStreamFromServer = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+            outputStreamToServer = new PrintWriter(socket.getOutputStream(), true);
+            handleServerCommunication();
         } catch (IOException e) {
-            System.out.println("Error setting up the server: " + e.getMessage());
+            System.out.println("Error connecting to server: " + e.getMessage());
         }
     }
 
-    private void handleClientInput() {
+    private void handleServerCommunication() {
         try {
-            String fromClient = inputStreamFromClient.readLine();
-            while (fromClient != "exit") {
-                while (fromClient != null) {
-                    System.out.println("Client says: " + fromClient);
-                }
-                fromClient = inputStreamFromClient.readLine();
+            // Communication loop
+            String fromServer;
+            while ((fromServer = inputStreamFromServer.readLine()) != null) {
+                String response = fromServer;
+                processServerResponse(response);
             }
+        } catch (SocketTimeoutException e) {
+            System.out.println("Connection timed out: " + e.getMessage());
         } catch (IOException e) {
-            System.out.println("Client disconnected: " + e.getMessage());
+            System.out.println("I/O error: " + e.getMessage());
         } finally {
             closeResources();
         }
     }
 
+<<<<<<< HEAD
     private void handleServerOutput() {
         Scanner scanner = new Scanner(System.in);
         try {
@@ -91,6 +88,23 @@ public class GameHost {
             }
             if (serverSocket != null && !serverSocket.isClosed()) {
                 serverSocket.close();
+=======
+    private void processServerResponse(String response) {
+        System.out.println("Received from server: " + response);
+        // Implement specific response handling based on server protocol
+    }
+
+    private void closeResources() {
+        try {
+            if (outputStreamToServer != null) {
+                outputStreamToServer.close();
+            }
+            if (inputStreamFromServer != null) {
+                inputStreamFromServer.close();
+            }
+            if (socket != null && !socket.isClosed()) {
+                socket.close();
+>>>>>>> bb1d6d5 (working on multiplayer)
             }
         } catch (IOException e) {
             System.out.println("Error closing resources: " + e.getMessage());
@@ -98,10 +112,21 @@ public class GameHost {
     }
 
     public static void main(String[] args) {
+<<<<<<< HEAD
         System.out.println("Enter the port number for the server:");
         Scanner scanner = new Scanner(System.in);
         int port = scanner.nextInt();
         scanner.close();
         new GameHost(port);
+=======
+        Scanner scanner = new Scanner(System.in);
+        System.out.println("Enter server IP:");
+        String serverIP = scanner.nextLine();
+        System.out.println("Enter server port:");
+        int port = scanner.nextInt();
+        scanner.close();
+
+        new GameHost(serverIP, port);
+>>>>>>> bb1d6d5 (working on multiplayer)
     }
 }
