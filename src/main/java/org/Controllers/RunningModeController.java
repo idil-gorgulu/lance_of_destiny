@@ -242,14 +242,12 @@ public class RunningModeController {
             Rectangle brRect = new Rectangle(br.getCoordinate().getX(), br.getCoordinate().getY(), (int) br.getPreferredSize().getWidth(), (int) br.getPreferredSize().getHeight());
 
             if (brRect.intersects(fireballRectangle)) {
-
                 runningModePage.playSoundEffect(1);
 
                 if (br==fireball.getLastCollided()) return;
 
                 fireball.setLastCollided(br);
                 if (!fireball.isOverwhelming()){ // no collision if it is
-
                 Rectangle sideLRect = new Rectangle(br.getCoordinate().getX(), br.getCoordinate().getY() + 5, 1, 5);
                 Rectangle sideRRect = new Rectangle(br.getCoordinate().getX() + 50, br.getCoordinate().getY() + 5, 1, 5);
 
@@ -567,6 +565,13 @@ public class RunningModeController {
 
             //THIS WILL BE UPDATED SO THAT THE SPELL APPEARS IN THE INVENTORY
             if (transformedRectangle.intersects(spellRectangle)) {
+                SpellType type = spell.getSpellType();
+                if(runningModePage.getInventory().containsKey(type)) {
+                    runningModePage.getInventory().put(type,runningModePage.getInventory().get(type)+1);
+                }
+                else{
+                    runningModePage.getInventory().put(type,1);
+                }
                 runningModePage.getGamePanel().remove(spell);
                 iterator.remove();
             }

@@ -8,14 +8,17 @@ import java.awt.image.ImageObserver;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Random;
 
 public class Spell extends JComponent {
     public BufferedImage spellImage;
     private Coordinate coordinate;
     private int yVelocity = 3;
+    SpellType spellType;
 
     public Spell(Coordinate coordinate) {
         this.coordinate = new Coordinate(coordinate.getX(), coordinate.getY());
+        this.spellType = initializeSpellType();
         try {
             this.spellImage = ImageIO.read(new File(setImageDirectory()));
         } catch (IOException e) {
@@ -59,5 +62,14 @@ public class Spell extends JComponent {
 
     public BufferedImage getSpellImage() {
         return spellImage;
+    }
+    public SpellType initializeSpellType(){
+        Random rand = new Random();
+        int randomSpellTypeIndex = rand.nextInt(SpellType.values().length);
+        return SpellType.values()[randomSpellTypeIndex];
+    }
+
+    public SpellType getSpellType() {
+        return spellType;
     }
 }

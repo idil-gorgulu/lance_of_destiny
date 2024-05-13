@@ -15,7 +15,7 @@ public class Fireball extends JPanel {
     private BufferedImage fireballImage;
     private boolean isOverwhelming=false;
     private Barrier lastCollided=null;
-
+  
     public Fireball() {
         this.coordinate = new Coordinate(200, 200);
 
