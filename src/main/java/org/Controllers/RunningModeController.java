@@ -653,13 +653,24 @@ public class RunningModeController {
     }
 
     //Temporarily here - melih
+    //FELIX_FELICIS
     public void useSpell1(){ // I will move these methods to somewhere else later, this is for testing -Melih
-        getGameSession().getChance().incrementChance();
-    } //CHANCE: FELIX_FELICIS
+        if (runningModePage.getInventory().get(SpellType.FELIX_FELICIS)>0) {
+            getGameSession().getChance().incrementChance();
+            runningModePage.getInventory().put(SpellType.FELIX_FELICIS,
+                    runningModePage.getInventory().get(SpellType.FELIX_FELICIS) -1 );
+        }
+    }
+
     public void useSpell2(){ //STAFF_EXPANSION
-        getGameSession().getMagicalStaff().setStaffWidth(200);
-        runningModePage.playSoundEffect(3);
-           }
+        if (runningModePage.getInventory().get(SpellType.STAFF_EXPANSION)>0) {
+            getGameSession().getMagicalStaff().setStaffWidth(200);
+            runningModePage.playSoundEffect(3);
+            runningModePage.getInventory().put(SpellType.STAFF_EXPANSION,
+                    runningModePage.getInventory().get(SpellType.STAFF_EXPANSION) -1 );
+        }
+    }
+
     public void redoSpell2(){
         getGameSession().getMagicalStaff().setStaffWidth(100);
         runningModePage.playSoundEffect(3);

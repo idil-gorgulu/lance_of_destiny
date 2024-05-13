@@ -27,7 +27,7 @@ public class RunningModePage extends Page{
     private ArrayList<Barrier> barriers = new ArrayList<>();
     private ArrayList<Debris> activeDebris;
     private ArrayList<Spell> droppingSpells;
-    private HashMap<SpellType,Integer> inventory;
+    public HashMap<SpellType,Integer> inventory;
 
     private ArrayList<Bullet> activeBullets;
     public static final int SCREENWIDTH =1000;
@@ -66,6 +66,7 @@ public class RunningModePage extends Page{
     public ArrayList<Debris> getActiveDebris() {  return activeDebris;   }
     public ArrayList<Spell> getDroppingSpells() { return droppingSpells; }
     public ArrayList<Bullet> getActiveBullets(){ return activeBullets;}
+    public HashMap<SpellType, Integer> getInventory(){ return inventory;}
 
 
     protected void paintComponent(Graphics g) { //background for the whole frame
@@ -314,11 +315,6 @@ public class RunningModePage extends Page{
     public void stopMusic(){
         sound.stop();
     }
-
-    public HashMap<SpellType, Integer> getInventory() {
-        return inventory;
-    }
-
     public void playSoundEffect(int i){
         sound.setFile(i);
         sound.play();
@@ -326,4 +322,5 @@ public class RunningModePage extends Page{
     public void volume(float i){
         sound.setVolume(sound.getVolume()+i);
     }
+
 }
