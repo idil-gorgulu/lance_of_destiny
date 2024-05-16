@@ -119,7 +119,7 @@ public class RunningModeController {
             lastCollisionTime = currentTime;
 
             double energy=xVelocity*xVelocity+yVelocity*yVelocity;
-            System.out.println("\nold: " + fireball.getxVelocity() + " " + fireball.getyVelocity()+" "+energy);
+            //System.out.println("\nold: " + fireball.getxVelocity() + " " + fireball.getyVelocity()+" "+energy);
 
             double u=xVelocity*Math.cos(angleRadians)+yVelocity*Math.sin(angleRadians);
             double v=xVelocity*Math.sin(angleRadians)-yVelocity*Math.cos(angleRadians);
@@ -129,7 +129,7 @@ public class RunningModeController {
             fireball.setxVelocity(reflectionX);
             fireball.setyVelocity(reflectionY);
             energy=reflectionX*reflectionX+reflectionY*reflectionY;
-            System.out.println("new: " + fireball.getxVelocity() + " " + fireball.getyVelocity()+" "+energy);
+            //System.out.println("new: " + fireball.getxVelocity() + " " + fireball.getyVelocity()+" "+energy);
 
             /*
             if (Math.abs(msAngle)<1e-5){
@@ -182,11 +182,7 @@ public class RunningModeController {
         if ((fireballX - fireballRadius <= 0) || (fireballX + fireballRadius > containerWidth - 10)) {
             runningModePage.playSoundEffect(1);
             fireball.setLastCollided(null);
-            fireball.setCoordinate(new Coordinate((int) (fireballX+-1*(Math.signum(xVelocity)*10)),fireballY));
-            //Shift the ball 10 pixels to prevent additional collisions
-
             fireball.setxVelocity(-xVelocity);// Reverse X velocity
-
         }
         // Check collision with top and bottom boundaries
         if (fireballY - fireballRadius <= -10)  {
@@ -655,19 +651,23 @@ public class RunningModeController {
     //Temporarily here - melih
     //FELIX_FELICIS
     public void useSpell1(){ // I will move these methods to somewhere else later, this is for testing -Melih
-        if (runningModePage.getInventory().get(SpellType.FELIX_FELICIS)>0) {
+        int remaining=runningModePage.getInventory().get(SpellType.FELIX_FELICIS);
+        if (remaining>0) {
             getGameSession().getChance().incrementChance();
-            runningModePage.getInventory().put(SpellType.FELIX_FELICIS,
-                    runningModePage.getInventory().get(SpellType.FELIX_FELICIS) -1 );
+            runningModePage.getInventory().put(SpellType.FELIX_FELICIS,remaining -1 );
         }
+
     }
 
     public void useSpell2(){ //STAFF_EXPANSION
-        if (runningModePage.getInventory().get(SpellType.STAFF_EXPANSION)>0) {
+        int remaining=runningModePage.getInventory().get(SpellType.STAFF_EXPANSION);
+        if (remaining>0) {
             getGameSession().getMagicalStaff().setStaffWidth(200);
             runningModePage.playSoundEffect(3);
-            runningModePage.getInventory().put(SpellType.STAFF_EXPANSION,
-                    runningModePage.getInventory().get(SpellType.STAFF_EXPANSION) -1 );
+            runningModePage.getInventory().put(SpellType.STAFF_EXPANSION,  remaining -1 );
+
+            MagicalStaff magicalStaff= game.getMagicalStaff();
+            magicalStaff.setExpansionTime(System.currentTimeMillis());
         }
     }
 
