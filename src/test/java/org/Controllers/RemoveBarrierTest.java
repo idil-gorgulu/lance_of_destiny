@@ -57,5 +57,33 @@ public class RemoveBarrierTest {
         assertEquals(0, game.getNumrewardingBarrier());
         assertNull(game.getBarrierBoard()[5][5]);
     }
+
+    @Test
+    public void testRemoveOneBarrierAmongMultiple() {
+        Coordinate coord1 = new Coordinate(50, 20);
+        Coordinate coord2 = new Coordinate(100, 40);
+        Coordinate coord3 = new Coordinate(150, 60);
+
+        game.addBarrier(coord1, BarrierType.SIMPLE);
+        game.addBarrier(coord2, BarrierType.REINFORCED);
+        game.addBarrier(coord3, BarrierType.EXPLOSIVE);
+
+        assertEquals(1, game.getNumSimpleBarrier());
+        assertEquals(1, game.getNumFirmBarrier());
+        assertEquals(1, game.getNumExplosiveBarrier());
+        assertEquals(3, game.getNumTotal());
+
+        // Remove the barrier at coord2 (REINFORCED)
+        game.removeBarrier(coord2, BarrierType.REINFORCED);
+        assertEquals(1, game.getNumSimpleBarrier());
+        assertEquals(0, game.getNumFirmBarrier());
+        assertEquals(1, game.getNumExplosiveBarrier());
+        assertEquals(2, game.getNumTotal());
+
+        // Ensure the barrierBoard is updated correctly
+        assertNull(game.getBarrierBoard()[2][2]); // coord2 should be removed
+        assertEquals("s", game.getBarrierBoard()[1][1]); // coord1 should remain
+        assertEquals("x", game.getBarrierBoard()[3][3]); // coord3 should remain
+    }
 }
 
