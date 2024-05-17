@@ -24,7 +24,7 @@ public class Barrier extends JPanel {
     private double centerY;
 
     private static final int RADIUS_FACTOR = 3; // 1.5 * L
-    private static final double ANGULAR_SPEED = Math.PI / 10;
+    public static final double ANGULAR_SPEED = Math.PI / 10;
     private long lastCollisionTime=-5; //-inf, initially barriers are able to collide, is updated after collision
 
     public Barrier(Coordinate coordinate, BarrierType type) {
@@ -151,7 +151,7 @@ public class Barrier extends JPanel {
         repaint();
     }
 
-    private double currentAngle = 0; // Maintain the current angle as a member variable
+    public double currentAngle = 0; // Maintain the current angle as a member variable
 
     public void moveCircular() {
         currentAngle += getVelocity() * ANGULAR_SPEED * (Math.PI / 180);
@@ -198,5 +198,7 @@ public class Barrier extends JPanel {
     public void setMoving(boolean moving) {
         isMoving = moving;
     }
+
+
 
 }
