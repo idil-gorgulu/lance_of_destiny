@@ -19,6 +19,7 @@ public class MagicalStaff extends JPanel {
     private int staffWidth=100;
     private int staffHeight=20;
     private boolean isReleased;
+    private long expansionTime=(long)Double.POSITIVE_INFINITY; // last time when staff is expanded
 
     public MagicalStaff() {
         this.coordinate = new Coordinate(0,450);
@@ -74,6 +75,11 @@ public class MagicalStaff extends JPanel {
             this.angle=0;
             this.angVelocity=0;
         }
+        long now=System.currentTimeMillis();
+        if (now-expansionTime > 30*1000){ // shrink back the staff after 30 sec
+            expansionTime=now;
+            setStaffWidth(100);
+        }
         repaint();
     }
 
@@ -126,8 +132,6 @@ public class MagicalStaff extends JPanel {
         this.angVelocity = angVelocity;
     }
 
-
-
     public int getStaffHeight() {
         return staffHeight;
     }
@@ -141,6 +145,9 @@ public class MagicalStaff extends JPanel {
     public void addCannon(){
 
     }
+    public void setExpansionTime(long time){
+        this.expansionTime=time;
+    }
 
     public void setStaffWidth(int staffWidth) {
         this.staffWidth = staffWidth;
@@ -152,7 +159,6 @@ public class MagicalStaff extends JPanel {
                 this.magicalStaffRectangle.setRect
                         (795, this.magicalStaffRectangle.y,
                                 this.magicalStaffRectangle.width, this.magicalStaffRectangle.height);
-
             }
             try {
                 magicalStaffImage = ImageIO.read(new File("assets/200Player_extended.png"));

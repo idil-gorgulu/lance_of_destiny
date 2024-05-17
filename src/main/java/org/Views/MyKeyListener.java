@@ -58,13 +58,14 @@ public class MyKeyListener extends KeyAdapter {
                 runningModeController.useSpell2();
                 break;
             case KeyEvent.VK_S:
-                runningModeController.redoSpell2();
+               // runningModeController.redoSpell2();
                 break;
             case KeyEvent.VK_E: // I AM TALKING TO STRANGERS HERE, WILL REVISE LATER - melih
                 runningModeController.getGameSession().getFireball().setOverwhelming(true);
+                runningModeController.getGameSession().getFireball().setOverwhelmTime(System.currentTimeMillis());
                 break;
             case KeyEvent.VK_F:
-                runningModeController.getGameSession().getFireball().setOverwhelming(false);
+               // runningModeController.getGameSession().getFireball().setOverwhelming(false);
                 break;
             case KeyEvent.VK_T:
                 runningModeController.fireBullet();

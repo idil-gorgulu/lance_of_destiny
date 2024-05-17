@@ -15,7 +15,9 @@ public class Fireball extends JPanel {
     private BufferedImage fireballImage;
     private boolean isOverwhelming=false;
     private Barrier lastCollided=null;
-  
+    private long overwhelmTime=(long)Double.POSITIVE_INFINITY; // last time when ball is overwhelming
+
+
     public Fireball() {
         this.coordinate = new Coordinate(200, 200);
 
@@ -38,6 +40,12 @@ public class Fireball extends JPanel {
         // change this so that coordinate will hande the update of the location
         this.getCoordinate().setX((int) Math.ceil(this.getCoordinate().getX() + this.xVelocity));
         this.getCoordinate().setY((int) Math.ceil(this.getCoordinate().getY() + this.yVelocity));
+
+        long now=System.currentTimeMillis();
+        if (now-overwhelmTime > 30*1000){ // shrink back the staff after 30 sec
+            overwhelmTime=now;
+            setOverwhelming(false);
+        }
     }
 
     @Override
@@ -125,5 +133,9 @@ public class Fireball extends JPanel {
 
     public void setLastCollided(Barrier lastCollided) {
         this.lastCollided = lastCollided;
+    }
+
+    public void setOverwhelmTime(long overwhelmTime) {
+        this.overwhelmTime = overwhelmTime;
     }
 }
