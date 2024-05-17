@@ -5,75 +5,88 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
-import java.net.SocketException;
 import java.util.Scanner;
-
 
 public class GameClient {
 
-    private String serverAdress;
-    private Socket socket;
+    private String serverAddress;
     private int serverPort;
-
+    private Socket socket;
     private BufferedReader inputStream;
     private PrintWriter outputStream;
 
-    public GameClient(String serverAdress, int serverPort) {
-        this.serverAdress = serverAdress;
+    public GameClient(String serverAddress, int serverPort) {
+        this.serverAddress = serverAddress;
         this.serverPort = serverPort;
-        this.connectToServer();
+        connectToServer();
     }
+
     public void connectToServer() {
         try {
-            this.socket = new Socket(this.serverAdress, this.serverPort);
-            this.socket.setSoTimeout(10000);
-            this.inputStream = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-            this.outputStream = new PrintWriter(socket.getOutputStream(), true);
-        } catch (Exception e) {
-            System.out.println(e);
+            socket = new Socket(serverAddress, serverPort);
+            inputStream = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+            outputStream = new PrintWriter(socket.getOutputStream(), true);
+
+            Thread inputHandler = new Thread(this::receiveFromServer);
+            inputHandler.start();
+
+            sendToServer();
+        } catch (IOException e) {
+            System.out.println("Unable to connect to server: " + e.getMessage());
         }
     }
 
-    public void startExchange() {
+    private void receiveFromServer() {
+        try {
+            String fromServer;
+            while ((fromServer = inputStream.readLine()) != null) {
+                System.out.println("Server says: " + fromServer);
+            }
+        } catch (IOException e) {
+            System.out.println("Server disconnected: " + e.getMessage());
+        } finally {
+            closeResources();
+        }
+    }
+
+    private void sendToServer() {
         Scanner scanner = new Scanner(System.in);
         try {
-            while (!this.socket.isClosed()) {
-                String message = scanner.nextLine();
-                this.processRequest(message);
+            while (true) {
+                String userInput = null;
+                if (scanner.hasNextLine()) {
+                    userInput = scanner.nextLine();
+                }
+                if (userInput == null || userInput.equalsIgnoreCase("exit")) {
+                    outputStream.println(userInput);
+                    break;
+                }
+                outputStream.println(userInput);
             }
-        } catch (Exception e) {
-            System.out.println("An unexpected error occurred: " + e.getMessage());
         } finally {
-            try {
-                socket.close();
-            } catch (IOException ex) {
-                System.out.println("Error closing the socket: " + ex.getMessage());
-            }
+            scanner.close();
+            closeResources();
         }
-        System.out.println("Client has disconnected from the server.");
     }
 
-    public void processRequest(String message) throws IOException {
-        String response = this.sendRequest(message);
-        this.proccesResponse(response);
+    private void closeResources() {
+        try {
+            if (outputStream != null) {
+                outputStream.close();
+            }
+            if (inputStream != null) {
+                inputStream.close();
+            }
+            if (socket != null && !socket.isClosed()) {
+                socket.close();
+            }
+        } catch (IOException e) {
+            System.out.println("Error when closing connection: " + e.getMessage());
+        }
     }
-    public String sendRequest(String message) throws IOException {
-        outputStream.println(message);
-        String response = new String(inputStream.readLine());
-        return response;
-    }
-
-    public void proccesResponse(String response) {
-        System.out.println(response);
-    }
-
-
-
 
     public static void main(String[] args) {
-        GameClient client = new GameClient("0.0.0.0", 10000);
-        client.startExchange();
+        System.out.println("Connecting to server at 0.0.0.0:10000");
+        new GameClient("0.0.0.0", 10000);
     }
-
-
 }
