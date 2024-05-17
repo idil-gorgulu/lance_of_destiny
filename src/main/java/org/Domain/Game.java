@@ -19,7 +19,7 @@ public class Game {
     public boolean ended = false;
     String[][] barrierBoard = new String[20][20];
 
-    public Game(){
+    private Game(){
         this.fireball = new Fireball();
         this.magicalStaff = new MagicalStaff();
         // Think about how to initialize it, from constructor maybe?

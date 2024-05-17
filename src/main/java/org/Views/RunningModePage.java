@@ -305,7 +305,7 @@ public class RunningModePage extends Page{
             return;
         }
         int timeElapsed=timeInSeconds;
-        runningModeController.saveGame(gameName,timeElapsed, activeDebris);
+        //runningModeController.saveGame(gameName,timeElapsed, activeDebris);
     }
     public void playMusic(int i){
         sound.setFile(i);
