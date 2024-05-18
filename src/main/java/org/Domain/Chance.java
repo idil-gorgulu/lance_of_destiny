@@ -48,7 +48,7 @@ public class Chance extends JPanel {
         add(Box.createHorizontalGlue());
         repaint();
         revalidate();
-        System.out.println("remaining chances: " + String.valueOf(remainingChances));
+        //System.out.println("remaining chances: " + String.valueOf(remainingChances));
     }
     public int getRemainingChance() {
         return remainingChances;

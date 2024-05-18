@@ -184,4 +184,8 @@ public class MagicalStaff extends JPanel {
         repaint();
     }
 
+    public void setTopLeftCornerOfMagicalStaff(int x, int y){
+        this.magicalStaffRectangle.x=x;
+        this.magicalStaffRectangle.y=y;
+    }
 }

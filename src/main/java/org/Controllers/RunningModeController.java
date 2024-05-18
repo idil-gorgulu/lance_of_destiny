@@ -113,6 +113,9 @@ public class RunningModeController {
         Shape transformedRectangle = transform.createTransformedShape(magicalStaffRectangle);
 
         if (transformedRectangle.intersects(fireballRectangle)) {
+            System.out.println(fireball.getCoordinate().getX()+" "+fireball.getCoordinate().getY());
+            System.out.println(magicalStaff.getTopLeftCornerOfMagicalStaff().getX()+" "+magicalStaff.getTopLeftCornerOfMagicalStaff().getY());
+
             fireball.setLastCollided(null);
             //System.out.println("\nCollision detected");
             runningModePage.playSoundEffect(1);
