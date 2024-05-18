@@ -113,9 +113,6 @@ public class RunningModeController {
         Shape transformedRectangle = transform.createTransformedShape(magicalStaffRectangle);
 
         if (transformedRectangle.intersects(fireballRectangle)) {
-            System.out.println(fireball.getCoordinate().getX()+" "+fireball.getCoordinate().getY());
-            System.out.println(magicalStaff.getTopLeftCornerOfMagicalStaff().getX()+" "+magicalStaff.getTopLeftCornerOfMagicalStaff().getY());
-
             fireball.setLastCollided(null);
             //System.out.println("\nCollision detected");
             runningModePage.playSoundEffect(1);
@@ -680,5 +677,9 @@ public class RunningModeController {
     }
     public void volume(int i){
         runningModePage.volume((float) (0.1*i));
+    }
+    //Put for Testing
+    public void setLastCollisionTime(long time){
+        this.lastCollisionTime=time;
     }
 }
