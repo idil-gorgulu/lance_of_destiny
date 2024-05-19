@@ -22,6 +22,7 @@ public class Barrier extends JPanel {
     private double radius; // Set an appropriate radius for visible movement
     private double centerX; // X center of the circle
     private double centerY;
+    private boolean isFrozen = false;
 
     private static final int RADIUS_FACTOR = 3; // 1.5 * L
     public static final double ANGULAR_SPEED = Math.PI / 10;
@@ -64,6 +65,9 @@ public class Barrier extends JPanel {
             return "assets/RedGem.png";
         }else if (type == BarrierType.REWARDING) {
             return "assets/GreenGem.png";
+        }
+        else if (type == BarrierType.HOLLOW_PURPLE) {
+            return "assets/PurpleGem.png";
         }
 
         // In here return Exception
@@ -211,6 +215,22 @@ public class Barrier extends JPanel {
 
     public void setMoving(boolean moving) {
         isMoving = moving;
+    }
+
+    public void freeze(){
+        isFrozen = true;
+        Timer unfreezeTimer = new Timer(15000, e -> unfreeze()); // Unfreeze after 15000 milliseconds (15 seconds)
+        unfreezeTimer.setRepeats(false);
+        unfreezeTimer.start();
+
+    }
+
+    public void unfreeze() {
+        isFrozen = false;
+    }
+
+    public boolean isFrozen() {
+        return isFrozen;
     }
 
 

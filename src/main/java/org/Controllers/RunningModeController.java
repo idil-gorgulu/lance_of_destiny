@@ -11,6 +11,7 @@ import java.awt.geom.AffineTransform;
 import java.awt.geom.Rectangle2D;
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.Random;
 
 import static org.Views.RunningModePage.COLLISION_COOLDOWN;
 
@@ -712,5 +713,16 @@ public class RunningModeController {
     //Put for Testing
     public void setLastCollisionTime(long time){
         this.lastCollisionTime=time;
+    }
+
+    public void checkYmirAbilities() {
+        if (new Random().nextBoolean()) { // Simulate the coin flip
+            Ymir ymir = new Ymir(game);
+            if (new Random().nextBoolean()) {
+                ymir.activateInfiniteVoid();
+            } else {
+                ymir.activateHollowPurple();
+            }
+        }
     }
 }
