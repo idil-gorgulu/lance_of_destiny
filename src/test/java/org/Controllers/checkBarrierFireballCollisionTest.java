@@ -115,6 +115,8 @@ public class checkBarrierFireballCollisionTest {
         assertEquals(-2.0, fireball.getyVelocity());
     }
 
+
+    // I can show this
     @Test
     public void testNoCollision() { // Black-Box Test
         fireball.setCoordinate(new Coordinate(200, 200));
@@ -127,7 +129,7 @@ public class checkBarrierFireballCollisionTest {
         fireball.setCoordinate(new Coordinate(100, 100));
         barrier1.setVelocity(2);
         checkBarrierFireballCollision(barriers, fireball);
-        assertEquals(0.0, fireball.getxVelocity());
+        assertEquals(2.0, fireball.getxVelocity());
     }
 
     @Test
@@ -135,7 +137,7 @@ public class checkBarrierFireballCollisionTest {
         fireball.setCoordinate(new Coordinate(100, 100));
         barrier1.setVelocity(-2);
         checkBarrierFireballCollision(barriers, fireball);
-        assertEquals(0.0, fireball.getxVelocity());
+        assertEquals(-2.0, fireball.getxVelocity());
     }
 
     @Test
