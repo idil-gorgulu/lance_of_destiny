@@ -24,7 +24,7 @@ public class GameHost {
     private void waitForConnection() {
         try {
             serverSocket = new ServerSocket(serverPort);
-            System.out.println("Waiting for a client to connect...");
+            System.out.println("Server is waiting for a client to connect...");
             clientSocket = serverSocket.accept();
             System.out.println("Client connected: " + clientSocket.getRemoteSocketAddress());
 
@@ -42,13 +42,11 @@ public class GameHost {
 
     private void handleClientInput() {
         try {
-            String fromClient = inputStreamFromClient.readLine();
-            while (fromClient != "exit") {
-                while (fromClient != null) {
-                    System.out.println("Client says: " + fromClient);
-                }
-                fromClient = inputStreamFromClient.readLine();
+            String fromClient;
+            while ((fromClient = inputStreamFromClient.readLine()) != null) {
+                System.out.println("Client says: " + fromClient);
             }
+            System.out.println("Client has disconnected.");
         } catch (IOException e) {
             System.out.println("Client disconnected: " + e.getMessage());
         } finally {
@@ -60,23 +58,20 @@ public class GameHost {
         Scanner scanner = new Scanner(System.in);
         try {
             while (true) {
-                String serverMessage = null;
-                if (scanner.hasNextLine()) {
-                    serverMessage = scanner.nextLine();
+                if (scanner.hasNext()) {
+                    String userInput = scanner.nextLine();
+                    if (userInput.equalsIgnoreCase("exit")) {
+                        outputStreamToClient.println(userInput);
+                        break;
+                    }
+                    outputStreamToClient.println(userInput);
                 }
-                if (serverMessage == null || serverMessage.equalsIgnoreCase("exit")) {
-                    break;
-                }
-                outputStreamToClient.println(serverMessage);
             }
-        } catch (Exception e) {
-            System.out.println("Error reading from console: " + e.getMessage());
         } finally {
             scanner.close();
             closeResources();
         }
     }
-
 
     private void closeResources() {
         try {
