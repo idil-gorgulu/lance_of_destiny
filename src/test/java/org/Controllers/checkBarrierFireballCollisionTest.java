@@ -1,34 +1,32 @@
-/**
- * Checks for collisions between the fireball and barriers in the game.
- *
- * Requires:
- * - barriers and fireball must not be null.
- * - barriers must contain a non-null ArrayList of Barrier objects.
- * - fireball must be a non-null Fireball object.
- *
- * Modifies:
- * - Fireball's velocity and lastCollided properties.
- * - The list of barriers.
- *
- * Effects:
- * - If a collision is detected between the fireball and a barrier:
- *   - Updates the fireball's velocity based on the collision logic.
- *   - Removes the barrier if it is hit.
- */
-
 package org.Controllers;
-
 import org.Domain.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-
 import java.awt.*;
 import java.awt.geom.Rectangle2D;
 import java.util.ArrayList;
-
 import static org.junit.jupiter.api.Assertions.*;
 
 public class checkBarrierFireballCollisionTest {
+
+    /**
+     * Overview:
+     * Checks for collisions between the fireball and barriers in the game.
+     *
+     * Requires:
+     * - barriers and fireball must not be null.
+     * - barriers must contain a non-null ArrayList of Barrier objects.
+     * - fireball must be a non-null Fireball object.
+     *
+     * Modifies:
+     * - Fireball's velocity and lastCollided properties.
+     * - The list of barriers.
+     *
+     * Effects:
+     * - If a collision is detected between the fireball and a barrier:
+     *   - Updates the fireball's velocity based on the collision logic.
+     *   - Removes the barrier if it is hit.
+     */
 
     private Fireball fireball;
     private Barrier barrier1, barrier2;
@@ -106,42 +104,45 @@ public class checkBarrierFireballCollisionTest {
         return false;
     }
 
+    // Black-box test: Checks collision with a barrier at the fireball's initial position.
     @Test
-    public void testCollisionWithBarrier() { // Black-Box Test
+    public void testCollisionWithBarrier() {
         fireball.setCoordinate(new Coordinate(100, 100));
         checkBarrierFireballCollision(barriers, fireball);
-        assertEquals(2, barriers.size());
-        assertEquals(0.0, fireball.getxVelocity());
-        assertEquals(-2.0, fireball.getyVelocity());
+        assertEquals(2, barriers.size()); // Barrier should not be destroyed in this case.
+        assertEquals(0.0, fireball.getxVelocity()); // X velocity should not change.
+        assertEquals(-2.0, fireball.getyVelocity()); // Y velocity should reverse.
     }
 
-
-    // I can show this
+    // Black-box test: Checks no collision scenario.
     @Test
-    public void testNoCollision() { // Black-Box Test
+    public void testNoCollision() {
         fireball.setCoordinate(new Coordinate(200, 200));
         checkBarrierFireballCollision(barriers, fireball);
-        assertEquals(2, barriers.size());
+        assertEquals(2, barriers.size()); // No barriers should be removed.
     }
 
+    // Glass-box test: Checks collision with a barrier moving in the same direction.
     @Test
-    public void testSameDirectionCollision() { // Glass-Box Test
+    public void testSameDirectionCollision() {
         fireball.setCoordinate(new Coordinate(100, 100));
         barrier1.setVelocity(2);
         checkBarrierFireballCollision(barriers, fireball);
-        assertEquals(2.0, fireball.getxVelocity());
+        assertEquals(2.0, fireball.getxVelocity()); // Fireball should gain velocity.
     }
 
+    // Glass-box test: Checks collision with a barrier moving in the opposite direction.
     @Test
-    public void testOppositeDirectionCollision() { // Glass-Box Test
+    public void testOppositeDirectionCollision() {
         fireball.setCoordinate(new Coordinate(100, 100));
         barrier1.setVelocity(-2);
         checkBarrierFireballCollision(barriers, fireball);
-        assertEquals(-2.0, fireball.getxVelocity());
+        assertEquals(-2.0, fireball.getxVelocity()); // Fireball should reverse its X velocity.
     }
 
+    // Glass-box test: Checks multiple barrier collisions.
     @Test
-    public void testMultipleBarriersCollision() { // Glass-Box Test
+    public void testMultipleBarriersCollision() {
         barrier1.setCoordinates(new Coordinate(100, 100));
         barrier2.setCoordinates(new Coordinate(105, 100));
         fireball.setCoordinate(new Coordinate(100, 100));
