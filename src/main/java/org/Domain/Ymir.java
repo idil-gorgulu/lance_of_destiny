@@ -1,32 +1,44 @@
 package org.Domain;
 
-import java.util.Random;
-import java.util.LinkedList;
-import java.util.Queue;
+import org.Views.RunningModePage;
+
+import java.util.*;
 
 
 public class Ymir {
-        private Queue<String> lastAbilities = new LinkedList<>();
-        private Random random = new Random();
+
+    private Game game;
+    private Timer timer;
+
+    private Queue<String> lastAbilities = new LinkedList<>();
+    private Random random = new Random();
 
         // Constants for the abilities
         private static final String INFINITE_VOID = "Infinite Void";
         private static final String DOUBLE_ACCEL = "Double Accel";
         private static final String HOLLOW_PURPLE = "Hollow Purple";
         private static final String[] ABILITIES = {INFINITE_VOID, DOUBLE_ACCEL, HOLLOW_PURPLE};
-
-        public Ymir() {
-            // Initialize with two random abilities to start
+        public Ymir(Game game) {
+            this.game = game;
+            timer = new Timer();
+            timer.schedule(new TimerTask() {
+                @Override
+                public void run() {
+                    tryActivateAbility();
+                }
+            }, 0, 30000);
             lastAbilities.offer(ABILITIES[random.nextInt(ABILITIES.length)]);
             lastAbilities.offer(ABILITIES[random.nextInt(ABILITIES.length)]);
         }
 
-        // Call this method every 30 seconds from the game loop
-        public void tryActivateAbility() {
-            if (random.nextBoolean()) { // Coin flip
-                activateRandomAbility();
-            }
+        //to be called every 30 seconds from the game loop
+        private void tryActivateAbility() {
+            // Implementation of Ymir's abilities
         }
+
+    public void stop() {
+        timer.cancel();  // Stop the timer when the game ends
+    }
 
         private void activateRandomAbility() {
             String ability;
@@ -66,9 +78,13 @@ public class Ymir {
                     break;
             }
         }
-        private void activateInfiniteVoid() {
-            System.out.println("Activating Infinite Void");
-            // Code to freeze barriers
+        public void activateInfiniteVoid() {
+            List<Barrier> barriers = game.getBarriers();
+            Collections.shuffle(barriers);
+            barriers.stream()
+                    .filter(b -> !b.isFrozen())
+                    .limit(8)
+                    .forEach(Barrier::freeze);
         }
 
         private void activateDoubleAccel() {
@@ -76,9 +92,20 @@ public class Ymir {
             // Code to reduce fireball speed
         }
 
-        private void activateHollowPurple() {
+        public void activateHollowPurple() {
             System.out.println("Activating Hollow Purple");
-            // Code to add hollow purple barriers
+            Random random = new Random();
+            for (int i = 0; i < 8; i++) { // Add 8 new hollow purple barriers
+                int x = random.nextInt(RunningModePage.SCREENWIDTH - 50);
+                int y = random.nextInt(500 - 15);
+                game.addBarrier(new Coordinate(x, y), BarrierType.HOLLOW_PURPLE);
+            }
         }
+
+    private List<Barrier> selectRandomBarriers() {
+        Collections.shuffle(game.getBarriers());
+        return game.getBarriers().subList(0, Math.min(8, game.getBarriers().size()));
+    }
+
 }
 

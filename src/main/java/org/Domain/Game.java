@@ -18,6 +18,7 @@ public class Game {
     public boolean started = false;
     public boolean ended = false;
     String[][] barrierBoard = new String[20][20];
+    private Ymir ymir;
 
     private Game(){
         this.fireball = new Fireball();
@@ -30,6 +31,7 @@ public class Game {
         numExplosiveBarrier=0;
         numrewardingBarrier=0;
         numTotal=0;
+        ymir = new Ymir(this);
     }
 
     public Fireball getFireball() {
