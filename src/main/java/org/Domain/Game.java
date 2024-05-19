@@ -78,7 +78,8 @@ public class Game {
         if(initialSize!=0){
             for (int i = 0; i < initialSize; i++) {
                 Barrier barrier = barriers.get(i);
-                if (barrier.getCoordinate().getX()==coordinates.getX() && barrier.getCoordinate().getY() == coordinates.getY()) {
+                if (barrier.getCoordinate().getX()==coordinates.getX() && barrier.getCoordinate().getY() == coordinates.getY()
+                   && barrier.getType() == type) {
                     System.out.println("Removed");
                     barriers.remove(barrier);
                     i--; // Decrease index because the size of ArrayList is reduced
