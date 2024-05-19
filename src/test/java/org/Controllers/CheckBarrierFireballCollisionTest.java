@@ -7,26 +7,7 @@ import java.awt.geom.Rectangle2D;
 import java.util.ArrayList;
 import static org.junit.jupiter.api.Assertions.*;
 
-public class checkBarrierFireballCollisionTest {
-
-    /**
-     * Overview:
-     * Checks for collisions between the fireball and barriers in the game.
-     *
-     * Requires:
-     * - barriers and fireball must not be null.
-     * - barriers must contain a non-null ArrayList of Barrier objects.
-     * - fireball must be a non-null Fireball object.
-     *
-     * Modifies:
-     * - Fireball's velocity and lastCollided properties.
-     * - The list of barriers.
-     *
-     * Effects:
-     * - If a collision is detected between the fireball and a barrier:
-     *   - Updates the fireball's velocity based on the collision logic.
-     *   - Removes the barrier if it is hit.
-     */
+public class CheckBarrierFireballCollisionTest {
 
     private Fireball fireball;
     private Barrier barrier1, barrier2;

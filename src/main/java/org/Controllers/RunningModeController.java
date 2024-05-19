@@ -237,7 +237,19 @@ public class RunningModeController {
         }
     }
 
-
+    /**
+     * Checks for collisions between the fireball and barriers, updates velocities accordingly,
+     * removes destroyed barriers, plays sound effects, and updates the score.
+     *
+     * @requires game != null && game.getFireball() != null && game.getBarriers() != null && runningModePage != null && this.getGameSession() != null
+     * @modifies game.getBarriers(), fireball, this.getGameSession().getScore()
+     * @effects
+     *      - Detects and processes collisions between the fireball and barriers.
+     *      - Updates the fireball's velocity based on the collision direction.
+     *      - Removes barriers that are hit by the fireball.
+     *      - Plays a sound effect when a collision occurs.
+     *      - Updates the score based on the number of barriers removed.
+     */
     public void checkBarrierFireballCollision(){
         ArrayList<Barrier> barriers = game.getBarriers();
         ArrayList<Barrier> toRemove = new ArrayList<>();
