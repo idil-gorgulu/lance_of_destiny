@@ -73,6 +73,25 @@ public class Game {
         printBoard();
     }
 
+    /* Attempts to remove a barrier of a specified type at the given coordinates.
+     REQUIRES:
+        - the input coordinate axes should not be null and must be of a valid position within
+          the grid boundaries.
+        - the barrier type should be from the BarrierType enum class.
+     MODIFIES:
+        - The visibility/existence of a barrier by potentially removing one.
+        - The barrier list, also by potentially removing a barrier.
+        - The barrier grid (i.e. the game board) by potentially changing the character at the corresponding
+          coordinate.
+        - Barrier count variables including numTotal, numSimpleBarrier, numFirmBarrier, numRewardingBarrier and
+         numExplosiveBarrier.
+     EFFECTS:
+        - If a barrier of the inputted barrier type is present at the input coordinates, it is removed from the
+          barrier list and the index corresponding to the coordinates in the barrierBoard array is set to null.
+        - The barrier counts numTotal and num(BarrierType) get decremented
+        - Prints messages which indicate the removal state of a barrier and the current barrier board.
+        - If no barrier or a barrier of the wrong type is found at the inputted coordinates, a message gets
+          printed. */
     public void removeBarrier(Coordinate coordinates, BarrierType type){
         int initialSize=barriers.size();
         if(initialSize!=0){
