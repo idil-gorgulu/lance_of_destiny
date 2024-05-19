@@ -86,6 +86,6 @@ public class MultiPortClient {
 
     public static void main(String[] args) {
         MultiPortClient client = new MultiPortClient();
-        client.start("localhost", 20005, 20004);
+        client.start("localhost", 56054, 56053);
     }
 }

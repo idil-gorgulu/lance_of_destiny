@@ -1,7 +1,6 @@
 package org.Views;
 
 import org.Controllers.DataBaseController;
-import org.Domain.MultiPlayerGame;
 import org.Domain.User;
 import org.bson.Document;
 
@@ -22,17 +21,10 @@ import static org.Utils.ComponentStyling.customizeButtonback;
 
 public class JoinMultiplayerGamePage extends Page {
 
-    public MultiPlayerGame mpgame;
-
     public BufferedImage backgroundImage;
 
-    public JoinMultiplayerGamePage(){
+    public JoinMultiplayerGamePage() {
         super();
-        try {
-            mpgame = new MultiPlayerGame();
-        } catch (Exception e) {
-
-        }
         initUI();
         loadBackgroundImage();
         initUI();
@@ -91,12 +83,7 @@ public class JoinMultiplayerGamePage extends Page {
         JPanel formPanel = new JPanel();
         formPanel.setLayout(new BoxLayout(formPanel, BoxLayout.Y_AXIS));
         formPanel.setOpaque(false);
-        ArrayList<Document> games =  new ArrayList<>();
-        try {
-            games = mpgame.getAllAvailableGames();
-
-        } catch (Exception e) {
-        }
+        ArrayList<Document> games = User.getUserInstance().getAllGames();
         System.out.println(games);
         for (int  i = 0; i < games.size(); i++) {
             Document game = games.get(i);

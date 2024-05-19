@@ -11,10 +11,8 @@ import java.io.IOException;
 
 public class WaitMultiplayerGameAccept extends Page {
     private BufferedImage backgroundImage;
-    private JLabel waitingMessage;
-    private JButton cancelButton;
-    private JProgressBar progressBar;
-    private JPanel centerPanel;  // Panel to hold the centered components
+    private JTextField hostIPAddressField;
+    private JTextField hostPortField;
 
     public WaitMultiplayerGameAccept() {
         super();
@@ -23,48 +21,51 @@ public class WaitMultiplayerGameAccept extends Page {
 
     @Override
     protected void initUI() {
-        setLayout(new BorderLayout());  // Set the layout to BorderLayout for overall frame
-
-        // Load the background image
+        setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
         try {
             backgroundImage = ImageIO.read(new File("assets/Background.png"));
         } catch (IOException e) {
             e.printStackTrace();
         }
+        add(Box.createVerticalStrut(50));
+        JLabel gameTitle = new JLabel("Lance of Destiny");
+        gameTitle.setForeground(Color.WHITE);
+        gameTitle.setFont(new Font("Arial", Font.BOLD, 24));
+        gameTitle.setAlignmentX(JComponent.CENTER_ALIGNMENT);
+        add(gameTitle);
 
-        centerPanel = new JPanel();
-        centerPanel.setLayout(new BoxLayout(centerPanel, BoxLayout.Y_AXIS));
-        centerPanel.setOpaque(false);  // Make the panel transparent
 
-        // Message label
-        waitingMessage = new JLabel("Waiting for other player to accept...");
-        waitingMessage.setAlignmentX(Component.CENTER_ALIGNMENT);
-        waitingMessage.setFont(new Font("Arial", Font.BOLD, 16));
-        centerPanel.add(waitingMessage);
-        centerPanel.add(Box.createVerticalStrut(20));  // Add space between components
+        /*
+        Dimension textFieldSize = new Dimension(200, 30);
+        hostIPAddressField = new JTextField(20);
+        hostPortField = new JTextField(10);
+        hostIPAddressField.setMaximumSize(textFieldSize);
+        hostPortField.setMaximumSize(textFieldSize);
 
-        // Progress bar as an indeterminate loader
-        progressBar = new JProgressBar();
-        progressBar.setIndeterminate(true);
-        progressBar.setAlignmentX(Component.CENTER_ALIGNMENT);
-        centerPanel.add(progressBar);
-        centerPanel.add(Box.createVerticalStrut(20));
+        add(Box.createVerticalStrut(20));
+        JLabel hostIPAddressLabel = new JLabel("Host IP Address:");
+        hostIPAddressLabel.setForeground(Color.WHITE);
+        add(hostIPAddressLabel);
+        add(hostIPAddressField);
 
-        // Cancel button to stop waiting and return
-        cancelButton = new JButton("Cancel");
-        cancelButton.setAlignmentX(Component.CENTER_ALIGNMENT);
-        cancelButton.addActionListener(new ActionListener() {
+        JLabel hostPortLabel = new JLabel("Host Port:");
+        hostPortLabel.setForeground(Color.WHITE);
+        add(hostPortLabel);
+        add(hostPortField);
+
+        JButton joinButton = new JButton("Join");
+
+        joinButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                onCancel();
+                String hostIP = hostIPAddressField.getText();
+                String port = hostPortField.getText();
+                System.out.println("Host IP Address: " + hostIP);
+                System.out.println("Host Port: " + port);
             }
         });
-        centerPanel.add(cancelButton);
-
-        add(centerPanel, BorderLayout.CENTER);  // Add the center panel to the middle of the BorderLayout
-
-        // Set the background panel to add some padding
-        setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+        add(joinButton);
+        */
     }
 
     @Override
@@ -73,10 +74,5 @@ public class WaitMultiplayerGameAccept extends Page {
         if (backgroundImage != null) {
             g.drawImage(backgroundImage, 0, 0, getWidth(), getHeight(), this);
         }
-    }
-
-    private void onCancel() {
-        // Handle the cancel action (e.g., close the window or return to the previous screen)
-        System.out.println("Waiting cancelled by the user.");
     }
 }
