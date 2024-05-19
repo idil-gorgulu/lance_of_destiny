@@ -5,6 +5,7 @@ import java.net.*;
 import java.util.Scanner;
 
 public class MultiPortServer {
+    public static MultiPortServer instance;
     private ServerSocket serverSocketOut;
     private Socket outputSocket;
     private PrintWriter output;
@@ -12,6 +13,15 @@ public class MultiPortServer {
     private ServerSocket serverSocketIn;
     private Socket inputSocket;
     private BufferedReader input;
+
+    public static MultiPortServer  getInstance() {
+        if (instance == null) {
+            instance = new MultiPortServer();
+            return instance;
+        } else {
+            return instance;
+        }
+    }
 
     public void start() {
         try {

@@ -1,5 +1,7 @@
 package org.Views;
 
+import org.MultiplayerUtils.MultiPortServer;
+
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
@@ -14,18 +16,19 @@ public class WaitMultiplayerGameAccept extends Page {
     private JLabel waitingMessage;
     private JButton cancelButton;
     private JProgressBar progressBar;
-    private JPanel centerPanel;  // Panel to hold the centered components
-
+    private JPanel centerPanel;
+    private MultiPortServer server;
     public WaitMultiplayerGameAccept() {
         super();
         initUI();
+        server = MultiPortServer.getInstance();
+        Thread comm = new Thread(server::start);
+        comm.start();
     }
 
     @Override
     protected void initUI() {
-        setLayout(new BorderLayout());  // Set the layout to BorderLayout for overall frame
-
-        // Load the background image
+        setLayout(new BorderLayout());
         try {
             backgroundImage = ImageIO.read(new File("assets/Background.png"));
         } catch (IOException e) {
@@ -34,23 +37,20 @@ public class WaitMultiplayerGameAccept extends Page {
 
         centerPanel = new JPanel();
         centerPanel.setLayout(new BoxLayout(centerPanel, BoxLayout.Y_AXIS));
-        centerPanel.setOpaque(false);  // Make the panel transparent
+        centerPanel.setOpaque(false);
 
-        // Message label
         waitingMessage = new JLabel("Waiting for other player to accept...");
         waitingMessage.setAlignmentX(Component.CENTER_ALIGNMENT);
         waitingMessage.setFont(new Font("Arial", Font.BOLD, 16));
         centerPanel.add(waitingMessage);
-        centerPanel.add(Box.createVerticalStrut(20));  // Add space between components
+        centerPanel.add(Box.createVerticalStrut(20));
 
-        // Progress bar as an indeterminate loader
         progressBar = new JProgressBar();
         progressBar.setIndeterminate(true);
         progressBar.setAlignmentX(Component.CENTER_ALIGNMENT);
         centerPanel.add(progressBar);
         centerPanel.add(Box.createVerticalStrut(20));
 
-        // Cancel button to stop waiting and return
         cancelButton = new JButton("Cancel");
         cancelButton.setAlignmentX(Component.CENTER_ALIGNMENT);
         cancelButton.addActionListener(new ActionListener() {
@@ -61,9 +61,8 @@ public class WaitMultiplayerGameAccept extends Page {
         });
         centerPanel.add(cancelButton);
 
-        add(centerPanel, BorderLayout.CENTER);  // Add the center panel to the middle of the BorderLayout
+        add(centerPanel, BorderLayout.CENTER);
 
-        // Set the background panel to add some padding
         setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
     }
 
@@ -76,7 +75,7 @@ public class WaitMultiplayerGameAccept extends Page {
     }
 
     private void onCancel() {
-        // Handle the cancel action (e.g., close the window or return to the previous screen)
+        // Change here later
         System.out.println("Waiting cancelled by the user.");
     }
 }
