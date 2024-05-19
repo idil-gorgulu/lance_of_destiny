@@ -19,6 +19,8 @@ public class MoveCircularTest {
         barrier.setMoving(true);
     }
 
+    // BB Test
+    // Checks wheter barier starts moving
     @Test
     void testInitialMovement() {
         double initialX = barrier.getCoordinate().getX();
@@ -27,6 +29,8 @@ public class MoveCircularTest {
                 "Barrier should move right from the initial position");
     }
 
+    // GB Test
+    // Checks wheter it controls the boundaries while moving
     @Test
     void testBoundaryCheckPositiveLimit() {
         barrier.getCoordinate().setX(SCREENWIDTH - 50);
@@ -37,6 +41,8 @@ public class MoveCircularTest {
                 "Angle change should be minimal if boundary condition prevents movement");
     }
 
+    // BB Test
+    // Checks wheter the barrier makes a full rotation
     @Test
     void testFullRotation() {
         int initialX = barrier.getCoordinate().getX();
@@ -51,6 +57,9 @@ public class MoveCircularTest {
                         Math.abs(barrier.getCoordinate().getY() - initialY) <= 50,
                 "X and Y should return to near initial after near full rotation, within a larger tolerance");
     }
+
+    // GB Test
+    // Tests wheter the barrier movies reverse
     @Test
     void testReverseMovement() {
         double initialX = barrier.getCoordinate().getX();
@@ -60,6 +69,8 @@ public class MoveCircularTest {
                 "Barrier's position should change when velocity is reversed");
     }
 
+    // GB Test
+    // Checks wheter barrier stops when it touches the edge
     @Test
     void testMovementStopAtBoundaries() {
         barrier.getCoordinate().setX(5);
