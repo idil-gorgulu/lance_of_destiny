@@ -21,9 +21,10 @@ public class GameClient {
         connectToServer();
     }
 
-    public void connectToServer() {
+    private void connectToServer() {
         try {
             socket = new Socket(serverAddress, serverPort);
+            System.out.println("Connected to server at " + serverAddress + ":" + serverPort);
             inputStream = new BufferedReader(new InputStreamReader(socket.getInputStream()));
             outputStream = new PrintWriter(socket.getOutputStream(), true);
 
@@ -42,6 +43,7 @@ public class GameClient {
             while ((fromServer = inputStream.readLine()) != null) {
                 System.out.println("Server says: " + fromServer);
             }
+            System.out.println("Server has disconnected.");
         } catch (IOException e) {
             System.out.println("Server disconnected: " + e.getMessage());
         } finally {
@@ -53,11 +55,8 @@ public class GameClient {
         Scanner scanner = new Scanner(System.in);
         try {
             while (true) {
-                String userInput = null;
-                if (scanner.hasNextLine()) {
-                    userInput = scanner.nextLine();
-                }
-                if (userInput == null || userInput.equalsIgnoreCase("exit")) {
+                String userInput = scanner.nextLine();
+                if (userInput.equalsIgnoreCase("exit")) {
                     outputStream.println(userInput);
                     break;
                 }
@@ -86,7 +85,7 @@ public class GameClient {
     }
 
     public static void main(String[] args) {
-        System.out.println("Connecting to server at 0.0.0.0:10000");
-        new GameClient("0.0.0.0", 10000);
+        System.out.println("Connecting to server at localhost:10000");
+        new GameClient("localhost", 10000); // Use localhost for local testing
     }
 }
