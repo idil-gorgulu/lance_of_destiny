@@ -5,7 +5,7 @@ import org.junit.jupiter.api.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class initialPopulationTest {
-
+    //tests initalPopulation method in Game class.
     private Game game;
 
     @BeforeEach
@@ -13,7 +13,7 @@ public class initialPopulationTest {
         game = Game.createNewGame();
     }
 
-    // BB tests
+    // Black box test checking the method with sufficient place in the game.
     @Test
     public void testInitialPopulationWithSufficientSpace() {
         assertTrue(game.initialPopulation(10, 10, 10, 10));
@@ -23,12 +23,14 @@ public class initialPopulationTest {
         assertEquals(10, game.getNumrewardingBarrier());
     }
 
+    //Black box test checking the method with insufficient place in the game.
     @Test
     public void testInitialPopulationWithInsufficientSpace() {
         game.initialPopulation(100, 100, 100, 100);
         assertFalse(game.initialPopulation(1, 1, 1, 1));
     }
 
+    //Black box test checking the method with some already placed barriers.
     @Test
     public void testInitialPopulationWithSomeBarriersAlreadyPlaced() {
         game.initialPopulation(50, 50, 50, 50);
@@ -39,7 +41,7 @@ public class initialPopulationTest {
         assertEquals(60, game.getNumrewardingBarrier());
     }
 
-    // GB tests
+    // Glass box test checking the inside of the barrier board matrix.
     @Test
     public void testInitialPopulationRandomPlacement() {
         assertTrue(game.initialPopulation(5, 5, 5, 5));
@@ -54,6 +56,7 @@ public class initialPopulationTest {
         assertEquals(20, count); // 5 + 5 + 5 + 5 = 20
     }
 
+    //Glass box test checking the exact barrier counts in the barrier board matrix.
     @Test
     public void testInitialPopulationExactBarrierCounts() {
         assertTrue(game.initialPopulation(10, 10, 10, 10));
@@ -77,6 +80,7 @@ public class initialPopulationTest {
         assertEquals(10, rewardingCount);
     }
 
+    //Glass box test checking the board's population with zero barriers.
     @Test
     public void testInitialPopulationWithZeroBarriers() {
         assertTrue(game.initialPopulation(0, 0, 0, 0));

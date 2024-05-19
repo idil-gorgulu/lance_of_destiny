@@ -146,6 +146,23 @@ public class Game {
         return debris;
     }
 
+    /**
+     * public boolean initialPopulation(int simpleNum, int firmNum, int exNum, int giftNum)
+     * Initializes the population of barriers on the board with inputs.
+     *
+     * //REQUIRES:
+     * - simpleNum, firmNum, exNum, and giftNum are non-negative integers.
+     * - numSimpleBarrier, numExplosiveBarrier, numFirmBarrier, and numrewardingBarrier are non-negative integers.
+     * - barrierBoard is a 2D array of dimensions 20x20.
+     *
+     * //MODIFIES: barrierBoard, numSimpleBarrier, numExplosiveBarrier, numFirmBarrier, numrewardingBarrier
+     *
+     * //EFFECTS:
+     * - Places the specified numbers of simple, firm, explosive, and gift barriers
+     *   on the board if there is sufficient space.
+     * -  if there is not enough space: Returns false to place all the specified barriers.
+     * -  if there is sufficient space: Returns true and places barriers.
+     */
     public boolean initialPopulation(int simpleNum, int firmNum, int exNum, int giftNum){
         int tot = numSimpleBarrier + numExplosiveBarrier + numFirmBarrier + numrewardingBarrier;
         if (400 - tot < simpleNum + firmNum + exNum + giftNum){
