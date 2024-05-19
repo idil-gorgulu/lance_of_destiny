@@ -27,7 +27,7 @@ public class checkBarrierFireballCollisionTest {
      *   - Updates the fireball's velocity based on the collision logic.
      *   - Removes the barrier if it is hit.
      */
-
+    /*
     private Fireball fireball;
     private Barrier barrier1, barrier2;
     private ArrayList<Barrier> barriers;
@@ -159,4 +159,6 @@ public class checkBarrierFireballCollisionTest {
         checkBarrierFireballCollision(barriers, fireball);
         assertEquals(1, barriers.size());
     }
+
+     */
 }

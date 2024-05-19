@@ -129,6 +129,7 @@ public class User {
         multiplayerGameSession.put("gameName", gameName);
         multiplayerGameSession.put("localIP", this.myLocalIP);
         multiplayerGameSession.put("publicIP", this.myPublicIP);
+        // Add the port in here
         multiplayerGameSession.put("joined", "False");
         Database.getInstance().getMultiplayerGameCollection().insertOne(multiplayerGameSession);
         System.out.println("Saved");
