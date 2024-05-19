@@ -19,32 +19,34 @@ public class MultiPlayerGame {
     String myPublicIP;
     String gameName;
 
-    public MultiPlayerGame(String gameName) throws Exception {
+    public MultiPlayerGame() {
         ArrayList<String> ips = getIP();
         this.myLocalIP = ips.get(0);
         this.myPublicIP = ips.get(1);
-        this.gameName = gameName;
     }
 
-    private ArrayList<String> getIP() throws Exception {
+    private ArrayList<String> getIP()  {
         // https://stackoverflow.com/questions/2939218/getting-the-external-ip-address-in-java
+        InetAddress localhost = null;
+        try {
+            localhost = InetAddress.getLocalHost();
+        } catch (Exception e) {
 
-        InetAddress localhost = InetAddress.getLocalHost();
-        System.out.println("System IP Address : " +
-                (localhost.getHostAddress()).trim());
+        }
+        //System.out.println("System IP Address : " + (localhost.getHostAddress()).trim());
 
         ArrayList<String> systemIPAddresses = new ArrayList<>();
 
         ArrayList<String> systemIpCheckers = new ArrayList<>();
 
-
         // I added them in the confidence order
         systemIpCheckers.add("http://checkip.amazonaws.com/");
+        /*
         systemIpCheckers.add("https://ipv4.icanhazip.com/");
         systemIpCheckers.add("http://myexternalip.com/raw");
         systemIpCheckers.add("http://ipecho.net/plain");
         systemIpCheckers.add("http://www.trackip.net/ip");
-
+         */
         for (String systemIpChecker : systemIpCheckers ) {
             try
             {
@@ -72,7 +74,8 @@ public class MultiPlayerGame {
             systemIPAddress = systemIPAddresses.get(0);
         }
 
-        System.out.println("Public IP Address: " + systemIPAddress);
+        // System.out.println("Public IP Address: " + systemIPAddress);
+        // Make this dict for better understanding
         ArrayList<String> ips = new ArrayList<>();
         ips.add(localhost.getHostAddress());
         ips.add(systemIPAddress);
@@ -89,25 +92,23 @@ public class MultiPlayerGame {
         System.out.println("Saved");
     }
 
-    public void getAllAvailableGames() throws Exception {
+    public ArrayList<Document> getAllAvailableGames() throws Exception {
+        ArrayList<Document> mpgames = new ArrayList<>();
         MongoCollection<Document> multiplayerGamesCollection = Database.getInstance().getMultiplayerGameCollection();
         FindIterable<Document> multiplayerGames = multiplayerGamesCollection.find();
         System.out.println("Game informations are retriving");
         byte[] subnetMask = InetAddress.getByName("255.255.0.0").getAddress();
 
         for (Document multiplayerGame : multiplayerGames) {
-            System.out.println(multiplayerGame);
             String joined = multiplayerGame.getString("joined");
             if (joined.equals("False")) {
-                System.out.println("entered here");
                 String gamePublicIP = multiplayerGame.getString("publicIP");
-                System.out.println("System IP: " + this.myPublicIP);
-                System.out.println("Game IP: " + gamePublicIP);
                 if (ipMatchesSubnet(this.myPublicIP, gamePublicIP, subnetMask)) {
-                    System.out.println(multiplayerGame.toJson());
+                    mpgames.add(multiplayerGame);
                 }
             }
         }
+        return mpgames;
     }
 
     private static boolean ipMatchesSubnet(String myPublicIP, String gamePublicIP, byte[] subnetMask) {
@@ -141,7 +142,7 @@ public class MultiPlayerGame {
 
 
     public static void main(String[] args) throws Exception {
-        MultiPlayerGame mpgame = new MultiPlayerGame("ata");
+        MultiPlayerGame mpgame = new MultiPlayerGame();
         // mpgame.sendMultiplayerGameInfo();
         mpgame.getAllAvailableGames();
     }
