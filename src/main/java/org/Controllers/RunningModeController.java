@@ -75,6 +75,24 @@ public class RunningModeController {
         }
     }
 
+
+    /**
+     * Checks if the fireball and magical staff collide, and if they do, updates the fireball's velocity accordingly.
+     *
+     * <p></p>REQUIRES:
+     * - The game must have previously set fireball and staff objects.
+     * - The fields of fireball and staff must be set correctly.
+     * - Both fireball and staff must be within the screen boundaries.
+     *
+     * <p>MODIFIES: fireball.xVelocity, fireball.yVelocity
+     *
+     * <p>EFFECTS:
+     * - Creates two Rectangle2D objects representing the bounding boxes around the fireball and the magical staff, considering their coordinates and orientation.
+     * - Checks if these rectangles intersect.
+     * - If they intersect, calculates the new velocity values for the fireball based on the collision angle and updates the fireball's velocity.
+     * - Plays a sound effect upon collision.
+     * - Ensures a cooldown period between consecutive collision checks to avoid multiple detections of the same collision.
+     */
     public void checkMagicalStaffFireballCollision() {
 
         long currentTime = System.currentTimeMillis();
@@ -218,6 +236,7 @@ public class RunningModeController {
 
         }
     }
+
 
     public void checkBarrierFireballCollision(){
         ArrayList<Barrier> barriers = game.getBarriers();

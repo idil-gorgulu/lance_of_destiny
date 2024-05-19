@@ -22,11 +22,12 @@ public class StaffCollisionTest {
         game = Game.createNewGame();
         fireball = game.getFireball();
         magicalStaff = game.getMagicalStaff();
-        lastCollisionTime = 0;
         runningModePage=new RunningModePage();
         runningModeController= new RunningModeController(runningModePage);
     }
 
+    //Black Box
+    //there shouldnt be a collision before the cooldown, this test compares the before and after the "collision"
     @Test
     public void collisionBeforeCooldown() {
         runningModeController.setLastCollisionTime(System.currentTimeMillis());
@@ -39,6 +40,8 @@ public class StaffCollisionTest {
         assertEquals(beforey, fireball.getyVelocity());
     }
 
+    // Glass box
+    //Checking the case where the ball and staff dont intersect, fireball velocities should not change
     @Test
     public void noIntersect() {
         runningModeController.setLastCollisionTime(0);
@@ -56,6 +59,9 @@ public class StaffCollisionTest {
         assertEquals(beforeX, fireball.getxVelocity());
         assertEquals(beforeY, fireball.getyVelocity());
     }
+
+    //Glass Box
+    //Collision when staff is horizontal (angle=0). Only the y component should change to -y.
     @Test
     public void horizontalReflection() {
         runningModeController.setLastCollisionTime(0);
@@ -75,6 +81,8 @@ public class StaffCollisionTest {
         assertEquals(-3, fireball.getyVelocity());
     }
 
+    //Glass Box
+    //Collision when staff angle=45. x,y --> y,x
     @Test
     public void angledReflection() {
         runningModeController.setLastCollisionTime(0);
@@ -88,14 +96,16 @@ public class StaffCollisionTest {
         magicalStaff.setAngVelocity(0);
 
         fireball.setxVelocity(3);
-        fireball.setyVelocity(0);
+        fireball.setyVelocity(5);
 
         runningModeController.checkMagicalStaffFireballCollision();
 
-        assertEquals(0, fireball.getxVelocity(), 0.01);
+        assertEquals(5, fireball.getxVelocity(), 0.01);
         assertEquals(3, fireball.getyVelocity(),0.01);
     }
 
+    //Glass box
+    // Checking collisions at unexpected speeds.
     @Test
     public void diffVelocity() {
         runningModeController.setLastCollisionTime(0);
