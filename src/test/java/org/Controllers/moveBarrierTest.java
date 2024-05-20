@@ -70,6 +70,7 @@ public class moveBarrierTest {
         explosiveBarrier.setVelocity(3);
         explosiveBarrier.getCoordinate().setX(0); // Placing it at the edge.
         explosiveBarrier.moveBarrier();
+        //
         // Assuming boundary checks prevent going negative.
         assertTrue(explosiveBarrier.getCoordinate().getX() >= 0, "Barrier should not move beyond screen boundary.");
     }
