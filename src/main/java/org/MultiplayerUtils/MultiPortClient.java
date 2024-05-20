@@ -7,11 +7,19 @@ import java.util.Scanner;
 public class MultiPortClient {
     private Socket outputSocket;
     private PrintWriter output;
-
     private Socket inputSocket;
     private BufferedReader input;
+    private String gameHostIpAdress;
+    private int outputPort;
+    private int inputPort;
 
-    public void start(String gameHostIpAdress, int outputPort, int inputPort) {
+    public MultiPortClient(String gameHostIpAdress, int outputPort, int inputPort) {
+        this.gameHostIpAdress = gameHostIpAdress;
+        this.outputPort = outputPort;
+        this.inputPort = inputPort;
+    }
+
+    public void start() {
         try {
             // This is for receiving messages from the gameHost
             inputSocket = new Socket(gameHostIpAdress, inputPort);
@@ -85,7 +93,7 @@ public class MultiPortClient {
     }
 
     public static void main(String[] args) {
-        MultiPortClient client = new MultiPortClient();
-        client.start("localhost", 59326, 59325);
+        MultiPortClient client = new MultiPortClient("localhost", 59326, 59325);
+        client.start();
     }
 }
