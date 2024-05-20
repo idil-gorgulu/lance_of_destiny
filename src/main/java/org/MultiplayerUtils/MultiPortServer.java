@@ -1,5 +1,9 @@
 package org.MultiplayerUtils;
 
+import org.Domain.User;
+import org.Utils.Database;
+import org.bson.Document;
+
 import java.io.*;
 import java.net.*;
 import java.util.Scanner;
@@ -23,6 +27,18 @@ public class MultiPortServer {
         }
     }
 
+    public void sendMultiplayerGameInfo(String outPort, String inPort) {
+        Document multiplayerGameSession = new Document();
+        multiplayerGameSession.put("gameName", User.getUserInstance().getMultiplayerGameName());
+        multiplayerGameSession.put("localIP", User.getUserInstance().getMyLocalIP());
+        multiplayerGameSession.put("publicIP", User.getUserInstance().getMyPublicIP());
+        multiplayerGameSession.put("outPort", outPort);
+        multiplayerGameSession.put("inPort", inPort);
+        multiplayerGameSession.put("joined", "False");
+        Database.getInstance().getMultiplayerGameCollection().insertOne(multiplayerGameSession);
+        System.out.println("Saved");
+    }
+
     public void start() {
         try {
             // port set to 0 for finding the available port
@@ -36,6 +52,9 @@ public class MultiPortServer {
             int inputPort = serverSocketIn.getLocalPort();
             System.out.println("Server waiting for client on port " + inputPort + " for incoming messages...");
 
+            // Send here the game and wait for the connection
+
+            sendMultiplayerGameInfo(Integer.toString(outputPort), Integer.toString(inputPort));
 
             outputSocket = serverSocketOut.accept();
             System.out.println("Client connected on port " + outputPort + " for outgoing messages.");

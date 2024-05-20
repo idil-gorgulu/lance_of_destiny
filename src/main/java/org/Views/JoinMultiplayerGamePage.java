@@ -3,6 +3,7 @@ package org.Views;
 import org.Controllers.DataBaseController;
 import org.Domain.MultiPlayerGame;
 import org.Domain.User;
+import org.MultiplayerUtils.MultiPortClient;
 import org.bson.Document;
 
 import javax.imageio.ImageIO;
@@ -25,6 +26,7 @@ public class JoinMultiplayerGamePage extends Page {
     public MultiPlayerGame mpgame;
 
     public BufferedImage backgroundImage;
+    public DataBaseController dataBaseController;
 
     public JoinMultiplayerGamePage(){
         super();
@@ -105,7 +107,12 @@ public class JoinMultiplayerGamePage extends Page {
             gameButton.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
-                    //dataBaseController.openFromDatabase(game);
+                    // First create the connection between the host and the client
+                    MultiPortClient client = new MultiPortClient(game.getString("localIp"), Integer.parseInt(game.getString("inputPort")), Integer.parseInt(game.getString("outputPort")));
+                    Thread comm = new Thread(client::start);
+                    comm.start();
+
+                    dataBaseController.openMultiplayerGame(game.getString("gameName"));
                     // Final statement will be this
                     Navigator.getInstance().showRunningModePage();
                 }

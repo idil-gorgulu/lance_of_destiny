@@ -15,6 +15,8 @@ import java.util.ArrayList;
 public class User {
     private String email;
     private ArrayList<Document> games;
+
+    private String multiplayerGameName;
     String myLocalIP;
     String myPublicIP;
     private static User userInstance;
@@ -133,5 +135,30 @@ public class User {
         multiplayerGameSession.put("joined", "False");
         Database.getInstance().getMultiplayerGameCollection().insertOne(multiplayerGameSession);
         System.out.println("Saved");
+    }
+
+
+    public String getMyLocalIP() {
+        return myLocalIP;
+    }
+
+    public void setMyLocalIP(String myLocalIP) {
+        this.myLocalIP = myLocalIP;
+    }
+
+    public String getMyPublicIP() {
+        return myPublicIP;
+    }
+
+    public void setMyPublicIP(String myPublicIP) {
+        this.myPublicIP = myPublicIP;
+    }
+
+    public String getMultiplayerGameName() {
+        return multiplayerGameName;
+    }
+
+    public void setMultiplayerGameName(String multiplayerGameName) {
+        this.multiplayerGameName = multiplayerGameName;
     }
 }

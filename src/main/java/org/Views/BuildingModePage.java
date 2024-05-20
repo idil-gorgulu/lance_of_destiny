@@ -181,7 +181,7 @@ public class BuildingModePage extends Page {
                 @Override
                 public void actionPerformed(ActionEvent e) {
                     buildingModeController.saveGameToDatabase(templateGameNameInput.getText());
-                    User.getUserInstance().sendMultiplayerGameInfo(templateGameNameInput.getText());
+                    User.getUserInstance().setMultiplayerGameName(templateGameNameInput.getText());
                     Navigator.getInstance().showWaitMultiplayerGameAcceptPage();
                 }
             });

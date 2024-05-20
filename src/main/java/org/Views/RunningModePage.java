@@ -36,6 +36,7 @@ public class RunningModePage extends Page{
     private int frameCount = 0;
     private Timer gameTimer =  new Timer();
     private Sound sound=new Sound();
+    private boolean multiplayerGame = false;
 
     public static final long COLLISION_COOLDOWN = 1000; // Cooldown period in milliseconds
 
