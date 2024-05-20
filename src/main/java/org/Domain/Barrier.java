@@ -189,6 +189,11 @@ public class Barrier extends JPanel {
     }
 
     public void moveBarrier(){
+        // Requires: a valid barrier type, isMoving flag set to true, valid initial position, and screen width constraints.
+        // Modifies: the x-coordinate of the barrier's position.
+        // Effects: moves the barrier in a circular pattern if it is of type EXPLOSIVE and is moving,
+        // otherwise moves it linearly within the screen boundaries, reversing direction at edges.
+
         if (type == BarrierType.EXPLOSIVE && isMoving) {
             moveCircular();
         } else {
