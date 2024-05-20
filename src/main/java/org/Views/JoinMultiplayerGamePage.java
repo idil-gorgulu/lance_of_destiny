@@ -108,7 +108,7 @@ public class JoinMultiplayerGamePage extends Page {
                 @Override
                 public void actionPerformed(ActionEvent e) {
                     // First create the connection between the host and the client
-                    MultiPortClient client = new MultiPortClient(game.getString("localIp"), Integer.parseInt(game.getString("inputPort")), Integer.parseInt(game.getString("outputPort")));
+                    MultiPortClient client = new MultiPortClient(game.getString("localIP"), Integer.parseInt(game.getString("inPort")), Integer.parseInt(game.getString("outPort")));
                     Thread comm = new Thread(client::start);
                     comm.start();
 
