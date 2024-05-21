@@ -9,7 +9,7 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 
-public class GameModePage extends Page{
+public class GameModePage extends Page {
     private BufferedImage backgroundImage;
 
     public GameModePage() {
@@ -34,13 +34,21 @@ public class GameModePage extends Page{
 
         JButton singleplayerModeButton = ComponentStyling.createStyledButton("Singleplayer Mode");
         JButton multiplayerModeButton = ComponentStyling.createStyledButton("Multiplayer Mode");
+        JButton helpScreenButton = ComponentStyling.createStyledButton("Help Screen");
 
         singleplayerModeButton.addActionListener(e -> Navigator.getInstance().showStartSingleplayerPage());
         multiplayerModeButton.addActionListener(e -> Navigator.getInstance().showStartMultiplayerPage());
+        helpScreenButton.addActionListener(e -> {
+            HelpScreenPage helpScreen = new HelpScreenPage();
+            helpScreen.setVisible(true);
+        });
+
         add(Box.createVerticalStrut(10));
         add(singleplayerModeButton);
         add(Box.createVerticalStrut(10));
         add(multiplayerModeButton);
+        add(Box.createVerticalStrut(10)); // Add space between multiplayer and help buttons
+        add(helpScreenButton);
     }
 
     @Override
