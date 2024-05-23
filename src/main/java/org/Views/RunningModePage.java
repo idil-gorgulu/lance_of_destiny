@@ -160,7 +160,7 @@ public class RunningModePage extends Page{
     protected void initUI() {
         setLayout(new BorderLayout());
         initializeGameObjects();
-        playMusic(0);
+        //playMusic(0); TODO
 
     }
 

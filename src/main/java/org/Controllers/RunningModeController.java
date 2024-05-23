@@ -254,7 +254,8 @@ public class RunningModeController {
         }
     }
 
-    public void checkBarrierFireballCollision(){
+    public void checkBarrierFireballCollision(int dummy){
+
         game.checkBarrierFireballCollision();
     }
     /**
@@ -342,7 +343,9 @@ public class RunningModeController {
         }
     }
 
-    public boolean hitBarrier(Barrier barrier, int hitTimes) {
+
+    // Moved to Game
+    public boolean hitBarrier(Barrier barrier, int hitTimes) { // Could have been private method, since only called in collision method
         barrier.setnHits(barrier.getnHits() - hitTimes);
         //barrier.revalidate();
         //barrier.repaint();
@@ -356,19 +359,14 @@ public class RunningModeController {
             }
             return true;
         }
-
         return false;
 
-        /*if(barrier.getType()==BarrierType.REWARDING){
-            //DROP SPELL
-        }*/
     }
 
     // Moved to Game
     private void explodeBarrier(Barrier barrier) {
         Debris debris = new Debris(barrier.getCoordinate());
         debris.setBackground(new Color(0, 0, 0, 0)); // Transparent background
-        runningModePage.getActiveDebris().add(debris); // Add debris to the list
         runningModePage.getGamePanel().add(debris);
         runningModePage.getActiveDebris().add(debris); // TODO should be in Game
         //runningModePage.repaint();
@@ -499,9 +497,8 @@ public class RunningModeController {
         ArrayList<Barrier> toRemove = new ArrayList<>();
 
 
-        Iterator<Bullet> iterator = runningModePage.getActiveBullets().iterator();
+        Iterator<Bullet> iterator = game.getActiveBullets().iterator();
         while (iterator.hasNext()) {
-
             Bullet bullet = iterator.next();
             bullet.moveUp();
             if (bullet.getCoordinate().getY() < 0) { //Out of Screen Top Border
@@ -628,6 +625,7 @@ public class RunningModeController {
     public HashMap<SpellType, Integer> getGameInventory(){
         return game.getInventory();
     }
+
 
     public ArrayList<Spell> getGameSpells(){
         return game.getSpells();

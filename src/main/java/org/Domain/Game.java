@@ -31,7 +31,6 @@ public class Game {
     private ArrayList<Bullet> activeBullets;
     private HashMap<SpellType,Integer> inventory;
     private String date;
-
     private Game(){
         this.fireball = new Fireball();
         this.magicalStaff = new MagicalStaff();
