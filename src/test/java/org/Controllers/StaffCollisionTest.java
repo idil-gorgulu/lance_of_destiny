@@ -54,7 +54,7 @@ public class StaffCollisionTest {
         double beforeX = fireball.getxVelocity();
         double beforeY = fireball.getyVelocity();
 
-       runningModeController.checkMagicalStaffFireballCollision();
+        runningModeController.checkMagicalStaffFireballCollision();
 
         assertEquals(beforeX, fireball.getxVelocity());
         assertEquals(beforeY, fireball.getyVelocity());

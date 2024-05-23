@@ -19,12 +19,16 @@ import static org.Views.RunningModePage.COLLISION_COOLDOWN;
 
 public class RunningModeController {
     protected RunningModePage runningModePage;
+    private DataBaseController dataBaseController;
+
     private Game game;
     private long lastCollisionTime = 0; // Time of the last collision in milliseconds
 
     public RunningModeController(RunningModePage runningModePage){
         this.runningModePage = runningModePage;
         this.game= Game.getInstance();
+        this.dataBaseController=DataBaseController.getInstance();
+
     }
     public Game getGameSession() {
         return Game.getInstance();
@@ -251,6 +255,7 @@ public class RunningModeController {
     }
 
     public void checkBarrierFireballCollision(int dummy){
+
         game.checkBarrierFireballCollision();
     }
     /**
@@ -266,7 +271,7 @@ public class RunningModeController {
      *      - Plays a sound effect when a collision occurs.
      *      - Updates the score based on the number of barriers removed.
      */
-    public void checkBarrierFireballCollision(){
+    public void checkBarrierFireballCollision(int changeSignature){
         ArrayList<Barrier> barriers = game.getBarriers();
         ArrayList<Barrier> toRemove = new ArrayList<>();
 
@@ -569,9 +574,11 @@ public class RunningModeController {
     /*
     public void useSpell1(int dummy){
         int remaining=runningModePage.getInventory().get(SpellType.FELIX_FELICIS);
+    public void useSpell1(){ // I will move these methods to somewhere else later, this is for testing -Melih
+        int remaining=getGameInventory().get(SpellType.FELIX_FELICIS);
         if (remaining>0) {
             getGameSession().getChance().incrementChance();
-            runningModePage.getInventory().put(SpellType.FELIX_FELICIS,remaining -1 );
+            getGameInventory().put(SpellType.FELIX_FELICIS,remaining -1 );
         }
 
     }
@@ -585,10 +592,12 @@ public class RunningModeController {
     /*
     public void useSpell2(int dummy){
         int remaining=runningModePage.getInventory().get(SpellType.STAFF_EXPANSION);
+    public void useSpell2(){ //STAFF_EXPANSION
+        int remaining=getGameInventory().get(SpellType.STAFF_EXPANSION);
         if (remaining>0) {
             getGameSession().getMagicalStaff().setStaffWidth(200);
             runningModePage.playSoundEffect(3);
-            runningModePage.getInventory().put(SpellType.STAFF_EXPANSION,  remaining -1 );
+            getGameInventory().put(SpellType.STAFF_EXPANSION,  remaining -1 );
 
             MagicalStaff magicalStaff= game.getMagicalStaff();
             magicalStaff.setExpansionTime(System.currentTimeMillis());
@@ -609,10 +618,15 @@ public class RunningModeController {
             }
         }
     }
+    public void saveGameToDatabase() {
 
-    public  HashMap<SpellType, Integer> getGameInventory(){
+        dataBaseController.saveGameToDatabase(game.getGameName(), game,true);
+    }
+    public HashMap<SpellType, Integer> getGameInventory(){
         return game.getInventory();
     }
+
+
     public ArrayList<Spell> getGameSpells(){
         return game.getSpells();
     }

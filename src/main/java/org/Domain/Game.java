@@ -9,6 +9,7 @@ import java.util.Random;
 import static org.Views.RunningModePage.COLLISION_COOLDOWN;
 
 public class Game {
+    private String gameName;
     private Fireball fireball;
     private MagicalStaff magicalStaff;
     private Chance chance;
@@ -29,14 +30,15 @@ public class Game {
     private ArrayList<Spell> droppingSpells;
     private ArrayList<Bullet> activeBullets;
     private HashMap<SpellType,Integer> inventory;
-
-
+    private String date;
     private Game(){
         this.fireball = new Fireball();
         this.magicalStaff = new MagicalStaff();
         // Think about how to initialize it, from constructor maybe?
         this.chance= new Chance();
         this.score= new Score();
+        this.gameName="none";
+        this.date="";
         numSimpleBarrier=0;
         numFirmBarrier=0;
         numExplosiveBarrier=0;
@@ -163,8 +165,9 @@ public class Game {
         this.magicalStaff = magicalStaff;
     }
 
-    public void setChance(Chance chance) {
-        this.chance = chance;
+    public void setChance(int chance) {
+
+        this.chance.setRemainingChance( chance);
     }
 
     public void setScore(Score score) {
@@ -310,6 +313,24 @@ public class Game {
         int boardY = coordinates.getY() / 20; // Adjust the indexing here
         barrierBoard[boardY][boardX] = s; // Adjusted the indexing here
         printBoard();
+    }
+
+    public void addDetailedBarrierFromDb(Coordinate coordinates, BarrierType type, int numHits, boolean isMoving, int velocity) {
+        Barrier newBarrier = new Barrier(coordinates, type);
+        newBarrier.setnHits(numHits);
+        newBarrier.setMoving(isMoving);
+        newBarrier.setVelocity(velocity);
+        barriers.add(newBarrier);
+        if (type == BarrierType.SIMPLE) { //Simple barrier
+            numSimpleBarrier++;
+        } else if (type == BarrierType.REINFORCED) { //Reinforced barrier
+            numFirmBarrier++;
+        } else if (type == BarrierType.EXPLOSIVE) { //Explosive barrier
+            numExplosiveBarrier++;
+        } else if (type == BarrierType.REWARDING) {
+            numrewardingBarrier++;
+        }
+        numTotal++;
     }
 
     public void reset() {
@@ -633,5 +654,19 @@ public class Game {
             MagicalStaff magicalStaff= getMagicalStaff();
             magicalStaff.setExpansionTime(System.currentTimeMillis());
         }
+    }
+
+    public String getGameName() {
+        return gameName;
+    }
+    public void setGameName(String gameName) {
+        this.gameName = gameName;
+    }
+
+    public String getDate() {
+        return date;
+    }
+    public void setDate(String date) {
+        this.date = date;
     }
 }
