@@ -10,6 +10,7 @@ import java.awt.*;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.Rectangle2D;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Random;
 
@@ -18,12 +19,16 @@ import static org.Views.RunningModePage.COLLISION_COOLDOWN;
 
 public class RunningModeController {
     protected RunningModePage runningModePage;
+    private DataBaseController dataBaseController;
+
     private Game game;
     private long lastCollisionTime = 0; // Time of the last collision in milliseconds
 
     public RunningModeController(RunningModePage runningModePage){
         this.runningModePage = runningModePage;
         this.game= Game.getInstance();
+        this.dataBaseController=DataBaseController.getInstance();
+
     }
     public Game getGameSession() {
         return Game.getInstance();
@@ -594,11 +599,11 @@ public class RunningModeController {
             //THIS WILL BE UPDATED SO THAT THE SPELL APPEARS IN THE INVENTORY
             if (transformedRectangle.intersects(spellRectangle)) {
                 SpellType type = spell.getSpellType();
-                if(runningModePage.getInventory().containsKey(type)) {
-                    runningModePage.getInventory().put(type,runningModePage.getInventory().get(type)+1);
+                if(getGameInventory().containsKey(type)) {
+                    getGameInventory().put(type,getGameInventory().get(type)+1);
                 }
                 else{
-                    runningModePage.getInventory().put(type,1);
+                    getGameInventory().put(type,1);
                 }
                 runningModePage.getGamePanel().remove(spell);
                 iterator.remove();
@@ -683,20 +688,20 @@ public class RunningModeController {
     //Temporarily here - melih
     //FELIX_FELICIS
     public void useSpell1(){ // I will move these methods to somewhere else later, this is for testing -Melih
-        int remaining=runningModePage.getInventory().get(SpellType.FELIX_FELICIS);
+        int remaining=getGameInventory().get(SpellType.FELIX_FELICIS);
         if (remaining>0) {
             getGameSession().getChance().incrementChance();
-            runningModePage.getInventory().put(SpellType.FELIX_FELICIS,remaining -1 );
+            getGameInventory().put(SpellType.FELIX_FELICIS,remaining -1 );
         }
 
     }
 
     public void useSpell2(){ //STAFF_EXPANSION
-        int remaining=runningModePage.getInventory().get(SpellType.STAFF_EXPANSION);
+        int remaining=getGameInventory().get(SpellType.STAFF_EXPANSION);
         if (remaining>0) {
             getGameSession().getMagicalStaff().setStaffWidth(200);
             runningModePage.playSoundEffect(3);
-            runningModePage.getInventory().put(SpellType.STAFF_EXPANSION,  remaining -1 );
+            getGameInventory().put(SpellType.STAFF_EXPANSION,  remaining -1 );
 
             MagicalStaff magicalStaff= game.getMagicalStaff();
             magicalStaff.setExpansionTime(System.currentTimeMillis());
@@ -724,5 +729,12 @@ public class RunningModeController {
                 ymir.activateHollowPurple();
             }
         }
+    }
+    public void saveGameToDatabase() {
+
+        dataBaseController.saveGameToDatabase(game.getGameName(), game,true);
+    }
+    public HashMap<SpellType, Integer> getGameInventory(){
+        return game.getInventory();
     }
 }

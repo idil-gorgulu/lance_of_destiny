@@ -8,6 +8,7 @@ import org.Utils.Database;
 import org.bson.Document;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class DataBaseController {
     private static Game gameSession;
@@ -20,6 +21,7 @@ public class DataBaseController {
         Game gameInstance = Game.getInstance();
         gameInstance.reset();
         String templateName = game.getString("gameName");
+        gameInstance.setGameName(templateName);
         int barrierAmount=game.getInteger("barrierAmount");
         for(int j=0; j<barrierAmount; j++) {
             String barrierInfo = game.getString("barrier_" + j);
@@ -34,21 +36,47 @@ public class DataBaseController {
             Coordinate co  =new Coordinate(xCoordinate, yCoordinate);
             gameInstance.addDetailedBarrier(co, barrierType, numHits, isMoving, velocity);
         }
+        gameInstance.getInventory().put(SpellType.FELIX_FELICIS, game.getInteger("spellFelixFelicis"));
+        gameInstance.getInventory().put(SpellType.STAFF_EXPANSION, game.getInteger("spellStaffExpansion"));
+        gameInstance.getInventory().put(SpellType.HEX, game.getInteger("spellHex"));
+        gameInstance.getInventory().put(SpellType.OVERWHELMING_FIREBALL, game.getInteger("spellOverwhelming"));
+
+
+        String[] fireballParts = game.getString("fireball").split("/");
+        gameInstance.getFireball().getCoordinate().setX(Integer.parseInt(fireballParts[0]));
+        gameInstance.getFireball().getCoordinate().setY(Integer.parseInt(fireballParts[1]));
+        gameInstance.getFireball().setxVelocity(Float.parseFloat(fireballParts[2]));
+        gameInstance.getFireball().setyVelocity(Float.parseFloat(fireballParts[3]));
+
+
     }
-    public void saveGameToDatabase(String gameName, Game game) {
+    public void saveGameToDatabase(String gameName, Game game, boolean played) {
         ArrayList<Barrier> barriers = game.getBarriers();
         Document gameSession = new Document();
         gameSession.put("email", User.getUserInstance().getEmail());
         gameSession.put("gameName", gameName);
         gameSession.put("barrierAmount", barriers.size());
-        gameSession.put("chancesLeft", 3);
-        gameSession.put("newlyCreated", "Yes");
+        gameSession.put("chancesLeft", game.getChance().getRemainingChance());
         for(int i=0; i<barriers.size(); i++){
             gameSession.put("barrier_"+i, barriers.get(i).getCoordinate().getX() + "/"+barriers.get(i).getCoordinate().getY() +
                     "/"+ barriers.get(i).getType().toString()+ "/" + barriers.get(i).getnHits() +
                     "/"+ barriers.get(i).isMoving() + "/"+barriers.get(i).getVelocity() );
         }
-        gameSession.put("played", "False");
+        HashMap<SpellType, Integer> inventory = game.getInventory();
+        gameSession.put("spellFelixFelicis",inventory.get(SpellType.FELIX_FELICIS));
+        gameSession.put("spellStaffExpansion",inventory.get(SpellType.STAFF_EXPANSION));
+        gameSession.put("spellHex",inventory.get(SpellType.HEX));
+        gameSession.put("spellOverwhelming",inventory.get(SpellType.OVERWHELMING_FIREBALL));
+
+        Fireball fireball = game.getFireball();
+        gameSession.put("fireball", fireball.getCoordinate().getX() + "/"+
+                fireball.getCoordinate().getY() + "/" +
+                fireball.getxVelocity()+ "/" +
+                fireball.getyVelocity());
+
+        if(played)gameSession.put("played", "True");
+        else gameSession.put("played", "False");
+
         Database.getInstance().getGameCollection().insertOne(gameSession);
         System.out.println("Saved");
     }

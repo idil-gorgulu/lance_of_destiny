@@ -1,8 +1,10 @@
 package org.Domain;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Random;
 
 public class Game {
+    private String gameName;
     private Fireball fireball;
     private MagicalStaff magicalStaff;
     private Chance chance;
@@ -19,6 +21,7 @@ public class Game {
     public boolean ended = false;
     String[][] barrierBoard = new String[20][20];
     private Ymir ymir;
+    private HashMap<SpellType,Integer> inventory;
 
     private Game(){
         this.fireball = new Fireball();
@@ -26,18 +29,23 @@ public class Game {
         // Think about how to initialize it, from constructor maybe?
         this.chance= new Chance();
         this.score= new Score();
+        this.gameName="none";
         numSimpleBarrier=0;
         numFirmBarrier=0;
         numExplosiveBarrier=0;
         numrewardingBarrier=0;
         numTotal=0;
         ymir = new Ymir(this);
+        inventory=new HashMap<>();
+        for (SpellType type : SpellType.values()) {
+            inventory.put(type, 0);
+        }
     }
 
     public Fireball getFireball() {
         return fireball;
     }
-
+    public HashMap<SpellType, Integer> getInventory(){ return inventory;}
     public MagicalStaff getMagicalStaff() {
         return magicalStaff;
     }
@@ -307,5 +315,12 @@ public class Game {
         instance = new Game();
         instance.started = false;
         return instance;
+    }
+    public String getGameName() {
+        return gameName;
+    }
+
+    public void setGameName(String gameName) {
+        this.gameName = gameName;
     }
 }
