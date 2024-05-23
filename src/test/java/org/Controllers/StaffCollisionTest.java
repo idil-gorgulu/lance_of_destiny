@@ -30,7 +30,7 @@ public class StaffCollisionTest {
     //there shouldnt be a collision before the cooldown, this test compares the before and after the "collision"
     @Test
     public void collisionBeforeCooldown() {
-        runningModeController.setLastCollisionTime(System.currentTimeMillis());
+        game.setLastCollisionTime(System.currentTimeMillis());
         Fireball fireball = game.getFireball();
         double beforex = fireball.getxVelocity();
         double beforey = fireball.getyVelocity();
@@ -44,7 +44,7 @@ public class StaffCollisionTest {
     //Checking the case where the ball and staff dont intersect, fireball velocities should not change
     @Test
     public void noIntersect() {
-        runningModeController.setLastCollisionTime(0);
+        game.setLastCollisionTime(0);
         Fireball fireball = game.getFireball();
         MagicalStaff magicalStaff = game.getMagicalStaff();
 
@@ -54,7 +54,7 @@ public class StaffCollisionTest {
         double beforeX = fireball.getxVelocity();
         double beforeY = fireball.getyVelocity();
 
-       runningModeController.checkMagicalStaffFireballCollision();
+        runningModeController.checkMagicalStaffFireballCollision();
 
         assertEquals(beforeX, fireball.getxVelocity());
         assertEquals(beforeY, fireball.getyVelocity());
@@ -64,7 +64,7 @@ public class StaffCollisionTest {
     //Collision when staff is horizontal (angle=0). Only the y component should change to -y.
     @Test
     public void horizontalReflection() {
-        runningModeController.setLastCollisionTime(0);
+        game.setLastCollisionTime(0);
         Fireball fireball = game.getFireball();
         MagicalStaff magicalStaff = game.getMagicalStaff();
 
@@ -85,7 +85,7 @@ public class StaffCollisionTest {
     //Collision when staff angle=45. x,y --> y,x
     @Test
     public void angledReflection() {
-        runningModeController.setLastCollisionTime(0);
+        game.setLastCollisionTime(0);
         Fireball fireball = game.getFireball();
         MagicalStaff magicalStaff = game.getMagicalStaff();
 
@@ -108,7 +108,7 @@ public class StaffCollisionTest {
     // Checking collisions at unexpected speeds.
     @Test
     public void diffVelocity() {
-        runningModeController.setLastCollisionTime(0);
+        game.setLastCollisionTime(0);
         Fireball fireball = game.getFireball();
         MagicalStaff magicalStaff = game.getMagicalStaff();
 
