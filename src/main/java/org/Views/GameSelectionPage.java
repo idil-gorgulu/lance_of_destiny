@@ -92,7 +92,7 @@ public class GameSelectionPage extends Page {
         System.out.println(games);
         for (int  i = 0; i < games.size(); i++) {
             Document game = games.get(i);
-            JButton gameButton = new JButton(game.getString("gameName"));
+            JButton gameButton = new JButton(game.getString("gameName") + " "+ game.getString("gameDate"));
             customizeButton(gameButton);
             gameButton.addActionListener(new ActionListener() {
                 @Override

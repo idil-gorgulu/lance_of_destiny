@@ -99,7 +99,8 @@ public class RunningModePage extends Page{
                     }
                 }
                 else if (runningModeController.getGameSession().ended) {
-                    JOptionPane.showMessageDialog(null, "You lost!");
+                    if(runningModeController.getGameSession().getBarriers().size()==0)JOptionPane.showMessageDialog(null, "You won!");
+                    else JOptionPane.showMessageDialog(null, "You lost!");
                     runningModeController = null;
                     Navigator.getInstance().showStartSingleplayerPage();
                 }
@@ -132,6 +133,12 @@ public class RunningModePage extends Page{
         updateInventoryDisplay();
         repaint();
         if (this.runningModeController.getGameSession().getChance().getRemainingChance() == 0) {
+            this.runningModeController.getGameSession().ended = true;
+
+
+        }
+        if (this.runningModeController.getGameSession().getBarriers().size()== 0) {
+            System.out.println("won");
             this.runningModeController.getGameSession().ended = true;
 
 

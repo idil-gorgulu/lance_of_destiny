@@ -22,6 +22,7 @@ public class Game {
     String[][] barrierBoard = new String[20][20];
     private Ymir ymir;
     private HashMap<SpellType,Integer> inventory;
+    private String date;
 
     private Game(){
         this.fireball = new Fireball();
@@ -30,6 +31,7 @@ public class Game {
         this.chance= new Chance();
         this.score= new Score();
         this.gameName="none";
+        this.date="";
         numSimpleBarrier=0;
         numFirmBarrier=0;
         numExplosiveBarrier=0;
@@ -151,8 +153,9 @@ public class Game {
         this.magicalStaff = magicalStaff;
     }
 
-    public void setChance(Chance chance) {
-        this.chance = chance;
+    public void setChance(int chance) {
+
+        this.chance.setRemainingChance( chance);
     }
 
     public void setScore(Score score) {
@@ -294,6 +297,24 @@ public class Game {
         printBoard();
     }
 
+    public void addDetailedBarrierFromDb(Coordinate coordinates, BarrierType type, int numHits, boolean isMoving, int velocity) {
+        Barrier newBarrier = new Barrier(coordinates, type);
+        newBarrier.setnHits(numHits);
+        newBarrier.setMoving(isMoving);
+        newBarrier.setVelocity(velocity);
+        barriers.add(newBarrier);
+        if (type == BarrierType.SIMPLE) { //Simple barrier
+            numSimpleBarrier++;
+        } else if (type == BarrierType.REINFORCED) { //Reinforced barrier
+            numFirmBarrier++;
+        } else if (type == BarrierType.EXPLOSIVE) { //Explosive barrier
+            numExplosiveBarrier++;
+        } else if (type == BarrierType.REWARDING) {
+            numrewardingBarrier++;
+        }
+        numTotal++;
+    }
+
     public void reset() {
         this.fireball = new Fireball();
         this.magicalStaff = new MagicalStaff();
@@ -322,5 +343,13 @@ public class Game {
 
     public void setGameName(String gameName) {
         this.gameName = gameName;
+    }
+
+    public String getDate() {
+        return date;
+    }
+
+    public void setDate(String date) {
+        this.date = date;
     }
 }

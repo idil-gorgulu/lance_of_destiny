@@ -1,5 +1,6 @@
 package org.Controllers;
-
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
 import org.Domain.BarrierType;
 import org.Domain.Coordinate;
 import org.Domain.Game;
@@ -21,7 +22,11 @@ public class DataBaseController {
         Game gameInstance = Game.getInstance();
         gameInstance.reset();
         String templateName = game.getString("gameName");
+        String gameDate = game.getString("gameDate");
         gameInstance.setGameName(templateName);
+        gameInstance.setDate(gameDate);
+        int chancesLeft=game.getInteger("chancesLeft");
+        gameInstance.setChance(chancesLeft);
         int barrierAmount=game.getInteger("barrierAmount");
         for(int j=0; j<barrierAmount; j++) {
             String barrierInfo = game.getString("barrier_" + j);
@@ -34,7 +39,7 @@ public class DataBaseController {
             boolean isMoving= Boolean.parseBoolean(parts[4]);
             int velocity = Integer.parseInt(parts[5]);
             Coordinate co  =new Coordinate(xCoordinate, yCoordinate);
-            gameInstance.addDetailedBarrier(co, barrierType, numHits, isMoving, velocity);
+            gameInstance.addDetailedBarrierFromDb(co, barrierType, numHits, isMoving, velocity);
         }
         gameInstance.getInventory().put(SpellType.FELIX_FELICIS, game.getInteger("spellFelixFelicis"));
         gameInstance.getInventory().put(SpellType.STAFF_EXPANSION, game.getInteger("spellStaffExpansion"));
@@ -51,10 +56,17 @@ public class DataBaseController {
 
     }
     public void saveGameToDatabase(String gameName, Game game, boolean played) {
+        // Get the current date and time with time zone
+        ZonedDateTime now = ZonedDateTime.now();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss");
+        // Format the date and time
+        String formattedDateTime = now.format(formatter);
+        game.setDate(formattedDateTime);
         ArrayList<Barrier> barriers = game.getBarriers();
         Document gameSession = new Document();
         gameSession.put("email", User.getUserInstance().getEmail());
         gameSession.put("gameName", gameName);
+        gameSession.put("gameDate", game.getDate());
         gameSession.put("barrierAmount", barriers.size());
         gameSession.put("chancesLeft", game.getChance().getRemainingChance());
         for(int i=0; i<barriers.size(); i++){
