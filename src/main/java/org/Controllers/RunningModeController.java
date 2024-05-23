@@ -250,7 +250,7 @@ public class RunningModeController {
         }
     }
 
-    public void checkBarrierFireballCollision(){
+    public void checkBarrierFireballCollision(int dummy){
         game.checkBarrierFireballCollision();
     }
     /**
@@ -266,7 +266,7 @@ public class RunningModeController {
      *      - Plays a sound effect when a collision occurs.
      *      - Updates the score based on the number of barriers removed.
      */
-    public void checkBarrierFireballCollision(int changeSignature){
+    public void checkBarrierFireballCollision(){
         ArrayList<Barrier> barriers = game.getBarriers();
         ArrayList<Barrier> toRemove = new ArrayList<>();
 
@@ -354,20 +354,16 @@ public class RunningModeController {
             }
             return true;
         }
-
         return false;
 
-        /*if(barrier.getType()==BarrierType.REWARDING){
-            //DROP SPELL
-        }*/
     }
 
     // Moved to Game
     private void explodeBarrier(Barrier barrier) {
         Debris debris = new Debris(barrier.getCoordinate());
         debris.setBackground(new Color(0, 0, 0, 0)); // Transparent background
-        runningModePage.getActiveDebris().add(debris); // Add debris to the list
         runningModePage.getGamePanel().add(debris);
+        runningModePage.getActiveDebris().add(debris); // TODO should be in Game
         //runningModePage.repaint();
     }
 
@@ -383,19 +379,19 @@ public class RunningModeController {
 
         runningModePage.getGamePanel().add(bullet);
         runningModePage.getGamePanel().add(bullet2);
-        runningModePage.getActiveBullets().add(bullet);
-        runningModePage.getActiveBullets().add(bullet2);
-        runningModePage.playSoundEffect(4);
+        runningModePage.getActiveBullets().add(bullet);// TODO should be in Game
+        runningModePage.getActiveBullets().add(bullet2);// TODO should be in Game
+        //runningModePage.playSoundEffect(4);
     }
     private void dropSpell(Barrier barrier){
         Spell spell = new Spell(barrier.getCoordinate());
         spell.setBackground(new Color(0, 0, 0, 0)); // Transparent background
-        runningModePage.getDroppingSpells().add(spell); // Add spells to the list
+        runningModePage.getDroppingSpells().add(spell); // TODO should be in Game
         runningModePage.getGamePanel().add(spell);
     }
 
     public void updateDebris() {
-        Iterator<Debris> iterator = runningModePage.getActiveDebris().iterator();
+        Iterator<Debris> iterator = game.getActiveDebris().iterator();
         while (iterator.hasNext()) {
             Debris debris = iterator.next();
             debris.moveDown();
@@ -496,9 +492,8 @@ public class RunningModeController {
         ArrayList<Barrier> toRemove = new ArrayList<>();
 
 
-        Iterator<Bullet> iterator = runningModePage.getActiveBullets().iterator();
+        Iterator<Bullet> iterator = game.getActiveBullets().iterator();
         while (iterator.hasNext()) {
-
             Bullet bullet = iterator.next();
             bullet.moveUp();
             if (bullet.getCoordinate().getY() < 0) { //Out of Screen Top Border
@@ -617,5 +612,14 @@ public class RunningModeController {
 
     public  HashMap<SpellType, Integer> getGameInventory(){
         return game.getInventory();
+    }
+    public ArrayList<Spell> getGameSpells(){
+        return game.getSpells();
+    }
+    public ArrayList<Bullet> getGameBullets(){
+        return game.getActiveBullets();
+    }
+    public ArrayList<Debris> getGameDebris(){
+        return game.getActiveDebris();
     }
 }

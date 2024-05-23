@@ -13,8 +13,6 @@ public class Game {
     private MagicalStaff magicalStaff;
     private Chance chance;
     private Score score;
-    private ArrayList<Barrier> barriers = new ArrayList<Barrier>(0); // Could maybe be a hashmap?
-    private ArrayList<Debris> debris = new ArrayList<Debris>(0);
     private static Game instance;
     int numSimpleBarrier=0;
     int numFirmBarrier=0;
@@ -26,7 +24,10 @@ public class Game {
     String[][] barrierBoard = new String[20][20];
     private Ymir ymir;
     private long lastCollisionTime = 0; // Time of the last collision in milliseconds
-
+    private ArrayList<Barrier> barriers = new ArrayList<Barrier>(0); // Could maybe be a hashmap?
+    private ArrayList<Debris> activeDebris;
+    private ArrayList<Spell> droppingSpells;
+    private ArrayList<Bullet> activeBullets;
     private HashMap<SpellType,Integer> inventory;
 
 
@@ -42,6 +43,9 @@ public class Game {
         numrewardingBarrier=0;
         numTotal=0;
         ymir = new Ymir(this);
+        activeDebris= new ArrayList<>();
+        droppingSpells=new ArrayList<>();
+        activeBullets=new ArrayList<>();
         inventory=new HashMap<>();
         for (SpellType type : SpellType.values()) {
             inventory.put(type, 0);
@@ -180,8 +184,14 @@ public class Game {
         Game.instance = instance;
     }
 
-    public ArrayList<Debris> getDebris() {
-        return debris;
+    public ArrayList<Debris> getActiveDebris() {
+        return activeDebris;
+    }
+    public ArrayList<Spell> getSpells(){
+        return droppingSpells;
+    }
+    public ArrayList<Bullet>getActiveBullets(){
+        return activeBullets;
     }
 
     /**
@@ -308,7 +318,7 @@ public class Game {
         this.chance = new Chance();
         this.score = new Score();
         this.barriers.clear();
-        this.debris.clear();
+        this.activeDebris.clear();
         this.numSimpleBarrier = 0;
         this.numFirmBarrier = 0;
         this.numExplosiveBarrier = 0;
@@ -375,12 +385,14 @@ public class Game {
             //runningModePage.playSoundEffect(1); TODO fix
             fireball.setLastCollided(null);
             fireball.setxVelocity(-xVelocity);// Reverse X velocity
+            fireball.setCoordinate(new Coordinate((int) (fireballX-xVelocity),fireballY));
         }
         // Check collision with top and bottom boundaries
         if (fireballY - fireballRadius <= -10)  {
             //runningModePage.playSoundEffect(1); TODO fix
             fireball.setyVelocity(-yVelocity);// TOP
             fireball.setLastCollided(null);
+            fireball.setCoordinate(new Coordinate(fireballX,(int)(fireballY-yVelocity)));
         }
 
         else if (fireballY + fireballRadius >= containerHeight) {
@@ -504,6 +516,10 @@ public class Game {
 
 
     }
+
+
+
+    // move back to controller
     public void checkBarrierFireballCollision(){
         ArrayList<Barrier> barriers = getBarriers();
         ArrayList<Barrier> toRemove = new ArrayList<>();
@@ -562,10 +578,7 @@ public class Game {
 
     }
 
-    // Active debris should be stored in game, cannot use this method now.
-    public boolean hitBarrier(Barrier barrier, int hitTimes){
-        return false;}
-    /*
+    // move back to controller
     public boolean hitBarrier(Barrier barrier, int hitTimes) { // Could have been private method, since only called in collision method
         barrier.setnHits(barrier.getnHits() - hitTimes);
         //barrier.revalidate();
@@ -573,38 +586,35 @@ public class Game {
         if (barrier.getnHits() <= 0) {
             barrier.destroy();
             if(barrier.getType()==BarrierType.EXPLOSIVE){
+                System.out.println("Explosive is broken");
                 explodeBarrier(barrier);
             }
             else if(barrier.getType()==BarrierType.REWARDING){
+                System.out.println("Rewarding is broken");
                 dropSpell(barrier);
             }
             return true;
         }
 
         return false;
-
-        /*if(barrier.getType()==BarrierType.REWARDING){
-            //DROP SPELL
-        }
     }
-*/
-// Active debris should be stored in game, cannot use this method now.
-    /*
+
+
+    // move back to controller
     private void explodeBarrier(Barrier barrier) {
         Debris debris = new Debris(barrier.getCoordinate());
         debris.setBackground(new Color(0, 0, 0, 0)); // Transparent background
-        runningModePage.getActiveDebris().add(debris); // Add debris to the list
-        runningModePage.getGamePanel().add(debris);
+        activeDebris.add(debris); // Add debris to the list
+
         //runningModePage.repaint();
     }
-    */
-/*
+
+    // move back to controller
     private void dropSpell(Barrier barrier){
         Spell spell = new Spell(barrier.getCoordinate());
         spell.setBackground(new Color(0, 0, 0, 0)); // Transparent background
-        runningModePage.getDroppingSpells().add(spell); // Add spells to the list
-        runningModePage.getGamePanel().add(spell);
-    }*/
+        droppingSpells.add(spell); // Add spells to the list
+    }
 
     public void useFelixFelicis(){
         int remaining=inventory.get(SpellType.FELIX_FELICIS);
