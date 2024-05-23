@@ -598,8 +598,6 @@ public class Game {
         //getScore().incrementScore(toRemove.size(), this.runningModePage.timeInSeconds); // TODO time is not in game now
 
 
-    public String getGameName() {
-        return gameName;
     }
 
     // move back to controller
@@ -619,12 +617,8 @@ public class Game {
             }
             return true;
         }
-    public void setGameName(String gameName) {
-        this.gameName = gameName;
-    }
 
-    public String getDate() {
-        return date;
+        return false;
     }
 
 
@@ -644,6 +638,35 @@ public class Game {
         droppingSpells.add(spell); // Add spells to the list
     }
 
+    public void useFelixFelicis(){
+        int remaining=inventory.get(SpellType.FELIX_FELICIS);
+        if (remaining>0) {
+            getChance().incrementChance();
+            inventory.put(SpellType.FELIX_FELICIS,remaining -1 );
+        }
+    }
+    public void useStaffExpansion(){
+        int remaining=inventory.get(SpellType.STAFF_EXPANSION);
+        if (remaining>0) {
+            getMagicalStaff().setStaffWidth(200);
+            //runningModePage.playSoundEffect(3); TODO fix
+            inventory.put(SpellType.STAFF_EXPANSION,  remaining -1 );
+
+            MagicalStaff magicalStaff= getMagicalStaff();
+            magicalStaff.setExpansionTime(System.currentTimeMillis());
+        }
+    }
+
+    public String getGameName() {
+        return gameName;
+    }
+    public void setGameName(String gameName) {
+        this.gameName = gameName;
+    }
+
+    public String getDate() {
+        return date;
+    }
     public void setDate(String date) {
         this.date = date;
     }

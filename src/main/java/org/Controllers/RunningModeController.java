@@ -342,9 +342,7 @@ public class RunningModeController {
         }
     }
 
-
-    // Moved to Game
-    public boolean hitBarrier(Barrier barrier, int hitTimes) { // Could have been private method, since only called in collision method
+    public boolean hitBarrier(Barrier barrier, int hitTimes) {
         barrier.setnHits(barrier.getnHits() - hitTimes);
         //barrier.revalidate();
         //barrier.repaint();
@@ -579,9 +577,11 @@ public class RunningModeController {
     /*
     public void useSpell1(int dummy){
         int remaining=runningModePage.getInventory().get(SpellType.FELIX_FELICIS);
+    public void useSpell1(){ // I will move these methods to somewhere else later, this is for testing -Melih
+        int remaining=getGameInventory().get(SpellType.FELIX_FELICIS);
         if (remaining>0) {
             getGameSession().getChance().incrementChance();
-            runningModePage.getInventory().put(SpellType.FELIX_FELICIS,remaining -1 );
+            getGameInventory().put(SpellType.FELIX_FELICIS,remaining -1 );
         }
 
     }
@@ -595,10 +595,12 @@ public class RunningModeController {
     /*
     public void useSpell2(int dummy){
         int remaining=runningModePage.getInventory().get(SpellType.STAFF_EXPANSION);
+    public void useSpell2(){ //STAFF_EXPANSION
+        int remaining=getGameInventory().get(SpellType.STAFF_EXPANSION);
         if (remaining>0) {
             getGameSession().getMagicalStaff().setStaffWidth(200);
             runningModePage.playSoundEffect(3);
-            runningModePage.getInventory().put(SpellType.STAFF_EXPANSION,  remaining -1 );
+            getGameInventory().put(SpellType.STAFF_EXPANSION,  remaining -1 );
 
             MagicalStaff magicalStaff= game.getMagicalStaff();
             magicalStaff.setExpansionTime(System.currentTimeMillis());
@@ -626,6 +628,7 @@ public class RunningModeController {
     public HashMap<SpellType, Integer> getGameInventory(){
         return game.getInventory();
     }
+
     public ArrayList<Spell> getGameSpells(){
         return game.getSpells();
     }

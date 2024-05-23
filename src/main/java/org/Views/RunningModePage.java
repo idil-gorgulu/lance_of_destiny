@@ -83,8 +83,8 @@ public class RunningModePage extends Page{
             public void run() {
                 // For Pausing the game
                 if (pause) {
-                    //Object[] options = {"Continue", "Quit", "Save"};
-                    Object[] options = {"Continue", "Quit"};
+                    Object[] options = {"Continue", "Quit", "Save"};
+                    //Object[] options = {"Continue", "Quit"};
                     int choice = JOptionPane.showOptionDialog(null,
                             "You paused",
                             "Game Paused",
@@ -100,6 +100,8 @@ public class RunningModePage extends Page{
                         pause = false;
                         runningModeController = null;
                         Navigator.getInstance().showStartSingleplayerPage();
+                    }else if(choice == JOptionPane.CANCEL_OPTION) {
+                        runningModeController.saveGameToDatabase();
                     }
                 }
                 else if (runningModeController.getGameSession().ended) {
@@ -325,5 +327,6 @@ public class RunningModePage extends Page{
     public void volume(float i){
         sound.setVolume(sound.getVolume()+i);
     }
+
 
 }

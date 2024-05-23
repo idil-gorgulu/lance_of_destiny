@@ -41,27 +41,8 @@ public class DataBaseController {
             Coordinate co  =new Coordinate(xCoordinate, yCoordinate);
             gameInstance.addDetailedBarrierFromDb(co, barrierType, numHits, isMoving, velocity);
         }
-        gameInstance.getInventory().put(SpellType.FELIX_FELICIS, game.getInteger("spellFelixFelicis"));
-        gameInstance.getInventory().put(SpellType.STAFF_EXPANSION, game.getInteger("spellStaffExpansion"));
-        gameInstance.getInventory().put(SpellType.HEX, game.getInteger("spellHex"));
-        gameInstance.getInventory().put(SpellType.OVERWHELMING_FIREBALL, game.getInteger("spellOverwhelming"));
-
-
-        String[] fireballParts = game.getString("fireball").split("/");
-        gameInstance.getFireball().getCoordinate().setX(Integer.parseInt(fireballParts[0]));
-        gameInstance.getFireball().getCoordinate().setY(Integer.parseInt(fireballParts[1]));
-        gameInstance.getFireball().setxVelocity(Float.parseFloat(fireballParts[2]));
-        gameInstance.getFireball().setyVelocity(Float.parseFloat(fireballParts[3]));
-
-
     }
-    public void saveGameToDatabase(String gameName, Game game, boolean played) {
-        // Get the current date and time with time zone
-        ZonedDateTime now = ZonedDateTime.now();
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss");
-        // Format the date and time
-        String formattedDateTime = now.format(formatter);
-        game.setDate(formattedDateTime);
+    public void saveGameToDatabase(String gameName, Game game) {
         ArrayList<Barrier> barriers = game.getBarriers();
         Document gameSession = new Document();
         gameSession.put("email", User.getUserInstance().getEmail());
