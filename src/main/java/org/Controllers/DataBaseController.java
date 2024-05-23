@@ -42,7 +42,7 @@ public class DataBaseController {
             gameInstance.addDetailedBarrierFromDb(co, barrierType, numHits, isMoving, velocity);
         }
     }
-    public void saveGameToDatabase(String gameName, Game game) {
+    public void saveGameToDatabase(String gameName, Game game, boolean played) {
         ArrayList<Barrier> barriers = game.getBarriers();
         Document gameSession = new Document();
         gameSession.put("email", User.getUserInstance().getEmail());
