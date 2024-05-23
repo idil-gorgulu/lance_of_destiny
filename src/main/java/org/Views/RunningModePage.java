@@ -24,7 +24,8 @@ public class RunningModePage extends Page{
     private JPanel inventoryContainer = new JPanel();
     protected RunningModeController runningModeController;
     public boolean pause = false;
-    private ArrayList<Barrier> barriers = new ArrayList<>();
+
+    private ArrayList<Barrier> barriers;
     private ArrayList<Debris> activeDebris;
     private ArrayList<Spell> droppingSpells;
     public HashMap<SpellType,Integer> inventory;
@@ -42,10 +43,7 @@ public class RunningModePage extends Page{
     private JLabel timeLabel;
     public RunningModePage() {
         super();
-        activeDebris = new ArrayList<>();
-        droppingSpells = new ArrayList<>();
-        inventory = new HashMap<>();
-        activeBullets=new ArrayList<>();
+
         this.setDoubleBuffered(true);
         try {
             backgroundImage = ImageIO.read(new File("assets/Background.png"));
@@ -55,18 +53,22 @@ public class RunningModePage extends Page{
 
         this.runningModeController = new RunningModeController(this);
         this.runningModeController.getGameSession().started = true;
+        inventory = runningModeController.getGameInventory();
+        activeDebris = runningModeController.getGameDebris();
+        droppingSpells = runningModeController.getGameSpells();
+        activeBullets=runningModeController.getGameBullets();
         initUI();
         setFocusable(true);
         requestFocus();
         setupTimer();
-        for (SpellType type : SpellType.values()) {
-            inventory.put(type, 0);
-        }
+       // for (SpellType type : SpellType.values()) {
+        //    inventory.put(type, 0);
+        //}
     }
     public ArrayList<Debris> getActiveDebris() {  return activeDebris;   }
     public ArrayList<Spell> getDroppingSpells() { return droppingSpells; }
     public ArrayList<Bullet> getActiveBullets(){ return activeBullets;}
-    public HashMap<SpellType, Integer> getInventory(){ return inventory;}
+    //public HashMap<SpellType, Integer> getInventory(){ return inventory;}
 
 
     protected void paintComponent(Graphics g) { //background for the whole frame
@@ -155,7 +157,7 @@ public class RunningModePage extends Page{
     protected void initUI() {
         setLayout(new BorderLayout());
         initializeGameObjects();
-        playMusic(0);
+        //playMusic(0); TODO
 
     }
 
