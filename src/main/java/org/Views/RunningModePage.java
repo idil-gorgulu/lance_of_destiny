@@ -44,7 +44,7 @@ public class RunningModePage extends Page{
         super();
         activeDebris = new ArrayList<>();
         droppingSpells = new ArrayList<>();
-        inventory = new HashMap<>();
+        inventory = runningModeController.getGameInventory();
         activeBullets=new ArrayList<>();
         this.setDoubleBuffered(true);
         try {
@@ -59,14 +59,14 @@ public class RunningModePage extends Page{
         setFocusable(true);
         requestFocus();
         setupTimer();
-        for (SpellType type : SpellType.values()) {
-            inventory.put(type, 0);
-        }
+       // for (SpellType type : SpellType.values()) {
+        //    inventory.put(type, 0);
+        //}
     }
     public ArrayList<Debris> getActiveDebris() {  return activeDebris;   }
     public ArrayList<Spell> getDroppingSpells() { return droppingSpells; }
     public ArrayList<Bullet> getActiveBullets(){ return activeBullets;}
-    public HashMap<SpellType, Integer> getInventory(){ return inventory;}
+    //public HashMap<SpellType, Integer> getInventory(){ return inventory;}
 
 
     protected void paintComponent(Graphics g) { //background for the whole frame
