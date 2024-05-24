@@ -1,9 +1,6 @@
 package org.Views;
+
 import org.Controllers.DataBaseController;
-import org.Controllers.LoginPageController;
-import org.Domain.BarrierType;
-import org.Domain.Coordinate;
-import org.Domain.Game;
 import org.Domain.User;
 import org.bson.Document;
 
@@ -11,8 +8,6 @@ import javax.imageio.ImageIO;
 import javax.swing.*;
 import javax.swing.plaf.basic.BasicButtonUI;
 import java.awt.*;
-import java.awt.event.FocusAdapter;
-import java.awt.event.FocusEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
@@ -22,17 +17,17 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
 
-
 public class GameSelectionPage extends Page {
 
     private BufferedImage backgroundImage;
     private DataBaseController dataBaseController;
+
     public GameSelectionPage() {
         super();
         this.setOpaque(false);
         loadBackgroundImage();
         initUI();
-        this.dataBaseController=DataBaseController.getInstance();
+        this.dataBaseController = DataBaseController.getInstance();
     }
 
     private void loadBackgroundImage() {
@@ -45,6 +40,7 @@ public class GameSelectionPage extends Page {
 
     protected void initUI() {
         setLayout(new BorderLayout());
+
         JPanel backgroundPanel = new JPanel(new BorderLayout()) {
             @Override
             protected void paintComponent(Graphics g) {
@@ -62,10 +58,9 @@ public class GameSelectionPage extends Page {
         JButton backButton = new JButton("Back");
         backButton.addActionListener(e -> Navigator.getInstance().getPrevious());
         backButtonPanel.add(backButton);
-
         backgroundPanel.add(backButtonPanel, BorderLayout.NORTH);
-
         customizeButtonback(backButton);
+
         JPanel centerPanel = new JPanel(new GridBagLayout()) {
             @Override
             protected void paintComponent(Graphics g) {
@@ -88,11 +83,12 @@ public class GameSelectionPage extends Page {
         JPanel formPanel = new JPanel();
         formPanel.setLayout(new BoxLayout(formPanel, BoxLayout.Y_AXIS));
         formPanel.setOpaque(false);
+
         ArrayList<Document> games = User.getUserInstance().getAllGames();
         System.out.println(games);
-        for (int  i = 0; i < games.size(); i++) {
+        for (int i = 0; i < games.size(); i++) {
             Document game = games.get(i);
-            JButton gameButton = new JButton(game.getString("gameName") + " "+ game.getString("gameDate"));
+            JButton gameButton = new JButton(game.getString("gameName") + " " + game.getString("gameDate"));
             customizeButton(gameButton);
             gameButton.addActionListener(new ActionListener() {
                 @Override
@@ -107,18 +103,24 @@ public class GameSelectionPage extends Page {
             gameButton.setAlignmentX(Component.CENTER_ALIGNMENT);
         }
 
+        // Ensure formPanel is scrollable by wrapping it in a JScrollPane
+        JScrollPane scrollPane = new JScrollPane(formPanel);
+        scrollPane.setOpaque(false);
+        scrollPane.getViewport().setOpaque(false);
+        scrollPane.setBorder(null);
+        scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+        scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
+
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.gridwidth = GridBagConstraints.REMAINDER;
-        gbc.fill = GridBagConstraints.VERTICAL;
-
-        // Additional padding to ensure the formPanel is visually centered
+        gbc.fill = GridBagConstraints.BOTH;
         gbc.insets = new Insets(10, 10, 10, 10);
-        centerPanel.add(formPanel, gbc);
+        gbc.weightx = 1;
+        gbc.weighty = 1;
 
-        // Adding the centered panel to the center of the border layout
+        centerPanel.add(scrollPane, gbc);
         add(centerPanel, BorderLayout.CENTER);
     }
-
 
     private void customizeButton(JButton button) {
         button.setBackground(new Color(100, 149, 237)); // Cornflower blue
@@ -199,5 +201,4 @@ public class GameSelectionPage extends Page {
             g.drawImage(backgroundImage, 0, 0, getWidth(), getHeight(), this);
         }
     }
-
 }

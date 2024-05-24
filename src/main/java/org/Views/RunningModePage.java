@@ -138,11 +138,10 @@ public class RunningModePage extends Page{
         runningModeController.updateHexBullets();
         updateInventoryDisplay();
         repaint();
-        if (this.runningModeController.getGameSession().getChance().getRemainingChance() == 0) {
+        if (this.runningModeController.getGameSession().getChance().getRemainingChance() == 0 || runningModeController.getGameSession().getBarriers().size()==0) {
             this.runningModeController.getGameSession().ended = true;
-
-
         }
+
         SwingUtilities.invokeLater(new Runnable() {
             @Override
             public void run() {
