@@ -254,7 +254,8 @@ public class RunningModeController {
         }
     }
 
-    public void checkBarrierFireballCollision(int dummy){
+
+    public void checkBarrierFireballCollision(){
 
         game.checkBarrierFireballCollision();
     }
@@ -271,6 +272,7 @@ public class RunningModeController {
      *      - Plays a sound effect when a collision occurs.
      *      - Updates the score based on the number of barriers removed.
      */
+    /*
     public void checkBarrierFireballCollision(int changeSignature){
         ArrayList<Barrier> barriers = game.getBarriers();
         ArrayList<Barrier> toRemove = new ArrayList<>();
@@ -325,7 +327,7 @@ public class RunningModeController {
         // Updating the score.
         this.getGameSession().getScore().incrementScore(toRemove.size(), this.runningModePage.timeInSeconds);
     }
-
+*/
 
     public void run(){
         Fireball fireball = game.getFireball();
