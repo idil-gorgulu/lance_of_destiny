@@ -12,13 +12,16 @@ import java.util.ArrayList;
 public class Bullet extends JComponent {
     public BufferedImage bulletImage;
     private Coordinate coordinate;
-    private int yVelocity = -3;
+    private int xvelocity;
+    private int yVelocity ;
 
-    public Bullet(Coordinate coordinate) {
+    public Bullet(Coordinate coordinate, int xvelocity, int yVelocity) {
         this.coordinate = new Coordinate(coordinate.getX(), coordinate.getY());
+        this.xvelocity=xvelocity;
+        this.yVelocity=yVelocity;
         try {
             this.bulletImage = ImageIO.read(new File(setImageDirectory()));
-            bulletImage = resizeImage(bulletImage, 20,20);
+            bulletImage = resizeImage(bulletImage, 20,5);
 
         } catch (IOException e) {
             e.printStackTrace();
@@ -53,6 +56,7 @@ public class Bullet extends JComponent {
     }
 
     public void moveUp() {
+        this.coordinate.setX(this.coordinate.getX()+xvelocity);
         this.coordinate.setY(this.coordinate.getY() + yVelocity);
         this.setBounds(this.coordinate.getX() - bulletImage.getWidth() / 2,
                 this.coordinate.getY() - bulletImage.getHeight() / 2,

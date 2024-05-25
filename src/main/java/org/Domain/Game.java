@@ -609,10 +609,17 @@ public class Game {
             getMagicalStaff().setStaffWidth(200);
             //runningModePage.playSoundEffect(3); TODO fix
             inventory.put(SpellType.STAFF_EXPANSION,  remaining -1 );
-
-            MagicalStaff magicalStaff= getMagicalStaff();
-            magicalStaff.setExpansionTime(System.currentTimeMillis());
+            getMagicalStaff().setExpansionTime(System.currentTimeMillis());
         }
+    }
+    public void useHex(){
+        int remaining=inventory.get(SpellType.HEX);
+        if (remaining>0){
+            getMagicalStaff().setShooting(true);
+            getMagicalStaff().setCannonTime(System.currentTimeMillis());
+            inventory.put(SpellType.HEX,  remaining -1 );
+        }
+
     }
 
     public String getGameName() {
