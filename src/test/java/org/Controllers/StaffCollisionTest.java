@@ -34,7 +34,7 @@ public class StaffCollisionTest {
         Fireball fireball = game.getFireball();
         double beforex = fireball.getxVelocity();
         double beforey = fireball.getyVelocity();
-        runningModeController.checkMagicalStaffFireballCollision();
+        game.checkMagicalStaffFireballCollision();
 
         assertEquals(beforex, fireball.getxVelocity());
         assertEquals(beforey, fireball.getyVelocity());
@@ -54,7 +54,7 @@ public class StaffCollisionTest {
         double beforeX = fireball.getxVelocity();
         double beforeY = fireball.getyVelocity();
 
-        runningModeController.checkMagicalStaffFireballCollision();
+        game.checkMagicalStaffFireballCollision();
 
         assertEquals(beforeX, fireball.getxVelocity());
         assertEquals(beforeY, fireball.getyVelocity());
@@ -75,7 +75,7 @@ public class StaffCollisionTest {
         fireball.setxVelocity(3);
         fireball.setyVelocity(3);
 
-        runningModeController.checkMagicalStaffFireballCollision();
+        game.checkMagicalStaffFireballCollision();
 
         assertEquals(3, fireball.getxVelocity());
         assertEquals(-3, fireball.getyVelocity());
@@ -98,7 +98,7 @@ public class StaffCollisionTest {
         fireball.setxVelocity(3);
         fireball.setyVelocity(5);
 
-        runningModeController.checkMagicalStaffFireballCollision();
+        game.checkMagicalStaffFireballCollision();
 
         assertEquals(5, fireball.getxVelocity(), 0.01);
         assertEquals(3, fireball.getyVelocity(),0.01);
@@ -119,7 +119,7 @@ public class StaffCollisionTest {
         fireball.setxVelocity(30);
         fireball.setyVelocity(-15);
 
-        runningModeController.checkMagicalStaffFireballCollision();
+        game.checkMagicalStaffFireballCollision();
 
         assertEquals(30, fireball.getxVelocity());
         assertEquals(15, fireball.getyVelocity());

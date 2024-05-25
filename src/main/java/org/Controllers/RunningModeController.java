@@ -36,26 +36,26 @@ public class RunningModeController {
 
     // These are the functions for updating the views of the game components.
     public void updateFireballView(){
-        this.getGameSession().getFireball().updateFireballView();
+        game.getFireball().updateFireballView();
     }
     public void updateMagicalStaffView(){
-        this.getGameSession().getMagicalStaff().updateMagicalStaffView();
+        game.getMagicalStaff().updateMagicalStaffView();
     }
 
     // These are the functions for updating the position and angle orientation of the magical staff.
     public void slideMagicalStaff(int x){
-        this.getGameSession().getMagicalStaff().setVelocity(x);
+        game.getMagicalStaff().setVelocity(x);
     }
 
     public void rotateMagicalStaff(double dTheta){
-        this.getGameSession().getMagicalStaff().setAngVelocity(dTheta);
+        game.getMagicalStaff().setAngVelocity(dTheta);
     }
 
     public void moveBarriers(){
         game.moveBarriers();
     }
     // Inside is moved to game with the same function name
-    public void moveBarriers(int justToChangeSignature){
+    public void moveBarriers(int dummy){
         int newpos;
         boolean isAvailable;
         int width= 10;
@@ -86,9 +86,6 @@ public class RunningModeController {
     }
 
 
-    public void checkMagicalStaffFireballCollision(){
-        game.checkMagicalStaffFireballCollision();
-    }
     /**
      * Checks if the fireball and magical staff collide, and if they do, updates the fireball's velocity accordingly.
      *
@@ -106,7 +103,7 @@ public class RunningModeController {
      * - Plays a sound effect upon collision.
      * - Ensures a cooldown period between consecutive collision checks to avoid multiple detections of the same collision.
      */
-    public void checkMagicalStaffFireballCollision(int justToChangeSignature) {
+    public void checkMagicalStaffFireballCollision(int dummy) {
 
         long currentTime = System.currentTimeMillis();
         if (currentTime - lastCollisionTime < COLLISION_COOLDOWN) {
@@ -197,11 +194,9 @@ public class RunningModeController {
 
     }
 
-    public void checkScreenBordersFireballCollision(){
-        game.checkScreenBordersFireballCollision();
-    }
 
-    public void checkScreenBordersFireballCollision(int justToChangeSignature){
+
+    public void checkScreenBordersFireballCollision(int dummy){
 
         Fireball fireball = game.getFireball();
         int fireballX = fireball.getCoordinate().getX();
@@ -255,10 +250,7 @@ public class RunningModeController {
     }
 
 
-    public void checkBarrierFireballCollision(){
 
-        game.checkBarrierFireballCollision();
-    }
     /**
      * Checks for collisions between the fireball and barriers, updates velocities accordingly,
      * removes destroyed barriers, plays sound effects, and updates the score.
@@ -272,8 +264,9 @@ public class RunningModeController {
      *      - Plays a sound effect when a collision occurs.
      *      - Updates the score based on the number of barriers removed.
      */
+
     /*
-    public void checkBarrierFireballCollision(int changeSignature){
+    public void checkBarrierFireballCollision(int dummy){
         ArrayList<Barrier> barriers = game.getBarriers();
         ArrayList<Barrier> toRemove = new ArrayList<>();
 
@@ -302,7 +295,6 @@ public class RunningModeController {
                 Rectangle sideRRect = new Rectangle(br.getCoordinate().getX() + 50, br.getCoordinate().getY() + 5, 1, 5);
 
                 if ((sideLRect.intersects(fireballRectangle)) || (sideRRect.intersects(fireballRectangle))) {
-                    // System.out.println("side collision");
                     fireball.setxVelocity(-xVelocity);
                 } else {
                     if (xVelocity*br.getVelocity()>0){ //barrier & ball same direction
@@ -329,6 +321,12 @@ public class RunningModeController {
     }
 */
 
+    public void checkCollision(){
+        game.checkBarrierFireballCollision();
+        game.checkMagicalStaffFireballCollision();
+        game.checkScreenBordersFireballCollision();
+    }
+
     public void run(){
         Fireball fireball = game.getFireball();
         MagicalStaff magicalStaff = game.getMagicalStaff();
@@ -346,8 +344,7 @@ public class RunningModeController {
     }
 
 
-    // Moved to Game
-    public boolean hitBarrier(Barrier barrier, int hitTimes) { // Could have been private method, since only called in collision method
+    private boolean hitBarrier(Barrier barrier, int hitTimes) {
         barrier.setnHits(barrier.getnHits() - hitTimes);
         //barrier.revalidate();
         //barrier.repaint();
@@ -370,7 +367,6 @@ public class RunningModeController {
         Debris debris = new Debris(barrier.getCoordinate());
         debris.setBackground(new Color(0, 0, 0, 0)); // Transparent background
         runningModePage.getGamePanel().add(debris);
-        runningModePage.getActiveDebris().add(debris); // TODO should be in Game
         //runningModePage.repaint();
     }
 
@@ -401,6 +397,7 @@ public class RunningModeController {
         Iterator<Debris> iterator = game.getActiveDebris().iterator();
         while (iterator.hasNext()) {
             Debris debris = iterator.next();
+            runningModePage.getGamePanel().add(debris);
             debris.moveDown();
             if (debris.getCoordinate().getY() > 600) {
                 runningModePage.getGamePanel().remove(debris);
@@ -427,8 +424,6 @@ public class RunningModeController {
                     debris.debrisImage.getHeight()
             );
 
-
-
             AffineTransform transform = new AffineTransform();
             double centerX = magicalStaffRectangle.getCenterX();
             double centerY = magicalStaffRectangle.getCenterY();
@@ -444,9 +439,10 @@ public class RunningModeController {
     }
 
     public void updateDroppingSpells() {
-        Iterator<Spell> iterator = runningModePage.getDroppingSpells().iterator();
+        Iterator<Spell> iterator = game.getSpells().iterator();
         while (iterator.hasNext()) {
             Spell spell = iterator.next();
+            runningModePage.getGamePanel().add(spell);
             spell.moveDown();
             if (spell.getCoordinate().getY() > 600) {
                 runningModePage.getGamePanel().remove(spell);
@@ -572,40 +568,14 @@ public class RunningModeController {
     public void useSpell1(){
         game.useFelixFelicis();
         //put SFX here maybe? TODO
-    }
-    /*
-    public void useSpell1(int dummy){
-        int remaining=runningModePage.getInventory().get(SpellType.FELIX_FELICIS);
-    public void useSpell1(){ // I will move these methods to somewhere else later, this is for testing -Melih
-        int remaining=getGameInventory().get(SpellType.FELIX_FELICIS);
-        if (remaining>0) {
-            getGameSession().getChance().incrementChance();
-            getGameInventory().put(SpellType.FELIX_FELICIS,remaining -1 );
-        }
 
     }
-    */
-
-    //STAFF_EXPANSION
+        //STAFF_EXPANSION
     public void useSpell2(){
         game.useStaffExpansion();
         //put SFX here maybe? TODO
+
     }
-    /*
-    public void useSpell2(int dummy){
-        int remaining=runningModePage.getInventory().get(SpellType.STAFF_EXPANSION);
-    public void useSpell2(){ //STAFF_EXPANSION
-        int remaining=getGameInventory().get(SpellType.STAFF_EXPANSION);
-        if (remaining>0) {
-            getGameSession().getMagicalStaff().setStaffWidth(200);
-            runningModePage.playSoundEffect(3);
-            getGameInventory().put(SpellType.STAFF_EXPANSION,  remaining -1 );
-
-            MagicalStaff magicalStaff= game.getMagicalStaff();
-            magicalStaff.setExpansionTime(System.currentTimeMillis());
-        }
-    }*/
-
     public void volume(int i){
         runningModePage.volume((float) (0.1*i));
     }

@@ -129,9 +129,7 @@ public class RunningModePage extends Page{
     public void updateGameFrame() {
         runningModeController.updateFireballView();
         runningModeController.updateMagicalStaffView();
-        runningModeController.checkMagicalStaffFireballCollision();
-        runningModeController.checkScreenBordersFireballCollision();
-        runningModeController.checkBarrierFireballCollision();
+        runningModeController.checkCollision();
         runningModeController.moveBarriers();
         runningModeController.updateDebris();// Handle debris movement
         runningModeController.updateDroppingSpells();// Hande spell dropping
