@@ -83,21 +83,6 @@ public class MagicalStaff extends JPanel {
         repaint();
     }
 
-/*
-    private Dimension calculateRotatedDimensions(double angle) {
-        double sin = Math.abs(Math.sin(angle));
-        double cos = Math.abs(Math.cos(angle));
-        int newWidth = (int) Math.floor(magicalStaffImage.getWidth() * cos + magicalStaffImage.getHeight() * sin);
-        int newHeight = (int) Math.floor(magicalStaffImage.getHeight() * cos + magicalStaffImage.getWidth() * sin);
-
-        //System.out.println(angle + " " + sin + " " + cos); sin and cos are correct now
-
-        //System.out.println(newWidth + " " + newHeight);
-        return new Dimension(newWidth, newHeight);
-    }
-    */
-
-
     public Coordinate getCoordinate() {
         return coordinate;
     }

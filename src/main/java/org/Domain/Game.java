@@ -356,9 +356,6 @@ public class Game {
         return instance;
     }
 
-
-    // BELOW ARE THE CODES BROUGHT FROM RUNNINGMCONTROLLER -Melih
-
     public void moveBarriers(){ // TODO Fix the logic
         int newpos;
         boolean isAvailable;
@@ -372,18 +369,14 @@ public class Game {
                     isAvailable = true;
                     newpos = br.getCoordinate().getX() +  br.getVelocity();
                     for (Barrier br2 : getBarriers()) {
-                        if ((!br2.equals(br)) && (br.getCoordinate().getY()==br2.getCoordinate().getY())){
-                            if (width*4.5>Math.abs(br2.getCoordinate().getX() - newpos)) {
-                                isAvailable = false;
-                                br.setVelocity(-1*br.getVelocity());
-                                break;
-                            }
-
+                        if ((!br2.equals(br)) && (br.getCoordinate().getY()==br2.getCoordinate().getY())
+                                &&(width*4.5>Math.abs(br2.getCoordinate().getX() - newpos)) ){
+                            isAvailable = false;
+                            br.setVelocity(-1*br.getVelocity());
+                            break;
                         }
                     }
-                    if (isAvailable) {
-                        br.moveBarrier();
-                    }
+                    if (isAvailable)   br.moveBarrier();
                 }
             }
         }
@@ -485,7 +478,6 @@ public class Game {
 
         if (transformedRectangle.intersects(fireballRectangle)) {
             fireball.setLastCollided(null);
-            //System.out.println("\nCollision detected");
             //runningModePage.playSoundEffect(1); TODO fix
             lastCollisionTime = currentTime;
 
@@ -497,50 +489,26 @@ public class Game {
 
             double reflectionX=u*Math.cos(angleRadians)-v*Math.sin(angleRadians);
             double reflectionY=u*Math.sin(angleRadians)+v*Math.cos(angleRadians);
+
+            if (reflectionX*magicalStaffVelocity>0){ //staff & ball same direction
+                reflectionX= reflectionX+  Math.signum(xVelocity) * 0.5;
+            }
+            else if (reflectionX*magicalStaffVelocity<0){ //opposite direction
+                reflectionX=-reflectionX;
+            }
+
             fireball.setxVelocity(reflectionX);
             fireball.setyVelocity(reflectionY);
             energy=reflectionX*reflectionX+reflectionY*reflectionY;
             //System.out.println("new: " + fireball.getxVelocity() + " " + fireball.getyVelocity()+" "+energy);
 
-            /*
-            if (Math.abs(msAngle)<1e-5){
-                if (xVelocity*magicalStaffVelocity>0){ //staff & ball same direction
-                   // System.out.println("same direction");
-                    fireball.setxVelocity( xVelocity+  Math.signum(xVelocity) * 0.5);
-                }
-                else if (xVelocity*magicalStaffVelocity<0){ //opposite direction
-                    //System.out.println("opp direction");
-                    fireball.setxVelocity(-xVelocity);
-                }
-                fireball.setyVelocity(-fireball.getyVelocity());
-
-            }
-            else {
-                System.out.println("Magical Staff angle: " + -msAngle);
-                double normalAngle = Math.toRadians((-msAngle + 90));
-                System.out.println(normalAngle);
-                Vector normal = new Vector(Math.cos(normalAngle), Math.sin(normalAngle));
-                System.out.println("Cos and sin " + Math.cos(normalAngle) + " " + Math.sin(normalAngle));
-                Vector velocity = new Vector(xVelocity, yVelocity);
-                double dProd = normal.dot(velocity);
-                double reflectionX = velocity.getX() - 2 * dProd * normal.getX();
-                double reflectionY = velocity.getY() - 2 * dProd * normal.getY();
-                //Vector vNew = velocity.subtract(normal.scale(2 * velocity.dot(normal)));
-                System.out.println("old: " + fireball.getxVelocity() + " " + fireball.getyVelocity());
-                fireball.setxVelocity(-reflectionX);
-                fireball.setyVelocity(reflectionY);
-                System.out.println("new: " + fireball.getxVelocity() + " " + fireball.getyVelocity());
-            }
-
-            */
         }
 
 
     }
 
 
-
-    // move back to controller
+    // moved back to controller
     public void checkBarrierFireballCollision(){
         ArrayList<Barrier> barriers = getBarriers();
         ArrayList<Barrier> toRemove = new ArrayList<>();
@@ -560,7 +528,7 @@ public class Game {
             Rectangle brRect = new Rectangle(br.getCoordinate().getX(), br.getCoordinate().getY(), (int) br.getPreferredSize().getWidth(), (int) br.getPreferredSize().getHeight());
 
             if (brRect.intersects(fireballRectangle)) {
-                //runningModePage.playSoundEffect(1); TODO fix
+               // runningModePage.playSoundEffect(1);
 
                 if (br==fireball.getLastCollided()) return;
 
@@ -570,7 +538,6 @@ public class Game {
                     Rectangle sideRRect = new Rectangle(br.getCoordinate().getX() + 50, br.getCoordinate().getY() + 5, 1, 5);
 
                     if ((sideLRect.intersects(fireballRectangle)) || (sideRRect.intersects(fireballRectangle))) {
-                        // System.out.println("side collision");
                         fireball.setxVelocity(-xVelocity);
                     } else {
                         if (xVelocity*br.getVelocity()>0){ //barrier & ball same direction
@@ -593,48 +560,40 @@ public class Game {
         }
         barriers.removeAll(toRemove);
         // Updating the score.
-
-        //getScore().incrementScore(toRemove.size(), this.runningModePage.timeInSeconds); // TODO time is not in game now
+        //getScore().incrementScore(toRemove.size(), this.runningModePage.timeInSeconds);
 
 
     }
 
-    // move back to controller
-    public boolean hitBarrier(Barrier barrier, int hitTimes) { // Could have been private method, since only called in collision method
+    // moved back to controller
+    private boolean hitBarrier(Barrier barrier, int hitTimes) {
         barrier.setnHits(barrier.getnHits() - hitTimes);
-        //barrier.revalidate();
-        //barrier.repaint();
         if (barrier.getnHits() <= 0) {
             barrier.destroy();
             if(barrier.getType()==BarrierType.EXPLOSIVE){
-                System.out.println("Explosive is broken");
                 explodeBarrier(barrier);
             }
             else if(barrier.getType()==BarrierType.REWARDING){
-                System.out.println("Rewarding is broken");
                 dropSpell(barrier);
             }
             return true;
         }
-
         return false;
     }
 
 
-    // move back to controller
+    // moved back to controller
     private void explodeBarrier(Barrier barrier) {
         Debris debris = new Debris(barrier.getCoordinate());
         debris.setBackground(new Color(0, 0, 0, 0)); // Transparent background
-        activeDebris.add(debris); // Add debris to the list
-
-        //runningModePage.repaint();
+        activeDebris.add(debris);
     }
 
-    // move back to controller
+    // moved back to controller
     private void dropSpell(Barrier barrier){
         Spell spell = new Spell(barrier.getCoordinate());
         spell.setBackground(new Color(0, 0, 0, 0)); // Transparent background
-        droppingSpells.add(spell); // Add spells to the list
+        droppingSpells.add(spell);
     }
 
     public void useFelixFelicis(){
