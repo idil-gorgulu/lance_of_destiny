@@ -20,6 +20,9 @@ public class MagicalStaff extends JPanel {
     private int staffHeight=20;
     private boolean isReleased;
     private long expansionTime=(long)Double.POSITIVE_INFINITY; // last time when staff is expanded
+    private boolean shooting;
+    private long cannonTime=(long) Double.POSITIVE_INFINITY; // last time hex is used
+    private long shotTime=0; // last time a bullet is shot
 
     public MagicalStaff() {
         this.coordinate = new Coordinate(0,450);
@@ -79,6 +82,10 @@ public class MagicalStaff extends JPanel {
         if (now-expansionTime > 30*1000){ // shrink back the staff after 30 sec
             expansionTime=now;
             setStaffWidth(100);
+        }
+        if (now-cannonTime>30*1000){ // unequip cannon after 30 sec
+            cannonTime=now;
+            shooting=false;
         }
         repaint();
     }
@@ -172,5 +179,29 @@ public class MagicalStaff extends JPanel {
     public void setTopLeftCornerOfMagicalStaff(int x, int y){
         this.magicalStaffRectangle.x=x;
         this.magicalStaffRectangle.y=y;
+    }
+
+    public boolean isShooting() {
+        return shooting;
+    }
+
+    public void setShooting(boolean shooting) {
+        this.shooting = shooting;
+    }
+
+    public long getCannonTime() {
+        return cannonTime;
+    }
+
+    public void setCannonTime(long cannonTime) {
+        this.cannonTime = cannonTime;
+    }
+
+    public long getShotTime() {
+        return shotTime;
+    }
+
+    public void setShotTime(long shotTime) {
+        this.shotTime = shotTime;
     }
 }

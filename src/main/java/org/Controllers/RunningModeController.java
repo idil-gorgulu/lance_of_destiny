@@ -39,7 +39,12 @@ public class RunningModeController {
         game.getFireball().updateFireballView();
     }
     public void updateMagicalStaffView(){
-        game.getMagicalStaff().updateMagicalStaffView();
+        MagicalStaff magicalStaff=game.getMagicalStaff();
+        magicalStaff.updateMagicalStaffView();
+        if (magicalStaff.isShooting() && System.currentTimeMillis()-magicalStaff.getShotTime()>0.3*1000){
+            fireBullet();
+            magicalStaff.setShotTime(System.currentTimeMillis());
+        }
     }
 
     // These are the functions for updating the position and angle orientation of the magical staff.
@@ -370,20 +375,34 @@ public class RunningModeController {
         //runningModePage.repaint();
     }
 
-    public void fireBullet(){
-        MagicalStaff magicalStaff=game.getMagicalStaff();
-        Bullet bullet=new Bullet(new Coordinate(magicalStaff.getTopLeftCornerOfMagicalStaff().getX(),
-                                                magicalStaff.getTopLeftCornerOfMagicalStaff().getY()));
-        bullet.setBackground(new Color(0, 0, 0, 0));
+    private void fireBullet(){
 
-        Bullet bullet2=new Bullet(new Coordinate(magicalStaff.getTopLeftCornerOfMagicalStaff().getX()+magicalStaff.getStaffWidth(),
-                                                    magicalStaff.getTopLeftCornerOfMagicalStaff().getY()));
+        MagicalStaff magicalStaff=game.getMagicalStaff();
+
+        int leftMostX=magicalStaff.getTopLeftCornerOfMagicalStaff().getX();
+        int leftMostY=magicalStaff.getTopLeftCornerOfMagicalStaff().getY();
+
+        int length=magicalStaff.getStaffWidth();
+
+        double angleRadian=Math.toRadians(magicalStaff.getAngle());
+        double lengthY= (double) length /2 * Math.sin(angleRadian);
+        double lengthXLeft= (double) length/2*(1-Math.cos(angleRadian));
+        double lengthXRight= (double) length/2 * (1+Math.cos(angleRadian));
+
+        Coordinate leftCoordinate= new Coordinate((int) (leftMostX+lengthXLeft),(int) (leftMostY-lengthY));
+        Coordinate rightCoordinate=new Coordinate((int) (leftMostX+lengthXRight),(int) (leftMostY+lengthY));
+        int bulletX=3*(int)Math.round(Math.sin(Math.toRadians(magicalStaff.getAngle())));
+        int bulletY=3*(int)-Math.round( Math.cos(Math.toRadians(magicalStaff.getAngle())));
+
+        Bullet bullet=new Bullet(leftCoordinate,bulletX,bulletY);
+        bullet.setBackground(new Color(0, 0, 0, 0));
+        Bullet bullet2=new Bullet(rightCoordinate,bulletX,bulletY);
         bullet2.setBackground(new Color(0, 0, 0, 0));
 
         runningModePage.getGamePanel().add(bullet);
         runningModePage.getGamePanel().add(bullet2);
-        runningModePage.getActiveBullets().add(bullet);// TODO should be in Game
-        runningModePage.getActiveBullets().add(bullet2);// TODO should be in Game
+        game.getActiveBullets().add(bullet);// TODO should be in Game
+        game.getActiveBullets().add(bullet2);// TODO should be in Game
         //runningModePage.playSoundEffect(4);
     }
     private void dropSpell(Barrier barrier){
@@ -493,11 +512,10 @@ public class RunningModeController {
     public void updateHexBullets(){
         ArrayList<Barrier> barriers = game.getBarriers();
         ArrayList<Barrier> toRemove = new ArrayList<>();
-
-
         Iterator<Bullet> iterator = game.getActiveBullets().iterator();
         while (iterator.hasNext()) {
             Bullet bullet = iterator.next();
+            runningModePage.getGamePanel().add(bullet);
             bullet.moveUp();
             if (bullet.getCoordinate().getY() < 0) { //Out of Screen Top Border
                 runningModePage.getGamePanel().remove(bullet);
@@ -574,7 +592,10 @@ public class RunningModeController {
     public void useSpell2(){
         game.useStaffExpansion();
         //put SFX here maybe? TODO
-
+    }
+    // Hex
+    public void useSpell3(){
+        game.useHex();
     }
     public void volume(int i){
         runningModePage.volume((float) (0.1*i));
