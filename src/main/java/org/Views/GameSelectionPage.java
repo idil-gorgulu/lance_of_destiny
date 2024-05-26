@@ -16,6 +16,9 @@ import java.io.IOException;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class GameSelectionPage extends Page {
 
@@ -53,13 +56,21 @@ public class GameSelectionPage extends Page {
         backgroundPanel.setOpaque(false);
         add(backgroundPanel, BorderLayout.NORTH);
 
-        JPanel backButtonPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
+
+        JPanel backButtonPanel = new JPanel(new BorderLayout());
         backButtonPanel.setOpaque(false); // Make the panel transparent
         JButton backButton = new JButton("Back");
         backButton.addActionListener(e -> Navigator.getInstance().getPrevious());
-        backButtonPanel.add(backButton);
         backgroundPanel.add(backButtonPanel, BorderLayout.NORTH);
         customizeButtonback(backButton);
+        backButtonPanel.add(backButton, BorderLayout.WEST);
+        JPanel headingPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
+        headingPanel.setOpaque(false); // Make the panel transparent
+        JLabel headingLabel = new JLabel("Your Saved Games");
+        headingLabel.setForeground(Color.WHITE); // Set text color
+        headingLabel.setFont(new Font("Tahoma", Font.BOLD, 24)); // Set font and size
+        headingPanel.add(headingLabel);
+        backButtonPanel.add(headingPanel, BorderLayout.CENTER);
 
         JPanel centerPanel = new JPanel(new GridBagLayout()) {
             @Override
@@ -79,36 +90,50 @@ public class GameSelectionPage extends Page {
             }
         });
 
-        // Panel for the rest of the login form
         JPanel formPanel = new JPanel();
         formPanel.setLayout(new BoxLayout(formPanel, BoxLayout.Y_AXIS));
         formPanel.setOpaque(false);
 
         ArrayList<Document> games = User.getUserInstance().getAllGames();
-        System.out.println(games);
-        for (int i = 0; i < games.size(); i++) {
-            Document game = games.get(i);
-            JButton gameButton = new JButton(game.getString("gameName") + " " + game.getString("gameDate"));
-            customizeButton(gameButton);
-            gameButton.addActionListener(new ActionListener() {
-                @Override
-                public void actionPerformed(ActionEvent e) {
-                    dataBaseController.openFromDatabase(game);
-                    // Final statement will be this
-                    Navigator.getInstance().showRunningModePage();
-                }
-            });
-            formPanel.add(gameButton);
-            gameButton.setMaximumSize(new Dimension(Integer.MAX_VALUE, gameButton.getPreferredSize().height));
-            gameButton.setAlignmentX(Component.CENTER_ALIGNMENT);
+
+        // Group games by name
+        Map<String, List<Document>> groupedGames = new HashMap<>();
+        for (Document game : games) {
+            String gameName = game.getString("gameName");
+            groupedGames.computeIfAbsent(gameName, k -> new ArrayList<>()).add(game);
         }
 
-        // Ensure formPanel is scrollable by wrapping it in a JScrollPane
+        // Using groups to show.
+        for (Map.Entry<String, List<Document>> entry : groupedGames.entrySet()) {
+            JPanel gamePanel = new JPanel(new FlowLayout(FlowLayout.LEFT)); // Use FlowLayout for left alignment
+            gamePanel.setOpaque(false);
+
+            for (Document game : entry.getValue()) { //creating buttons
+                JButton gameButton = new JButton("<html>" + game.getString("gameName") + "<br><small>" + game.getString("gameDate") + "</small></html>");
+                customizeButton(gameButton);
+                gameButton.setPreferredSize(new Dimension(180, 80  )); // Set preferred size for uniformity
+                gameButton.setMaximumSize(new Dimension(180, 80)); // Set maximum size for uniformity
+                gameButton.setMinimumSize(new Dimension(180, 80)); // Set minimum size for uniformity
+                gameButton.addActionListener(new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
+                        dataBaseController.openFromDatabase(game);
+                        // Final statement will be this
+                        Navigator.getInstance().showRunningModePage();
+                    }
+                });
+                gamePanel.add(gameButton);
+            }
+
+            formPanel.add(gamePanel);
+        }
+
+        // formPanel is scrollable
         JScrollPane scrollPane = new JScrollPane(formPanel);
         scrollPane.setOpaque(false);
         scrollPane.getViewport().setOpaque(false);
         scrollPane.setBorder(null);
-        scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+        scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED); //dont show if not needed
         scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
 
         GridBagConstraints gbc = new GridBagConstraints();
@@ -123,7 +148,7 @@ public class GameSelectionPage extends Page {
     }
 
     private void customizeButton(JButton button) {
-        button.setBackground(new Color(100, 149, 237)); // Cornflower blue
+        button.setBackground(new Color(100, 149, 237));
         button.setForeground(Color.WHITE);
         button.setFocusPainted(false);
         button.setFont(new Font("Tahoma", Font.BOLD, 18)); // Increased font size
