@@ -65,11 +65,6 @@ public class RunningModePage extends Page{
         //    inventory.put(type, 0);
         //}
     }
-    public ArrayList<Debris> getActiveDebris() {  return activeDebris;   }
-    public ArrayList<Spell> getDroppingSpells() { return droppingSpells; }
-    public ArrayList<Bullet> getActiveBullets(){ return activeBullets;}
-    //public HashMap<SpellType, Integer> getInventory(){ return inventory;}
-
 
     protected void paintComponent(Graphics g) { //background for the whole frame
         super.paintComponent(g);

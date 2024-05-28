@@ -20,9 +20,7 @@ import static org.Views.RunningModePage.COLLISION_COOLDOWN;
 public class RunningModeController {
     protected RunningModePage runningModePage;
     private DataBaseController dataBaseController;
-
     private Game game;
-    private long lastCollisionTime = 0; // Time of the last collision in milliseconds
 
     public RunningModeController(RunningModePage runningModePage){
         this.runningModePage = runningModePage;
@@ -41,7 +39,7 @@ public class RunningModeController {
     public void updateMagicalStaffView(){
         MagicalStaff magicalStaff=game.getMagicalStaff();
         magicalStaff.updateMagicalStaffView();
-        if (magicalStaff.isShooting() && System.currentTimeMillis()-magicalStaff.getShotTime()>0.3*1000){
+        if (magicalStaff.isShooting() && System.currentTimeMillis()-magicalStaff.getShotTime()>0.6*1000){
             fireBullet();
             magicalStaff.setShotTime(System.currentTimeMillis());
         }
@@ -59,275 +57,9 @@ public class RunningModeController {
     public void moveBarriers(){
         game.moveBarriers();
     }
-    // Inside is moved to game with the same function name
-    public void moveBarriers(int dummy){
-        int newpos;
-        boolean isAvailable;
-        int width= 10;
-        for (Barrier br: getGameSession().getBarriers()){
-            if (br.isMoving()) {
-                if (br.getType() == BarrierType.EXPLOSIVE) {
-                    if (br.getVelocity() != 0) {
-                        br.moveBarrier();                   }               }
-                else {
-                    isAvailable = true;
-                    newpos = br.getCoordinate().getX() +  br.getVelocity();
-                    for (Barrier br2 : getGameSession().getBarriers()) {
-                        if ((!br2.equals(br)) && (br.getCoordinate().getY()==br2.getCoordinate().getY())){
-                            if (width*4.5>Math.abs(br2.getCoordinate().getX() - newpos)) {
-                                isAvailable = false;
-                                br.setVelocity(-1*br.getVelocity());
-                                break;
-                            }
-
-                        }
-                    }
-                    if (isAvailable) {
-                        br.moveBarrier();
-                    }
-                }
-            }
-        }
-    }
-
-
-    /**
-     * Checks if the fireball and magical staff collide, and if they do, updates the fireball's velocity accordingly.
-     *
-     * <p></p>REQUIRES:
-     * - The game must have previously set fireball and staff objects.
-     * - The fields of fireball and staff must be set correctly.
-     * - Both fireball and staff must be within the screen boundaries.
-     *
-     * <p>MODIFIES: fireball.xVelocity, fireball.yVelocity
-     *
-     * <p>EFFECTS:
-     * - Creates two Rectangle2D objects representing the bounding boxes around the fireball and the magical staff, considering their coordinates and orientation.
-     * - Checks if these rectangles intersect.
-     * - If they intersect, calculates the new velocity values for the fireball based on the collision angle and updates the fireball's velocity.
-     * - Plays a sound effect upon collision.
-     * - Ensures a cooldown period between consecutive collision checks to avoid multiple detections of the same collision.
-     */
-    public void checkMagicalStaffFireballCollision(int dummy) {
-
-        long currentTime = System.currentTimeMillis();
-        if (currentTime - lastCollisionTime < COLLISION_COOLDOWN) {
-            return; // Skip collision check if we are within the cooldown period
-        }
-
-        Fireball fireball = game.getFireball();
-        MagicalStaff magicalStaff = game.getMagicalStaff();
-        int magicalStaffVelocity = magicalStaff.getVelocity();
-
-        double xVelocity = fireball.getxVelocity();
-        double yVelocity = fireball.getyVelocity();
-
-        double msAngle = magicalStaff.getAngle();
-        double angleRadians = Math.toRadians(msAngle);
-
-        Rectangle2D.Double fireballRectangle = new Rectangle2D.Double(
-                fireball.getCoordinate().getX() - fireball.getFireballRadius(),
-                fireball.getCoordinate().getY() - fireball.getFireballRadius(),
-                2 * fireball.getFireballRadius(),
-                2 * fireball.getFireballRadius()
-        );
-
-        Rectangle2D.Double magicalStaffRectangle = new Rectangle2D.Double(
-                magicalStaff.getTopLeftCornerOfMagicalStaff().getX(),
-                magicalStaff.getTopLeftCornerOfMagicalStaff().getY(),
-                magicalStaff.getStaffWidth(),
-                magicalStaff.getStaffHeight()
-        );
-
-        AffineTransform transform = new AffineTransform();
-        double centerX = magicalStaffRectangle.getCenterX();
-        double centerY = magicalStaffRectangle.getCenterY();
-        transform.rotate(angleRadians, centerX, centerY);
-        Shape transformedRectangle = transform.createTransformedShape(magicalStaffRectangle);
-
-        if (transformedRectangle.intersects(fireballRectangle)) {
-            fireball.setLastCollided(null);
-            //System.out.println("\nCollision detected");
-            runningModePage.playSoundEffect(1);
-            lastCollisionTime = currentTime;
-
-            double energy=xVelocity*xVelocity+yVelocity*yVelocity;
-            //System.out.println("\nold: " + fireball.getxVelocity() + " " + fireball.getyVelocity()+" "+energy);
-
-            double u=xVelocity*Math.cos(angleRadians)+yVelocity*Math.sin(angleRadians);
-            double v=xVelocity*Math.sin(angleRadians)-yVelocity*Math.cos(angleRadians);
-
-            double reflectionX=u*Math.cos(angleRadians)-v*Math.sin(angleRadians);
-            double reflectionY=u*Math.sin(angleRadians)+v*Math.cos(angleRadians);
-            fireball.setxVelocity(reflectionX);
-            fireball.setyVelocity(reflectionY);
-            energy=reflectionX*reflectionX+reflectionY*reflectionY;
-            //System.out.println("new: " + fireball.getxVelocity() + " " + fireball.getyVelocity()+" "+energy);
-
-            /*
-            if (Math.abs(msAngle)<1e-5){
-                if (xVelocity*magicalStaffVelocity>0){ //staff & ball same direction
-                   // System.out.println("same direction");
-                    fireball.setxVelocity( xVelocity+  Math.signum(xVelocity) * 0.5);
-                }
-                else if (xVelocity*magicalStaffVelocity<0){ //opposite direction
-                    //System.out.println("opp direction");
-                    fireball.setxVelocity(-xVelocity);
-                }
-                fireball.setyVelocity(-fireball.getyVelocity());
-
-            }
-            else {
-                System.out.println("Magical Staff angle: " + -msAngle);
-                double normalAngle = Math.toRadians((-msAngle + 90));
-                System.out.println(normalAngle);
-                Vector normal = new Vector(Math.cos(normalAngle), Math.sin(normalAngle));
-                System.out.println("Cos and sin " + Math.cos(normalAngle) + " " + Math.sin(normalAngle));
-                Vector velocity = new Vector(xVelocity, yVelocity);
-                double dProd = normal.dot(velocity);
-                double reflectionX = velocity.getX() - 2 * dProd * normal.getX();
-                double reflectionY = velocity.getY() - 2 * dProd * normal.getY();
-                //Vector vNew = velocity.subtract(normal.scale(2 * velocity.dot(normal)));
-                System.out.println("old: " + fireball.getxVelocity() + " " + fireball.getyVelocity());
-                fireball.setxVelocity(-reflectionX);
-                fireball.setyVelocity(reflectionY);
-                System.out.println("new: " + fireball.getxVelocity() + " " + fireball.getyVelocity());
-            }
-
-            */
-        }
-
-    }
-
-
-
-    public void checkScreenBordersFireballCollision(int dummy){
-
-        Fireball fireball = game.getFireball();
-        int fireballX = fireball.getCoordinate().getX();
-        int fireballY = fireball.getCoordinate().getY();
-        int fireballRadius = fireball.getFireballRadius();
-        double xVelocity = fireball.getxVelocity();
-        double yVelocity = fireball.getyVelocity();
-
-        int containerWidth = 1000;
-        int containerHeight = 600;
-
-        // Check collision with left and right boundaries
-        if ((fireballX - fireballRadius <= 0) || (fireballX + fireballRadius > containerWidth - 10)) {
-            runningModePage.playSoundEffect(1);
-            fireball.setLastCollided(null);
-            fireball.setxVelocity(-xVelocity);// Reverse X velocity
-        }
-        // Check collision with top and bottom boundaries
-        if (fireballY - fireballRadius <= -10)  {
-            runningModePage.playSoundEffect(1);
-            fireball.setyVelocity(-yVelocity);// TOP
-            fireball.setLastCollided(null);
-        }
-
-        else if (fireballY + fireballRadius >= containerHeight) {
-            // BOTTOM
-            fireball.setLastCollided(null);
-            this.getGameSession().getChance().decrementChance();
-            runningModePage.playSoundEffect(2);
-            if (this.getGameSession().getChance().getRemainingChance() == 0) {
-                game.started = false;
-                System.out.println("Not active");
-                runningModePage.stopMusic();
-                return;
-            }
-            int fireballWidth = fireball.getPreferredSize().width;
-            int fireballPositionX = (1000 - fireballWidth) / 2; // make these dynamic
-            int fireballHeight = fireball.getPreferredSize().height;
-            int fireballPositionY = (500 - fireballHeight - 200); // make these dynamic
-            fireball.setxVelocity(3);
-            fireball.setyVelocity(-3);
-            fireball.getCoordinate().setX(fireballPositionX);
-            fireball.getCoordinate().setY(fireballPositionY);
-            fireball.setBounds(fireballPositionX, fireballPositionY, fireballWidth, fireballHeight);
-            fireball.setOverwhelming(false);
-            //fireball.setBackground(Color.red);
-            fireball.setBackground(new Color(0, 0, 0, 0)); // Transparent background
-            fireball.setOpaque(true);
-
-        }
-    }
-
-
-
-    /**
-     * Checks for collisions between the fireball and barriers, updates velocities accordingly,
-     * removes destroyed barriers, plays sound effects, and updates the score.
-     *
-     * @requires game != null && game.getFireball() != null && game.getBarriers() != null && runningModePage != null && this.getGameSession() != null
-     * @modifies game.getBarriers(), fireball, this.getGameSession().getScore()
-     * @effects
-     *      - Detects and processes collisions between the fireball and barriers.
-     *      - Updates the fireball's velocity based on the collision direction.
-     *      - Removes barriers that are hit by the fireball.
-     *      - Plays a sound effect when a collision occurs.
-     *      - Updates the score based on the number of barriers removed.
-     */
-
-    /*
-    public void checkBarrierFireballCollision(int dummy){
-        ArrayList<Barrier> barriers = game.getBarriers();
-        ArrayList<Barrier> toRemove = new ArrayList<>();
-
-        Fireball fireball = game.getFireball();
-        double xVelocity = fireball.getxVelocity();
-        double yVelocity = fireball.getyVelocity();
-
-        Rectangle2D.Double fireballRectangle = new Rectangle2D.Double(
-                fireball.getCoordinate().getX() - fireball.getFireballRadius(),
-                fireball.getCoordinate().getY() - fireball.getFireballRadius(),
-                2 * fireball.getFireballRadius(),
-                2 * fireball.getFireballRadius()
-        );
-
-        for (Barrier br : barriers) {
-            Rectangle brRect = new Rectangle(br.getCoordinate().getX(), br.getCoordinate().getY(), (int) br.getPreferredSize().getWidth(), (int) br.getPreferredSize().getHeight());
-
-            if (brRect.intersects(fireballRectangle)) {
-                runningModePage.playSoundEffect(1);
-
-                if (br==fireball.getLastCollided()) return;
-
-                fireball.setLastCollided(br);
-                if (!fireball.isOverwhelming()){ // no collision if it is
-                Rectangle sideLRect = new Rectangle(br.getCoordinate().getX(), br.getCoordinate().getY() + 5, 1, 5);
-                Rectangle sideRRect = new Rectangle(br.getCoordinate().getX() + 50, br.getCoordinate().getY() + 5, 1, 5);
-
-                if ((sideLRect.intersects(fireballRectangle)) || (sideRRect.intersects(fireballRectangle))) {
-                    fireball.setxVelocity(-xVelocity);
-                } else {
-                    if (xVelocity*br.getVelocity()>0){ //barrier & ball same direction
-                        fireball.setxVelocity( xVelocity+  Math.signum(xVelocity) * 0.5);
-                    }
-                    else if (xVelocity*br.getVelocity()<0){ //opposite direction
-                        fireball.setxVelocity(-xVelocity);
-                    }
-                    fireball.setyVelocity(-yVelocity);
-                }
-                if (hitBarrier(br,1)) {
-                    toRemove.add(br);
-                }}
-                else {
-                    if (hitBarrier(br,10)){ //This is always true
-                        toRemove.add(br);
-                    }
-                }
-            }
-        }
-        barriers.removeAll(toRemove);
-        // Updating the score.
-        this.getGameSession().getScore().incrementScore(toRemove.size(), this.runningModePage.timeInSeconds);
-    }
-*/
 
     public void checkCollision(){
-        game.checkBarrierFireballCollision();
+        game.checkBarrierFireballCollision(runningModePage.timeInSeconds);
         game.checkMagicalStaffFireballCollision();
         game.checkScreenBordersFireballCollision();
     }
@@ -348,72 +80,16 @@ public class RunningModeController {
         }
     }
 
-
-    private boolean hitBarrier(Barrier barrier, int hitTimes) {
-        barrier.setnHits(barrier.getnHits() - hitTimes);
-        //barrier.revalidate();
-        //barrier.repaint();
-        if (barrier.getnHits() <= 0) {
-            barrier.destroy();
-            if(barrier.getType()==BarrierType.EXPLOSIVE){
-                explodeBarrier(barrier);
-            }
-            else if(barrier.getType()==BarrierType.REWARDING){
-                dropSpell(barrier);
-            }
-            return true;
-        }
-        return false;
-
-    }
-
-    // Moved to Game
-    private void explodeBarrier(Barrier barrier) {
-        Debris debris = new Debris(barrier.getCoordinate());
-        debris.setBackground(new Color(0, 0, 0, 0)); // Transparent background
-        runningModePage.getGamePanel().add(debris);
-        //runningModePage.repaint();
-    }
-
     private void fireBullet(){
-
-        MagicalStaff magicalStaff=game.getMagicalStaff();
-
-        int leftMostX=magicalStaff.getTopLeftCornerOfMagicalStaff().getX();
-        int leftMostY=magicalStaff.getTopLeftCornerOfMagicalStaff().getY();
-
-        int length=magicalStaff.getStaffWidth();
-
-        double angleRadian=Math.toRadians(magicalStaff.getAngle());
-        double lengthY= (double) length /2 * Math.sin(angleRadian);
-        double lengthXLeft= (double) length/2*(1-Math.cos(angleRadian));
-        double lengthXRight= (double) length/2 * (1+Math.cos(angleRadian));
-
-        Coordinate leftCoordinate= new Coordinate((int) (leftMostX+lengthXLeft),(int) (leftMostY-lengthY));
-        Coordinate rightCoordinate=new Coordinate((int) (leftMostX+lengthXRight),(int) (leftMostY+lengthY));
-        int bulletX=3*(int)Math.round(Math.sin(Math.toRadians(magicalStaff.getAngle())));
-        int bulletY=3*(int)-Math.round( Math.cos(Math.toRadians(magicalStaff.getAngle())));
-
-        Bullet bullet=new Bullet(leftCoordinate,bulletX,bulletY);
-        bullet.setBackground(new Color(0, 0, 0, 0));
-        Bullet bullet2=new Bullet(rightCoordinate,bulletX,bulletY);
-        bullet2.setBackground(new Color(0, 0, 0, 0));
-
+        Bullet bullet = game.createHexBullet()[0];
+        Bullet bullet2 = game.createHexBullet()[1];
         runningModePage.getGamePanel().add(bullet);
         runningModePage.getGamePanel().add(bullet2);
-        game.getActiveBullets().add(bullet);// TODO should be in Game
-        game.getActiveBullets().add(bullet2);// TODO should be in Game
         //runningModePage.playSoundEffect(4);
     }
-    private void dropSpell(Barrier barrier){
-        Spell spell = new Spell(barrier.getCoordinate());
-        spell.setBackground(new Color(0, 0, 0, 0)); // Transparent background
-        runningModePage.getDroppingSpells().add(spell); // TODO should be in Game
-        runningModePage.getGamePanel().add(spell);
-    }
-
     public void updateDebris() {
         Iterator<Debris> iterator = game.getActiveDebris().iterator();
+        Shape transformedRectangle=game.getStaffOrientation();
         while (iterator.hasNext()) {
             Debris debris = iterator.next();
             runningModePage.getGamePanel().add(debris);
@@ -423,42 +99,22 @@ public class RunningModeController {
                 iterator.remove();
             }
             // For debris collision with magical staff
-
-            MagicalStaff magicalStaff = game.getMagicalStaff();
-
-            double msAngle = magicalStaff.getAngle();
-            double angleRadians = Math.toRadians(msAngle);
-
-            Rectangle2D.Double magicalStaffRectangle = new Rectangle2D.Double(
-                    magicalStaff.getTopLeftCornerOfMagicalStaff().getX(),
-                    magicalStaff.getTopLeftCornerOfMagicalStaff().getY(),
-                    magicalStaff.getStaffWidth(),
-                    20
-            );
-
             Rectangle2D.Double debrisRectangle = new Rectangle2D.Double(
                     debris.getCoordinate().getX() - debris.debrisImage.getWidth()/2 ,
                     debris.getCoordinate().getY() - debris.debrisImage.getHeight()/2,
                     debris.debrisImage.getWidth(),
                     debris.debrisImage.getHeight()
             );
-
-            AffineTransform transform = new AffineTransform();
-            double centerX = magicalStaffRectangle.getCenterX();
-            double centerY = magicalStaffRectangle.getCenterY();
-            transform.rotate(angleRadians, centerX, centerY);
-            Shape transformedRectangle = transform.createTransformedShape(magicalStaffRectangle);
-
             if (transformedRectangle.intersects(debrisRectangle)) {
-                this.getGameSession().getChance().decrementChance();
+                game.getChance().decrementChance();
                 runningModePage.getGamePanel().remove(debris);
                 iterator.remove();
             }
         }
     }
-
     public void updateDroppingSpells() {
         Iterator<Spell> iterator = game.getSpells().iterator();
+        Shape transformedRectangle=game.getStaffOrientation();
         while (iterator.hasNext()) {
             Spell spell = iterator.next();
             runningModePage.getGamePanel().add(spell);
@@ -468,32 +124,12 @@ public class RunningModeController {
                 iterator.remove();
             }
             // For spell collision with magical staff
-            MagicalStaff magicalStaff = game.getMagicalStaff();
-
-            double msAngle = magicalStaff.getAngle();
-            double angleRadians = Math.toRadians(msAngle);
-
-            Rectangle2D.Double magicalStaffRectangle = new Rectangle2D.Double(
-                    magicalStaff.getTopLeftCornerOfMagicalStaff().getX(),
-                    magicalStaff.getTopLeftCornerOfMagicalStaff().getY(),
-                    magicalStaff.getStaffWidth(),
-                    20
-            );
-
             Rectangle2D.Double spellRectangle = new Rectangle2D.Double(
                     spell.getCoordinate().getX() - spell.spellImage.getWidth()/2 ,
                     spell.getCoordinate().getY() - spell.spellImage.getHeight()/2,
                     spell.spellImage.getWidth(),
                     spell.spellImage.getHeight()
             );
-
-
-            AffineTransform transform = new AffineTransform();
-            double centerX = magicalStaffRectangle.getCenterX();
-            double centerY = magicalStaffRectangle.getCenterY();
-            transform.rotate(angleRadians, centerX, centerY);
-            Shape transformedRectangle = transform.createTransformedShape(magicalStaffRectangle);
-
             //THIS WILL BE UPDATED SO THAT THE SPELL APPEARS IN THE INVENTORY
             if (transformedRectangle.intersects(spellRectangle)) {
                 SpellType type = spell.getSpellType();
@@ -508,10 +144,7 @@ public class RunningModeController {
             }
         }
     }
-
     public void updateHexBullets(){
-        ArrayList<Barrier> barriers = game.getBarriers();
-        ArrayList<Barrier> toRemove = new ArrayList<>();
         Iterator<Bullet> iterator = game.getActiveBullets().iterator();
         while (iterator.hasNext()) {
             Bullet bullet = iterator.next();
@@ -521,22 +154,11 @@ public class RunningModeController {
                 runningModePage.getGamePanel().remove(bullet);
                 iterator.remove();
             }
+           if (game.checkHexBulletCollision(bullet, runningModePage.timeInSeconds)){
+               runningModePage.getGamePanel().remove(bullet);
+               iterator.remove();
+           }
 
-            Rectangle2D.Double bulletRectangle = new Rectangle2D.Double( // Barrier collision
-                    bullet.getCoordinate().getX()  ,  bullet.getCoordinate().getY(),20,20);
-
-            for (Barrier br : barriers) {
-                Rectangle brRect = new Rectangle(br.getCoordinate().getX(), br.getCoordinate().getY(),
-                        (int) br.getPreferredSize().getWidth(), (int) br.getPreferredSize().getHeight());
-                if (brRect.intersects(bulletRectangle)) {
-                    if (hitBarrier(br,1))  toRemove.add(br);
-                    runningModePage.getGamePanel().remove(bullet);
-                    iterator.remove();
-                }
-            }
-            barriers.removeAll(toRemove);
-            // Updating the score.
-            this.getGameSession().getScore().incrementScore(toRemove.size(), this.runningModePage.timeInSeconds);
         }
 
     }
@@ -585,13 +207,12 @@ public class RunningModeController {
     //FELIX_FELICIS
     public void useSpell1(){
         game.useFelixFelicis();
-        //put SFX here maybe? TODO
-
+       //runningModePage.playSoundEffect(5); cant check if in inventory --> move it to game somehow
     }
         //STAFF_EXPANSION
     public void useSpell2(){
         game.useStaffExpansion();
-        //put SFX here maybe? TODO
+
     }
     // Hex
     public void useSpell3(){
@@ -612,14 +233,11 @@ public class RunningModeController {
         }
     }
     public void saveGameToDatabase() {
-
         dataBaseController.saveGameToDatabase(game.getGameName(), game,true);
     }
     public HashMap<SpellType, Integer> getGameInventory(){
         return game.getInventory();
     }
-
-
     public ArrayList<Spell> getGameSpells(){
         return game.getSpells();
     }

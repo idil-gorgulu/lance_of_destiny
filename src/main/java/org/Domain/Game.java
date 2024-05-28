@@ -440,6 +440,24 @@ public class Game {
     public void setLastCollisionTime(long time){
         this.lastCollisionTime=time;
     }
+
+    /**
+     * Checks if the fireball and magical staff collide, and if they do, updates the fireball's velocity accordingly.
+     *
+     * <p></p>REQUIRES:
+     * - The game must have previously set fireball and staff objects.
+     * - The fields of fireball and staff must be set correctly.
+     * - Both fireball and staff must be within the screen boundaries.
+     *
+     * <p>MODIFIES: fireball.xVelocity, fireball.yVelocity
+     *
+     * <p>EFFECTS:
+     * - Creates two Rectangle2D objects representing the bounding boxes around the fireball and the magical staff, considering their coordinates and orientation.
+     * - Checks if these rectangles intersect.
+     * - If they intersect, calculates the new velocity values for the fireball based on the collision angle and updates the fireball's velocity.
+     * - Plays a sound effect upon collision.
+     * - Ensures a cooldown period between consecutive collision checks to avoid multiple detections of the same collision.
+     */
     public void checkMagicalStaffFireballCollision(){
         long currentTime = System.currentTimeMillis();
         if (currentTime - lastCollisionTime < COLLISION_COOLDOWN) {
@@ -507,9 +525,20 @@ public class Game {
 
     }
 
-
-    // moved back to controller
-    public void checkBarrierFireballCollision(){
+    /**
+     * Checks for collisions between the fireball and barriers, updates velocities accordingly,
+     * removes destroyed barriers, plays sound effects, and updates the score.
+     *
+     * @requires game != null && game.getFireball() != null && game.getBarriers() != null && runningModePage != null && this.getGameSession() != null
+     * @modifies game.getBarriers(), fireball, this.getGameSession().getScore()
+     * @effects
+     *      - Detects and processes collisions between the fireball and barriers.
+     *      - Updates the fireball's velocity based on the collision direction.
+     *      - Removes barriers that are hit by the fireball.
+     *      - Plays a sound effect when a collision occurs.
+     *      - Updates the score based on the number of barriers removed.
+     */
+    public void checkBarrierFireballCollision(int timeInSeconds){
         ArrayList<Barrier> barriers = getBarriers();
         ArrayList<Barrier> toRemove = new ArrayList<>();
 
@@ -560,12 +589,10 @@ public class Game {
         }
         barriers.removeAll(toRemove);
         // Updating the score.
-        //getScore().incrementScore(toRemove.size(), this.runningModePage.timeInSeconds);
+        getScore().incrementScore(toRemove.size(), timeInSeconds);
 
 
     }
-
-    // moved back to controller
     private boolean hitBarrier(Barrier barrier, int hitTimes) {
         barrier.setnHits(barrier.getnHits() - hitTimes);
         if (barrier.getnHits() <= 0) {
@@ -582,14 +609,12 @@ public class Game {
     }
 
 
-    // moved back to controller
     private void explodeBarrier(Barrier barrier) {
         Debris debris = new Debris(barrier.getCoordinate());
         debris.setBackground(new Color(0, 0, 0, 0)); // Transparent background
         activeDebris.add(debris);
     }
 
-    // moved back to controller
     private void dropSpell(Barrier barrier){
         Spell spell = new Spell(barrier.getCoordinate());
         spell.setBackground(new Color(0, 0, 0, 0)); // Transparent background
@@ -620,6 +645,72 @@ public class Game {
             inventory.put(SpellType.HEX,  remaining -1 );
         }
 
+    }
+    public Bullet[] createHexBullet(){
+
+        MagicalStaff magicalStaff=getMagicalStaff();
+        int leftMostX=magicalStaff.getTopLeftCornerOfMagicalStaff().getX();
+        int leftMostY=magicalStaff.getTopLeftCornerOfMagicalStaff().getY();
+        int length=magicalStaff.getStaffWidth();
+        double angleRadian=Math.toRadians(magicalStaff.getAngle());
+        double lengthY= (double) length /2 * Math.sin(angleRadian);
+        double lengthXLeft= (double) length/2*(1-Math.cos(angleRadian));
+        double lengthXRight= (double) length/2 * (1+Math.cos(angleRadian));
+
+        Coordinate leftCoordinate= new Coordinate((int) (leftMostX+lengthXLeft),(int) (leftMostY-lengthY));
+        Coordinate rightCoordinate=new Coordinate((int) (leftMostX+lengthXRight),(int) (leftMostY+lengthY));
+        int bulletX=3*(int)Math.round(Math.sin(Math.toRadians(magicalStaff.getAngle())));
+        int bulletY=3*(int)-Math.round( Math.cos(Math.toRadians(magicalStaff.getAngle())));
+
+        Bullet bullet=new Bullet(leftCoordinate,bulletX,bulletY);
+        bullet.setBackground(new Color(0, 0, 0, 0));
+        Bullet bullet2=new Bullet(rightCoordinate,bulletX,bulletY);
+        bullet2.setBackground(new Color(0, 0, 0, 0));
+
+        activeBullets.add(bullet);
+        activeBullets.add(bullet2);
+
+        Bullet[] bullets= {bullet,bullet2};
+        return bullets;
+    }
+
+    public Shape getStaffOrientation(){
+        MagicalStaff magicalStaff = getMagicalStaff();
+        double msAngle = magicalStaff.getAngle();
+        double angleRadians = Math.toRadians(msAngle);
+        Rectangle2D.Double magicalStaffRectangle = new Rectangle2D.Double(
+                magicalStaff.getTopLeftCornerOfMagicalStaff().getX(),
+                magicalStaff.getTopLeftCornerOfMagicalStaff().getY(),
+                magicalStaff.getStaffWidth(),
+                20
+        );
+
+        AffineTransform transform = new AffineTransform();
+        double centerX = magicalStaffRectangle.getCenterX();
+        double centerY = magicalStaffRectangle.getCenterY();
+        transform.rotate(angleRadians, centerX, centerY);
+        Shape transformedRectangle = transform.createTransformedShape(magicalStaffRectangle);
+        return transformedRectangle;
+    }
+
+    public boolean checkHexBulletCollision(Bullet bullet, int timeInSeconds){
+        boolean collides=false;
+        ArrayList<Barrier> toRemove = new ArrayList<>();
+        Rectangle2D.Double bulletRectangle = new Rectangle2D.Double( // Barrier collision
+                bullet.getCoordinate().getX()  ,  bullet.getCoordinate().getY(),20,20);
+
+        for (Barrier br : barriers) {
+            Rectangle brRect = new Rectangle(br.getCoordinate().getX(), br.getCoordinate().getY(),
+                    (int) br.getPreferredSize().getWidth(), (int) br.getPreferredSize().getHeight());
+            if (brRect.intersects(bulletRectangle)) {
+                if (hitBarrier(br,1))  toRemove.add(br);
+                collides=true;
+            }
+        }
+        barriers.removeAll(toRemove);
+        // Updating the score.
+        getScore().incrementScore(toRemove.size(), timeInSeconds);
+        return collides;
     }
 
     public String getGameName() {
