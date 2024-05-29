@@ -2,13 +2,23 @@ package org.Domain;
 
 import org.Views.RunningModePage;
 
+import javax.imageio.ImageIO;
+import javax.swing.*;
+import java.awt.*;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 import java.util.*;
+import java.util.List;
+import java.util.Timer;
 
 
-public class Ymir {
+public class Ymir extends JPanel {
 
     private Game game;
     private Timer timer;
+    private Coordinate coordinate;
+    private BufferedImage ymirImage;
 
     private Queue<String> lastAbilities = new LinkedList<>();
     private Random random = new Random();
@@ -18,8 +28,8 @@ public class Ymir {
         private static final String DOUBLE_ACCEL = "Double Accel";
         private static final String HOLLOW_PURPLE = "Hollow Purple";
         private static final String[] ABILITIES = {INFINITE_VOID, DOUBLE_ACCEL, HOLLOW_PURPLE};
-        public Ymir(Game game) {
-            this.game = game;
+        public Ymir() {
+            this.coordinate = new Coordinate(0,300);
             timer = new Timer();
             timer.schedule(new TimerTask() {
                 @Override
@@ -29,6 +39,24 @@ public class Ymir {
             }, 0, 30000);
             lastAbilities.offer(ABILITIES[random.nextInt(ABILITIES.length)]);
             lastAbilities.offer(ABILITIES[random.nextInt(ABILITIES.length)]);
+
+            try {
+                ymirImage = ImageIO.read(new File("ymir.png"));
+                ymirImage = resizeImage(ymirImage, 100, 200);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            setPreferredSize(new Dimension(1000, 400));
+            this.setOpaque(false);
+            this.setVisible(true);
+        }
+
+        private BufferedImage resizeImage(BufferedImage originalImage, int targetWidth, int targetHeight) {
+            BufferedImage resizedImage = new BufferedImage(targetWidth, targetHeight, BufferedImage.TYPE_INT_ARGB);
+            Graphics2D g2d = resizedImage.createGraphics();
+            g2d.drawImage(originalImage, 0, 0, targetWidth, targetHeight, null);
+            g2d.dispose();
+            return resizedImage;
         }
 
         //to be called every 30 seconds from the game loop
@@ -101,6 +129,10 @@ public class Ymir {
                 game.addBarrier(new Coordinate(x, y), BarrierType.HOLLOW_PURPLE);
             }
         }
+
+    public Coordinate getCoordinate() {
+        return coordinate;
+    }
 
     private List<Barrier> selectRandomBarriers() {
         Collections.shuffle(game.getBarriers());

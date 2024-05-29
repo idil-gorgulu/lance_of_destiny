@@ -34,6 +34,7 @@ public class Game {
     private Game(){
         this.fireball = new Fireball();
         this.magicalStaff = new MagicalStaff();
+        this.ymir = new Ymir();
         // Think about how to initialize it, from constructor maybe?
         this.chance= new Chance();
         this.score= new Score();
@@ -44,7 +45,6 @@ public class Game {
         numExplosiveBarrier=0;
         numrewardingBarrier=0;
         numTotal=0;
-        ymir = new Ymir(this);
         activeDebris= new ArrayList<>();
         droppingSpells=new ArrayList<>();
         activeBullets=new ArrayList<>();
@@ -62,6 +62,7 @@ public class Game {
         return magicalStaff;
     }
 
+    public Ymir getYmir() {return ymir;}
     public Chance getChance() { return chance;}
     public Score getScore(){return score;}
 

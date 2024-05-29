@@ -246,10 +246,18 @@ public class RunningModePage extends Page{
                 int magicalStaffPositionX = runningModeController.getGameSession().getMagicalStaff().getCoordinate().getX();
                 int magicalStaffPositionY = runningModeController.getGameSession().getMagicalStaff().getCoordinate().getY();
                 runningModeController.getGameSession().getMagicalStaff().setBounds(magicalStaffPositionX, magicalStaffPositionY, magicalStaffWidth, magicalStaffHeight);
+                gamePanel.add(runningModeController.getGameSession().getMagicalStaff());
+
+                //Initializing Ymir
+                int ymirWidth = runningModeController.getGameSession().getYmir().getPreferredSize().width;
+                int ymirHeight = runningModeController.getGameSession().getYmir().getPreferredSize().height;
+                int ymirPositionX = runningModeController.getGameSession().getYmir().getCoordinate().getX();
+                int ymirPositionY = runningModeController.getGameSession().getYmir().getCoordinate().getY();
+                runningModeController.getGameSession().getMagicalStaff().setBounds(ymirPositionX, ymirPositionY, ymirWidth, ymirHeight);
+                gamePanel.add(runningModeController.getGameSession().getYmir());
 
                 gamePanel.requestFocus();
                 gamePanel.setFocusTraversalKeysEnabled(false);
-                gamePanel.add(runningModeController.getGameSession().getMagicalStaff());
 
                 //to follow if view has focus:
                 gamePanel.addFocusListener(new FocusListener() {

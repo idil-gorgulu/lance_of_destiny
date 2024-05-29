@@ -224,7 +224,7 @@ public class RunningModeController {
 
     public void checkYmirAbilities() {
         if (new Random().nextBoolean()) { // Simulate the coin flip
-            Ymir ymir = new Ymir(game);
+            Ymir ymir = new Ymir();
             if (new Random().nextBoolean()) {
                 ymir.activateInfiniteVoid();
             } else {
