@@ -9,8 +9,8 @@ import javax.imageio.ImageIO;
 
 public class Fireball extends JPanel {
     private Coordinate coordinate;
-    private double xVelocity = 1;
-    private double yVelocity = -3;
+    private double xVelocity = 0;
+    private double yVelocity = 2;
     private int fireballRadius = 15;
     private BufferedImage fireballImage;
     private boolean isOverwhelming=false;

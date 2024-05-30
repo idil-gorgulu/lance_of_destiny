@@ -26,7 +26,6 @@ public class RunningModeController {
         this.runningModePage = runningModePage;
         this.game= Game.getInstance();
         this.dataBaseController=DataBaseController.getInstance();
-
     }
     public Game getGameSession() {
         return Game.getInstance();
@@ -171,47 +170,6 @@ public class RunningModeController {
         }
     }
 
-    //Not used yet:
-    public void saveGame(String gameName, int timeInSeconds, ArrayList<Debris> activeDebris){
-        ArrayList<Barrier> barriers = game.getBarriers();
-        Document gameSession = new Document();
-        gameSession.put("email", User.getUserInstance().getEmail());
-        gameSession.put("gameName", gameName);
-        gameSession.put("score", getGameSession().getScore().getScore());
-        gameSession.put("timeElapsed", timeInSeconds);
-
-        for(int i=0; i<barriers.size(); i++){
-            gameSession.put("barrier_"+i, barriers.get(i).getCoordinate().getX() + "-"+barriers.get(i).getCoordinate().getY() +
-                    "-"+ barriers.get(i).getType().toString()+ "-" + barriers.get(i).getnHits());
-        }
-
-        ArrayList<Document> debrisList = new ArrayList<>();
-        for (Debris debris : activeDebris) {
-            Document debrisDoc = new Document();
-            debrisDoc.put("x", debris.getCoordinate().getX());
-            debrisDoc.put("y", debris.getCoordinate().getY());
-            debrisList.add(debrisDoc);
-        }
-
-        gameSession.put("debris", debrisList);
-        gameSession.put("played", "True");
-
-        Coordinate staffCoord = game.getMagicalStaff().getCoordinate();
-        gameSession.put("magicalStaff", new Document("x", staffCoord.getX()).append("y", staffCoord.getY()));
-
-        // Save fireball details
-        Fireball fireball = game.getFireball();
-        gameSession.put("fireball", new Document("x", fireball.getCoordinate().getX())
-                .append("y", fireball.getCoordinate().getY())
-                .append("velocityX", fireball.getxVelocity())
-                .append("velocityY", fireball.getyVelocity()));
-
-        Database.getInstance().getGameCollection().insertOne(gameSession);
-        JOptionPane.showMessageDialog(null, "Game saved successfully!");
-
-    }
-
-
     public void volume(int i){
         runningModePage.volume((float) (0.1*i));
     }
@@ -225,6 +183,7 @@ public class RunningModeController {
             }
         }
     }
+
     public void saveGameToDatabase() {
         dataBaseController.saveGameToDatabase(game.getGameName(), game,true);
     }

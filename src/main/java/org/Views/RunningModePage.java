@@ -1,5 +1,4 @@
 package org.Views;
-
 import org.Domain.*;
 import org.Controllers.*;
 import org.Listeners.MyKeyListener;
@@ -30,26 +29,21 @@ public class RunningModePage extends Page implements InventoryListener{
     private JPanel inventoryContainer = new JPanel();
     protected RunningModeController runningModeController;
     public boolean pause = false;
-
     private ArrayList<Barrier> barriers;
     private ArrayList<Debris> activeDebris;
     private ArrayList<Spell> droppingSpells;
     public HashMap<SpellType,Integer> inventory;
-
     private ArrayList<Bullet> activeBullets;
     public static final int SCREENWIDTH =1000;
     public int screenHeight;
     public int timeInSeconds = 0;
     private int frameCount = 0;
     private Timer gameTimer =  new Timer();
-    private Sound sound=new Sound();
-
+    private Sound sound = new Sound();
     public static final long COLLISION_COOLDOWN = 1000; // Cooldown period in milliseconds
-
     private JLabel timeLabel;
     public RunningModePage() {
         super();
-
         this.setDoubleBuffered(true);
         try {
             backgroundImage = ImageIO.read(new File("assets/Background.png"));
@@ -64,7 +58,7 @@ public class RunningModePage extends Page implements InventoryListener{
         this.runningModeController.getGameSession().started = true;
         activeDebris = runningModeController.getGameDebris();
         droppingSpells = runningModeController.getGameSpells();
-        activeBullets=runningModeController.getGameBullets();
+        activeBullets = runningModeController.getGameBullets();
         initUI();
         setFocusable(true);
         requestFocus();
@@ -76,16 +70,12 @@ public class RunningModePage extends Page implements InventoryListener{
         super.paintComponent(g);
         g.drawImage(backgroundImage, 0, 0, this.getWidth(), this.getHeight(), this);
     }
-    private void setupTimer() {
-        int delay = 0;  // start immediately
-        int period = 16; // 16 ms period for approx. 60 FPS
-
-        TimerTask task = new TimerTask() {
+    /*
+    TimerTask task = new TimerTask() {
             public void run() {
                 // For Pausing the game
                 if (pause) {
                     Object[] options = {"Continue", "Quit", "Save"};
-                    //Object[] options = {"Continue", "Quit"};
                     int choice = JOptionPane.showOptionDialog(null,
                             "You paused",
                             "Game Paused",
@@ -101,12 +91,13 @@ public class RunningModePage extends Page implements InventoryListener{
                         pause = false;
                         runningModeController = null;
                         Navigator.getInstance().showStartSingleplayerPage();
-                    }else if(choice == JOptionPane.CANCEL_OPTION) {
+                    } else if(choice == JOptionPane.CANCEL_OPTION) {
                         runningModeController.saveGameToDatabase();
                     }
                 }
                 else if (runningModeController.getGameSession().ended) {
-                    if(runningModeController.getGameSession().getBarriers().size()==0)JOptionPane.showMessageDialog(null, "You won!");
+
+                    if(runningModeController.getGameSession().getBarriers().isEmpty()) JOptionPane.showMessageDialog(null, "You won!");
                     else JOptionPane.showMessageDialog(null, "You lost!");
                     runningModeController = null;
                     Navigator.getInstance().showStartSingleplayerPage();
@@ -126,27 +117,63 @@ public class RunningModePage extends Page implements InventoryListener{
         };
         gameTimer.scheduleAtFixedRate(task, delay, period);
     }
+     */
+    private void setupTimer() {
+        int delay = 0;  // start immediately
+        int period = 16; // 16 ms period for approx. 60 FPS
+
+        TimerTask task = new TimerTask() {
+            public void run() {
+                // Check if the game is paused
+                if (pause) {
+
+                    return; // Skip any updates if the game is paused
+                }
+
+                // Handle end of game session
+                if (runningModeController.getGameSession().ended) {
+                    if (runningModeController.getGameSession().getBarriers().isEmpty())
+                        JOptionPane.showMessageDialog(null, "You won!");
+                    else
+                        JOptionPane.showMessageDialog(null, "You lost!");
+                    runningModeController = null;
+                    Navigator.getInstance().showStartSingleplayerPage();
+                } else {
+                    // Update the game frame
+                    SwingUtilities.invokeLater(() -> updateGameFrame());
+                    // Manage time and frames
+                    frameCount++;
+                    if (frameCount >= 70) {
+                        timeInSeconds++;
+                        SwingUtilities.invokeLater(() -> timeLabel.setText("Time: " + timeInSeconds + "s"));
+                        frameCount = 0;
+                    }
+                }
+            }
+        };
+
+
+
+        gameTimer.scheduleAtFixedRate(task, delay, period);
+    }
 
     public void updateGameFrame() {
         runningModeController.updateFireballView();
         runningModeController.updateMagicalStaffView();
         runningModeController.checkCollision();
         runningModeController.moveBarriers();
-        runningModeController.updateDebris();// Handle debris movement
-        runningModeController.updateDroppingSpells();// Hande spell dropping
+        runningModeController.updateDebris();
+        runningModeController.updateDroppingSpells();
         runningModeController.updateHexBullets();
         runningModeController.updatePurpleBarriers();
         repaint();
-        if (this.runningModeController.getGameSession().getChance().getRemainingChance() == 0 || runningModeController.getGameSession().getBarriers().size()==0) {
+        if (this.runningModeController.getGameSession().getChance().getRemainingChance() == 0 || runningModeController.getGameSession().getBarriers().isEmpty()) {
             this.runningModeController.getGameSession().ended = true;
         }
 
-        SwingUtilities.invokeLater(new Runnable() {
-            @Override
-            public void run() {
-                    runningModeController.run();
-                    repaint();
-            }
+        SwingUtilities.invokeLater(() -> {
+                runningModeController.run();
+                repaint();
         });
     }
 
@@ -159,7 +186,6 @@ public class RunningModePage extends Page implements InventoryListener{
         setLayout(new BorderLayout());
         initializeGameObjects();
         //playMusic(0); TODO
-
     }
 
     private void initializeGameObjects() {
@@ -176,9 +202,46 @@ public class RunningModePage extends Page implements InventoryListener{
                 infoContainer.add(timeLabel);
 
                 JButton pauseButton = new JButton("Pause");
-                pauseButton.addActionListener(e -> pause = true);
+                pauseButton.addActionListener(e -> {
+                    // Toggle pause state
+                    pause = !pause;
 
-// Add the pause button to the info container
+                    if (pause) {
+                        Object[] options = {"Continue", "Save Game", "Quit"};
+                        int choice = JOptionPane.showOptionDialog(null,
+                                "Game is paused. What would you like to do?",
+                                "Game Paused",
+                                JOptionPane.YES_NO_CANCEL_OPTION,
+                                JOptionPane.QUESTION_MESSAGE,
+                                null,
+                                options,
+                                options[0]);
+
+                        switch (choice) {
+                            case JOptionPane.YES_OPTION: // Continue
+                                pause = false; // Unpause the game
+                                gamePanel.requestFocus(); // Ensure focus is returned to the game panel on resume
+                                break;
+                            case JOptionPane.NO_OPTION: // Save Game
+                                runningModeController.saveGameToDatabase();
+                                pause = false; // Optionally unpause the game after saving
+                                gamePanel.requestFocus(); // Ensure focus is returned to the game panel on resume
+                                break;
+                            case JOptionPane.CANCEL_OPTION: // Quit
+                                pause = false; // Reset pause state
+                                runningModeController = null;
+                                Navigator.getInstance().showStartSingleplayerPage(); // Navigate away from the game page
+                                break;
+                            default:
+                                // Handle closing the JOptionPane without making a selection
+                                pause = true; // Ensure game remains paused if no valid option is chosen
+                                break;
+                        }
+                    }
+                });
+
+
+
                 infoContainer.add(pauseButton);
                 JButton helpScreenButton = new JButton("Help Screen");
                 infoContainer.add(helpScreenButton);
@@ -346,21 +409,6 @@ public class RunningModePage extends Page implements InventoryListener{
         }
     }
 
-
-
-
-
-
-
-    private void saveGame() {
-        String gameName = JOptionPane.showInputDialog(this, "Enter a name for your save file:", "Save Game", JOptionPane.PLAIN_MESSAGE);
-        if (gameName == null || gameName.trim().isEmpty()) {
-            JOptionPane.showMessageDialog(null, "Please provide a name to save the game.");
-            return;
-        }
-        int timeElapsed=timeInSeconds;
-        //runningModeController.saveGame(gameName,timeElapsed, activeDebris);
-    }
     public void playMusic(int i){
         sound.setFile(i);
         sound.playMusic();
@@ -376,7 +424,6 @@ public class RunningModePage extends Page implements InventoryListener{
     public void volume(float i){
         sound.setVolume(sound.getVolume()+i);
     }
-
 
     @Override
     public void onInventoryUpdate(SpellType spellType, int newCount) {

@@ -28,7 +28,6 @@ public class Game {
     private long lastCollisionTime = 0; // Time of the last collision in milliseconds
     private ArrayList<Barrier> barriers = new ArrayList<Barrier>(0); // Could maybe be a hashmap?
     private ArrayList<Debris> activeDebris;
-
     private ArrayList<Barrier> purpleBarriers = new ArrayList<Barrier>(0);;
     private ArrayList<Spell> droppingSpells;
     private ArrayList<Bullet> activeBullets;
@@ -58,11 +57,9 @@ public class Game {
     public Fireball getFireball() {
         return fireball;
     }
-
     public MagicalStaff getMagicalStaff() {
         return magicalStaff;
     }
-
     public Ymir getYmir() {return ymir;}
     public Chance getChance() { return chance;}
     public Score getScore(){return score;}
@@ -383,7 +380,8 @@ public class Game {
         return instance;
     }
 
-    public void moveBarriers(){ // TODO Fix the logic
+    // TODO Fix the logic
+    public void moveBarriers(){
         int newpos;
         boolean isAvailable;
         int width= 10;
@@ -543,7 +541,7 @@ public class Game {
 
             fireball.setxVelocity(reflectionX);
             fireball.setyVelocity(reflectionY);
-            energy=reflectionX*reflectionX+reflectionY*reflectionY;
+            energy = reflectionX*reflectionX+reflectionY*reflectionY;
             //System.out.println("new: " + fireball.getxVelocity() + " " + fireball.getyVelocity()+" "+energy);
 
         }
@@ -621,8 +619,6 @@ public class Game {
         purpleBarriers.removeAll(purplesToRemove);
         // Updating the score.
         getScore().incrementScore(toRemove.size(), timeInSeconds);
-
-
     }
     private boolean hitBarrier(Barrier barrier, int hitTimes) {
         if (barrier.isFrozen()) return false;
