@@ -18,7 +18,8 @@ public class Game {
     int numSimpleBarrier=0;
     int numFirmBarrier=0;
     int numExplosiveBarrier=0;
-    int numrewardingBarrier=0;
+    int numRewardingBarrier=0;
+    int numPurpleBarrier=0;
     int numTotal;
     public boolean started = false;
     public boolean ended = false;
@@ -27,6 +28,8 @@ public class Game {
     private long lastCollisionTime = 0; // Time of the last collision in milliseconds
     private ArrayList<Barrier> barriers = new ArrayList<Barrier>(0); // Could maybe be a hashmap?
     private ArrayList<Debris> activeDebris;
+
+    private ArrayList<Barrier> purpleBarriers = new ArrayList<Barrier>(0);;
     private ArrayList<Spell> droppingSpells;
     private ArrayList<Bullet> activeBullets;
     private HashMap<SpellType,Integer> inventory;
@@ -34,6 +37,7 @@ public class Game {
     private Game(){
         this.fireball = new Fireball();
         this.magicalStaff = new MagicalStaff();
+        this.ymir = new Ymir(this);
         // Think about how to initialize it, from constructor maybe?
         this.chance= new Chance();
         this.score= new Score();
@@ -42,9 +46,9 @@ public class Game {
         numSimpleBarrier=0;
         numFirmBarrier=0;
         numExplosiveBarrier=0;
-        numrewardingBarrier=0;
+        numRewardingBarrier=0;
+        numPurpleBarrier=0;
         numTotal=0;
-        ymir = new Ymir(this);
         activeDebris= new ArrayList<>();
         droppingSpells=new ArrayList<>();
         activeBullets=new ArrayList<>();
@@ -62,6 +66,7 @@ public class Game {
         return magicalStaff;
     }
 
+    public Ymir getYmir() {return ymir;}
     public Chance getChance() { return chance;}
     public Score getScore(){return score;}
 
@@ -87,13 +92,31 @@ public class Game {
             numExplosiveBarrier++;
             s="x";
         } else if (type == BarrierType.REWARDING) {
-            numrewardingBarrier++;
-            s="r";
+            numRewardingBarrier++;
+            s = "r";
         }
         numTotal++;
         int boardX = coordinates.getX() / 50; // Adjust the indexing here
         int boardY = coordinates.getY() / 20; // Adjust the indexing here
         barrierBoard[boardY][boardX] = s; // Adjusted the indexing here
+        printBoard();
+    }
+
+    public void addPurpleBarrier(Coordinate coordinates) {
+        Barrier newBarrier = new Barrier(coordinates, BarrierType.HOLLOW_PURPLE);
+        if (Math.random()<0.2)    {
+            newBarrier.setMoving(true);
+            if (Math.random()<0.5)  newBarrier.setVelocity(3);
+            else                    newBarrier.setVelocity(-3);
+        }
+
+        barriers.add(newBarrier);
+        purpleBarriers.add(newBarrier);
+        numPurpleBarrier++;
+        numTotal++;
+        int boardX = coordinates.getX() / 50; // Adjust the indexing here
+        int boardY = coordinates.getY() / 20; // Adjust the indexing here
+        barrierBoard[boardY][boardX] = "p"; // Adjusted the indexing here
         printBoard();
     }
 
@@ -121,6 +144,7 @@ public class Game {
         if(initialSize!=0){
             for (int i = 0; i < initialSize; i++) {
                 Barrier barrier = barriers.get(i);
+                if (barrier.isFrozen()) return;
                 if (barrier.getCoordinate().getX()==coordinates.getX() && barrier.getCoordinate().getY() == coordinates.getY()
                    && barrier.getType() == type) {
                     System.out.println("Removed");
@@ -139,7 +163,10 @@ public class Game {
                     } else if (type == BarrierType.EXPLOSIVE) { //Explosive barrier
                         numExplosiveBarrier--;
                     } else if (type == BarrierType.REWARDING) {
-                        numrewardingBarrier--;
+                        numRewardingBarrier--;
+                    }
+                    else if (type == BarrierType.HOLLOW_PURPLE) {
+                        numPurpleBarrier--;
                     }
                     return;
                 }
@@ -215,7 +242,7 @@ public class Game {
      * -  if there is sufficient space: Returns true and places barriers.
      */
     public boolean initialPopulation(int simpleNum, int firmNum, int exNum, int giftNum){
-        int tot = numSimpleBarrier + numExplosiveBarrier + numFirmBarrier + numrewardingBarrier;
+        int tot = numSimpleBarrier + numExplosiveBarrier + numFirmBarrier + numRewardingBarrier;
         if (400 - tot < simpleNum + firmNum + exNum + giftNum){
             return false;
         }
@@ -276,7 +303,7 @@ public class Game {
     }
 
     public int getNumrewardingBarrier() {
-        return numrewardingBarrier;
+        return numRewardingBarrier;
     }
 
     public int getNumTotal() {
@@ -305,7 +332,7 @@ public class Game {
             numExplosiveBarrier++;
             s="x";
         } else if (type == BarrierType.REWARDING) {
-            numrewardingBarrier++;
+            numRewardingBarrier++;
             s="r";
         }
         numTotal++;
@@ -328,7 +355,7 @@ public class Game {
         } else if (type == BarrierType.EXPLOSIVE) { //Explosive barrier
             numExplosiveBarrier++;
         } else if (type == BarrierType.REWARDING) {
-            numrewardingBarrier++;
+            numRewardingBarrier++;
         }
         numTotal++;
     }
@@ -343,7 +370,7 @@ public class Game {
         this.numSimpleBarrier = 0;
         this.numFirmBarrier = 0;
         this.numExplosiveBarrier = 0;
-        this.numrewardingBarrier = 0;
+        this.numRewardingBarrier = 0;
         this.numTotal = 0;
         this.started = true;
         this.ended = false;
@@ -540,6 +567,7 @@ public class Game {
     public void checkBarrierFireballCollision(int timeInSeconds){
         ArrayList<Barrier> barriers = getBarriers();
         ArrayList<Barrier> toRemove = new ArrayList<>();
+        ArrayList<Barrier> purplesToRemove = new ArrayList<>();
 
         Fireball fireball = getFireball();
         double xVelocity = fireball.getxVelocity();
@@ -581,18 +609,23 @@ public class Game {
                     }}
                 else {
                     if (hitBarrier(br,10)){ //This is always true
+                        if(br.getType()==BarrierType.HOLLOW_PURPLE){
+                            purplesToRemove.add(br);
+                        }
                         toRemove.add(br);
                     }
                 }
             }
         }
         barriers.removeAll(toRemove);
+        purpleBarriers.removeAll(purplesToRemove);
         // Updating the score.
         getScore().incrementScore(toRemove.size(), timeInSeconds);
 
 
     }
     private boolean hitBarrier(Barrier barrier, int hitTimes) {
+        if (barrier.isFrozen()) return false;
         barrier.setnHits(barrier.getnHits() - hitTimes);
         if (barrier.getnHits() <= 0) {
             barrier.destroy();
@@ -601,6 +634,9 @@ public class Game {
             }
             else if(barrier.getType()==BarrierType.REWARDING){
                 dropSpell(barrier);
+            }
+            else if(barrier.getType()==BarrierType.HOLLOW_PURPLE){
+                purpleBarriers.remove(barrier);
             }
             return true;
         }
@@ -726,6 +762,14 @@ public class Game {
         // Updating the score.
         getScore().incrementScore(toRemove.size(), timeInSeconds);
         return collides;
+    }
+
+    public ArrayList<Barrier> getPurpleBarriers() {
+        return purpleBarriers;
+    }
+
+    public void setPurpleBarriers(ArrayList<Barrier> purpleBarriers) {
+        this.purpleBarriers = purpleBarriers;
     }
 
     public String getGameName() {

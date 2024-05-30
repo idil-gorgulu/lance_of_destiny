@@ -2,43 +2,78 @@ package org.Domain;
 
 import org.Views.RunningModePage;
 
+import javax.imageio.ImageIO;
+import javax.swing.*;
+import java.awt.*;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 import java.util.*;
+import java.util.List;
+import java.util.Timer;
 
 
-public class Ymir {
+public class Ymir extends JPanel {
 
     private Game game;
     private Timer timer;
-
+    private Coordinate coordinate;
+    private BufferedImage ymirImage;
     private Queue<String> lastAbilities = new LinkedList<>();
     private Random random = new Random();
 
-        // Constants for the abilities
+
         private static final String INFINITE_VOID = "Infinite Void";
         private static final String DOUBLE_ACCEL = "Double Accel";
         private static final String HOLLOW_PURPLE = "Hollow Purple";
         private static final String[] ABILITIES = {INFINITE_VOID, DOUBLE_ACCEL, HOLLOW_PURPLE};
         public Ymir(Game game) {
             this.game = game;
+            this.coordinate = new Coordinate(890,430);
             timer = new Timer();
             timer.schedule(new TimerTask() {
                 @Override
                 public void run() {
-                    tryActivateAbility();
+                    System.out.println("YMIR Timer task executed");
+                    if (random.nextBoolean()) {
+                        activateRandomAbility();
+                        //activateHollowPurple();
+                    }
                 }
             }, 0, 30000);
             lastAbilities.offer(ABILITIES[random.nextInt(ABILITIES.length)]);
             lastAbilities.offer(ABILITIES[random.nextInt(ABILITIES.length)]);
+
+            try {
+                ymirImage = ImageIO.read(new File("assets/ymir.png"));
+                ymirImage = resizeImage(ymirImage, 116, 176);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            setPreferredSize(new Dimension(116, 176));
+            this.setOpaque(false);
+            this.setVisible(true);
         }
 
-        //to be called every 30 seconds from the game loop
-        private void tryActivateAbility() {
-            // Implementation of Ymir's abilities
+        private BufferedImage resizeImage(BufferedImage originalImage, int targetWidth, int targetHeight) {
+            BufferedImage resizedImage = new BufferedImage(targetWidth, targetHeight, BufferedImage.TYPE_INT_ARGB);
+            Graphics2D g2d = resizedImage.createGraphics();
+            g2d.drawImage(originalImage, 0, 0, targetWidth, targetHeight, null);
+            g2d.dispose();
+            return resizedImage;
         }
 
-    public void stop() {
-        timer.cancel();  // Stop the timer when the game ends
-    }
+        @Override
+        protected void paintComponent(Graphics g) {
+            super.paintComponent(g);
+            if (ymirImage != null) {
+                Graphics2D g2d = (Graphics2D) g.create();
+                int x = (getWidth() - ymirImage.getWidth()) / 2;
+                int y = (getHeight() - ymirImage.getHeight()) / 2;
+                g2d.drawImage(ymirImage, x, y, this);
+                g2d.dispose();
+            }
+        }
 
         private void activateRandomAbility() {
             String ability;
@@ -50,9 +85,13 @@ public class Ymir {
             manageAbilityHistory(ability);
         }
 
+        public void stop() {
+        timer.cancel();  // Stop the timer when the game ends
+    }
+
+
         private boolean isRepeatAbility(String ability) {
-            // Check if this ability was the last two abilities used
-            if (lastAbilities.contains(ability) && lastAbilities.peek().equals(ability)) {
+            if (lastAbilities.size() == 2 && lastAbilities.peek().equals(ability)) {
                 return true;
             }
             return false;
@@ -60,9 +99,9 @@ public class Ymir {
 
         private void manageAbilityHistory(String ability) {
             if (lastAbilities.size() >= 2) {
-                lastAbilities.poll(); // Remove the oldest if we already have two
+                lastAbilities.poll();
             }
-            lastAbilities.offer(ability); // Add the new one to the history
+            lastAbilities.offer(ability);
         }
 
         private void executeAbility(String ability) {
@@ -79,6 +118,7 @@ public class Ymir {
             }
         }
         public void activateInfiniteVoid() {
+            System.out.println("Activating Infinite Void");
             List<Barrier> barriers = game.getBarriers();
             Collections.shuffle(barriers);
             barriers.stream()
@@ -89,18 +129,30 @@ public class Ymir {
 
         private void activateDoubleAccel() {
             System.out.println("Activating Double Accel");
-            // Code to reduce fireball speed
+            Fireball fireball = game.getFireball();
+            fireball.setxVelocity(fireball.getxVelocity() / 2);
+            fireball.setyVelocity(fireball.getyVelocity() / 2);
         }
 
         public void activateHollowPurple() {
+            int numPurpleBarrier = 0;
             System.out.println("Activating Hollow Purple");
             Random random = new Random();
-            for (int i = 0; i < 8; i++) { // Add 8 new hollow purple barriers
+            while(numPurpleBarrier < 8) {
                 int x = random.nextInt(RunningModePage.SCREENWIDTH - 50);
-                int y = random.nextInt(500 - 15);
-                game.addBarrier(new Coordinate(x, y), BarrierType.HOLLOW_PURPLE);
+                int y = random.nextInt(400 - 15);
+                int boardX = x / 50;
+                int boardY = y / 20;
+                if (game.getBarrierBoard()[boardY][boardX]==null){
+                    game.addPurpleBarrier(new Coordinate(x,y));
+                    numPurpleBarrier++;
+                }
             }
         }
+
+    public Coordinate getCoordinate() {
+        return coordinate;
+    }
 
     private List<Barrier> selectRandomBarriers() {
         Collections.shuffle(game.getBarriers());

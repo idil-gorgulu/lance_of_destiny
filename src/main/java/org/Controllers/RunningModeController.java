@@ -69,6 +69,7 @@ public class RunningModeController {
     public void run(){
         Fireball fireball = game.getFireball();
         MagicalStaff magicalStaff = game.getMagicalStaff();
+        Ymir ymir = game.getYmir();
         ArrayList<Barrier> barriers = game.getBarriers();
         Chance chance = getGameSession().getChance();
         Score score = getGameSession().getScore();
@@ -167,6 +168,15 @@ public class RunningModeController {
 
     }
 
+    public void updatePurpleBarriers(){
+        Iterator<Barrier> iterator = game.getPurpleBarriers().iterator();
+        while (iterator.hasNext()) {
+            Barrier b = iterator.next();
+            runningModePage.getGamePanel().add(b);
+            iterator.remove();
+        }
+    }
+
     //Not used yet:
     public void saveGame(String gameName, int timeInSeconds, ArrayList<Debris> activeDebris){
         ArrayList<Barrier> barriers = game.getBarriers();
@@ -238,11 +248,10 @@ public class RunningModeController {
 
     public void checkYmirAbilities() {
         if (new Random().nextBoolean()) { // Simulate the coin flip
-            Ymir ymir = new Ymir(game);
             if (new Random().nextBoolean()) {
-                ymir.activateInfiniteVoid();
+                game.getYmir().activateInfiniteVoid();
             } else {
-                ymir.activateHollowPurple();
+                game.getYmir().activateHollowPurple();
             }
         }
     }
