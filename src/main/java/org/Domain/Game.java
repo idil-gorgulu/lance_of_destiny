@@ -653,6 +653,7 @@ public class Game {
     }
 
     public void useSpell(SpellType spellType){
+
         if(inventory.checkSpellCount(spellType)){
             if(spellType == SpellType.FELIX_FELICIS){
                 chance.incrementChance();
