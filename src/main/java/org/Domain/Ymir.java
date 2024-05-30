@@ -29,7 +29,7 @@ public class Ymir extends JPanel {
         private static final String HOLLOW_PURPLE = "Hollow Purple";
         private static final String[] ABILITIES = {INFINITE_VOID, DOUBLE_ACCEL, HOLLOW_PURPLE};
         public Ymir() {
-            this.coordinate = new Coordinate(0,300);
+            this.coordinate = new Coordinate(890,430);
             timer = new Timer();
             timer.schedule(new TimerTask() {
                 @Override
@@ -41,12 +41,12 @@ public class Ymir extends JPanel {
             lastAbilities.offer(ABILITIES[random.nextInt(ABILITIES.length)]);
 
             try {
-                ymirImage = ImageIO.read(new File("ymir.png"));
-                ymirImage = resizeImage(ymirImage, 100, 200);
+                ymirImage = ImageIO.read(new File("assets/ymir.png"));
+                ymirImage = resizeImage(ymirImage, 116, 176);
             } catch (IOException e) {
                 e.printStackTrace();
             }
-            setPreferredSize(new Dimension(1000, 400));
+            setPreferredSize(new Dimension(116, 176));
             this.setOpaque(false);
             this.setVisible(true);
         }
@@ -57,6 +57,19 @@ public class Ymir extends JPanel {
             g2d.drawImage(originalImage, 0, 0, targetWidth, targetHeight, null);
             g2d.dispose();
             return resizedImage;
+        }
+
+        @Override
+        protected void paintComponent(Graphics g) {
+            super.paintComponent(g);
+            if (ymirImage != null) {
+                Graphics2D g2d = (Graphics2D) g.create();
+                int x = (getWidth() - ymirImage.getWidth()) / 2;
+                int y = (getHeight() - ymirImage.getHeight()) / 2;
+                g2d.drawImage(ymirImage, x, y, this);
+                g2d.dispose();
+            }
+            System.out.println("Ymir paintComponent called");
         }
 
         //to be called every 30 seconds from the game loop

@@ -253,8 +253,9 @@ public class RunningModePage extends Page{
                 int ymirHeight = runningModeController.getGameSession().getYmir().getPreferredSize().height;
                 int ymirPositionX = runningModeController.getGameSession().getYmir().getCoordinate().getX();
                 int ymirPositionY = runningModeController.getGameSession().getYmir().getCoordinate().getY();
-                runningModeController.getGameSession().getMagicalStaff().setBounds(ymirPositionX, ymirPositionY, ymirWidth, ymirHeight);
+                runningModeController.getGameSession().getYmir().setBounds(ymirPositionX, ymirPositionY, ymirWidth, ymirHeight);
                 gamePanel.add(runningModeController.getGameSession().getYmir());
+                System.out.println("YMIR ADDED TO THE GAME");
 
                 gamePanel.requestFocus();
                 gamePanel.setFocusTraversalKeysEnabled(false);
