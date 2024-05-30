@@ -47,10 +47,10 @@ public class RunningModePage extends Page implements InventoryListener{
         this.setDoubleBuffered(true);
         try {
             backgroundImage = ImageIO.read(new File("assets/Background.png"));
-            hexImage = ImageIO.read(new File("assets/spells/felix_felicis.png"));
+            hexImage = ImageIO.read(new File("assets/spells/hex.png"));
             felixFelicisImage = ImageIO.read(new File("assets/spells/felix_felicis.png"));
             magicalStaffExpansionImage = ImageIO.read(new File("assets/spells/magical_staff_expansion.png"));
-            overwhelmingFireballImage = ImageIO.read(new File("assets/spells/felix_felicis.png"));
+            overwhelmingFireballImage = ImageIO.read(new File("assets/spells/overwhelmingfb.png"));
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -362,7 +362,7 @@ public class RunningModePage extends Page implements InventoryListener{
     private void initializeInventory(GridBagConstraints gbc) {
         ArrayList<JLabel> countLabels = new ArrayList<>(Arrays.asList(hexCount, felixFelicisCount, magicalStaffExpansionCount, overwhelmingFireballCount));
         ArrayList<BufferedImage> images = new ArrayList<>(Arrays.asList(hexImage, felixFelicisImage, magicalStaffExpansionImage, overwhelmingFireballImage));
-
+        ArrayList<JLabel> activationKeys = new ArrayList<>(Arrays.asList(new JLabel("T"),new JLabel("Q"),new JLabel("W"),new JLabel("E")));
         int imageWidth = 40;  // Resimlerin istenen genişliği
         int imageHeight = 40; // Resimlerin istenen yüksekliği
 
@@ -398,14 +398,7 @@ public class RunningModePage extends Page implements InventoryListener{
             // Butonları ayarlayın
             gbc.gridx = 2;
             gbc.insets = commonPadding;
-            JButton useButton = new JButton("Use");
-            useButton.addActionListener(new ActionListener() {
-                @Override
-                public void actionPerformed(ActionEvent e) {
-                    // Burada ilgili öğenin kullanımını tetikleyecek kodları ekleyebilirsiniz
-                }
-            });
-            inventoryContainer.add(useButton, gbc);
+            inventoryContainer.add(activationKeys.get(i), gbc);
         }
     }
 
