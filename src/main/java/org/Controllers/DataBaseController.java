@@ -37,7 +37,7 @@ public class DataBaseController {
             gameInstance.addDetailedBarrier(co, barrierType, numHits, isMoving, velocity);
         }
     }
-    public void saveGameToDatabase(String gameName, Game game) {
+    public void saveGameToDatabase(String gameName, Game game, boolean played) {
         ArrayList<Barrier> barriers = game.getBarriers();
         Document gameSession = new Document();
         gameSession.put("email", User.getUserInstance().getEmail());
@@ -50,7 +50,8 @@ public class DataBaseController {
                     "/"+ barriers.get(i).getType().toString()+ "/" + barriers.get(i).getnHits() +
                     "/"+ barriers.get(i).isMoving() + "/"+barriers.get(i).getVelocity() );
         }
-        gameSession.put("played", "False");
+        if(played) gameSession.put("played", "True");
+        else gameSession.put("played", "False");
         Database.getInstance().getGameCollection().insertOne(gameSession);
         System.out.println("Saved");
     }
