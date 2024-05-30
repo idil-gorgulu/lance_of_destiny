@@ -17,11 +17,11 @@ public class MultiPortServer {
     public static MultiPortServer instance;
     private ServerSocket serverSocketOut;
     private Socket outputSocket;
-    private PrintWriter output;
+    public PrintWriter output;
 
     private ServerSocket serverSocketIn;
     private Socket inputSocket;
-    private BufferedReader input;
+    public BufferedReader input;
     public boolean connected = false;
     public boolean selfReadyClicked = false;
     public boolean opponentReadyClicked = false;
@@ -87,17 +87,18 @@ public class MultiPortServer {
             inputSocket = serverSocketIn.accept();
             System.out.println("Client connected on port " + inputPort + " for incoming messages.");
             input = new BufferedReader(new InputStreamReader(inputSocket.getInputStream()));
-
+            output.println("Hello from server");
             // Put ready button when
             // Then when connected first print out 3 2 1
             this.setConnected(true);
-            while(!selfReadyClicked){}
             // Make this a function
             output.println("gameReady");
             // Wait other player to click as well
             String inputLine;
             while ((inputLine = input.readLine()) != null) {
+                System.out.println(inputLine);
                 if (inputLine.equals("gameReady")) {
+                    System.out.println("Opponent is ready");
                     opponentReadyClicked = true;
                     break;
                 }

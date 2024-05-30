@@ -104,6 +104,21 @@ public class WaitMultiplayerGameAccept extends Page implements StateChangeListen
             Navigator.getInstance().showRunningModePage();
         } else {
             // Update UI to show a waiting message or similar
+            server.output.println("gameReady");
+            // Wait other player to click as well
+            String inputLine;
+            try {
+                while ((inputLine = server.input.readLine()) != null) {
+                    System.out.println(inputLine);
+                    if (inputLine.equals("gameReady")) {
+                        System.out.println("Opponent is ready");
+                        server.opponentReadyClicked = true;
+                        break;
+                    }
+                }
+            } catch (Exception ex) {
+                System.out.println(ex);
+            }
         }
     }
 }

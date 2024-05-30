@@ -12,9 +12,9 @@ import java.util.concurrent.TimeUnit;
 public class MultiPortClient {
     private List<StateChangeListener> listeners = new ArrayList<>();
     private Socket outputSocket;
-    private PrintWriter output;
+    public PrintWriter output;
     private Socket inputSocket;
-    private BufferedReader input;
+    public BufferedReader input;
     private String gameHostIpAdress;
     private int outputPort;
     private int inputPort;
@@ -52,14 +52,14 @@ public class MultiPortClient {
 
             connected = true;
             notifyAllListeners();
-            System.out.println("Helloooo");
-            while(!selfReadyClicked){}
             // Make this a function
             output.println("gameReady");
             // Wait other player to click as well
             String inputLine;
             while ((inputLine = input.readLine()) != null) {
+                System.out.println(inputLine);
                 if (inputLine.equals("gameReady")) {
+                    System.out.println("Opponent is ready");
                     opponentReadyClicked = true;
                     break;
                 }

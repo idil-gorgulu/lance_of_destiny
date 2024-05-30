@@ -178,6 +178,21 @@ public class JoinMultiplayerGamePage extends Page implements StateChangeListener
             } else {
                 // Display a waiting message
                 System.out.println("Waiting for opponent...");
+                inClient.output.println("gameReady");
+                // Wait other player to click as well
+                String inputLine;
+                try {
+                    while ((inputLine = inClient.input.readLine()) != null) {
+                        System.out.println(inputLine);
+                        if (inputLine.equals("gameReady")) {
+                            System.out.println("Opponent is ready");
+                            inClient.opponentReadyClicked = true;
+                            break;
+                        }
+                    }
+                } catch(Exception ex) {
+                    System.out.println(ex);
+                }
             }
         }
     }
