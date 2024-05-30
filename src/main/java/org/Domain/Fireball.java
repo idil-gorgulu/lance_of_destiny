@@ -10,7 +10,7 @@ import javax.imageio.ImageIO;
 public class Fireball extends JPanel {
     private Coordinate coordinate;
     private double xVelocity = 0;
-    private double yVelocity = 2;
+    private double yVelocity = 0;
     private int fireballRadius = 15;
     private BufferedImage fireballImage;
     private boolean isOverwhelming=false;
@@ -19,7 +19,7 @@ public class Fireball extends JPanel {
 
 
     public Fireball() {
-        this.coordinate = new Coordinate(200, 200);
+        this.coordinate = new Coordinate(500, 530);
 
         try {
             // Load the original fireball image

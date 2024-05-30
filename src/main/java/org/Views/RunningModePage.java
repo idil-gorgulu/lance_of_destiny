@@ -294,6 +294,7 @@ public class RunningModePage extends Page implements InventoryListener{
                     @Override
                     public void mouseClicked(MouseEvent e) {
                         System.out.println("Mouse click coordinates:"+ e.getX()+" "+ e.getY());
+                        runningModeController.getGameSession().triggerBall();
                     }
                 });
 
@@ -309,12 +310,12 @@ public class RunningModePage extends Page implements InventoryListener{
 
                 // Initializing Fireball
                 int fireballWidth = runningModeController.getGameSession().getFireball().getPreferredSize().width;
-                int fireballPositionX = (SCREENWIDTH - fireballWidth) / 2;
+                //int fireballPositionX = (SCREENWIDTH - fireballWidth) / 2;
                 int fireballHeight = runningModeController.getGameSession().getFireball().getPreferredSize().height;
-                int fireballPositionY = (screenHeight - fireballHeight - 200);
-                runningModeController.getGameSession().getFireball().getCoordinate().setX(fireballPositionX);
-                runningModeController.getGameSession().getFireball().getCoordinate().setY(fireballPositionY);
-                runningModeController.getGameSession().getFireball().setBounds(fireballPositionX, fireballPositionY, fireballWidth, fireballHeight);
+                //int fireballPositionY = (screenHeight - fireballHeight - 200);
+                //runningModeController.getGameSession().getFireball().getCoordinate().setX(fireballPositionX);
+                //runningModeController.getGameSession().getFireball().getCoordinate().setY(fireballPositionY);
+                runningModeController.getGameSession().getFireball().setBounds(runningModeController.getGameSession().getFireball().getX(), runningModeController.getGameSession().getFireball().getY(), fireballWidth, fireballHeight);
                 gamePanel.add(runningModeController.getGameSession().getFireball());
 
                 // Initializing MagicalStaff
@@ -363,7 +364,7 @@ public class RunningModePage extends Page implements InventoryListener{
     private void initializeInventory(GridBagConstraints gbc) {
         ArrayList<JLabel> countLabels = new ArrayList<>(Arrays.asList(hexCount, felixFelicisCount, magicalStaffExpansionCount, overwhelmingFireballCount));
         ArrayList<BufferedImage> images = new ArrayList<>(Arrays.asList(hexImage, felixFelicisImage, magicalStaffExpansionImage, overwhelmingFireballImage));
-        ArrayList<JLabel> activationKeys = new ArrayList<>(Arrays.asList(new JLabel("T"),new JLabel("Q"),new JLabel("W"),new JLabel("E")));
+        ArrayList<JLabel> activationKeys = new ArrayList<>(Arrays.asList(new JLabel("T"),new JLabel("Q"),new JLabel("H"),new JLabel("E")));
         int imageWidth = 40;  // Resimlerin istenen genişliği
         int imageHeight = 40; // Resimlerin istenen yüksekliği
 
