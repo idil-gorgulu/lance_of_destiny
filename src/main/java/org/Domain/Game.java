@@ -776,4 +776,5 @@ public class Game {
     public void getYmir(Ymir ymir) {
         this.ymir = ymir;
     }
+
 }

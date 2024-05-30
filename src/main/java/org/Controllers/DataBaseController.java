@@ -55,6 +55,8 @@ public class DataBaseController {
         gameInstance.getYmir().manageAbilityHistory(ymirAbilities[1]);
         System.out.println(ymirAbilities[0] +"---"+ ymirAbilities[1]);
 
+        gameInstance.getScore().setTotalScore(game.getInteger("score"));
+
     }
     public void saveGameToDatabase(String gameName, Game game, boolean played) {
         // Get the current date and time with time zone
@@ -89,6 +91,7 @@ public class DataBaseController {
 
         //add other fields here:
         gameSession.put("Ymir",game.getYmir().getLastAbilitiesAsList().get(0).toString()+"/"+game.getYmir().getLastAbilitiesAsList().get(1).toString());
+        gameSession.put("score",game.getScore().getTotalScore());
 
         Database.getInstance().getGameCollection().insertOne(gameSession);
         System.out.println("Saved");
