@@ -768,4 +768,12 @@ public class Game {
     public void setDate(String date) {
         this.date = date;
     }
+
+    public void setYmir(Ymir ymir) {
+        this.ymir = ymir;
+    }
+
+    public void getYmir(Ymir ymir) {
+        this.ymir = ymir;
+    }
 }

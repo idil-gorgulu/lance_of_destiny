@@ -21,8 +21,6 @@ public class Ymir extends JPanel {
     private BufferedImage ymirImage;
     private Queue<String> lastAbilities = new LinkedList<>();
     private Random random = new Random();
-
-
         private static final String INFINITE_VOID = "Infinite Void";
         private static final String DOUBLE_ACCEL = "Double Accel";
         private static final String HOLLOW_PURPLE = "Hollow Purple";
@@ -88,7 +86,6 @@ public class Ymir extends JPanel {
         public void stop() {
         timer.cancel();  // Stop the timer when the game ends
     }
-
 
         private boolean isRepeatAbility(String ability) {
             if (lastAbilities.size() == 2 && lastAbilities.peek().equals(ability)) {
@@ -159,5 +156,12 @@ public class Ymir extends JPanel {
         return game.getBarriers().subList(0, Math.min(8, game.getBarriers().size()));
     }
 
+    public Queue<String> getLastAbilities() {
+        return lastAbilities;
+    }
+
+    public void setLastAbilities(Queue<String> lastAbilities) {
+        this.lastAbilities = lastAbilities;
+    }
 }
 

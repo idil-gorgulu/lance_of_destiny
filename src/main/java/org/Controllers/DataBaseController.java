@@ -81,6 +81,10 @@ public class DataBaseController {
                 fireball.getyVelocity());
         if(played)gameSession.put("played", "True");
         else gameSession.put("played", "False");
+
+        //add other fields here:
+        gameSession.put("Ymir",game.getYmir().getLastAbilities());
+
         Database.getInstance().getGameCollection().insertOne(gameSession);
         System.out.println("Saved");
     }
