@@ -168,6 +168,7 @@ public class RunningModePage extends Page implements InventoryListener{
         runningModeController.updatePurpleBarriers();
         repaint();
         if (this.runningModeController.getGameSession().getChance().getRemainingChance() == 0 || runningModeController.getGameSession().getBarriers().isEmpty()) {
+            this.runningModeController.getGameSession().getYmir().getTimer().cancel();
             this.runningModeController.getGameSession().ended = true;
         }
 

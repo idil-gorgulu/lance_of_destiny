@@ -20,6 +20,8 @@ public class Ymir extends JPanel {
     private Coordinate coordinate;
     private BufferedImage ymirImage;
     private Queue<String> lastAbilities = new LinkedList<>();
+
+    private static Ymir instance;
     private Random random = new Random();
 
 
@@ -159,5 +161,18 @@ public class Ymir extends JPanel {
         return game.getBarriers().subList(0, Math.min(8, game.getBarriers().size()));
     }
 
+    public Timer getTimer() {
+        return timer;
+    }
+
+    public static Ymir getInstance(){
+        if (instance==null) {
+            instance=new Ymir(Game.createNewGame());
+            return instance;
+        }
+        else{
+            return instance;
+        }
+    }
 }
 
