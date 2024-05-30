@@ -44,11 +44,11 @@ public class DataBaseController {
         gameInstance.getInventory().setSpellCount(SpellType.STAFF_EXPANSION, game.getInteger("spellStaffExpansion"));
         gameInstance.getInventory().setSpellCount(SpellType.HEX, game.getInteger("spellHex"));
         gameInstance.getInventory().setSpellCount(SpellType.OVERWHELMING_FIREBALL, game.getInteger("spellOverwhelming"));
-        String[] fireballParts = game.getString("fireball").split("/");
-        gameInstance.getFireball().getCoordinate().setX(Integer.parseInt(fireballParts[0]));
-        gameInstance.getFireball().getCoordinate().setY(Integer.parseInt(fireballParts[1]));
-        gameInstance.getFireball().setxVelocity(Float.parseFloat(fireballParts[2]));
-        gameInstance.getFireball().setyVelocity(Float.parseFloat(fireballParts[3]));
+//        String[] fireballParts = game.getString("fireball").split("/");
+//        gameInstance.getFireball().getCoordinate().setX(Integer.parseInt(fireballParts[0]));
+//        gameInstance.getFireball().getCoordinate().setY(Integer.parseInt(fireballParts[1]));
+//        gameInstance.getFireball().setxVelocity(Float.parseFloat(fireballParts[2]));
+//        gameInstance.getFireball().setyVelocity(Float.parseFloat(fireballParts[3]));
 
         String[] ymirAbilities = game.getString("Ymir").split("/");
         gameInstance.getYmir().manageAbilityHistory(ymirAbilities[0]);
@@ -81,11 +81,11 @@ public class DataBaseController {
         gameSession.put("spellStaffExpansion",game.getInventory().getSpellCount(SpellType.STAFF_EXPANSION));
         gameSession.put("spellHex",game.getInventory().getSpellCount(SpellType.HEX));
         gameSession.put("spellOverwhelming",game.getInventory().getSpellCount(SpellType.OVERWHELMING_FIREBALL));
-        Fireball fireball = game.getFireball();
-        gameSession.put("fireball", fireball.getCoordinate().getX() + "/"+
-                fireball.getCoordinate().getY() + "/" +
-                fireball.getxVelocity()+ "/" +
-                fireball.getyVelocity());
+//        Fireball fireball = game.getFireball();
+//        gameSession.put("fireball", fireball.getCoordinate().getX() + "/"+
+//                fireball.getCoordinate().getY() + "/" +
+//                fireball.getxVelocity()+ "/" +
+//                fireball.getyVelocity());
         if(played)gameSession.put("played", "True");
         else gameSession.put("played", "False");
 

@@ -446,7 +446,7 @@ public class Game {
                 return;
             }
             int fireballWidth = fireball.getPreferredSize().width;
-            int fireballPositionX = (int) this.magicalStaff.getMagicalStaffRectangle().getX()+10;
+            int fireballPositionX = (int) this.magicalStaff.getMagicalStaffRectangle().getX()+50;
             System.out.println("coordinate----");
             System.out.println((int) this.magicalStaff.getMagicalStaffRectangle().getX());
             System.out.println((int) this.magicalStaff.getMagicalStaffRectangle().getY());
@@ -782,7 +782,7 @@ public class Game {
     public void triggerBall() {
         if(fireball.getxVelocity()==0 && fireball.getyVelocity()==0){
             this.fireball.setxVelocity(0);
-            this.fireball.setyVelocity(3);
+            this.fireball.setyVelocity(-3);
         }
     }
 

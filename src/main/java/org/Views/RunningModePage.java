@@ -364,27 +364,24 @@ public class RunningModePage extends Page implements InventoryListener{
     private void initializeInventory(GridBagConstraints gbc) {
         ArrayList<JLabel> countLabels = new ArrayList<>(Arrays.asList(hexCount, felixFelicisCount, magicalStaffExpansionCount, overwhelmingFireballCount));
         ArrayList<BufferedImage> images = new ArrayList<>(Arrays.asList(hexImage, felixFelicisImage, magicalStaffExpansionImage, overwhelmingFireballImage));
-        ArrayList<JLabel> activationKeys = new ArrayList<>(Arrays.asList(new JLabel("T"),new JLabel("Q"),new JLabel("H"),new JLabel("E")));
+        ArrayList<JLabel> activationKeys = new ArrayList<>(Arrays.asList(new JLabel("H"),new JLabel("Q"),new JLabel("T"),new JLabel("E")));
         int imageWidth = 40;  // Resimlerin istenen genişliği
         int imageHeight = 40; // Resimlerin istenen yüksekliği
 
-        // "Inventory" başlığını ayarlayın
         gbc.gridx = 0;
         gbc.gridy = 0;
-        gbc.gridwidth = 3; // Başlık genişliği üç sütunu kaplayacak şekilde ayarlanıyor
+        gbc.gridwidth = 3;
         gbc.anchor = GridBagConstraints.CENTER;
         gbc.insets = new Insets(10, 0, 10, 0);
         JLabel inventoryTitleLabel = new JLabel("Inventory");
         inventoryContainer.add(inventoryTitleLabel, gbc);
 
-        // Resim, etiket ve butonlar için düzenlemeler
         Insets commonPadding = new Insets(5, 5, 5, 5);  // Ortak padding
 
         for (int i = 0; i < images.size(); i++) {
             Image scaledImage = images.get(i).getScaledInstance(imageWidth, imageHeight, Image.SCALE_SMOOTH);
             ImageIcon scaledIcon = new ImageIcon(scaledImage);
 
-            // Resimleri ayarlayın
             gbc.gridx = 0;
             gbc.gridy = i + 1;
             gbc.gridwidth = 1;
