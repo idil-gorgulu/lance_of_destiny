@@ -28,7 +28,7 @@ public class MultiPortClient {
         this.inputPort = inputPort;
     }
 
-    public void addClientStateChangeListener(StateChangeListener listener) {
+    public void addStateChangeListener(StateChangeListener listener) {
         listeners.add(listener);
     }
 

@@ -26,11 +26,14 @@ public class JoinMultiplayerGamePage extends Page implements StateChangeListener
     private JPanel centerPanel;
     private JPanel backButtonPanel;
     private MultiPlayerGame mpgame;
+    public JoinMultiplayerGamePage instance;
 
     public JoinMultiplayerGamePage() {
         super();
+        this.mpgame = new MultiPlayerGame();
         loadBackgroundImage();
         initUI();
+        instance = this;
     }
 
     private void loadBackgroundImage() {
@@ -128,6 +131,7 @@ public class JoinMultiplayerGamePage extends Page implements StateChangeListener
                     @Override
                     public void actionPerformed(ActionEvent e) {
                         MultiPortClient client = new MultiPortClient(game.getString("localIP"), Integer.parseInt(game.getString("inPort")), Integer.parseInt(game.getString("outPort")));
+                        client.addStateChangeListener(instance);
                         inClient = client;
                         Thread comm = new Thread(client::start);
                         comm.start();
