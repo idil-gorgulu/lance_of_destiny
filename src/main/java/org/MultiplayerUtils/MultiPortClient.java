@@ -9,7 +9,7 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
-public class MultiPortClient {
+public class MultiPortClient{
     private List<StateChangeListener> listeners = new ArrayList<>();
     private Socket outputSocket;
     public PrintWriter output;
@@ -19,7 +19,7 @@ public class MultiPortClient {
     private int outputPort;
     private int inputPort;
     public boolean connected = false;
-    public boolean selfReadyClicked = false;
+    public volatile boolean selfReadyClicked = false;
     public boolean opponentReadyClicked = false;
 
     public MultiPortClient(String gameHostIpAdress, int outputPort, int inputPort) {
@@ -53,6 +53,12 @@ public class MultiPortClient {
             connected = true;
             notifyAllListeners();
             // Make this a function
+
+            //  !!! TODO: I need to stop here until the button is pressed
+            while (!selfReadyClicked) {
+                Thread.onSpinWait();
+                // It will wait until it is
+            }
             output.println("gameReady");
             // Wait other player to click as well
             String inputLine;
@@ -64,6 +70,8 @@ public class MultiPortClient {
                     break;
                 }
             }
+
+            // I need to stop in here until opponentReadyClicked is true
 
             // Assure that the game is loaded
             Runnable sendStatisticsRunnable = new Runnable() {
@@ -139,4 +147,5 @@ public class MultiPortClient {
         MultiPortClient client = new MultiPortClient("localhost", 59326, 59325);
         client.start();
     }
+
 }

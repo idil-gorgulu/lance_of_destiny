@@ -23,7 +23,7 @@ public class MultiPortServer {
     private Socket inputSocket;
     public BufferedReader input;
     public boolean connected = false;
-    public boolean selfReadyClicked = false;
+    public volatile boolean selfReadyClicked = false;
     public boolean opponentReadyClicked = false;
     private List<StateChangeListener> listeners = new ArrayList<>();
 
@@ -92,6 +92,10 @@ public class MultiPortServer {
             // Then when connected first print out 3 2 1
             this.setConnected(true);
             // Make this a function
+            while (!selfReadyClicked) {
+                Thread.onSpinWait();
+                // This will wait
+            }
             output.println("gameReady");
             // Wait other player to click as well
             String inputLine;
