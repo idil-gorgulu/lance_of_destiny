@@ -180,7 +180,13 @@ public class RunningModePage extends Page implements InventoryListener{
 
 // Add the pause button to the info container
                 infoContainer.add(pauseButton);
+                JButton helpScreenButton = new JButton("Help Screen");
+                infoContainer.add(helpScreenButton);
 
+                helpScreenButton.addActionListener(e -> {
+                    HelpScreenPage helpScreen = new HelpScreenPage();
+                    helpScreen.setVisible(true);
+                });
                 // Adding infoContainer the chance and score instances which are already visual JPanels.
                 infoContainer.add(runningModeController.getGameSession().getChance());
                 infoContainer.add(runningModeController.getGameSession().getScore());

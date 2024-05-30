@@ -17,17 +17,14 @@ public class HelpScreenPage extends JFrame {
             "<html><head><style>body { text-align: center; }</style></head><body><h1>Spells</h1><p>Collect spells to enhance your abilities or hinder your opponent. Spells like 'Hex' and 'Magical Staff Expansion' can be pivotal in gameplay.</p></html>",
             "<html><head><style>body { text-align: center; }</style></head><body><h1>Controls I</h1><p>Use arrow keys to move the Magical Staff.</p></html>",
             "<html><head><style>body { text-align: center; }</style></head><body><h1>Controls II</h1><p>Use 'A' and 'D' to rotate it.</p></html>",
+            "<html><head><style>body { text-align: center; } li { text-align: left; }</style></head><body><h1>Singleplayer & Multiplayer</h1><p>The game can be played in single player and multiplayer modes.</p><ul><li><strong>Host a Game:</strong> Select this option to create a new game session that other players can join.</li><li><strong>Join a Game:</strong> If you want to join an existing game, select this option. You will need to enter the host's IP address and the port number on which the game is being hosted.</li></ul></body></html>\n",
             "<html><head><style>body { text-align: center; }</style></head><body><h1>Build the Game</h1><p>In building mode, there are two options for placing barriers: <br> 1) Specify the quantity of each type of barrier and let the game automatically place them. <br> 2) Manually select the type of barrier and its location.</p></html>"
-
-
-
-
     };
 
     public HelpScreenPage() {
         setTitle("Help - Lance of Destiny");
-        setSize(400, 300);
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setSize(800, 500); // Square size
+        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE); // Change to DISPOSE_ON_CLOSE
         setLocationRelativeTo(null);
 
         mainPanel = new JPanel();
@@ -39,23 +36,20 @@ public class HelpScreenPage extends JFrame {
             JLabel label = new JLabel(text);
             label.setHorizontalAlignment(JLabel.CENTER);
 
-            // "Use arrow keys to move the Magical Staff" metnini içeren sayfaya gif ekleme
+            // Add GIFs
             if (text.contains("Use arrow keys to move the Magical Staff")) {
-                ImageIcon gifIcon = new ImageIcon("assets/move.gif"); // Gif dosyanızın yolu
+                ImageIcon gifIcon = new ImageIcon("assets/move.gif");
                 JLabel gifLabel = new JLabel(gifIcon);
-                panel.add(gifLabel, BorderLayout.NORTH); // Gif'i etiketin üstüne yerleştir
-            }
-            else if (text.contains("Use 'A' and 'D' to rotate it")) {
-                ImageIcon gifIcon = new ImageIcon("assets/rotate.gif"); // Gif dosyanızın yolu
+                panel.add(gifLabel, BorderLayout.NORTH);
+            } else if (text.contains("Use 'A' and 'D' to rotate it")) {
+                ImageIcon gifIcon = new ImageIcon("assets/rotate.gif");
                 JLabel gifLabel = new JLabel(gifIcon);
-                panel.add(gifLabel, BorderLayout.NORTH); // Gif'i etiketin üstüne yerleştir
-            }
-            else if (text.contains("In building mode, there are two options for placing barriers:")) {
-                ImageIcon gifIcon = new ImageIcon("assets/buildingMode.gif"); // Gif dosyanızın yolu
+                panel.add(gifLabel, BorderLayout.NORTH);
+            } else if (text.contains("In building mode, there are two options for placing barriers:")) {
+                ImageIcon gifIcon = new ImageIcon("assets/BuildingMode.gif");
                 JLabel gifLabel = new JLabel(gifIcon);
-                panel.add(gifLabel, BorderLayout.NORTH); // Gif'i etiketin üstüne yerleştir
+                panel.add(gifLabel, BorderLayout.NORTH);
             }
-
 
             panel.add(label);
             mainPanel.add(panel);
