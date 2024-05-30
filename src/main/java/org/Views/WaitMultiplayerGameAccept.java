@@ -22,11 +22,11 @@ public class WaitMultiplayerGameAccept extends Page implements StateChangeListen
 
     public WaitMultiplayerGameAccept() {
         super();
-        initUI();
         server = MultiPortServer.getInstance();
         server.addStateChangeListener(this);
         Thread comm = new Thread(server::start);
         comm.start();
+        initUI();
     }
 
     @Override
