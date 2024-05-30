@@ -65,7 +65,7 @@ public class JoinMultiplayerGamePage extends Page implements StateChangeListener
         backgroundPanel.add(backButtonPanel, BorderLayout.NORTH);
 
 
-        JPanel centerPanel = new JPanel(new GridBagLayout()) {
+        centerPanel = new JPanel(new GridBagLayout()) {
             @Override
             protected void paintComponent(Graphics g) {
                 super.paintComponent(g);
@@ -106,8 +106,6 @@ public class JoinMultiplayerGamePage extends Page implements StateChangeListener
             headingLabel.setFont(new Font("Tahoma", Font.BOLD, 24));
             headingPanel.add(headingLabel);
             backButtonPanel.add(headingPanel, BorderLayout.CENTER);
-
-
 
             JPanel formPanel = new JPanel();
             formPanel.setLayout(new BoxLayout(formPanel, BoxLayout.Y_AXIS));
@@ -163,7 +161,6 @@ public class JoinMultiplayerGamePage extends Page implements StateChangeListener
             centerPanel.add(scrollPane, gbc);
             add(centerPanel, BorderLayout.CENTER);
         }
-
         centerPanel.revalidate();
         centerPanel.repaint();
     }
