@@ -222,7 +222,13 @@ public class Barrier extends JPanel {
 
     public void freeze(){
         isFrozen = true;
-        Timer unfreezeTimer = new Timer(15000, e -> unfreeze()); // Unfreeze after 15000 milliseconds (15 seconds)
+        try {
+            this.barrierImage = ImageIO.read(new File("assets/frozenicongem.png"));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        repaint();
+        Timer unfreezeTimer = new Timer(15000, e -> unfreeze());
         unfreezeTimer.setRepeats(false);
         unfreezeTimer.start();
 

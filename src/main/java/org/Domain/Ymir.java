@@ -19,22 +19,25 @@ public class Ymir extends JPanel {
     private Timer timer;
     private Coordinate coordinate;
     private BufferedImage ymirImage;
-
     private Queue<String> lastAbilities = new LinkedList<>();
     private Random random = new Random();
 
-        // Constants for the abilities
+
         private static final String INFINITE_VOID = "Infinite Void";
         private static final String DOUBLE_ACCEL = "Double Accel";
         private static final String HOLLOW_PURPLE = "Hollow Purple";
         private static final String[] ABILITIES = {INFINITE_VOID, DOUBLE_ACCEL, HOLLOW_PURPLE};
-        public Ymir() {
+        public Ymir(Game game) {
+            this.game = game;
             this.coordinate = new Coordinate(890,430);
             timer = new Timer();
             timer.schedule(new TimerTask() {
                 @Override
                 public void run() {
-                    tryActivateAbility();
+                    System.out.println("YMIR Timer task executed");
+                    if (random.nextBoolean()) {
+                        activateRandomAbility();
+                    }
                 }
             }, 0, 30000);
             lastAbilities.offer(ABILITIES[random.nextInt(ABILITIES.length)]);
@@ -69,17 +72,7 @@ public class Ymir extends JPanel {
                 g2d.drawImage(ymirImage, x, y, this);
                 g2d.dispose();
             }
-            System.out.println("Ymir paintComponent called");
         }
-
-        //to be called every 30 seconds from the game loop
-        private void tryActivateAbility() {
-            // Implementation of Ymir's abilities
-        }
-
-    public void stop() {
-        timer.cancel();  // Stop the timer when the game ends
-    }
 
         private void activateRandomAbility() {
             String ability;
@@ -91,9 +84,13 @@ public class Ymir extends JPanel {
             manageAbilityHistory(ability);
         }
 
+        public void stop() {
+        timer.cancel();  // Stop the timer when the game ends
+    }
+
+
         private boolean isRepeatAbility(String ability) {
-            // Check if this ability was the last two abilities used
-            if (lastAbilities.contains(ability) && lastAbilities.peek().equals(ability)) {
+            if (lastAbilities.size() == 2 && lastAbilities.peek().equals(ability)) {
                 return true;
             }
             return false;
@@ -101,9 +98,9 @@ public class Ymir extends JPanel {
 
         private void manageAbilityHistory(String ability) {
             if (lastAbilities.size() >= 2) {
-                lastAbilities.poll(); // Remove the oldest if we already have two
+                lastAbilities.poll();
             }
-            lastAbilities.offer(ability); // Add the new one to the history
+            lastAbilities.offer(ability);
         }
 
         private void executeAbility(String ability) {
@@ -120,6 +117,7 @@ public class Ymir extends JPanel {
             }
         }
         public void activateInfiniteVoid() {
+            System.out.println("Activating Infinite Void");
             List<Barrier> barriers = game.getBarriers();
             Collections.shuffle(barriers);
             barriers.stream()
@@ -130,7 +128,9 @@ public class Ymir extends JPanel {
 
         private void activateDoubleAccel() {
             System.out.println("Activating Double Accel");
-            // Code to reduce fireball speed
+            Fireball fireball = game.getFireball();
+            fireball.setxVelocity(fireball.getxVelocity() / 2);
+            fireball.setyVelocity(fireball.getyVelocity() / 2);
         }
 
         public void activateHollowPurple() {

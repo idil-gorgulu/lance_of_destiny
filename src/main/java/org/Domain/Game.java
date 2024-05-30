@@ -18,7 +18,8 @@ public class Game {
     int numSimpleBarrier=0;
     int numFirmBarrier=0;
     int numExplosiveBarrier=0;
-    int numrewardingBarrier=0;
+    int numRewardingBarrier=0;
+    int numPurpleBarrier=0;
     int numTotal;
     public boolean started = false;
     public boolean ended = false;
@@ -34,7 +35,7 @@ public class Game {
     private Game(){
         this.fireball = new Fireball();
         this.magicalStaff = new MagicalStaff();
-        this.ymir = new Ymir();
+        this.ymir = new Ymir(this);
         // Think about how to initialize it, from constructor maybe?
         this.chance= new Chance();
         this.score= new Score();
@@ -43,7 +44,8 @@ public class Game {
         numSimpleBarrier=0;
         numFirmBarrier=0;
         numExplosiveBarrier=0;
-        numrewardingBarrier=0;
+        numRewardingBarrier=0;
+        numPurpleBarrier=0;
         numTotal=0;
         activeDebris= new ArrayList<>();
         droppingSpells=new ArrayList<>();
@@ -88,8 +90,12 @@ public class Game {
             numExplosiveBarrier++;
             s="x";
         } else if (type == BarrierType.REWARDING) {
-            numrewardingBarrier++;
-            s="r";
+            numRewardingBarrier++;
+            s = "r";
+        }
+        else if (type == BarrierType.HOLLOW_PURPLE) {
+            numPurpleBarrier++;
+            s="p";
         }
         numTotal++;
         int boardX = coordinates.getX() / 50; // Adjust the indexing here
@@ -122,6 +128,7 @@ public class Game {
         if(initialSize!=0){
             for (int i = 0; i < initialSize; i++) {
                 Barrier barrier = barriers.get(i);
+                if (barrier.isFrozen()) return;
                 if (barrier.getCoordinate().getX()==coordinates.getX() && barrier.getCoordinate().getY() == coordinates.getY()
                    && barrier.getType() == type) {
                     System.out.println("Removed");
@@ -140,7 +147,10 @@ public class Game {
                     } else if (type == BarrierType.EXPLOSIVE) { //Explosive barrier
                         numExplosiveBarrier--;
                     } else if (type == BarrierType.REWARDING) {
-                        numrewardingBarrier--;
+                        numRewardingBarrier--;
+                    }
+                    else if (type == BarrierType.HOLLOW_PURPLE) {
+                        numPurpleBarrier--;
                     }
                     return;
                 }
@@ -216,7 +226,7 @@ public class Game {
      * -  if there is sufficient space: Returns true and places barriers.
      */
     public boolean initialPopulation(int simpleNum, int firmNum, int exNum, int giftNum){
-        int tot = numSimpleBarrier + numExplosiveBarrier + numFirmBarrier + numrewardingBarrier;
+        int tot = numSimpleBarrier + numExplosiveBarrier + numFirmBarrier + numRewardingBarrier;
         if (400 - tot < simpleNum + firmNum + exNum + giftNum){
             return false;
         }
@@ -277,7 +287,7 @@ public class Game {
     }
 
     public int getNumrewardingBarrier() {
-        return numrewardingBarrier;
+        return numRewardingBarrier;
     }
 
     public int getNumTotal() {
@@ -306,7 +316,7 @@ public class Game {
             numExplosiveBarrier++;
             s="x";
         } else if (type == BarrierType.REWARDING) {
-            numrewardingBarrier++;
+            numRewardingBarrier++;
             s="r";
         }
         numTotal++;
@@ -329,7 +339,7 @@ public class Game {
         } else if (type == BarrierType.EXPLOSIVE) { //Explosive barrier
             numExplosiveBarrier++;
         } else if (type == BarrierType.REWARDING) {
-            numrewardingBarrier++;
+            numRewardingBarrier++;
         }
         numTotal++;
     }
@@ -344,7 +354,7 @@ public class Game {
         this.numSimpleBarrier = 0;
         this.numFirmBarrier = 0;
         this.numExplosiveBarrier = 0;
-        this.numrewardingBarrier = 0;
+        this.numRewardingBarrier = 0;
         this.numTotal = 0;
         this.started = true;
         this.ended = false;
@@ -595,6 +605,7 @@ public class Game {
 
     }
     private boolean hitBarrier(Barrier barrier, int hitTimes) {
+        if (barrier.isFrozen()) return false;
         barrier.setnHits(barrier.getnHits() - hitTimes);
         if (barrier.getnHits() <= 0) {
             barrier.destroy();
