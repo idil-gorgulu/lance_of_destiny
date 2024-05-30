@@ -20,6 +20,10 @@ public class MultiPortServer {
     private ServerSocket serverSocketIn;
     private Socket inputSocket;
     private BufferedReader input;
+    public boolean connected = false;
+    public boolean selfReadyClicked = false;
+    public boolean opponentReadyClicked = false;
+
 
     public static MultiPortServer  getInstance() {
         if (instance == null) {
@@ -56,7 +60,6 @@ public class MultiPortServer {
             System.out.println("Server waiting for client on port " + inputPort + " for incoming messages...");
 
             // Send here the game and wait for the connection
-
             sendMultiplayerGameInfo(Integer.toString(outputPort), Integer.toString(inputPort));
 
             outputSocket = serverSocketOut.accept();
@@ -67,6 +70,22 @@ public class MultiPortServer {
             System.out.println("Client connected on port " + inputPort + " for incoming messages.");
             input = new BufferedReader(new InputStreamReader(inputSocket.getInputStream()));
 
+            // Put ready button when
+            // Then when connected first print out 3 2 1
+            connected = true;
+            while(!selfReadyClicked){}
+            // Make this a function
+            output.println("gameReady");
+            // Wait other player to click as well
+            String inputLine;
+            while ((inputLine = input.readLine()) != null) {
+                if (inputLine.equals("gameReady")) {
+                    opponentReadyClicked = true;
+                    break;
+                }
+            }
+
+            // Assure that the game is loaded
             Runnable sendStatisticsRunnable = new Runnable() {
                 public void run() {
                     output.println("sending statistics");
@@ -79,7 +98,6 @@ public class MultiPortServer {
             Thread sendThread = new Thread(this::handleSending);
             sendThread.start();
 
-            String inputLine;
             while ((inputLine = input.readLine()) != null) {
                 System.out.println("Incoming Message: " + inputLine);
             }

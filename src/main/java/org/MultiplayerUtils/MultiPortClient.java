@@ -15,6 +15,9 @@ public class MultiPortClient {
     private String gameHostIpAdress;
     private int outputPort;
     private int inputPort;
+    public boolean connected = false;
+    public boolean selfReadyClicked = false;
+    public boolean opponentReadyClicked = false;
 
     public MultiPortClient(String gameHostIpAdress, int outputPort, int inputPort) {
         this.gameHostIpAdress = gameHostIpAdress;
@@ -34,6 +37,20 @@ public class MultiPortClient {
             System.out.println("Connected to server at " + gameHostIpAdress + ":" + outputPort + " for sending messages at port " + outputSocket.getLocalPort() + ".");
             output = new PrintWriter(outputSocket.getOutputStream(), true);
 
+            connected = true;
+            while(!selfReadyClicked){}
+            // Make this a function
+            output.println("gameReady");
+            // Wait other player to click as well
+            String inputLine;
+            while ((inputLine = input.readLine()) != null) {
+                if (inputLine.equals("gameReady")) {
+                    opponentReadyClicked = true;
+                    break;
+                }
+            }
+
+            // Assure that the game is loaded
             Runnable sendStatisticsRunnable = new Runnable() {
                 public void run() {
                     output.println("sending statistics");

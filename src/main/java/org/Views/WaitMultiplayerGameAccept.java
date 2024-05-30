@@ -15,6 +15,7 @@ public class WaitMultiplayerGameAccept extends Page {
     private BufferedImage backgroundImage;
     private JLabel waitingMessage;
     private JButton cancelButton;
+    private JButton readyButton;
     private JProgressBar progressBar;
     private JPanel centerPanel;
     private MultiPortServer server;
@@ -39,31 +40,48 @@ public class WaitMultiplayerGameAccept extends Page {
         centerPanel.setLayout(new BoxLayout(centerPanel, BoxLayout.Y_AXIS));
         centerPanel.setOpaque(false);
 
-        waitingMessage = new JLabel("Waiting for other player to accept...");
-        waitingMessage.setAlignmentX(Component.CENTER_ALIGNMENT);
-        waitingMessage.setFont(new Font("Arial", Font.BOLD, 16));
-        centerPanel.add(waitingMessage);
-        centerPanel.add(Box.createVerticalStrut(20));
+        if (!MultiPortServer.getInstance().connected) {
+            waitingMessage = new JLabel("Waiting for other player to accept...");
+            waitingMessage.setAlignmentX(Component.CENTER_ALIGNMENT);
+            waitingMessage.setFont(new Font("Arial", Font.BOLD, 16));
+            centerPanel.add(waitingMessage);
+            centerPanel.add(Box.createVerticalStrut(20));
 
-        progressBar = new JProgressBar();
-        progressBar.setIndeterminate(true);
-        progressBar.setAlignmentX(Component.CENTER_ALIGNMENT);
-        centerPanel.add(progressBar);
-        centerPanel.add(Box.createVerticalStrut(20));
+            progressBar = new JProgressBar();
+            progressBar.setIndeterminate(true);
+            progressBar.setAlignmentX(Component.CENTER_ALIGNMENT);
+            centerPanel.add(progressBar);
+            centerPanel.add(Box.createVerticalStrut(20));
 
-        cancelButton = new JButton("Cancel");
-        cancelButton.setAlignmentX(Component.CENTER_ALIGNMENT);
-        cancelButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                onCancel();
-            }
-        });
-        centerPanel.add(cancelButton);
+            cancelButton = new JButton("Cancel");
+            cancelButton.setAlignmentX(Component.CENTER_ALIGNMENT);
+            cancelButton.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    onCancel();
+                }
+            });
+            centerPanel.add(cancelButton);
 
-        add(centerPanel, BorderLayout.CENTER);
+            add(centerPanel, BorderLayout.CENTER);
 
-        setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+            setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+        } else {
+            readyButton = new JButton("Ready");
+            readyButton.setAlignmentX(Component.CENTER_ALIGNMENT);
+            readyButton.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    ready();
+                }
+            });
+            centerPanel.add(readyButton);
+
+            add(centerPanel, BorderLayout.CENTER);
+
+            setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+        }
+
     }
 
     @Override
@@ -75,7 +93,17 @@ public class WaitMultiplayerGameAccept extends Page {
     }
 
     private void onCancel() {
-        // Change here later
-        System.out.println("Waiting cancelled by the user.");
+        // TODO: Implement reset in here
+        Navigator.getInstance().showGameModePage();
+    }
+
+    private void ready() {
+        MultiPortServer.getInstance().selfReadyClicked = true;
+        if (MultiPortServer.getInstance().opponentReadyClicked) {
+            // Load the game
+            Navigator.getInstance().showRunningModePage();
+        } else {
+            // kind of a wait screen
+        }
     }
 }
