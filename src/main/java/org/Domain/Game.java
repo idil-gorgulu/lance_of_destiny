@@ -446,11 +446,16 @@ public class Game {
                 return;
             }
             int fireballWidth = fireball.getPreferredSize().width;
-            int fireballPositionX = (1000 - fireballWidth) / 2; // make these dynamic
+            int fireballPositionX = (int) this.magicalStaff.getMagicalStaffRectangle().getX()+50;
+            System.out.println("coordinate----");
+            System.out.println((int) this.magicalStaff.getMagicalStaffRectangle().getX());
+            System.out.println((int) this.magicalStaff.getMagicalStaffRectangle().getY());
+
             int fireballHeight = fireball.getPreferredSize().height;
-            int fireballPositionY = (500 - fireballHeight - 200); // make these dynamic
-            fireball.setxVelocity(3);
-            fireball.setyVelocity(-3);
+            int fireballPositionY = 620-(int) this.magicalStaff.getMagicalStaffRectangle().getY();
+
+            fireball.setxVelocity(0);
+            fireball.setyVelocity(0);
             fireball.getCoordinate().setX(fireballPositionX);
             fireball.getCoordinate().setY(fireballPositionY);
             fireball.setBounds(fireballPositionX, fireballPositionY, fireballWidth, fireballHeight);
@@ -772,6 +777,13 @@ public class Game {
 
     public void getYmir(Ymir ymir) {
         this.ymir = ymir;
+    }
+
+    public void triggerBall() {
+        if(fireball.getxVelocity()==0 && fireball.getyVelocity()==0){
+            this.fireball.setxVelocity(0);
+            this.fireball.setyVelocity(-3);
+        }
     }
 
 }

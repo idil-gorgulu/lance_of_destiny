@@ -203,4 +203,12 @@ public class MagicalStaff extends JPanel {
     public void setShotTime(long shotTime) {
         this.shotTime = shotTime;
     }
+
+    public Rectangle2D.Double getMagicalStaffRectangle() {
+        return magicalStaffRectangle;
+    }
+
+    public void setMagicalStaffRectangle(Rectangle2D.Double magicalStaffRectangle) {
+        this.magicalStaffRectangle = magicalStaffRectangle;
+    }
 }
