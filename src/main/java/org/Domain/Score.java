@@ -19,7 +19,15 @@ public class Score extends JPanel {
         return totalScore;
     }
 
-    public void incrementScore(int barrierCount,float time) {
+    public int getTotalScore() {
+        return totalScore;
+    }
+
+    public void setTotalScore(int totalScore) {
+        this.totalScore = totalScore;
+    }
+
+    public void incrementScore(int barrierCount, float time) {
         totalScore = (int) (totalScore + (barrierCount * (300 / time)));
         updateScoreView();
     }
@@ -28,4 +36,5 @@ public class Score extends JPanel {
     private void updateScoreView() {
         scoreLabel.setText("Score: " + totalScore);
     }
+
 }
