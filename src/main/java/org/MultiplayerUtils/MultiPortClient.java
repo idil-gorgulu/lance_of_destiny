@@ -52,6 +52,7 @@ public class MultiPortClient {
 
             connected = true;
             notifyAllListeners();
+            System.out.println("Helloooo");
             while(!selfReadyClicked){}
             // Make this a function
             output.println("gameReady");
