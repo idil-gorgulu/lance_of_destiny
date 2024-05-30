@@ -42,7 +42,6 @@ public class GameModePage extends Page{
         add(Box.createVerticalStrut(10));
         add(multiplayerModeButton);
     }
-
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
