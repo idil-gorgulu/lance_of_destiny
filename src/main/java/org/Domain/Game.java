@@ -28,6 +28,8 @@ public class Game {
     private long lastCollisionTime = 0; // Time of the last collision in milliseconds
     private ArrayList<Barrier> barriers = new ArrayList<Barrier>(0); // Could maybe be a hashmap?
     private ArrayList<Debris> activeDebris;
+
+    private ArrayList<Barrier> purpleBarriers = new ArrayList<Barrier>(0);;
     private ArrayList<Spell> droppingSpells;
     private ArrayList<Bullet> activeBullets;
     private HashMap<SpellType,Integer> inventory;
@@ -93,14 +95,28 @@ public class Game {
             numRewardingBarrier++;
             s = "r";
         }
-        else if (type == BarrierType.HOLLOW_PURPLE) {
-            numPurpleBarrier++;
-            s ="p";
-        }
         numTotal++;
         int boardX = coordinates.getX() / 50; // Adjust the indexing here
         int boardY = coordinates.getY() / 20; // Adjust the indexing here
         barrierBoard[boardY][boardX] = s; // Adjusted the indexing here
+        printBoard();
+    }
+
+    public void addPurpleBarrier(Coordinate coordinates) {
+        Barrier newBarrier = new Barrier(coordinates, BarrierType.HOLLOW_PURPLE);
+        if (Math.random()<0.2)    {
+            newBarrier.setMoving(true);
+            if (Math.random()<0.5)  newBarrier.setVelocity(3);
+            else                    newBarrier.setVelocity(-3);
+        }
+
+        barriers.add(newBarrier);
+        purpleBarriers.add(newBarrier);
+        numPurpleBarrier++;
+        numTotal++;
+        int boardX = coordinates.getX() / 50; // Adjust the indexing here
+        int boardY = coordinates.getY() / 20; // Adjust the indexing here
+        barrierBoard[boardY][boardX] = "p"; // Adjusted the indexing here
         printBoard();
     }
 
@@ -552,6 +568,7 @@ public class Game {
     public void checkBarrierFireballCollision(int timeInSeconds){
         ArrayList<Barrier> barriers = getBarriers();
         ArrayList<Barrier> toRemove = new ArrayList<>();
+        ArrayList<Barrier> purplesToRemove = new ArrayList<>();
 
         Fireball fireball = getFireball();
         double xVelocity = fireball.getxVelocity();
@@ -593,12 +610,16 @@ public class Game {
                     }}
                 else {
                     if (hitBarrier(br,10)){ //This is always true
+                        if(br.getType()==BarrierType.HOLLOW_PURPLE){
+                            purplesToRemove.add(br);
+                        }
                         toRemove.add(br);
                     }
                 }
             }
         }
         barriers.removeAll(toRemove);
+        purpleBarriers.removeAll(purplesToRemove);
         // Updating the score.
         getScore().incrementScore(toRemove.size(), timeInSeconds);
 
@@ -614,6 +635,9 @@ public class Game {
             }
             else if(barrier.getType()==BarrierType.REWARDING){
                 dropSpell(barrier);
+            }
+            else if(barrier.getType()==BarrierType.HOLLOW_PURPLE){
+                purpleBarriers.remove(barrier);
             }
             return true;
         }
@@ -723,6 +747,14 @@ public class Game {
         // Updating the score.
         getScore().incrementScore(toRemove.size(), timeInSeconds);
         return collides;
+    }
+
+    public ArrayList<Barrier> getPurpleBarriers() {
+        return purpleBarriers;
+    }
+
+    public void setPurpleBarriers(ArrayList<Barrier> purpleBarriers) {
+        this.purpleBarriers = purpleBarriers;
     }
 
     public String getGameName() {

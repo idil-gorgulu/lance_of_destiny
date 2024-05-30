@@ -37,6 +37,7 @@ public class Ymir extends JPanel {
                     System.out.println("YMIR Timer task executed");
                     if (random.nextBoolean()) {
                         activateRandomAbility();
+                        //activateHollowPurple();
                     }
                 }
             }, 0, 30000);
@@ -143,8 +144,7 @@ public class Ymir extends JPanel {
                 int boardX = x / 50;
                 int boardY = y / 20;
                 if (game.getBarrierBoard()[boardY][boardX]==null){
-                    Coordinate c = new Coordinate(x, y);
-                    game.addBarrier(new Coordinate(x, y), BarrierType.HOLLOW_PURPLE);
+                    game.addPurpleBarrier(new Coordinate(x,y));
                     numPurpleBarrier++;
                 }
             }

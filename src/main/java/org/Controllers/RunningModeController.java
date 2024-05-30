@@ -164,6 +164,15 @@ public class RunningModeController {
 
     }
 
+    public void updatePurpleBarriers(){
+        Iterator<Barrier> iterator = game.getPurpleBarriers().iterator();
+        while (iterator.hasNext()) {
+            Barrier b = iterator.next();
+            runningModePage.getGamePanel().add(b);
+            iterator.remove();
+        }
+    }
+
     //Not used yet:
     public void saveGame(String gameName, int timeInSeconds, ArrayList<Debris> activeDebris){
         ArrayList<Barrier> barriers = game.getBarriers();

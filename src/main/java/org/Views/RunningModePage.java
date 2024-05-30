@@ -129,6 +129,7 @@ public class RunningModePage extends Page{
         runningModeController.updateDebris();// Handle debris movement
         runningModeController.updateDroppingSpells();// Hande spell dropping
         runningModeController.updateHexBullets();
+        runningModeController.updatePurpleBarriers();
         updateInventoryDisplay();
         repaint();
         if (this.runningModeController.getGameSession().getChance().getRemainingChance() == 0 || runningModeController.getGameSession().getBarriers().size()==0) {
