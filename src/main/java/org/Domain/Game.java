@@ -433,7 +433,6 @@ public class Game {
             //fireball.setBackground(Color.red);
             fireball.setBackground(new Color(0, 0, 0, 0)); // Transparent background
             fireball.setOpaque(true);
-
         }
     }
     //Put for Testing
@@ -621,31 +620,47 @@ public class Game {
         droppingSpells.add(spell);
     }
 
-    public void useFelixFelicis(){
+    public boolean useFelixFelicis(){
         int remaining=inventory.get(SpellType.FELIX_FELICIS);
-        if (remaining>0) {
+        boolean nonzero=remaining>0;
+        if (nonzero) {
             getChance().incrementChance();
             inventory.put(SpellType.FELIX_FELICIS,remaining -1 );
         }
+        return nonzero;
     }
-    public void useStaffExpansion(){
+    public boolean useStaffExpansion(){
         int remaining=inventory.get(SpellType.STAFF_EXPANSION);
-        if (remaining>0) {
+        boolean cond=(remaining>0 && getMagicalStaff().getStaffWidth()==100);
+        if (cond) {
             getMagicalStaff().setStaffWidth(200);
-            //runningModePage.playSoundEffect(3); TODO fix
             inventory.put(SpellType.STAFF_EXPANSION,  remaining -1 );
             getMagicalStaff().setExpansionTime(System.currentTimeMillis());
         }
+        return cond;
     }
-    public void useHex(){
+    public boolean useHex(){
         int remaining=inventory.get(SpellType.HEX);
-        if (remaining>0){
+        boolean cond=(remaining>0 && !getMagicalStaff().isShooting());
+        if (cond){
             getMagicalStaff().setShooting(true);
             getMagicalStaff().setCannonTime(System.currentTimeMillis());
             inventory.put(SpellType.HEX,  remaining -1 );
         }
-
+        return cond;
     }
+
+    public boolean useOverwhelmingFB(){
+        int remaining=inventory.get(SpellType.OVERWHELMING_FIREBALL);
+        boolean cond=(remaining>0 && getFireball().isOverwhelming());
+        if (cond){
+            getFireball().setOverwhelming(true);
+            getFireball().setOverwhelmTime(System.currentTimeMillis());
+            inventory.put(SpellType.OVERWHELMING_FIREBALL,remaining-1);
+        }
+        return cond;
+    }
+
     public Bullet[] createHexBullet(){
 
         MagicalStaff magicalStaff=getMagicalStaff();

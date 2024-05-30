@@ -23,7 +23,7 @@ public class MyKeyListener extends KeyAdapter {
                 break;
             case KeyEvent.VK_A:
                 runningModeController.rotateMagicalStaff(-3); // Rotate counterclockwise (degrees)
-                runningModeController.getGameSession().getMagicalStaff().setReleased(false);
+                runningModeController.getGameSession().getMagicalStaff().setReleased(false); //TODO dont talk to strangers
                 break;
             case KeyEvent.VK_D:
                 runningModeController.rotateMagicalStaff(+3); // Rotate clockwise (degrees)
@@ -43,32 +43,23 @@ public class MyKeyListener extends KeyAdapter {
                 break;
             case KeyEvent.VK_A:
                 runningModeController.rotateMagicalStaff(3); // Rotate counterclockwise
-                runningModeController.getGameSession().getMagicalStaff().setReleased(true);
+                runningModeController.getGameSession().getMagicalStaff().setReleased(true);//TODO dont talk to strangers
                 break;
             case KeyEvent.VK_D:
                 runningModeController.rotateMagicalStaff(-3); // Rotate clockwise
                 runningModeController.getGameSession().getMagicalStaff().setReleased(true);
                 break;
-
-                //Temporarily here -melih
             case KeyEvent.VK_Q:
-                runningModeController.useSpell1();
+                runningModeController.useFelixFelicis();
                 break;
             case KeyEvent.VK_W:
-                runningModeController.useSpell2();
+                runningModeController.useMSExpansion();
                 break;
-            case KeyEvent.VK_S:
-               // runningModeController.redoSpell2();
-                break;
-            case KeyEvent.VK_E: // I AM TALKING TO STRANGERS HERE, WILL REVISE LATER - melih
-                runningModeController.getGameSession().getFireball().setOverwhelming(true);
-                runningModeController.getGameSession().getFireball().setOverwhelmTime(System.currentTimeMillis());
-                break;
-            case KeyEvent.VK_F:
-               // runningModeController.getGameSession().getFireball().setOverwhelming(false);
+            case KeyEvent.VK_E:
+                runningModeController.useOverwhelmingFB();
                 break;
             case KeyEvent.VK_T:
-                runningModeController.useSpell3();
+                runningModeController.useHex();
                 break;
             case KeyEvent.VK_P:
                 runningModeController.volume(1);
