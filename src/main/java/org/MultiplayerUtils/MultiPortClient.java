@@ -8,6 +8,7 @@ import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
 public class MultiPortClient {
+
     private Socket outputSocket;
     private PrintWriter output;
     private Socket inputSocket;
@@ -38,6 +39,7 @@ public class MultiPortClient {
             output = new PrintWriter(outputSocket.getOutputStream(), true);
 
             connected = true;
+
             while(!selfReadyClicked){}
             // Make this a function
             output.println("gameReady");

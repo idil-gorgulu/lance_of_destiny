@@ -3,6 +3,7 @@ package org.Views;
 import org.Controllers.DataBaseController;
 import org.Domain.MultiPlayerGame;
 import org.MultiplayerUtils.MultiPortClient;
+import org.MultiplayerUtils.MultiPortServer;
 import org.bson.Document;
 
 import javax.imageio.ImageIO;
@@ -26,6 +27,8 @@ public class JoinMultiplayerGamePage extends Page {
 
     public BufferedImage backgroundImage;
     public DataBaseController dataBaseController;
+    public MultiPortClient inClient = null;
+    public boolean connected = false;
 
     public JoinMultiplayerGamePage() {
         super();
@@ -70,13 +73,6 @@ public class JoinMultiplayerGamePage extends Page {
         customizeButtonback(backButton);
         backgroundPanel.add(backButtonPanel, BorderLayout.NORTH);
 
-        JPanel headingPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
-        headingPanel.setOpaque(false);
-        JLabel headingLabel = new JLabel("Join Multiplayer Game");
-        headingLabel.setForeground(Color.WHITE);
-        headingLabel.setFont(new Font("Tahoma", Font.BOLD, 24));
-        headingPanel.add(headingLabel);
-        backButtonPanel.add(headingPanel, BorderLayout.CENTER);
 
         JPanel centerPanel = new JPanel(new GridBagLayout()) {
             @Override
@@ -96,52 +92,97 @@ public class JoinMultiplayerGamePage extends Page {
             }
         });
 
-        JPanel formPanel = new JPanel();
-        formPanel.setLayout(new BoxLayout(formPanel, BoxLayout.Y_AXIS));
-        formPanel.setOpaque(false);
+        if (!connected) {
+            JPanel headingPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
+            headingPanel.setOpaque(false);
+            JLabel headingLabel = new JLabel("Join Multiplayer Game");
+            headingLabel.setForeground(Color.WHITE);
+            headingLabel.setFont(new Font("Tahoma", Font.BOLD, 24));
+            headingPanel.add(headingLabel);
+            backButtonPanel.add(headingPanel, BorderLayout.CENTER);
 
-        ArrayList<Document> games = new ArrayList<>();
-        try {
-            games = mpgame.getAllAvailableGames();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
 
-        for (Document game : games) {
-            JButton gameButton = new JButton(game.getString("gameName"));
-            customizeButton(gameButton);
-            gameButton.setPreferredSize(new Dimension(180, 80));
-            gameButton.setMaximumSize(new Dimension(180, 80));
-            gameButton.setMinimumSize(new Dimension(180, 80));
-            gameButton.addActionListener(new ActionListener() {
+
+            JPanel formPanel = new JPanel();
+            formPanel.setLayout(new BoxLayout(formPanel, BoxLayout.Y_AXIS));
+            formPanel.setOpaque(false);
+
+            ArrayList<Document> games = new ArrayList<>();
+            try {
+                games = mpgame.getAllAvailableGames();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+            for (Document game : games) {
+                JButton gameButton = new JButton(game.getString("gameName"));
+                customizeButton(gameButton);
+                gameButton.setPreferredSize(new Dimension(180, 80));
+                gameButton.setMaximumSize(new Dimension(180, 80));
+                gameButton.setMinimumSize(new Dimension(180, 80));
+                gameButton.addActionListener(new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
+                        MultiPortClient client = new MultiPortClient(game.getString("localIP"), Integer.parseInt(game.getString("inPort")), Integer.parseInt(game.getString("outPort")));
+                        inClient = client;
+                        Thread comm = new Thread(client::start);
+                        comm.start();
+                        // Notify the user for connection made
+                        if (client.connected) {
+                            connected = true;
+                            System.out.println("Communication made");
+                        } else {
+                            // Lets hope no else
+                        }
+                        // dataBaseController.openMultiplayerGame(game.getString("gameName"));
+                        // Navigator.getInstance().showRunningModePage();
+                    }
+                });
+                formPanel.add(gameButton);
+            }
+
+            JScrollPane scrollPane = new JScrollPane(formPanel);
+            scrollPane.setOpaque(false);
+            scrollPane.getViewport().setOpaque(false);
+            scrollPane.setBorder(null);
+            scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+            scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
+
+            GridBagConstraints gbc = new GridBagConstraints();
+            gbc.gridwidth = GridBagConstraints.REMAINDER;
+            gbc.fill = GridBagConstraints.BOTH;
+            gbc.insets = new Insets(10, 10, 10, 10);
+            gbc.weightx = 1;
+            gbc.weighty = 1;
+
+            centerPanel.add(scrollPane, gbc);
+            add(centerPanel, BorderLayout.CENTER);
+        } else {
+            JButton readyButton = new JButton("Ready");
+            readyButton.setAlignmentX(Component.CENTER_ALIGNMENT);
+            readyButton.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
-                    MultiPortClient client = new MultiPortClient(game.getString("localIP"), Integer.parseInt(game.getString("inPort")), Integer.parseInt(game.getString("outPort")));
-                    Thread comm = new Thread(client::start);
-                    comm.start();
-                    dataBaseController.openMultiplayerGame(game.getString("gameName"));
-                    Navigator.getInstance().showRunningModePage();
+                    ready();
                 }
             });
-            formPanel.add(gameButton);
+            centerPanel.add(readyButton);
+
+            add(centerPanel, BorderLayout.CENTER);
+
+            setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
         }
 
-        JScrollPane scrollPane = new JScrollPane(formPanel);
-        scrollPane.setOpaque(false);
-        scrollPane.getViewport().setOpaque(false);
-        scrollPane.setBorder(null);
-        scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
-        scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
+    }
 
-        GridBagConstraints gbc = new GridBagConstraints();
-        gbc.gridwidth = GridBagConstraints.REMAINDER;
-        gbc.fill = GridBagConstraints.BOTH;
-        gbc.insets = new Insets(10, 10, 10, 10);
-        gbc.weightx = 1;
-        gbc.weighty = 1;
-
-        centerPanel.add(scrollPane, gbc);
-        add(centerPanel, BorderLayout.CENTER);
+    private void ready() {
+        inClient.selfReadyClicked = true;
+        if (inClient.opponentReadyClicked) {
+            // Load the game
+            Navigator.getInstance().showRunningModePage();
+        } else {
+            // kind of a wait screen
+        }
     }
 
     @Override
