@@ -30,6 +30,19 @@ public class MyKeyListener extends KeyAdapter {
                 runningModeController.rotateMagicalStaff(+3); // Rotate clockwise (degrees)
                 runningModeController.getGameSession().getMagicalStaff().setReleased(false);
                 break;
+            case KeyEvent.VK_T:
+                runningModeController.getGameSession().useSpell(SpellType.HEX);
+                break;
+            case KeyEvent.VK_Q:
+                runningModeController.getGameSession().useSpell(SpellType.FELIX_FELICIS);
+                break;
+            case KeyEvent.VK_W:
+                runningModeController.getGameSession().useSpell(SpellType.STAFF_EXPANSION);
+                break;
+            case KeyEvent.VK_E:
+                runningModeController.getGameSession().useSpell(SpellType.OVERWHELMING_FIREBALL);
+                break;
+
         }
     }
     @Override
@@ -50,18 +63,7 @@ public class MyKeyListener extends KeyAdapter {
                 runningModeController.rotateMagicalStaff(-3); // Rotate clockwise
                 runningModeController.getGameSession().getMagicalStaff().setReleased(true);
                 break;
-            case KeyEvent.VK_Q:
-                runningModeController.getGameSession().useSpell(SpellType.FELIX_FELICIS);
-                break;
-            case KeyEvent.VK_W:
-                runningModeController.getGameSession().useSpell(SpellType.STAFF_EXPANSION);
-                break;
-            case KeyEvent.VK_E:
-                runningModeController.getGameSession().useSpell(SpellType.OVERWHELMING_FIREBALL);
-                break;
-            case KeyEvent.VK_T:
-                runningModeController.getGameSession().useSpell(SpellType.HEX);
-                break;
+
             case KeyEvent.VK_P:
                 runningModeController.volume(1);
                 break;

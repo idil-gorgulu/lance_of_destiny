@@ -653,6 +653,7 @@ public class Game {
     }
 
     public void useSpell(SpellType spellType){
+
         if(inventory.checkSpellCount(spellType)){
             if(spellType == SpellType.FELIX_FELICIS){
                 chance.incrementChance();
@@ -764,4 +765,13 @@ public class Game {
     public void setDate(String date) {
         this.date = date;
     }
+
+    public void setYmir(Ymir ymir) {
+        this.ymir = ymir;
+    }
+
+    public void getYmir(Ymir ymir) {
+        this.ymir = ymir;
+    }
+
 }

@@ -134,9 +134,8 @@ public class RunningModeController {
                     spell.spellImage.getWidth(),
                     spell.spellImage.getHeight()
             );
-            //THIS WILL BE UPDATED SO THAT THE SPELL APPEARS IN THE INVENTORY
             if (transformedRectangle.intersects(spellRectangle)) {
-
+                this.game.getInventory().updateInventory(spell.getSpellType(), +1);
                 runningModePage.getGamePanel().remove(spell);
                 iterator.remove();
             }

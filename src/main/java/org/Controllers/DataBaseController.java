@@ -49,6 +49,14 @@ public class DataBaseController {
         gameInstance.getFireball().getCoordinate().setY(Integer.parseInt(fireballParts[1]));
         gameInstance.getFireball().setxVelocity(Float.parseFloat(fireballParts[2]));
         gameInstance.getFireball().setyVelocity(Float.parseFloat(fireballParts[3]));
+
+        String[] ymirAbilities = game.getString("Ymir").split("/");
+        gameInstance.getYmir().manageAbilityHistory(ymirAbilities[0]);
+        gameInstance.getYmir().manageAbilityHistory(ymirAbilities[1]);
+        System.out.println(ymirAbilities[0] +"---"+ ymirAbilities[1]);
+
+        gameInstance.getScore().setTotalScore(game.getInteger("score"));
+
     }
     public void saveGameToDatabase(String gameName, Game game, boolean played) {
         // Get the current date and time with time zone
@@ -80,6 +88,11 @@ public class DataBaseController {
                 fireball.getyVelocity());
         if(played)gameSession.put("played", "True");
         else gameSession.put("played", "False");
+
+        //add other fields here:
+        gameSession.put("Ymir",game.getYmir().getLastAbilitiesAsList().get(0).toString()+"/"+game.getYmir().getLastAbilitiesAsList().get(1).toString());
+        gameSession.put("score",game.getScore().getTotalScore());
+
         Database.getInstance().getGameCollection().insertOne(gameSession);
         System.out.println("Saved");
     }

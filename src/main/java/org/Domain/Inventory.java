@@ -70,11 +70,7 @@ public class Inventory{
         else if (spellType == SpellType.OVERWHELMING_FIREBALL && spellCountsList.get(3) > 0){
             hasSpell = true;
         }
-        if(hasSpell){
-            updateInventory(spellType,-1);
-            return true;
-        }
-        return false;
+        return hasSpell;
     }
     public ArrayList<Integer> getSpellCountsList() {
         return spellCountsList;

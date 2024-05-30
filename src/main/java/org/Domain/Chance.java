@@ -3,57 +3,65 @@ package org.Domain;
 import javax.swing.*;
 import java.awt.*;
 
-
 public class Chance extends JPanel {
-    private Coordinate coordinate;
+    private ImageIcon heartIcon; // Icon to display as a visual representation of chances
 
     int remainingChances;
 
-    public Chance(){
+    public Chance() {
         this.remainingChances = 3;
         setPreferredSize(new Dimension(190, 50));
         setLayout(new BoxLayout(this, BoxLayout.X_AXIS));
-        setForeground(Color.WHITE);
+        setOpaque(false); // Make the background transparent
+
+        heartIcon = new ImageIcon("./assets/200Heart.png");
+
         updateChanceView();
         setVisible(true);
-
     }
 
-    public int getRemainingChances() {
-        return remainingChances;
-    }
-
-    public void incrementChance(){
-        remainingChances+=1;
+    public void incrementChance() {
+        remainingChances += 1;
         updateChanceView();
     }
+
     public void decrementChance() {
         if (remainingChances > 0) {
-            remainingChances = remainingChances-1;
+            remainingChances -= 1;
             updateChanceView();
         }
     }
 
-    // Do not call this method directly, instead, call incrementChance or decrementChance.
     private void updateChanceView() {
-        removeAll();
+        removeAll(); // Clear the panel before updating
+
+        // Add horizontal glue before the icons and label to center everything
         add(Box.createHorizontalGlue());
 
-        ImageIcon heartIcon = new ImageIcon("./assets/200Heart.png");
-        for (int i = 0; i < remainingChances; i++) {
-            JLabel heartLabel = new JLabel(heartIcon);
-            add(heartLabel);
+        int displayedChances = Math.min(remainingChances, 3); // Display up to 3 icons
+        for (int i = 0; i < displayedChances; i++) {
+            add(new JLabel(heartIcon)); // Add heart icon
         }
 
+        if (remainingChances > 3) {
+            JLabel extraChancesLabel = new JLabel(" +" + (remainingChances - 3));
+            extraChancesLabel.setForeground(Color.black); // Set the text color
+            add(extraChancesLabel); // Add the label displaying the number of extra chances
+        }
+
+        // Add horizontal glue after the icons and label to maintain center alignment
         add(Box.createHorizontalGlue());
+
         repaint();
         revalidate();
-        //System.out.println("remaining chances: " + String.valueOf(remainingChances));
     }
+
     public int getRemainingChance() {
         return remainingChances;
     }
+
     public void setRemainingChance(int chance) {
         remainingChances = chance;
+        updateChanceView();
     }
 }
