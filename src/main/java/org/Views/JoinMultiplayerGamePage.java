@@ -83,7 +83,7 @@ public class JoinMultiplayerGamePage extends Page implements StateChangeListener
             }
         });
 
-        updateUI();
+        updateUIView();
         add(centerPanel, BorderLayout.CENTER);
     }
 
