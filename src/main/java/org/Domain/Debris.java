@@ -27,7 +27,7 @@ public class Debris extends JComponent {
     }
 
     private String setImageDirectory() {
-            return "assets/debris.png";
+            return "assets/newdebris.png";
     }
     @Override
     protected void paintComponent(Graphics g) {
