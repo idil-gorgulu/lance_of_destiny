@@ -10,7 +10,8 @@ import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
 public class MultiPortClient{
-    private List<StateChangeListener> listeners = new ArrayList<>();
+    private List<ConnectedStateChangeListener> connectedStateChangeListeners = new ArrayList<>();
+    private List<CountdownStateChangeListener> countdownStateChangeListeners = new ArrayList<>();
     private Socket outputSocket;
     public PrintWriter output;
     private Socket inputSocket;
@@ -21,6 +22,8 @@ public class MultiPortClient{
     public boolean connected = false;
     public volatile boolean selfReadyClicked = false;
     public boolean opponentReadyClicked = false;
+    public boolean startCountdown = false;
+    public boolean gameStarted = false;
 
     public MultiPortClient(String gameHostIpAdress, int outputPort, int inputPort) {
         this.gameHostIpAdress = gameHostIpAdress;
@@ -28,15 +31,25 @@ public class MultiPortClient{
         this.inputPort = inputPort;
     }
 
-    public void addStateChangeListener(StateChangeListener listener) {
-        listeners.add(listener);
+    public void addConnectedStateChangeListener(ConnectedStateChangeListener listener) {
+        connectedStateChangeListeners.add(listener);
+    }
+    public void addCountdownStateChangeListener(CountdownStateChangeListener listener) {
+        countdownStateChangeListeners.add(listener);
     }
 
-    private void notifyAllListeners() {
-        for (StateChangeListener listener : listeners) {
-            listener.onStateChange();
+
+    private void notifyAllConnectedStateChangeListeners() {
+        for (ConnectedStateChangeListener listener : connectedStateChangeListeners) {
+            listener.onConnectedStateChange();
         }
     }
+    private void notifyAllCountdownStateChangeListeners() {
+        for (CountdownStateChangeListener listener : countdownStateChangeListeners) {
+            listener.onCountdownStateChange();
+        }
+    }
+
 
     public void start() {
         try {
@@ -51,7 +64,7 @@ public class MultiPortClient{
             output = new PrintWriter(outputSocket.getOutputStream(), true);
 
             connected = true;
-            notifyAllListeners();
+            notifyAllConnectedStateChangeListeners();
             // Make this a function
 
             //  !!! TODO: I need to stop here until the button is pressed
@@ -71,9 +84,15 @@ public class MultiPortClient{
                 }
             }
 
-            // I need to stop in here until opponentReadyClicked is true
+            // In here says 3 2 1 and then open the game
+            startCountdown = true;
+            notifyAllCountdownStateChangeListeners();
 
             // Assure that the game is loaded
+            while (!gameStarted) {
+                Thread.onSpinWait();
+                // It will wait until it is
+            }
             Runnable sendStatisticsRunnable = new Runnable() {
                 public void run() {
                     output.println("sending statistics");

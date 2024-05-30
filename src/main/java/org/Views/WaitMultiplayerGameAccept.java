@@ -1,18 +1,17 @@
 package org.Views;
 
 import org.MultiplayerUtils.MultiPortServer;
-import org.MultiplayerUtils.StateChangeListener;
+import org.MultiplayerUtils.ConnectedStateChangeListener;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 
-public class WaitMultiplayerGameAccept extends Page implements StateChangeListener {
+public class WaitMultiplayerGameAccept extends Page implements ConnectedStateChangeListener {
     private BufferedImage backgroundImage;
     private JLabel waitingMessage;
     private JButton cancelButton;
@@ -49,7 +48,7 @@ public class WaitMultiplayerGameAccept extends Page implements StateChangeListen
     }
 
     @Override
-    public void onStateChange() {
+    public void onConnectedStateChange() {
         SwingUtilities.invokeLater(this::updateUIView);
     }
 

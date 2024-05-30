@@ -1,8 +1,9 @@
 package org.Views;
 
 import org.Domain.MultiPlayerGame;
+import org.MultiplayerUtils.CountdownStateChangeListener;
 import org.MultiplayerUtils.MultiPortClient;
-import org.MultiplayerUtils.StateChangeListener;
+import org.MultiplayerUtils.ConnectedStateChangeListener;
 import org.bson.Document;
 
 import javax.imageio.ImageIO;
@@ -16,17 +17,23 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
 import static org.Utils.ComponentStyling.customizeButton;
 import static org.Utils.ComponentStyling.customizeButtonback;
 
-public class JoinMultiplayerGamePage extends Page implements StateChangeListener {
+public class JoinMultiplayerGamePage extends Page implements ConnectedStateChangeListener, CountdownStateChangeListener {
     private BufferedImage backgroundImage;
     private MultiPortClient inClient;
     private JPanel centerPanel;
     private JPanel backButtonPanel;
     private MultiPlayerGame mpgame;
     public JoinMultiplayerGamePage instance;
+    private JLabel countdownLabel;
+    private ScheduledExecutorService countdownExecutor;
+    private int countdownValue = 3; // starting from 3 seconds
 
     public JoinMultiplayerGamePage() {
         super();
@@ -91,7 +98,7 @@ public class JoinMultiplayerGamePage extends Page implements StateChangeListener
     }
 
     @Override
-    public void onStateChange() {
+    public void onConnectedStateChange() {
         SwingUtilities.invokeLater(this::updateUIView);
     }
 
@@ -131,7 +138,8 @@ public class JoinMultiplayerGamePage extends Page implements StateChangeListener
                     @Override
                     public void actionPerformed(ActionEvent e) {
                         MultiPortClient client = new MultiPortClient(game.getString("localIP"), Integer.parseInt(game.getString("inPort")), Integer.parseInt(game.getString("outPort")));
-                        client.addStateChangeListener(instance);
+                        client.addConnectedStateChangeListener(instance);
+                        client.addCountdownStateChangeListener(instance);
                         inClient = client;
                         Thread comm = new Thread(client::start);
                         comm.start();
@@ -188,5 +196,31 @@ public class JoinMultiplayerGamePage extends Page implements StateChangeListener
         if (backgroundImage != null) {
             g.drawImage(backgroundImage, 0, 0, getWidth(), getHeight(), this);
         }
+    }
+
+    @Override
+    public void onCountdownStateChange() {
+        SwingUtilities.invokeLater(this::startCountdown);
+    }
+
+    private void startCountdown() {
+        countdownLabel = new JLabel("Ready?", SwingConstants.CENTER);
+        countdownLabel.setFont(new Font("Tahoma", Font.BOLD, 48));
+        countdownLabel.setForeground(Color.WHITE);
+        centerPanel.add(countdownLabel, BorderLayout.CENTER);
+        countdownExecutor = Executors.newSingleThreadScheduledExecutor();
+        countdownExecutor.scheduleAtFixedRate(() -> {
+            if (countdownValue > 0) {
+                SwingUtilities.invokeLater(() -> countdownLabel.setText(String.valueOf(countdownValue--)));
+            } else {
+                SwingUtilities.invokeLater(() -> countdownLabel.setText("Go!"));
+                countdownExecutor.shutdown();
+                if (inClient.opponentReadyClicked) {
+                    Navigator.getInstance().showRunningModePage();
+                }
+            }
+        }, 0, 1, TimeUnit.SECONDS);
+        // And finally continue to the game
+        inClient.gameStarted = true;
     }
 }

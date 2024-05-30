@@ -25,7 +25,8 @@ public class MultiPortServer {
     public boolean connected = false;
     public volatile boolean selfReadyClicked = false;
     public boolean opponentReadyClicked = false;
-    private List<StateChangeListener> listeners = new ArrayList<>();
+    public boolean startCountdown = false;
+    private List<ConnectedStateChangeListener> listeners = new ArrayList<>();
 
 
 
@@ -42,13 +43,13 @@ public class MultiPortServer {
         notifyAllListeners();
     }
 
-    public void addStateChangeListener(StateChangeListener listener) {
+    public void addStateChangeListener(ConnectedStateChangeListener listener) {
         listeners.add(listener);
     }
 
     private void notifyAllListeners() {
-        for (StateChangeListener listener : listeners) {
-            listener.onStateChange();
+        for (ConnectedStateChangeListener listener : listeners) {
+            listener.onConnectedStateChange();
         }
     }
 
@@ -107,6 +108,8 @@ public class MultiPortServer {
                     break;
                 }
             }
+
+            startCountdown = true;
 
             // Assure that the game is loaded
             Runnable sendStatisticsRunnable = new Runnable() {
