@@ -94,7 +94,7 @@ public class Ymir extends JPanel {
             return false;
         }
 
-        private void manageAbilityHistory(String ability) {
+        public void manageAbilityHistory(String ability) {
             if (lastAbilities.size() >= 2) {
                 lastAbilities.poll();
             }
@@ -156,12 +156,10 @@ public class Ymir extends JPanel {
         return game.getBarriers().subList(0, Math.min(8, game.getBarriers().size()));
     }
 
-    public Queue<String> getLastAbilities() {
-        return lastAbilities;
+    // Method to get abilities as a list
+    public List<String> getLastAbilitiesAsList() {
+        return new ArrayList<>(lastAbilities);
     }
 
-    public void setLastAbilities(Queue<String> lastAbilities) {
-        this.lastAbilities = lastAbilities;
-    }
 }
 
