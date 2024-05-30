@@ -18,7 +18,7 @@ public class Inventory{
     private ArrayList<InventoryListener> listeners;
 
     public Inventory() {
-        this.spellCountsList = new ArrayList<>(Arrays.asList(2, 2, 2, 2));
+        this.spellCountsList = new ArrayList<>(Arrays.asList(0, 0, 0, 0));
         this.listeners = new ArrayList<>();
     }
 

@@ -49,7 +49,6 @@ public class DataBaseController {
         gameInstance.getFireball().getCoordinate().setY(Integer.parseInt(fireballParts[1]));
         gameInstance.getFireball().setxVelocity(Float.parseFloat(fireballParts[2]));
         gameInstance.getFireball().setyVelocity(Float.parseFloat(fireballParts[3]));
-
     }
     public void saveGameToDatabase(String gameName, Game game, boolean played) {
         // Get the current date and time with time zone
