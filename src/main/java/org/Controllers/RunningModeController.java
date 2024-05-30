@@ -137,13 +137,7 @@ public class RunningModeController {
             );
             //THIS WILL BE UPDATED SO THAT THE SPELL APPEARS IN THE INVENTORY
             if (transformedRectangle.intersects(spellRectangle)) {
-                SpellType type = spell.getSpellType();
-                if(getGameInventory().containsKey(type)) {
-                    getGameInventory().put(type,getGameInventory().get(type)+1);
-                }
-                else{
-                    getGameInventory().put(type,1);
-                }
+
                 runningModePage.getGamePanel().remove(spell);
                 iterator.remove();
             }
@@ -218,30 +212,6 @@ public class RunningModeController {
     }
 
 
-    //FELIX_FELICIS
-    public void useFelixFelicis(){
-        if (game.useFelixFelicis()){ // check if spell was used
-            runningModePage.playSoundEffect(5);
-        }
-    }
-    //STAFF_EXPANSION
-    public void useMSExpansion(){
-        if (game.useStaffExpansion()){
-        runningModePage.playSoundEffect(3);
-        }
-    }
-    // Hex
-    public void useHex(){
-        if(game.useHex()){
-            runningModePage.playSoundEffect(3);  // Change SFX
-        }
-    }
-    //Overwhelming Fireball
-    public void useOverwhelmingFB(){
-        if (game.useOverwhelmingFB()){
-            runningModePage.playSoundEffect(3); // Change SFX
-        }
-    }
     public void volume(int i){
         runningModePage.volume((float) (0.1*i));
     }
@@ -257,9 +227,6 @@ public class RunningModeController {
     }
     public void saveGameToDatabase() {
         dataBaseController.saveGameToDatabase(game.getGameName(), game,true);
-    }
-    public HashMap<SpellType, Integer> getGameInventory(){
-        return game.getInventory();
     }
     public ArrayList<Spell> getGameSpells(){
         return game.getSpells();

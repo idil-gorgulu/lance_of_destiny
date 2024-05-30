@@ -1,6 +1,7 @@
-package org.Views;
+package org.Listeners;
 
 import org.Controllers.RunningModeController;
+import org.Domain.SpellType;
 
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
@@ -50,16 +51,16 @@ public class MyKeyListener extends KeyAdapter {
                 runningModeController.getGameSession().getMagicalStaff().setReleased(true);
                 break;
             case KeyEvent.VK_Q:
-                runningModeController.useFelixFelicis();
+                runningModeController.getGameSession().useSpell(SpellType.FELIX_FELICIS);
                 break;
             case KeyEvent.VK_W:
-                runningModeController.useMSExpansion();
+                runningModeController.getGameSession().useSpell(SpellType.STAFF_EXPANSION);
                 break;
             case KeyEvent.VK_E:
-                runningModeController.useOverwhelmingFB();
+                runningModeController.getGameSession().useSpell(SpellType.OVERWHELMING_FIREBALL);
                 break;
             case KeyEvent.VK_T:
-                runningModeController.useHex();
+                runningModeController.getGameSession().useSpell(SpellType.HEX);
                 break;
             case KeyEvent.VK_P:
                 runningModeController.volume(1);

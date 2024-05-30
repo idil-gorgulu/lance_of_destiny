@@ -32,7 +32,7 @@ public class Game {
     private ArrayList<Barrier> purpleBarriers = new ArrayList<Barrier>(0);;
     private ArrayList<Spell> droppingSpells;
     private ArrayList<Bullet> activeBullets;
-    private HashMap<SpellType,Integer> inventory;
+    private Inventory inventory;
     private String date;
     private Game(){
         this.fireball = new Fireball();
@@ -52,10 +52,7 @@ public class Game {
         activeDebris= new ArrayList<>();
         droppingSpells=new ArrayList<>();
         activeBullets=new ArrayList<>();
-        inventory=new HashMap<>();
-        for (SpellType type : SpellType.values()) {
-            inventory.put(type, 0);
-        }
+        inventory = new Inventory();
     }
 
     public Fireball getFireball() {
@@ -69,8 +66,6 @@ public class Game {
     public Ymir getYmir() {return ymir;}
     public Chance getChance() { return chance;}
     public Score getScore(){return score;}
-
-    public HashMap<SpellType, Integer> getInventory(){ return inventory;}
 
     public void addBarrier(Coordinate coordinates, BarrierType type) {
         Barrier newBarrier = new Barrier(coordinates, type);
@@ -313,6 +308,11 @@ public class Game {
     public String[][] getBarrierBoard() {
         return barrierBoard;
     }
+
+    public Inventory getInventory() {
+        return inventory;
+    }
+
 
     //TODO: Update this according to new database saving
     public void addDetailedBarrier(Coordinate coordinates, BarrierType type, int numHits, boolean isMoving, int velocity) {
@@ -656,45 +656,28 @@ public class Game {
         droppingSpells.add(spell);
     }
 
-    public boolean useFelixFelicis(){
-        int remaining=inventory.get(SpellType.FELIX_FELICIS);
-        boolean nonzero=remaining>0;
-        if (nonzero) {
-            getChance().incrementChance();
-            inventory.put(SpellType.FELIX_FELICIS,remaining -1 );
+    public void useSpell(SpellType spellType){
+        if(inventory.checkSpellCount(spellType)){
+            if(spellType == SpellType.FELIX_FELICIS){
+                chance.incrementChance();
+                inventory.updateInventory(spellType, -1);
+            }
+            if(spellType == SpellType.STAFF_EXPANSION) {
+                magicalStaff.setStaffWidth(200);
+                magicalStaff.setExpansionTime(System.currentTimeMillis());
+                inventory.updateInventory(spellType, -1);
+            }
+            if(spellType == SpellType.HEX && !getMagicalStaff().isShooting()){
+                getMagicalStaff().setShooting(true);
+                getMagicalStaff().setCannonTime(System.currentTimeMillis());
+                inventory.updateInventory(spellType, -1);
+            }
+            if(spellType == SpellType.OVERWHELMING_FIREBALL && getFireball().isOverwhelming()){
+                getFireball().setOverwhelming(true);
+                getFireball().setOverwhelmTime(System.currentTimeMillis());
+                inventory.updateInventory(spellType, -1);
+            }
         }
-        return nonzero;
-    }
-    public boolean useStaffExpansion(){
-        int remaining=inventory.get(SpellType.STAFF_EXPANSION);
-        boolean cond=(remaining>0 && getMagicalStaff().getStaffWidth()==100);
-        if (cond) {
-            getMagicalStaff().setStaffWidth(200);
-            inventory.put(SpellType.STAFF_EXPANSION,  remaining -1 );
-            getMagicalStaff().setExpansionTime(System.currentTimeMillis());
-        }
-        return cond;
-    }
-    public boolean useHex(){
-        int remaining=inventory.get(SpellType.HEX);
-        boolean cond=(remaining>0 && !getMagicalStaff().isShooting());
-        if (cond){
-            getMagicalStaff().setShooting(true);
-            getMagicalStaff().setCannonTime(System.currentTimeMillis());
-            inventory.put(SpellType.HEX,  remaining -1 );
-        }
-        return cond;
-    }
-
-    public boolean useOverwhelmingFB(){
-        int remaining=inventory.get(SpellType.OVERWHELMING_FIREBALL);
-        boolean cond=(remaining>0 && getFireball().isOverwhelming());
-        if (cond){
-            getFireball().setOverwhelming(true);
-            getFireball().setOverwhelmTime(System.currentTimeMillis());
-            inventory.put(SpellType.OVERWHELMING_FIREBALL,remaining-1);
-        }
-        return cond;
     }
 
     public Bullet[] createHexBullet(){

@@ -2,22 +2,28 @@ package org.Views;
 
 import org.Domain.*;
 import org.Controllers.*;
-import org.Utils.Database;
+import org.Listeners.MyKeyListener;
+import org.Listeners.InventoryListener;
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import javax.swing.border.Border;
-import org.bson.Document;
 import java.awt.*;
 import java.awt.event.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.TimerTask;
+import java.util.*;
 import java.util.Timer;
-import java.util.HashMap;
 
-public class RunningModePage extends Page{
+public class RunningModePage extends Page implements InventoryListener{
+    private JLabel hexCount = new JLabel("0");
+    private JLabel overwhelmingFireballCount = new JLabel("0");
+    private JLabel magicalStaffExpansionCount = new JLabel("0");
+    private JLabel felixFelicisCount = new JLabel("0");
+    private BufferedImage hexImage;
+    private BufferedImage felixFelicisImage;
+    private BufferedImage magicalStaffExpansionImage;
+    private BufferedImage overwhelmingFireballImage;
     private BufferedImage backgroundImage;
     private JPanel gamePanel =  new JPanel();
     private JPanel infoContainer =  new JPanel();
@@ -47,13 +53,15 @@ public class RunningModePage extends Page{
         this.setDoubleBuffered(true);
         try {
             backgroundImage = ImageIO.read(new File("assets/Background.png"));
+            hexImage = ImageIO.read(new File("assets/spells/felix_felicis.png"));
+            felixFelicisImage = ImageIO.read(new File("assets/spells/felix_felicis.png"));
+            magicalStaffExpansionImage = ImageIO.read(new File("assets/spells/magical_staff_expansion.png"));
+            overwhelmingFireballImage = ImageIO.read(new File("assets/spells/felix_felicis.png"));
         } catch (IOException e) {
             e.printStackTrace();
         }
-
         this.runningModeController = new RunningModeController(this);
         this.runningModeController.getGameSession().started = true;
-        inventory = runningModeController.getGameInventory();
         activeDebris = runningModeController.getGameDebris();
         droppingSpells = runningModeController.getGameSpells();
         activeBullets=runningModeController.getGameBullets();
@@ -61,9 +69,7 @@ public class RunningModePage extends Page{
         setFocusable(true);
         requestFocus();
         setupTimer();
-       // for (SpellType type : SpellType.values()) {
-        //    inventory.put(type, 0);
-        //}
+        this.runningModeController.getGameSession().getInventory().addInventoryListener(this);
     }
 
     protected void paintComponent(Graphics g) { //background for the whole frame
@@ -130,7 +136,6 @@ public class RunningModePage extends Page{
         runningModeController.updateDroppingSpells();// Hande spell dropping
         runningModeController.updateHexBullets();
         runningModeController.updatePurpleBarriers();
-        updateInventoryDisplay();
         repaint();
         if (this.runningModeController.getGameSession().getChance().getRemainingChance() == 0 || runningModeController.getGameSession().getBarriers().size()==0) {
             this.runningModeController.getGameSession().ended = true;
@@ -191,16 +196,18 @@ public class RunningModePage extends Page{
                 mainPanel.add(separatorPanel);
 
                 inventoryContainer = new JPanel();
-                inventoryContainer.setLayout(new BorderLayout());
-
+                inventoryContainer.setLayout(new GridBagLayout());
+                GridBagConstraints gbc = new GridBagConstraints();
+                gbc.insets = new Insets(5, 5, 5, 5);
+                gbc.gridx = 0;
+                gbc.gridy = 0;
+                gbc.anchor = GridBagConstraints.WEST;
+                gbc.gridwidth = 2;
                 JLabel inventoryTitleLabel = new JLabel("Inventory", SwingConstants.CENTER);
-                inventoryContainer.add(inventoryTitleLabel, BorderLayout.NORTH);
-
-                inventoryContainer.setPreferredSize(new Dimension(190, 100));
-                inventoryContainer.setBackground(new Color(color.getRed(), color.getGreen(), color.getBlue(), 50));
-                updateInventoryDisplay();
+                inventoryContainer.add(inventoryTitleLabel, gbc);
+                inventoryContainer.setPreferredSize(new Dimension(190, 150));
+                initializeInventory(gbc);
                 mainPanel.add(inventoryContainer);
-
                 add(mainPanel, BorderLayout.WEST);
 
                 JLabel statusLabel = new JLabel("Running Mode", SwingConstants.CENTER);
@@ -284,27 +291,29 @@ public class RunningModePage extends Page{
         });
     }
 
-    private void updateInventoryDisplay() {
-        /*inventoryContainer.removeAll();
-        for (HashMap.Entry<SpellType, Integer> entry : inventory.entrySet()) {
-            JLabel label = new JLabel(entry.getKey().name() + ": " + entry.getValue());
-            inventoryContainer.add(label);
-        }
-        inventoryContainer.revalidate();
-        inventoryContainer.repaint();
-    }*/
-        inventoryContainer.removeAll();  // Remove all components first
-        inventoryContainer.setLayout(new GridLayout(0, 1));  // Set layout to GridLayout for dynamic adjustment
+    private void initializeInventory(GridBagConstraints gbc) {
+        ArrayList<JLabel> countLabels = new ArrayList<>(Arrays.asList(hexCount, felixFelicisCount, magicalStaffExpansionCount, overwhelmingFireballCount));
+        ArrayList<BufferedImage> images = new ArrayList<>(Arrays.asList(hexImage, felixFelicisImage, magicalStaffExpansionImage, overwhelmingFireballImage));
 
-        for (HashMap.Entry<SpellType, Integer> entry : inventory.entrySet()) {
-            JLabel label = new JLabel(entry.getKey().name() + ": " + entry.getValue());
-            inventoryContainer.add(label);
-        }
+        int imageWidth = 25;  // Desired width of the images
+        int imageHeight = 25; // Desired height of the images
 
-        inventoryContainer.revalidate();  // Revalidate to layout the components in the container
-        inventoryContainer.repaint();  // Repaint to display the changes
+        for (int i = 0; i < images.size(); i++) {
+            Image scaledImage = images.get(i).getScaledInstance(imageWidth, imageHeight, Image.SCALE_SMOOTH);
+            ImageIcon scaledIcon = new ImageIcon(scaledImage);
+
+            // Add the image to the inventory container
+            gbc.gridy = i + 1;
+            gbc.gridx = 0;
+            gbc.anchor = GridBagConstraints.WEST;
+            inventoryContainer.add(new JLabel(scaledIcon), gbc);
+
+            // Add the label to the right of the image
+            gbc.gridx = 1;
+            inventoryContainer.add(countLabels.get(i), gbc);
+            countLabels.get(i).setText(String.valueOf(this.runningModeController.getGameSession().getInventory().getSpellCountsList().get(i)));
+        }
     }
-
 
     private void saveGame() {
         String gameName = JOptionPane.showInputDialog(this, "Enter a name for your save file:", "Save Game", JOptionPane.PLAIN_MESSAGE);
@@ -332,4 +341,25 @@ public class RunningModePage extends Page{
     }
 
 
+    @Override
+    public void onInventoryUpdate(SpellType spellType, int newCount) {
+        SwingUtilities.invokeLater(() -> {
+            switch (spellType) {
+                case HEX:
+                    hexCount.setText(String.valueOf(newCount));
+                    break;
+                case FELIX_FELICIS:
+                    felixFelicisCount.setText(String.valueOf(newCount));
+                    break;
+                case STAFF_EXPANSION:
+                    magicalStaffExpansionCount.setText(String.valueOf(newCount));
+                    break;
+                case OVERWHELMING_FIREBALL:
+                    overwhelmingFireballCount.setText(String.valueOf(newCount));
+                    break;
+            }
+        });
+        inventoryContainer.repaint();
+        inventoryContainer.revalidate();
+    }
 }
