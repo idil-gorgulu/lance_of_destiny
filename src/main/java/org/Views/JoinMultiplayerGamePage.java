@@ -1,9 +1,8 @@
 package org.Views;
 
-import org.Controllers.DataBaseController;
 import org.Domain.MultiPlayerGame;
 import org.MultiplayerUtils.MultiPortClient;
-import org.MultiplayerUtils.MultiPortServer;
+import org.MultiplayerUtils.StateChangeListener;
 import org.bson.Document;
 
 import javax.imageio.ImageIO;
@@ -21,22 +20,15 @@ import java.util.ArrayList;
 import static org.Utils.ComponentStyling.customizeButton;
 import static org.Utils.ComponentStyling.customizeButtonback;
 
-public class JoinMultiplayerGamePage extends Page {
-
-    public MultiPlayerGame mpgame;
-
-    public BufferedImage backgroundImage;
-    public DataBaseController dataBaseController;
-    public MultiPortClient inClient = null;
-    public boolean connected = false;
+public class JoinMultiplayerGamePage extends Page implements StateChangeListener {
+    private BufferedImage backgroundImage;
+    private MultiPortClient inClient;
+    private JPanel centerPanel;
+    private JPanel backButtonPanel;
+    private MultiPlayerGame mpgame;
 
     public JoinMultiplayerGamePage() {
         super();
-        try {
-            mpgame = new MultiPlayerGame();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
         loadBackgroundImage();
         initUI();
     }
@@ -52,7 +44,6 @@ public class JoinMultiplayerGamePage extends Page {
     @Override
     protected void initUI() {
         setLayout(new BorderLayout());
-
         JPanel backgroundPanel = new JPanel(new BorderLayout()) {
             @Override
             protected void paintComponent(Graphics g) {
@@ -65,7 +56,7 @@ public class JoinMultiplayerGamePage extends Page {
         backgroundPanel.setOpaque(false);
         add(backgroundPanel, BorderLayout.NORTH);
 
-        JPanel backButtonPanel = new JPanel(new BorderLayout());
+        backButtonPanel = new JPanel(new BorderLayout());
         backButtonPanel.setOpaque(false);
         JButton backButton = new JButton("Back");
         backButton.addActionListener(e -> Navigator.getInstance().getPrevious());
@@ -92,7 +83,22 @@ public class JoinMultiplayerGamePage extends Page {
             }
         });
 
-        if (!connected) {
+        updateUI();
+        add(centerPanel, BorderLayout.CENTER);
+    }
+
+    @Override
+    public void onStateChange() {
+        SwingUtilities.invokeLater(this::updateUIView);
+    }
+
+    private void updateUIView() {
+        centerPanel.removeAll();
+        if (inClient != null && inClient.connected) {
+            JButton readyButton = new JButton("Ready");
+            readyButton.addActionListener(this::ready);
+            centerPanel.add(readyButton);
+        } else {
             JPanel headingPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
             headingPanel.setOpaque(false);
             JLabel headingLabel = new JLabel("Join Multiplayer Game");
@@ -129,7 +135,6 @@ public class JoinMultiplayerGamePage extends Page {
                         comm.start();
                         // Notify the user for connection made
                         if (client.connected) {
-                            connected = true;
                             System.out.println("Communication made");
                         } else {
                             // Lets hope no else
@@ -157,31 +162,22 @@ public class JoinMultiplayerGamePage extends Page {
 
             centerPanel.add(scrollPane, gbc);
             add(centerPanel, BorderLayout.CENTER);
-        } else {
-            JButton readyButton = new JButton("Ready");
-            readyButton.setAlignmentX(Component.CENTER_ALIGNMENT);
-            readyButton.addActionListener(new ActionListener() {
-                @Override
-                public void actionPerformed(ActionEvent e) {
-                    ready();
-                }
-            });
-            centerPanel.add(readyButton);
-
-            add(centerPanel, BorderLayout.CENTER);
-
-            setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
         }
 
+        centerPanel.revalidate();
+        centerPanel.repaint();
     }
 
-    private void ready() {
-        inClient.selfReadyClicked = true;
-        if (inClient.opponentReadyClicked) {
-            // Load the game
-            Navigator.getInstance().showRunningModePage();
-        } else {
-            // kind of a wait screen
+    private void ready(ActionEvent e) {
+        if (inClient != null) {
+            inClient.selfReadyClicked = true;
+            if (inClient.opponentReadyClicked) {
+                // Load the game
+                Navigator.getInstance().showRunningModePage();
+            } else {
+                // Display a waiting message
+                System.out.println("Waiting for opponent...");
+            }
         }
     }
 

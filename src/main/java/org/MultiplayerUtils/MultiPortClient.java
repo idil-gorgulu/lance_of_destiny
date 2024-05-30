@@ -2,13 +2,15 @@ package org.MultiplayerUtils;
 
 import java.io.*;
 import java.net.*;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
 public class MultiPortClient {
-
+    private List<StateChangeListener> listeners = new ArrayList<>();
     private Socket outputSocket;
     private PrintWriter output;
     private Socket inputSocket;
@@ -26,6 +28,16 @@ public class MultiPortClient {
         this.inputPort = inputPort;
     }
 
+    public void addClientStateChangeListener(StateChangeListener listener) {
+        listeners.add(listener);
+    }
+
+    private void notifyAllListeners() {
+        for (StateChangeListener listener : listeners) {
+            listener.onStateChange();
+        }
+    }
+
     public void start() {
         try {
             // This is for receiving messages from the gameHost
@@ -39,7 +51,7 @@ public class MultiPortClient {
             output = new PrintWriter(outputSocket.getOutputStream(), true);
 
             connected = true;
-
+            notifyAllListeners();
             while(!selfReadyClicked){}
             // Make this a function
             output.println("gameReady");

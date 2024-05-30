@@ -1,17 +1,17 @@
 package org.Views;
 
 import org.MultiplayerUtils.MultiPortServer;
+import org.MultiplayerUtils.StateChangeListener;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 
-public class WaitMultiplayerGameAccept extends Page {
+public class WaitMultiplayerGameAccept extends Page implements StateChangeListener {
     private BufferedImage backgroundImage;
     private JLabel waitingMessage;
     private JButton cancelButton;
@@ -19,10 +19,12 @@ public class WaitMultiplayerGameAccept extends Page {
     private JProgressBar progressBar;
     private JPanel centerPanel;
     private MultiPortServer server;
+
     public WaitMultiplayerGameAccept() {
         super();
         initUI();
         server = MultiPortServer.getInstance();
+        server.addStateChangeListener(this);
         Thread comm = new Thread(server::start);
         comm.start();
     }
@@ -39,8 +41,26 @@ public class WaitMultiplayerGameAccept extends Page {
         centerPanel = new JPanel();
         centerPanel.setLayout(new BoxLayout(centerPanel, BoxLayout.Y_AXIS));
         centerPanel.setOpaque(false);
+        updateUIView();
 
-        if (!MultiPortServer.getInstance().connected) {
+        setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+        add(centerPanel, BorderLayout.CENTER);
+    }
+
+    @Override
+    public void onStateChange() {
+        SwingUtilities.invokeLater(this::updateUIView);
+    }
+
+    private void updateUIView() {
+        centerPanel.removeAll();
+
+        if (server.connected) {
+            readyButton = new JButton("Ready");
+            readyButton.setAlignmentX(Component.CENTER_ALIGNMENT);
+            readyButton.addActionListener(this::ready);
+            centerPanel.add(readyButton);
+        } else {
             waitingMessage = new JLabel("Waiting for other player to accept...");
             waitingMessage.setAlignmentX(Component.CENTER_ALIGNMENT);
             waitingMessage.setFont(new Font("Arial", Font.BOLD, 16));
@@ -55,33 +75,12 @@ public class WaitMultiplayerGameAccept extends Page {
 
             cancelButton = new JButton("Cancel");
             cancelButton.setAlignmentX(Component.CENTER_ALIGNMENT);
-            cancelButton.addActionListener(new ActionListener() {
-                @Override
-                public void actionPerformed(ActionEvent e) {
-                    onCancel();
-                }
-            });
+            cancelButton.addActionListener(e -> onCancel());
             centerPanel.add(cancelButton);
-
-            add(centerPanel, BorderLayout.CENTER);
-
-            setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
-        } else {
-            readyButton = new JButton("Ready");
-            readyButton.setAlignmentX(Component.CENTER_ALIGNMENT);
-            readyButton.addActionListener(new ActionListener() {
-                @Override
-                public void actionPerformed(ActionEvent e) {
-                    ready();
-                }
-            });
-            centerPanel.add(readyButton);
-
-            add(centerPanel, BorderLayout.CENTER);
-
-            setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
         }
 
+        centerPanel.revalidate();
+        centerPanel.repaint();
     }
 
     @Override
@@ -93,17 +92,16 @@ public class WaitMultiplayerGameAccept extends Page {
     }
 
     private void onCancel() {
-        // TODO: Implement reset in here
+        // TODO: Implement reset logic
         Navigator.getInstance().showGameModePage();
     }
 
-    private void ready() {
-        MultiPortServer.getInstance().selfReadyClicked = true;
-        if (MultiPortServer.getInstance().opponentReadyClicked) {
-            // Load the game
+    private void ready(ActionEvent e) {
+        server.selfReadyClicked = true;
+        if (server.opponentReadyClicked) {
             Navigator.getInstance().showRunningModePage();
         } else {
-            // kind of a wait screen
+            // Update UI to show a waiting message or similar
         }
     }
 }

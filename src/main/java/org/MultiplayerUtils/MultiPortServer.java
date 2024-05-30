@@ -6,6 +6,8 @@ import org.bson.Document;
 
 import java.io.*;
 import java.net.*;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
@@ -23,6 +25,8 @@ public class MultiPortServer {
     public boolean connected = false;
     public boolean selfReadyClicked = false;
     public boolean opponentReadyClicked = false;
+    private List<StateChangeListener> listeners = new ArrayList<>();
+
 
 
     public static MultiPortServer  getInstance() {
@@ -31,6 +35,20 @@ public class MultiPortServer {
             return instance;
         } else {
             return instance;
+        }
+    }
+    public void setConnected(boolean connected) {
+        this.connected = connected;
+        notifyAllListeners();
+    }
+
+    public void addStateChangeListener(StateChangeListener listener) {
+        listeners.add(listener);
+    }
+
+    private void notifyAllListeners() {
+        for (StateChangeListener listener : listeners) {
+            listener.onStateChange();
         }
     }
 
@@ -72,7 +90,7 @@ public class MultiPortServer {
 
             // Put ready button when
             // Then when connected first print out 3 2 1
-            connected = true;
+            this.setConnected(true);
             while(!selfReadyClicked){}
             // Make this a function
             output.println("gameReady");
