@@ -28,7 +28,7 @@ public class StartSingleplayerPage extends Page {
 
         // Back Button oluşturuluyor ve BorderLayout'un WEST kısmına ekleniyor
         JButton backButton = new JButton("Back");
-        backButton.addActionListener(e -> Navigator.getInstance().getPrevious());
+        backButton.addActionListener(e -> Navigator.getInstance().showGameModePage());
         JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
         buttonPanel.add(backButton);
         buttonPanel.setOpaque(false);  // Buton paneli şeffaf yapılır
