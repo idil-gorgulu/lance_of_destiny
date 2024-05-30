@@ -7,7 +7,7 @@ import java.awt.geom.Rectangle2D;
 import java.util.ArrayList;
 import static org.junit.jupiter.api.Assertions.*;
 
-public class checkBarrierFireballCollisionTest {
+public class CheckBarrierFireballCollisionTest {
 
     /**
      * Overview:

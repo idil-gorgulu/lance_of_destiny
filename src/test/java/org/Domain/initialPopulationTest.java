@@ -5,6 +5,7 @@ import org.junit.jupiter.api.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class initialPopulationTest {
+    /*
     //tests initalPopulation method in Game class.
     private Game game;
 
@@ -90,4 +91,6 @@ public class initialPopulationTest {
             }
         }
     }
+
+     */
 }

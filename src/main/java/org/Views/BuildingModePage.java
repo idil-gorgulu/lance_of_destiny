@@ -120,9 +120,10 @@ public class BuildingModePage extends Page {
                 int num4 = Integer.parseInt(inputText4);
                 //populating game:
                 boolean b = buildingModeController.initialPopulation(num1, num2, num3, num4);
-                if (!b) {
+                if(!b){
                     JOptionPane.showMessageDialog(null, "Not enough places!");
-                } else {
+                }
+                else{
                     regenerate();
                     inputField1.setText("0");
                     inputField2.setText("0");
@@ -136,19 +137,19 @@ public class BuildingModePage extends Page {
         JLabel line = new JLabel("-----------------------------------");
         infoContainer.add(line);
         //displaying current number of barriers:
-        simpleAmount = new JLabel("Simple barriers: " + buildingModeController.getGameSession().getNumSimpleBarrier() + "/75");
+        simpleAmount = new JLabel("Simple barriers: "+ buildingModeController.getGameSession().getNumSimpleBarrier()+ "/75");
         simpleAmount.setHorizontalAlignment(SwingConstants.LEFT);
         infoContainer.add(simpleAmount);
 
-        firmAmount = new JLabel("Firm barriers: " + buildingModeController.getGameSession().getNumFirmBarrier() + "/10");
+        firmAmount = new JLabel("Firm barriers: "+ buildingModeController.getGameSession().getNumFirmBarrier()+ "/10");
         firmAmount.setHorizontalAlignment(SwingConstants.LEFT);
         infoContainer.add(firmAmount);
 
-        explosiveAmount = new JLabel("Explosive barriers: " + buildingModeController.getGameSession().getNumExplosiveBarrier() + "/5");
+        explosiveAmount = new JLabel("Explosive barriers: "+ buildingModeController.getGameSession().getNumExplosiveBarrier()+ "/5");
         explosiveAmount.setHorizontalAlignment(SwingConstants.LEFT);
         infoContainer.add(explosiveAmount);
 
-        rewardingAmount = new JLabel("Rewarding barriers: " + buildingModeController.getGameSession().getNumrewardingBarrier() + "/10");
+        rewardingAmount = new JLabel("Rewarding barriers: "+ buildingModeController.getGameSession().getNumrewardingBarrier()+ "/10");
         rewardingAmount.setHorizontalAlignment(SwingConstants.LEFT);
         infoContainer.add(rewardingAmount);
 
@@ -268,7 +269,7 @@ public class BuildingModePage extends Page {
             @Override
             public void mousePressed(MouseEvent e) {
                 if (selectedButtonIndex != -1) {
-                    System.out.println("Mouse click coordinates:" + e.getX() + " " + e.getY()); //to debug
+                    System.out.println("Mouse click coordinates:"+ e.getX()+" "+ e.getY()); //to debug
                     addBarrierImage(new Coordinate(e.getX(), e.getY()));
                 }
             }
@@ -286,12 +287,12 @@ public class BuildingModePage extends Page {
     }
 
     private void addBarrierImage(Coordinate coordinates) {
-        if (selectedButtonIndex == -1 || coordinates.getY() >= 399) {
+        if (selectedButtonIndex == -1  || coordinates.getY()>=399) {
             return;
         }
-        Coordinate barrierCoordinates = BuildingModeController.addBarrier(coordinates, BarrierType.values()[selectedButtonIndex]);
+        Coordinate barrierCoordinates=BuildingModeController.addBarrier(coordinates,BarrierType.values()[selectedButtonIndex] );
 
-        if (barrierCoordinates == null) { //barrier already exists in those coordinates
+        if (barrierCoordinates==null){ //barrier already exists in those coordinates
             regenerate();
             buildingPanel.repaint();
             buildingPanel.revalidate();
@@ -312,8 +313,7 @@ public class BuildingModePage extends Page {
             buttons[selectedButtonIndex].setBackground(Color.GREEN);
         }
     }
-
-    public void regenerate() {
+    public void regenerate(){
         buildingPanel.removeAll();
         simpleAmount.setText("Simple barriers: " + buildingModeController.getGameSession().getNumSimpleBarrier() + "/75");
         firmAmount.setText("Firm barriers: " + buildingModeController.getGameSession().getNumFirmBarrier() + "/10");
@@ -325,18 +325,18 @@ public class BuildingModePage extends Page {
         infoContainer.add(saveButton, BorderLayout.SOUTH);
         leftSide.add(playButton, BorderLayout.SOUTH);
 
-        if (buildingModeController.getReady()) {
+        if (buildingModeController.getReady()){
             //donot delete these commented out lines
 //            infoContainer.add(saveButton, BorderLayout.SOUTH);
 //            leftSide.add(playButton, BorderLayout.SOUTH);
             infoContainer.remove(lowerBoundInfo);
-        } else {
+        }
+        else{
             //donot delete these commented out lines
 //            infoContainer.remove(saveButton);
 //            leftSide.remove(playButton);
             lowerBoundInfo.setHorizontalAlignment(SwingConstants.LEFT);
-            infoContainer.add(lowerBoundInfo);
-        }
+            infoContainer.add(lowerBoundInfo); }
 
         infoContainer.revalidate();
         infoContainer.repaint();

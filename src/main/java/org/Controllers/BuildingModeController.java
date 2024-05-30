@@ -72,7 +72,7 @@ public class BuildingModeController {
     }
 
     public void saveGameToDatabase(String gameName) {
-        dataBaseController.saveGameToDatabase(gameName, gameSession, false);
+        dataBaseController.saveGameToDatabase(gameName, gameSession,false);
     }
 
 }
