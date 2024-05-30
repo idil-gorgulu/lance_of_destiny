@@ -39,6 +39,8 @@ public class RunningModeController {
     public void updateMagicalStaffView(){
         MagicalStaff magicalStaff=game.getMagicalStaff();
         magicalStaff.updateMagicalStaffView();
+
+        // TODO move to cannon
         if (magicalStaff.isShooting() && System.currentTimeMillis()-magicalStaff.getShotTime()>0.6*1000){
             fireBullet();
             magicalStaff.setShotTime(System.currentTimeMillis());
@@ -85,7 +87,6 @@ public class RunningModeController {
         Bullet bullet2 = game.createHexBullet()[1];
         runningModePage.getGamePanel().add(bullet);
         runningModePage.getGamePanel().add(bullet2);
-        //runningModePage.playSoundEffect(4);
     }
     public void updateDebris() {
         Iterator<Debris> iterator = game.getActiveDebris().iterator();
@@ -98,6 +99,8 @@ public class RunningModeController {
                 runningModePage.getGamePanel().remove(debris);
                 iterator.remove();
             }
+
+            // TODO move collision logic
             // For debris collision with magical staff
             Rectangle2D.Double debrisRectangle = new Rectangle2D.Double(
                     debris.getCoordinate().getX() - debris.debrisImage.getWidth()/2 ,
@@ -123,6 +126,7 @@ public class RunningModeController {
                 runningModePage.getGamePanel().remove(spell);
                 iterator.remove();
             }
+            // TODO move collision logic
             // For spell collision with magical staff
             Rectangle2D.Double spellRectangle = new Rectangle2D.Double(
                     spell.getCoordinate().getX() - spell.spellImage.getWidth()/2 ,
@@ -205,18 +209,28 @@ public class RunningModeController {
 
 
     //FELIX_FELICIS
-    public void useSpell1(){
-        game.useFelixFelicis();
-       //runningModePage.playSoundEffect(5); cant check if in inventory --> move it to game somehow
+    public void useFelixFelicis(){
+        if (game.useFelixFelicis()){ // check if spell was used
+            runningModePage.playSoundEffect(5);
+        }
     }
-        //STAFF_EXPANSION
-    public void useSpell2(){
-        game.useStaffExpansion();
-
+    //STAFF_EXPANSION
+    public void useMSExpansion(){
+        if (game.useStaffExpansion()){
+        runningModePage.playSoundEffect(3);
+        }
     }
     // Hex
-    public void useSpell3(){
-        game.useHex();
+    public void useHex(){
+        if(game.useHex()){
+            runningModePage.playSoundEffect(3);  // Change SFX
+        }
+    }
+    //Overwhelming Fireball
+    public void useOverwhelmingFB(){
+        if (game.useOverwhelmingFB()){
+            runningModePage.playSoundEffect(3); // Change SFX
+        }
     }
     public void volume(int i){
         runningModePage.volume((float) (0.1*i));
