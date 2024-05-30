@@ -3,6 +3,9 @@ package org.MultiplayerUtils;
 import java.io.*;
 import java.net.*;
 import java.util.Scanner;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
 public class MultiPortClient {
     private Socket outputSocket;
@@ -31,6 +34,14 @@ public class MultiPortClient {
             System.out.println("Connected to server at " + gameHostIpAdress + ":" + outputPort + " for sending messages at port " + outputSocket.getLocalPort() + ".");
             output = new PrintWriter(outputSocket.getOutputStream(), true);
 
+            Runnable sendStatisticsRunnable = new Runnable() {
+                public void run() {
+                    output.println("sending statistics");
+                }
+            };
+
+            ScheduledExecutorService executor = Executors.newScheduledThreadPool(1);
+            executor.scheduleAtFixedRate(sendStatisticsRunnable, 0, 1, TimeUnit.SECONDS);
 
             Thread receiveThread = new Thread(this::receiveFromServer);
             receiveThread.start();

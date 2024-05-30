@@ -7,6 +7,9 @@ import org.bson.Document;
 import java.io.*;
 import java.net.*;
 import java.util.Scanner;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
 public class MultiPortServer {
     public static MultiPortServer instance;
@@ -63,6 +66,15 @@ public class MultiPortServer {
             inputSocket = serverSocketIn.accept();
             System.out.println("Client connected on port " + inputPort + " for incoming messages.");
             input = new BufferedReader(new InputStreamReader(inputSocket.getInputStream()));
+
+            Runnable sendStatisticsRunnable = new Runnable() {
+                public void run() {
+                    output.println("sending statistics");
+                }
+            };
+
+            ScheduledExecutorService executor = Executors.newScheduledThreadPool(1);
+            executor.scheduleAtFixedRate(sendStatisticsRunnable, 0, 1, TimeUnit.SECONDS);
 
             Thread sendThread = new Thread(this::handleSending);
             sendThread.start();
