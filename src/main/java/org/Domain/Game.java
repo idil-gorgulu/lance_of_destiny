@@ -95,7 +95,7 @@ public class Game {
         }
         else if (type == BarrierType.HOLLOW_PURPLE) {
             numPurpleBarrier++;
-            s="p";
+            s ="p";
         }
         numTotal++;
         int boardX = coordinates.getX() / 50; // Adjust the indexing here

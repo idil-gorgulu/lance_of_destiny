@@ -134,12 +134,19 @@ public class Ymir extends JPanel {
         }
 
         public void activateHollowPurple() {
+            int numPurpleBarrier = 0;
             System.out.println("Activating Hollow Purple");
             Random random = new Random();
-            for (int i = 0; i < 8; i++) { // Add 8 new hollow purple barriers
+            while(numPurpleBarrier < 8) {
                 int x = random.nextInt(RunningModePage.SCREENWIDTH - 50);
-                int y = random.nextInt(500 - 15);
-                game.addBarrier(new Coordinate(x, y), BarrierType.HOLLOW_PURPLE);
+                int y = random.nextInt(400 - 15);
+                int boardX = x / 50;
+                int boardY = y / 20;
+                if (game.getBarrierBoard()[boardY][boardX]==null){
+                    Coordinate c = new Coordinate(x, y);
+                    game.addBarrier(new Coordinate(x, y), BarrierType.HOLLOW_PURPLE);
+                    numPurpleBarrier++;
+                }
             }
         }
 

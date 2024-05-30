@@ -223,7 +223,8 @@ public class Barrier extends JPanel {
     public void freeze(){
         isFrozen = true;
         try {
-            this.barrierImage = ImageIO.read(new File("assets/frozenicongem.png"));
+            //this.barrierImage = ImageIO.read(new File("assets/frozenicongem.png"));
+            this.barrierImage = resizeImage(ImageIO.read(new File("assets/frozenicongem.png")), 50, 15);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -236,6 +237,12 @@ public class Barrier extends JPanel {
 
     public void unfreeze() {
         isFrozen = false;
+        try {
+            this.barrierImage = ImageIO.read(new File(setImageDirectory(type)));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        repaint();
     }
 
     public boolean isFrozen() {

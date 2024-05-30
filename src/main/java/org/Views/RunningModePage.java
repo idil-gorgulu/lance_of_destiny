@@ -282,6 +282,7 @@ public class RunningModePage extends Page{
             }
         });
     }
+
     private void updateInventoryDisplay() {
         /*inventoryContainer.removeAll();
         for (HashMap.Entry<SpellType, Integer> entry : inventory.entrySet()) {
