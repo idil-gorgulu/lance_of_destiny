@@ -209,8 +209,7 @@ public class RunningModePage extends Page implements InventoryListener{
                 gbc.gridy = 0;
                 gbc.anchor = GridBagConstraints.WEST;
                 gbc.gridwidth = 2;
-                JLabel inventoryTitleLabel = new JLabel("Inventory", SwingConstants.CENTER);
-                inventoryContainer.add(inventoryTitleLabel, gbc);
+
                 inventoryContainer.setPreferredSize(new Dimension(190, 150));
                 initializeInventory(gbc);
                 mainPanel.add(inventoryContainer);
@@ -301,25 +300,57 @@ public class RunningModePage extends Page implements InventoryListener{
         ArrayList<JLabel> countLabels = new ArrayList<>(Arrays.asList(hexCount, felixFelicisCount, magicalStaffExpansionCount, overwhelmingFireballCount));
         ArrayList<BufferedImage> images = new ArrayList<>(Arrays.asList(hexImage, felixFelicisImage, magicalStaffExpansionImage, overwhelmingFireballImage));
 
-        int imageWidth = 25;  // Desired width of the images
-        int imageHeight = 25; // Desired height of the images
+        int imageWidth = 40;  // Resimlerin istenen genişliği
+        int imageHeight = 40; // Resimlerin istenen yüksekliği
+
+        // "Inventory" başlığını ayarlayın
+        gbc.gridx = 0;
+        gbc.gridy = 0;
+        gbc.gridwidth = 3; // Başlık genişliği üç sütunu kaplayacak şekilde ayarlanıyor
+        gbc.anchor = GridBagConstraints.CENTER;
+        gbc.insets = new Insets(10, 0, 10, 0);
+        JLabel inventoryTitleLabel = new JLabel("Inventory");
+        inventoryContainer.add(inventoryTitleLabel, gbc);
+
+        // Resim, etiket ve butonlar için düzenlemeler
+        Insets commonPadding = new Insets(5, 5, 5, 5);  // Ortak padding
 
         for (int i = 0; i < images.size(); i++) {
             Image scaledImage = images.get(i).getScaledInstance(imageWidth, imageHeight, Image.SCALE_SMOOTH);
             ImageIcon scaledIcon = new ImageIcon(scaledImage);
 
-            // Add the image to the inventory container
-            gbc.gridy = i + 1;
+            // Resimleri ayarlayın
             gbc.gridx = 0;
+            gbc.gridy = i + 1;
+            gbc.gridwidth = 1;
             gbc.anchor = GridBagConstraints.WEST;
+            gbc.insets = commonPadding;
             inventoryContainer.add(new JLabel(scaledIcon), gbc);
 
-            // Add the label to the right of the image
+            // Sayı etiketlerini ayarlayın
             gbc.gridx = 1;
+            gbc.insets = commonPadding;
             inventoryContainer.add(countLabels.get(i), gbc);
-            countLabels.get(i).setText(String.valueOf(this.runningModeController.getGameSession().getInventory().getSpellCountsList().get(i)));
+
+            // Butonları ayarlayın
+            gbc.gridx = 2;
+            gbc.insets = commonPadding;
+            JButton useButton = new JButton("Use");
+            useButton.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    // Burada ilgili öğenin kullanımını tetikleyecek kodları ekleyebilirsiniz
+                }
+            });
+            inventoryContainer.add(useButton, gbc);
         }
     }
+
+
+
+
+
+
 
     private void saveGame() {
         String gameName = JOptionPane.showInputDialog(this, "Enter a name for your save file:", "Save Game", JOptionPane.PLAIN_MESSAGE);
