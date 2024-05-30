@@ -199,6 +199,8 @@ public class RunningModePage extends Page implements InventoryListener{
                 infoContainer = new JPanel(new FlowLayout());
                 infoContainer.setPreferredSize(new Dimension(190, 200));
                 infoContainer.setBackground(new Color(color.getRed(), color.getGreen(), color.getBlue(), 50));
+
+                infoContainer.setOpaque(true);
                 timeLabel = new JLabel("Time: 0s", SwingConstants.CENTER);
                 infoContainer.add(timeLabel);
 
