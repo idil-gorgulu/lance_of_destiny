@@ -61,7 +61,6 @@ public class MagicalStaff extends JPanel {
         if (magicalStaffImage != null) {
             g2d.drawImage(magicalStaffImage, (int) magicalStaffRectangle.x, (int) magicalStaffRectangle.y, null);
         }
-        g2d.setColor(Color.RED);
         g2d.draw(magicalStaffRectangle);
         g2d.setTransform(old);
     }
