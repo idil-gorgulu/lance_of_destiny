@@ -143,7 +143,9 @@ public class Ymir extends JPanel {
             int y = random.nextInt(400 - 15);
             int boardX = x / 50;
             int boardY = y / 20;
-            if (game.getBarrierBoard()[boardY][boardX]==null){
+            x = boardX*50;
+            y = boardY*20;
+            if (game.getBarrierBoard()[boardY][boardX]==null){ //TODO:Update board
                 game.addBarrier(new Coordinate(x,y),BarrierType.HOLLOW_PURPLE);
                 numPurpleBarrier++;
             }

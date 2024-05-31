@@ -612,7 +612,7 @@ public class Game {
         ArrayList<Barrier> barriers = getBarriers();
         ArrayList<Barrier> toRemove = new ArrayList<>();
         ArrayList<Barrier> purplesToRemove = new ArrayList<>();
-
+        int hollowCount = 0;
         Fireball fireball = getFireball();
         double xVelocity = fireball.getxVelocity();
         double yVelocity = fireball.getyVelocity();
@@ -633,6 +633,7 @@ public class Game {
                 if (br==fireball.getLastCollided()) return;
 
                 fireball.setLastCollided(br);
+                if(br.getType()==BarrierType.HOLLOW_PURPLE) hollowCount++;
                 if (!fireball.isOverwhelming()){ // no collision if it is
                     Rectangle sideLRect = new Rectangle(br.getCoordinate().getX(), br.getCoordinate().getY() + 5, 1, 5);
                     Rectangle sideRRect = new Rectangle(br.getCoordinate().getX() + 50, br.getCoordinate().getY() + 5, 1, 5);
@@ -664,7 +665,7 @@ public class Game {
         barriers.removeAll(toRemove);
         purpleBarriers.removeAll(purplesToRemove);
         // Updating the score.
-        getScore().incrementScore(toRemove.size(), timeInSeconds);
+        getScore().incrementScore(toRemove.size()-hollowCount, timeInSeconds);
     }
     private boolean hitBarrier(Barrier barrier, int hitTimes) {
         if (barrier.isFrozen()) return false;

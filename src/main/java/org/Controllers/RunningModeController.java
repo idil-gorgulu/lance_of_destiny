@@ -85,10 +85,10 @@ public class RunningModeController {
         fireball.setBounds(fireball.getCoordinate().getX(), fireball.getCoordinate().getY(), fireball.getWidth(), fireball.getPreferredSize().height);
 
         for (Barrier barrier : barriers) {
-            runningModePage.getGamePanel().add(barrier);
             barrier.setBounds(barrier.getCoordinate().getX(), barrier.getCoordinate().getY(), 50, 10);
             barrier.setVisible(true);
             barrier.setOpaque(false);
+            runningModePage.getGamePanel().add(barrier);
         }
     }
 
