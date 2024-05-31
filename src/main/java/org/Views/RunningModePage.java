@@ -334,6 +334,7 @@ public class RunningModePage extends Page implements InventoryListener {
                 gamePanel.add(runningModeController.getGameSession().getMagicalStaff());
 
                 //Initializing Ymir
+                runningModeController.getGameSession().getYmir().setActive(true);
                 int ymirWidth = runningModeController.getGameSession().getYmir().getPreferredSize().width;
                 int ymirHeight = runningModeController.getGameSession().getYmir().getPreferredSize().height;
                 int ymirPositionX = runningModeController.getGameSession().getYmir().getCoordinate().getX();
