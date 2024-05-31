@@ -204,23 +204,35 @@ public class JoinMultiplayerGamePage extends Page implements ConnectedStateChang
     }
 
     private void startCountdown() {
-        countdownLabel = new JLabel("Ready?", SwingConstants.CENTER);
+        JFrame parentFrame = (JFrame) SwingUtilities.getWindowAncestor(this);
+        JDialog countdownDialog = new JDialog(parentFrame, "Game Starting Soon", true);
+        countdownDialog.setLayout(new BorderLayout());
+        countdownDialog.setSize(300, 200);
+        countdownDialog.setLocationRelativeTo(parentFrame);
+        countdownDialog.setDefaultCloseOperation(JDialog.DO_NOTHING_ON_CLOSE);
+
+        JLabel countdownLabel = new JLabel("3", SwingConstants.CENTER);
         countdownLabel.setFont(new Font("Tahoma", Font.BOLD, 48));
-        countdownLabel.setForeground(Color.WHITE);
-        centerPanel.add(countdownLabel, BorderLayout.CENTER);
+        countdownLabel.setForeground(Color.BLACK);
+        countdownDialog.add(countdownLabel, BorderLayout.CENTER);
+
+        countdownDialog.setVisible(true);
+
         countdownExecutor = Executors.newSingleThreadScheduledExecutor();
         countdownExecutor.scheduleAtFixedRate(() -> {
             if (countdownValue > 0) {
                 SwingUtilities.invokeLater(() -> countdownLabel.setText(String.valueOf(countdownValue--)));
             } else {
-                SwingUtilities.invokeLater(() -> countdownLabel.setText("Go!"));
-                countdownExecutor.shutdown();
-                if (inClient.opponentReadyClicked) {
-                    Navigator.getInstance().showRunningModePage();
-                }
+                SwingUtilities.invokeLater(() -> {
+                    countdownLabel.setText("Go!");
+                    countdownExecutor.shutdown();
+                    countdownDialog.dispose();
+                    if (inClient.opponentReadyClicked) {
+                        Navigator.getInstance().showRunningModePage();
+                    }
+                });
             }
         }, 0, 1, TimeUnit.SECONDS);
-        // And finally continue to the game
         inClient.gameStarted = true;
     }
 }
