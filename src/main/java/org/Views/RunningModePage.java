@@ -373,14 +373,16 @@ public class RunningModePage extends Page implements InventoryListener, MPInfoLi
                 gamePanel.add(runningModeController.getGameSession().getMagicalStaff());
 
                 //Initializing Ymir
-                runningModeController.getGameSession().getYmir().setActive(true);
-                int ymirWidth = runningModeController.getGameSession().getYmir().getPreferredSize().width;
-                int ymirHeight = runningModeController.getGameSession().getYmir().getPreferredSize().height;
-                int ymirPositionX = runningModeController.getGameSession().getYmir().getCoordinate().getX();
-                int ymirPositionY = runningModeController.getGameSession().getYmir().getCoordinate().getY();
-                runningModeController.getGameSession().getYmir().setBounds(ymirPositionX, ymirPositionY, ymirWidth, ymirHeight);
-                gamePanel.add(runningModeController.getGameSession().getYmir());
-                System.out.println("YMIR ADDED TO THE GAME");
+                if (mpgame==true) {
+                    runningModeController.getGameSession().getYmir().setActive(true);
+                    int ymirWidth = runningModeController.getGameSession().getYmir().getPreferredSize().width;
+                    int ymirHeight = runningModeController.getGameSession().getYmir().getPreferredSize().height;
+                    int ymirPositionX = runningModeController.getGameSession().getYmir().getCoordinate().getX();
+                    int ymirPositionY = runningModeController.getGameSession().getYmir().getCoordinate().getY();
+                    runningModeController.getGameSession().getYmir().setBounds(ymirPositionX, ymirPositionY, ymirWidth, ymirHeight);
+                    gamePanel.add(runningModeController.getGameSession().getYmir());
+                    System.out.println("YMIR ADDED TO THE GAME");
+                }
 
                 gamePanel.requestFocus();
                 gamePanel.setFocusTraversalKeysEnabled(false);
