@@ -1,5 +1,6 @@
 package org.Views;
 
+import org.MultiplayerUtils.CountdownStateChangeListener;
 import org.MultiplayerUtils.MultiPortServer;
 import org.MultiplayerUtils.ConnectedStateChangeListener;
 
@@ -11,7 +12,7 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 
-public class WaitMultiplayerGameAccept extends Page implements ConnectedStateChangeListener {
+public class WaitMultiplayerGameAccept extends Page implements ConnectedStateChangeListener, CountdownStateChangeListener {
     private BufferedImage backgroundImage;
     private JLabel waitingMessage;
     private JButton cancelButton;
@@ -19,11 +20,14 @@ public class WaitMultiplayerGameAccept extends Page implements ConnectedStateCha
     private JProgressBar progressBar;
     private JPanel centerPanel;
     private MultiPortServer server;
+    private int countdownValue = 3; // starting from 3 seconds
+
 
     public WaitMultiplayerGameAccept() {
         super();
         server = MultiPortServer.getInstance();
         server.addStateChangeListener(this);
+        server.addCountdownStateChangeListener(this);
         Thread comm = new Thread(server::start);
         comm.start();
         initUI();
@@ -50,6 +54,30 @@ public class WaitMultiplayerGameAccept extends Page implements ConnectedStateCha
     @Override
     public void onConnectedStateChange() {
         SwingUtilities.invokeLater(this::updateUIView);
+    }
+
+    @Override
+    public void onCountdownStateChange() {
+        SwingUtilities.invokeLater(this::startCountdown);
+    }
+
+    private void startCountdown() {
+        while (countdownValue >= 0) {
+            System.out.println(countdownValue); // Print the current countdown value
+            countdownValue--; // Decrement the countdown value
+
+            try {
+                Thread.sleep(1000); // Wait for 1 second before continuing
+            } catch (InterruptedException e) {
+                System.err.println("Countdown was interrupted!");
+                break;
+            }
+        }
+
+        System.out.println("Go!"); // Print "Go!" when the countdown finishes
+        server.gameStarted = true;
+        // Set the game in here
+        Navigator.getInstance().showRunningModePage();
     }
 
     private void updateUIView() {

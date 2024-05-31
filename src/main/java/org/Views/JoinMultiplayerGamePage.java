@@ -204,35 +204,21 @@ public class JoinMultiplayerGamePage extends Page implements ConnectedStateChang
     }
 
     private void startCountdown() {
-        JFrame parentFrame = (JFrame) SwingUtilities.getWindowAncestor(this);
-        JDialog countdownDialog = new JDialog(parentFrame, "Game Starting Soon", true);
-        countdownDialog.setLayout(new BorderLayout());
-        countdownDialog.setSize(300, 200);
-        countdownDialog.setLocationRelativeTo(parentFrame);
-        countdownDialog.setDefaultCloseOperation(JDialog.DO_NOTHING_ON_CLOSE);
+        while (countdownValue >= 0) {
+            System.out.println(countdownValue); // Print the current countdown value
+            countdownValue--; // Decrement the countdown value
 
-        JLabel countdownLabel = new JLabel("3", SwingConstants.CENTER);
-        countdownLabel.setFont(new Font("Tahoma", Font.BOLD, 48));
-        countdownLabel.setForeground(Color.BLACK);
-        countdownDialog.add(countdownLabel, BorderLayout.CENTER);
-
-        countdownDialog.setVisible(true);
-
-        countdownExecutor = Executors.newSingleThreadScheduledExecutor();
-        countdownExecutor.scheduleAtFixedRate(() -> {
-            if (countdownValue > 0) {
-                SwingUtilities.invokeLater(() -> countdownLabel.setText(String.valueOf(countdownValue--)));
-            } else {
-                SwingUtilities.invokeLater(() -> {
-                    countdownLabel.setText("Go!");
-                    countdownExecutor.shutdown();
-                    countdownDialog.dispose();
-                    if (inClient.opponentReadyClicked) {
-                        Navigator.getInstance().showRunningModePage();
-                    }
-                });
+            try {
+                Thread.sleep(1000); // Wait for 1 second before continuing
+            } catch (InterruptedException e) {
+                System.err.println("Countdown was interrupted!");
+                break;
             }
-        }, 0, 1, TimeUnit.SECONDS);
+        }
+
+        System.out.println("Go!"); // Print "Go!" when the countdown finishes
         inClient.gameStarted = true;
+        // Set the game in here
+        Navigator.getInstance().showRunningModePage();
     }
 }
