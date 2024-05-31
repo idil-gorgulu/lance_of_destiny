@@ -205,6 +205,8 @@ public class RunningModePage extends Page implements InventoryListener {
                 infoContainer = new JPanel(new FlowLayout());
                 infoContainer.setPreferredSize(new Dimension(190, 200));
                 infoContainer.setBackground(new Color(color.getRed(), color.getGreen(), color.getBlue(), 50));
+
+                infoContainer.setOpaque(true);
                 timeLabel = new JLabel("Time: 0s", SwingConstants.CENTER);
                 infoContainer.add(timeLabel);
                 JButton pauseButton = new JButton("Pause");
@@ -297,6 +299,7 @@ public class RunningModePage extends Page implements InventoryListener {
                     @Override
                     public void mouseClicked(MouseEvent e) {
                         System.out.println("Mouse click coordinates:"+ e.getX()+" "+ e.getY());
+                        runningModeController.getGameSession().triggerBall();
                     }
                 });
 
@@ -312,12 +315,12 @@ public class RunningModePage extends Page implements InventoryListener {
 
                 // Initializing Fireball
                 int fireballWidth = runningModeController.getGameSession().getFireball().getPreferredSize().width;
-                int fireballPositionX = (SCREENWIDTH - fireballWidth) / 2;
+                //int fireballPositionX = (SCREENWIDTH - fireballWidth) / 2;
                 int fireballHeight = runningModeController.getGameSession().getFireball().getPreferredSize().height;
-                int fireballPositionY = (screenHeight - fireballHeight - 200);
-                runningModeController.getGameSession().getFireball().getCoordinate().setX(fireballPositionX);
-                runningModeController.getGameSession().getFireball().getCoordinate().setY(fireballPositionY);
-                runningModeController.getGameSession().getFireball().setBounds(fireballPositionX, fireballPositionY, fireballWidth, fireballHeight);
+                //int fireballPositionY = (screenHeight - fireballHeight - 200);
+                //runningModeController.getGameSession().getFireball().getCoordinate().setX(fireballPositionX);
+                //runningModeController.getGameSession().getFireball().getCoordinate().setY(fireballPositionY);
+                runningModeController.getGameSession().getFireball().setBounds(runningModeController.getGameSession().getFireball().getX(), runningModeController.getGameSession().getFireball().getY(), fireballWidth, fireballHeight);
                 gamePanel.add(runningModeController.getGameSession().getFireball());
 
                 // Initializing MagicalStaff
@@ -400,26 +403,26 @@ public class RunningModePage extends Page implements InventoryListener {
         ArrayList<BufferedImage> images = new ArrayList<>(Arrays.asList(hexImage, felixFelicisImage, magicalStaffExpansionImage, overwhelmingFireballImage));
         ArrayList<JLabel> activationKeys = new ArrayList<>(Arrays.asList(new JLabel("T"),new JLabel("Q"),new JLabel("W"),new JLabel("E")));
         ArrayList<JButton> activationButtons = new ArrayList<>(Arrays.asList(hexButton, felixFelicisButton, magicalStaffExpansionButton, overwhelmingFireballButton));
+
         int imageWidth = 40;  // Resimlerin istenen genişliği
         int imageHeight = 40; // Resimlerin istenen yüksekliği
 
-        // "Inventory" başlığını ayarlayın
         gbc.gridx = 0;
         gbc.gridy = 0;
+
         gbc.gridwidth = 4; // Başlık genişliği üç sütunu kaplayacak şekilde ayarlanıyor
+
         gbc.anchor = GridBagConstraints.CENTER;
         gbc.insets = new Insets(10, 0, 10, 0);
         JLabel inventoryTitleLabel = new JLabel("Inventory");
         inventoryContainer.add(inventoryTitleLabel, gbc);
 
-        // Resim, etiket ve butonlar için düzenlemeler
         Insets commonPadding = new Insets(5, 5, 5, 5);  // Ortak padding
 
         for (int i = 0; i < images.size(); i++) {
             Image scaledImage = images.get(i).getScaledInstance(imageWidth, imageHeight, Image.SCALE_SMOOTH);
             ImageIcon scaledIcon = new ImageIcon(scaledImage);
 
-            // Resimleri ayarlayın
             gbc.gridx = 0;
             gbc.gridy = i + 1;
             gbc.gridwidth = 1;
