@@ -61,6 +61,8 @@ public class Navigator {
     public void showMultiplayerBuildingModePage() { showPage(new BuildingModePage(true)); }
 
     public void showRunningModePage() { showPage(new RunningModePage()); }
+    public void showMultiplayerRunningModePage() { showPage(new RunningModePage(true)); }
+
     public void showGameSelectionPage() {showPage(new GameSelectionPage()); }
     public void showGameModePage() {showPage(new GameModePage()); }
     public void showJoinMultiplayerGamePage() {showPage(new JoinMultiplayerGamePage()); }

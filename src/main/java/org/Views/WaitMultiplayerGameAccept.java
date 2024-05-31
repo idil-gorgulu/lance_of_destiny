@@ -86,7 +86,7 @@ public class WaitMultiplayerGameAccept extends Page implements ConnectedStateCha
         multiplayerGame = Game.getInstance();
         MultiPortServer.getInstance().setMultiplayerGame(multiplayerGame);
         server.gameStarted = true;
-        Navigator.getInstance().showRunningModePage();
+        Navigator.getInstance().showMultiplayerRunningModePage();
     }
 
     private void updateUIView() {
