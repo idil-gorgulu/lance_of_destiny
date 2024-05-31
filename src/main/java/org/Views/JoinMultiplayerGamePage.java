@@ -225,9 +225,8 @@ public class JoinMultiplayerGamePage extends Page implements ConnectedStateChang
         // Set the game in here
         DataBaseController.getInstance().openMultiplayerGame(this.gameName);
         multiplayerGame = Game.getInstance();
-        multiplayerGame.isMultiplayer = true;
-        inClient.setMultiplayerGame(Game.getInstance());
-        Game.getInstance().comm = inClient;
+        inClient.setMultiplayerGame(multiplayerGame);
+        multiplayerGame.comm = inClient;
         inClient.gameStarted = true;
         Navigator.getInstance().showMultiplayerRunningModePage();
     }

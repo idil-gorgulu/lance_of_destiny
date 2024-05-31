@@ -412,6 +412,7 @@ public class Game {
         this.barrierBoard = new String[20][20];
         this.inventory = new Inventory();
         this.lastCollisionTime = 0;
+        this.isMultiplayer = false;
     }
 
     public static Game createNewGame() {

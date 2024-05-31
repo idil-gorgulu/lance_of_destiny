@@ -101,6 +101,7 @@ public class DataBaseController {
         Document game = getGame(gameName);
         Game gameInstance = Game.getInstance();
         gameInstance.reset();
+        gameInstance.isMultiplayer = true;
         String templateName = game.getString("gameName");
         int barrierAmount=game.getInteger("barrierAmount");
         for(int j=0; j<barrierAmount; j++) {
