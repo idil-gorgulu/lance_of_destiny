@@ -205,7 +205,7 @@ public class MultiPortServer implements CommInterface {
     }
 
     private static void parseSpell(String input) {
-        Pattern pattern = Pattern.compile("spellType: (\\d+)");
+        Pattern pattern = Pattern.compile("spellType: (\\s+)");
         Matcher matcher = pattern.matcher(input);
 
         if (matcher.find()) {
