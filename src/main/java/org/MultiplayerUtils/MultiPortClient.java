@@ -124,10 +124,13 @@ public class MultiPortClient extends KeyAdapter {
             ScheduledExecutorService executor = Executors.newScheduledThreadPool(1);
             executor.scheduleAtFixedRate(sendStatisticsRunnable, 0, 1, TimeUnit.SECONDS);
 
-            Thread receiveThread = new Thread(new HandleSending(output));
-            receiveThread.start();
+            Thread sendThread = new Thread(new HandleSending(output));
+            sendThread.start();
 
-            sendToServer();
+            while ((inputLine = input.readLine()) != null) {
+                System.out.println("Incoming Message: " + inputLine);
+                processInput(inputLine);
+            }
         } catch (IOException e) {
             e.printStackTrace();
         } finally {
