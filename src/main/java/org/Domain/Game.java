@@ -1,6 +1,7 @@
 package org.Domain;
 import org.Controllers.RunningModeController;
 import org.Listeners.MPInfoListener;
+import org.MultiplayerUtils.CommInterface;
 
 import javax.swing.*;
 import java.awt.*;
@@ -39,6 +40,7 @@ public class Game {
     private ArrayList<Bullet> activeBullets;
     private Inventory inventory;
     private String date;
+    public CommInterface comm;
 
     public ArrayList<Integer> getMpGameInformation() {
         return mpGameInformation;
