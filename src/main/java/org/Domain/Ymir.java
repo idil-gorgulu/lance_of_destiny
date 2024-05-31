@@ -71,7 +71,6 @@ public class Ymir extends JPanel {
         do {
             ability = ABILITIES[random.nextInt(ABILITIES.length)];
         } while (isRepeatAbility(ability));
-        ability=ABILITIES[2];
 
         executeAbility(ability);
         manageAbilityHistory(ability);

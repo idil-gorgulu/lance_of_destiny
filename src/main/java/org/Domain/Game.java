@@ -143,24 +143,6 @@ public class Game {
         printBoard();
     }
 
-    public void addPurpleBarrier(Coordinate coordinates) {
-        Barrier newBarrier = new Barrier(coordinates, BarrierType.HOLLOW_PURPLE);
-        if (Math.random()<0.2)    {
-            newBarrier.setMoving(true);
-            if (Math.random()<0.5)  newBarrier.setVelocity(3);
-            else                    newBarrier.setVelocity(-3);
-        }
-
-        barriers.add(newBarrier);
-        purpleBarriers.add(newBarrier);
-        numPurpleBarrier++;
-        numTotal++;
-        int boardX = coordinates.getX() / 50; // Adjust the indexing here
-        int boardY = coordinates.getY() / 20; // Adjust the indexing here
-        barrierBoard[boardY][boardX] = "p"; // Adjusted the indexing here
-        printBoard();
-    }
-
     /* Attempts to remove a barrier of a specified type at the given coordinates.
      REQUIRES:
         - the input coordinate axes should not be null and must be of a valid position within
