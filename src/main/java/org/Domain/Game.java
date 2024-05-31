@@ -674,7 +674,7 @@ public class Game {
                 getMagicalStaff().setCannonTime(System.currentTimeMillis());
                 inventory.updateInventory(spellType, -1);
             }
-            if(spellType == SpellType.OVERWHELMING_FIREBALL && getFireball().isOverwhelming()){
+            if(spellType == SpellType.OVERWHELMING_FIREBALL ){
                 getFireball().setOverwhelming(true);
                 getFireball().setOverwhelmTime(System.currentTimeMillis());
                 inventory.updateInventory(spellType, -1);

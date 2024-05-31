@@ -40,6 +40,7 @@ public class MyKeyListener extends KeyAdapter {
                 runningModeController.getGameSession().useSpell(SpellType.STAFF_EXPANSION);
                 break;
             case KeyEvent.VK_E:
+                System.out.println("overwhelmingggg");
                 runningModeController.getGameSession().useSpell(SpellType.OVERWHELMING_FIREBALL);
                 break;
 
