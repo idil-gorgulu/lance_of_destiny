@@ -99,19 +99,19 @@ public class MultiPortClient{
             // In here says 3 2 1 and then open the game
             startCountdown = true;
             notifyAllCountdownStateChangeListeners();
-
+            System.out.println("here");
             // Assure that the game is loaded
             while (!gameStarted) {
                 Thread.onSpinWait();
                 // It will wait until it is
             }
+            System.out.println("asdf");
             Runnable sendStatisticsRunnable = new Runnable() {
                 public void run() {
-                        output.println("Sending info");
-//                    int score = multiplayerGame.getScore().getTotalScore();
-//                    int barrierCount = multiplayerGame.getBarriers().size();
-//                    int chance = multiplayerGame.getChance().getRemainingChance();
-//                    output.println(String.format("{score: %d, barrierCount: %d, chance: %d}", score, barrierCount, chance));
+                    int score = multiplayerGame.getScore().getTotalScore();
+                    int barrierCount = multiplayerGame.getBarriers().size();
+                    int chance = multiplayerGame.getChance().getRemainingChance();
+                    output.println(String.format("{score: %d, barrierCount: %d, chance: %d}", score, barrierCount, chance));
                 }
             };
 
