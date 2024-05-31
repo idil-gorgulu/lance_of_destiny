@@ -1,8 +1,9 @@
 package org.MultiplayerUtils;
 
 import org.Domain.Game;
-import org.Listeners.MPInfoListener;
 
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 import java.io.*;
 import java.net.*;
 import java.util.ArrayList;
@@ -14,7 +15,7 @@ import java.util.concurrent.TimeUnit;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class MultiPortClient{
+public class MultiPortClient extends KeyAdapter {
     private List<ConnectedStateChangeListener> connectedStateChangeListeners = new ArrayList<>();
     private List<CountdownStateChangeListener> countdownStateChangeListeners = new ArrayList<>();
     private Socket outputSocket;
@@ -123,7 +124,7 @@ public class MultiPortClient{
             ScheduledExecutorService executor = Executors.newScheduledThreadPool(1);
             executor.scheduleAtFixedRate(sendStatisticsRunnable, 0, 1, TimeUnit.SECONDS);
 
-            Thread receiveThread = new Thread(this::receiveFromServer);
+            Thread receiveThread = new Thread(new HandleSending(output));
             receiveThread.start();
 
             sendToServer();
@@ -189,6 +190,11 @@ public class MultiPortClient{
             int spellType = Integer.parseInt(matcher.group(1));
             System.out.println("Spell Information:");
             System.out.println("SpellType: " + spellType);
+//            if () {
+//                multiplayerGame.getYmir().
+//            } else {
+//
+//            }
         } else {
             System.out.println("No spell information found!");
         }
@@ -228,6 +234,22 @@ public class MultiPortClient{
             System.out.println("Closed all resources.");
         } catch (IOException e) {
             System.out.println("Error when closing client resources: " + e.getMessage());
+        }
+    }
+
+    @Override
+    public void keyPressed(KeyEvent e) {
+        int keyCode = e.getKeyCode();
+        switch (keyCode) {
+            case KeyEvent.VK_Z:
+                multiplayerGame.getYmir().activateHollowPurple();
+                break;
+            case KeyEvent.VK_X:
+                multiplayerGame.getYmir().activateInfiniteVoid();
+                break;
+            case KeyEvent.VK_C:
+                multiplayerGame.getYmir().activateDoubleAccel();
+                break;
         }
     }
 

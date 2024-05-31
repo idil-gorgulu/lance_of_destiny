@@ -43,10 +43,20 @@ public class MyKeyListener extends KeyAdapter {
                 System.out.println("overwhelmingggg");
                 runningModeController.getGameSession().useSpell(SpellType.OVERWHELMING_FIREBALL);
                 break;
-
             case KeyEvent.VK_W:
                 runningModeController.getGameSession().triggerBall();
                 break;
+//            case KeyEvent.VK_Z:
+//                runningModeController.getGameSession().useSpell(SpellType.STAFF_EXPANSION);
+//                break;
+//            case KeyEvent.VK_X:
+//                System.out.println("overwhelmingggg");
+//                runningModeController.getGameSession().useSpell(SpellType.OVERWHELMING_FIREBALL);
+//                break;
+//            case KeyEvent.VK_C:
+//                runningModeController.getGameSession().triggerBall();
+//                break;
+
         }
     }
     @Override
