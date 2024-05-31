@@ -156,7 +156,7 @@ public class MultiPortServer implements CommInterface {
             ScheduledExecutorService executor = Executors.newScheduledThreadPool(1);
             executor.scheduleAtFixedRate(sendStatisticsRunnable, 0, 1, TimeUnit.SECONDS);
 
-            Thread sendThread = new Thread(new HandleSending(output));
+            Thread sendThread = new Thread(this::handleSending);
             sendThread.start();
 
             while ((inputLine = input.readLine()) != null) {

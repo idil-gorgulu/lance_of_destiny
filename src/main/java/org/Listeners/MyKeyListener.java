@@ -61,7 +61,6 @@ public class MyKeyListener extends KeyAdapter {
                 //multiplayerGame.getYmir().activateDoubleAccel();
 //                spellMessage("da");
                 runningModeController.comm.sendSpell("da");
-
                 break;
         }
 
