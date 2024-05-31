@@ -148,4 +148,5 @@ public class Fireball extends JPanel {
     public void setOnStaff(boolean onStaff) {
         isOnStaff = onStaff;
     }
+
 }

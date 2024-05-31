@@ -19,6 +19,7 @@ public class Ymir extends JPanel {
     private Timer timer;
     private Coordinate coordinate;
     private BufferedImage ymirImage;
+    private BufferedImage coin;
     private Queue<String> lastAbilities = new LinkedList<>();
     private boolean isActive = false;
 
@@ -122,6 +123,15 @@ public class Ymir extends JPanel {
         Fireball fireball = game.getFireball();
         fireball.setxVelocity(fireball.getxVelocity() / 2);
         fireball.setyVelocity(fireball.getyVelocity() / 2);
+
+        new Timer().schedule(new TimerTask() {
+            @Override
+            public void run() {
+                System.out.println("Restoring original velocities");
+                fireball.setxVelocity(fireball.getxVelocity() * 2);
+                fireball.setyVelocity(fireball.getyVelocity() * 2);
+            }
+        }, 15000);
     }
 
     public void activateHollowPurple() {
