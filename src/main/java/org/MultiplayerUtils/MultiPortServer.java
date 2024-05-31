@@ -213,6 +213,7 @@ public class MultiPortServer implements CommInterface {
             System.out.println("Spell Information:");
             System.out.println("SpellType: " + spellType);
             // TODO: Implement the listener for action the game
+
         } else {
             System.out.println("No spell information found!");
         }

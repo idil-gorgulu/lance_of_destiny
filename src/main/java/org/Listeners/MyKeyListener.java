@@ -49,18 +49,18 @@ public class MyKeyListener extends KeyAdapter {
             case KeyEvent.VK_Z:
                 //multiplayerGame.getYmir().activateHollowPurple();
 //                spellMessage("hp");
-                runningModeController.comm.sendSpell("hp");
+                runningModeController.comm.sendSpell("Spell: {spellType: hp}");
                 break;
             case KeyEvent.VK_X:
                 //multiplayerGame.getYmir().activateInfiniteVoid();
 //                spellMessage("iv");
-                runningModeController.comm.sendSpell("iv");
+                runningModeController.comm.sendSpell("Spell: {spellType: iv}");
 
                 break;
             case KeyEvent.VK_C:
                 //multiplayerGame.getYmir().activateDoubleAccel();
 //                spellMessage("da");
-                runningModeController.comm.sendSpell("da");
+                runningModeController.comm.sendSpell("Spell: {spellType: da}");
                 break;
         }
 
