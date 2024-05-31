@@ -15,10 +15,6 @@ public class Score extends JPanel {
         setVisible(true);
     }
 
-    public int getScore() {
-        return totalScore;
-    }
-
     public int getTotalScore() {
         return totalScore;
     }

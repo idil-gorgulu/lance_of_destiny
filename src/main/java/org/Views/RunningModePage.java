@@ -190,6 +190,7 @@ public class RunningModePage extends Page implements InventoryListener, MPInfoLi
 
                 // Handle end of game session
                 if (runningModeController.getGameSession().ended) {
+                    stopMusic();
                     if (runningModeController.getGameSession().getBarriers().isEmpty())
                         JOptionPane.showMessageDialog(null, "You won!");
                     else
@@ -245,7 +246,7 @@ public class RunningModePage extends Page implements InventoryListener, MPInfoLi
     protected void initUI() {
         setLayout(new BorderLayout());
         initializeGameObjects();
-        //playMusic(0); TODO
+        playMusic(0);
     }
 
     private void initializeGameObjects() {
