@@ -209,7 +209,7 @@ public class MultiPortServer implements CommInterface {
         Matcher matcher = pattern.matcher(input);
 
         if (matcher.find()) {
-            int spellType = Integer.parseInt(matcher.group(1));
+            String spellType = matcher.group(1);
             System.out.println("Spell Information:");
             System.out.println("SpellType: " + spellType);
             // TODO: Implement the listener for action the game
