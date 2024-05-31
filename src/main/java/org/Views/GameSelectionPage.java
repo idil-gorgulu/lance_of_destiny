@@ -1,6 +1,7 @@
 package org.Views;
 
 import org.Controllers.DataBaseController;
+import org.Domain.Game;
 import org.Domain.User;
 import org.bson.Document;
 
@@ -118,8 +119,8 @@ public class GameSelectionPage extends Page {
                     @Override
                     public void actionPerformed(ActionEvent e) {
                         dataBaseController.openFromDatabase(game);
-                        // Final statement will be this
                         Navigator.getInstance().showRunningModePage();
+
                     }
                 });
                 gamePanel.add(gameButton);

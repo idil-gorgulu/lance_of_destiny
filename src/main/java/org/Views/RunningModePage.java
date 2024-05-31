@@ -3,6 +3,7 @@ import org.Domain.*;
 import org.Controllers.*;
 import org.Listeners.MyKeyListener;
 import org.Listeners.InventoryListener;
+
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import javax.swing.border.Border;
@@ -14,22 +15,15 @@ import java.io.IOException;
 import java.util.*;
 import java.util.Timer;
 
-public class RunningModePage extends Page implements InventoryListener{
+public class RunningModePage extends Page implements InventoryListener {
     private JLabel hexCount = new JLabel("0");
     private JLabel overwhelmingFireballCount = new JLabel("0");
     private JLabel magicalStaffExpansionCount = new JLabel("0");
     private JLabel felixFelicisCount = new JLabel("0");
-    JButton hexButton = new JButton("Use");
-
-
-    JButton overwhelmingFireballButton = new JButton("Use");
-
-
-    JButton magicalStaffExpansionButton = new JButton("Use");
-
-
-    JButton felixFelicisButton = new JButton("Use");
-
+    private JButton hexButton = new JButton("Use");
+    private JButton overwhelmingFireballButton = new JButton("Use");
+    private JButton magicalStaffExpansionButton = new JButton("Use");
+    private JButton felixFelicisButton = new JButton("Use");
     private BufferedImage hexImage;
     private BufferedImage felixFelicisImage;
     private BufferedImage magicalStaffExpansionImage;
@@ -51,7 +45,7 @@ public class RunningModePage extends Page implements InventoryListener{
     private int frameCount = 0;
     private Timer gameTimer =  new Timer();
     private Sound sound = new Sound();
-    public static final long COLLISION_COOLDOWN = 1000; // Cooldown period in milliseconds
+    public static final long COLLISION_COOLDOWN = 1000;
     private JLabel timeLabel;
     public RunningModePage() {
         super();
@@ -75,6 +69,7 @@ public class RunningModePage extends Page implements InventoryListener{
         requestFocus();
         setupTimer();
         this.runningModeController.getGameSession().getInventory().addInventoryListener(this);
+        this.runningModeController.getGameSession().getInventory().reloadInventory();
     }
 
     protected void paintComponent(Graphics g) { //background for the whole frame
@@ -212,7 +207,6 @@ public class RunningModePage extends Page implements InventoryListener{
                 infoContainer.setBackground(new Color(color.getRed(), color.getGreen(), color.getBlue(), 50));
                 timeLabel = new JLabel("Time: 0s", SwingConstants.CENTER);
                 infoContainer.add(timeLabel);
-
                 JButton pauseButton = new JButton("Pause");
                 pauseButton.addActionListener(e -> {
                     // Toggle pause state
@@ -251,8 +245,6 @@ public class RunningModePage extends Page implements InventoryListener{
                         }
                     }
                 });
-
-
 
                 infoContainer.add(pauseButton);
                 JButton helpScreenButton = new JButton("Help Screen");
@@ -488,4 +480,5 @@ public class RunningModePage extends Page implements InventoryListener{
         inventoryContainer.repaint();
         inventoryContainer.revalidate();
     }
+
 }

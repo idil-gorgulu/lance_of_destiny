@@ -15,7 +15,7 @@ public class DataBaseController {
     private static Game gameSession;
     private static DataBaseController instance;
     public DataBaseController(){
-        this.gameSession = Game.getInstance();
+        gameSession = Game.getInstance();
     }
     public void openFromDatabase(Document game){
         Game gameInstance = Game.getInstance();
@@ -54,9 +54,7 @@ public class DataBaseController {
         gameInstance.getYmir().manageAbilityHistory(ymirAbilities[0]);
         gameInstance.getYmir().manageAbilityHistory(ymirAbilities[1]);
         System.out.println(ymirAbilities[0] +"---"+ ymirAbilities[1]);
-
         gameInstance.getScore().setTotalScore(game.getInteger("score"));
-
     }
     public void saveGameToDatabase(String gameName, Game game, boolean played) {
         // Get the current date and time with time zone
