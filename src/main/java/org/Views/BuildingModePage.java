@@ -186,6 +186,7 @@ public class BuildingModePage extends Page {
             add(leftSide, BorderLayout.WEST);
         } else {
             saveButton = new JButton("Multiplayer");
+            playButton.setVisible(false);
             saveButton.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {

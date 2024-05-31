@@ -41,8 +41,6 @@ public class RunningModeController {
     public void updateMagicalStaffView(){
         MagicalStaff magicalStaff=game.getMagicalStaff();
         magicalStaff.updateMagicalStaffView();
-
-        // TODO move to cannon
         if (magicalStaff.isShooting() && System.currentTimeMillis()-magicalStaff.getShotTime()>0.6*1000){
             fireBullet();
             magicalStaff.setShotTime(System.currentTimeMillis());
@@ -97,6 +95,7 @@ public class RunningModeController {
         Bullet bullet2 = game.createHexBullet()[1];
         runningModePage.getGamePanel().add(bullet);
         runningModePage.getGamePanel().add(bullet2);
+        runningModePage.playSoundEffect(4);
     }
     public void updateDebris() {
         Iterator<Debris> iterator = game.getActiveDebris().iterator();

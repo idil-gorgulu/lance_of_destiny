@@ -24,7 +24,7 @@ public class MyKeyListener extends KeyAdapter {
                 break;
             case KeyEvent.VK_A:
                 runningModeController.rotateMagicalStaff(-3); // Rotate counterclockwise (degrees)
-                runningModeController.getGameSession().getMagicalStaff().setReleased(false); //TODO dont talk to strangers
+                runningModeController.getGameSession().getMagicalStaff().setReleased(false);
                 break;
             case KeyEvent.VK_D:
                 runningModeController.rotateMagicalStaff(+3); // Rotate clockwise (degrees)
@@ -76,7 +76,7 @@ public class MyKeyListener extends KeyAdapter {
                 break;
             case KeyEvent.VK_A:
                 runningModeController.rotateMagicalStaff(3); // Rotate counterclockwise
-                runningModeController.getGameSession().getMagicalStaff().setReleased(true);//TODO dont talk to strangers
+                runningModeController.getGameSession().getMagicalStaff().setReleased(true);
                 break;
             case KeyEvent.VK_D:
                 runningModeController.rotateMagicalStaff(-3); // Rotate clockwise

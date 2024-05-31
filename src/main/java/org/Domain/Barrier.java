@@ -23,7 +23,6 @@ public class Barrier extends JPanel {
     private double centerX; // X center of the circle
     private double centerY;
     private boolean isFrozen = false;
-    private static final int RADIUS_FACTOR = 3; // 1.5 * L //TODO delete
     public static final double ANGULAR_SPEED = Math.PI / 10;
 
     public Barrier(Coordinate coordinate, BarrierType type) {

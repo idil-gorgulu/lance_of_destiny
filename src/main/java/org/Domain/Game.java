@@ -22,6 +22,7 @@ public class Game {
     private Chance chance;
     private Score score;
     private static Game instance;
+    private Sound sound=new Sound();
     int numSimpleBarrier=0;
     int numFirmBarrier=0;
     int numExplosiveBarrier=0;
@@ -469,14 +470,14 @@ public class Game {
 
         // Check collision with left and right boundaries
         if ((fireballX - fireballRadius <= 0) || (fireballX + fireballRadius > containerWidth - 10)) {
-            //runningModePage.playSoundEffect(1); TODO fix
+            playSoundEffect(1);
             fireball.setLastCollided(null);
             fireball.setxVelocity(-xVelocity);// Reverse X velocity
             fireball.setCoordinate(new Coordinate((int) (fireballX-xVelocity),fireballY));
         }
         // Check collision with top and bottom boundaries
         if (fireballY - fireballRadius <= -10)  {
-            //runningModePage.playSoundEffect(1); TODO fix
+            playSoundEffect(1);
             fireball.setyVelocity(-yVelocity);// TOP
             fireball.setLastCollided(null);
             fireball.setCoordinate(new Coordinate(fireballX,(int)(fireballY-yVelocity)));
@@ -486,7 +487,7 @@ public class Game {
             // BOTTOM
             fireball.setLastCollided(null);
             getChance().decrementChance();
-            //playSoundEffect(2); TODO fix
+            playSoundEffect(2);
             if (getChance().getRemainingChance() == 0) {
                 this.started = false;
                 System.out.println("Not active");
@@ -513,10 +514,7 @@ public class Game {
             fireball.setOpaque(true);
         }
     }
-    //Put for Testing
-    public void setLastCollisionTime(long time){
-        this.lastCollisionTime=time;
-    }
+
 
     /**
      * Checks if the fireball and magical staff collide, and if they do, updates the fireball's velocity accordingly.
@@ -573,7 +571,7 @@ public class Game {
 
         if (transformedRectangle.intersects(fireballRectangle)) {
             fireball.setLastCollided(null);
-            //runningModePage.playSoundEffect(1); TODO fix
+            playSoundEffect(1);
             lastCollisionTime = currentTime;
 
             double energy=xVelocity*xVelocity+yVelocity*yVelocity;
@@ -635,7 +633,7 @@ public class Game {
             Rectangle brRect = new Rectangle(br.getCoordinate().getX(), br.getCoordinate().getY(), (int) br.getPreferredSize().getWidth(), (int) br.getPreferredSize().getHeight());
 
             if (brRect.intersects(fireballRectangle)) {
-               // runningModePage.playSoundEffect(1);
+               playSoundEffect(1);
 
                 if (br==fireball.getLastCollided()) return;
 
@@ -712,18 +710,20 @@ public class Game {
             if(spellType == SpellType.FELIX_FELICIS){
                 chance.incrementChance();
                 inventory.updateInventory(spellType, -1);
+                playSoundEffect(5);
             }
-            if(spellType == SpellType.STAFF_EXPANSION) {
+            if(spellType == SpellType.STAFF_EXPANSION && magicalStaff.getStaffWidth()==100) {
                 magicalStaff.setStaffWidth(200);
                 magicalStaff.setExpansionTime(System.currentTimeMillis());
                 inventory.updateInventory(spellType, -1);
+                playSoundEffect(3);
             }
             if(spellType == SpellType.HEX && !getMagicalStaff().isShooting()){
                 getMagicalStaff().setShooting(true);
                 getMagicalStaff().setCannonTime(System.currentTimeMillis());
                 inventory.updateInventory(spellType, -1);
             }
-            if(spellType == SpellType.OVERWHELMING_FIREBALL ){
+            if(spellType == SpellType.OVERWHELMING_FIREBALL && !getFireball().isOverwhelming()){
                 getFireball().setOverwhelming(true);
                 getFireball().setOverwhelmTime(System.currentTimeMillis());
                 inventory.updateInventory(spellType, -1);
@@ -809,6 +809,10 @@ public class Game {
         this.purpleBarriers = purpleBarriers;
     }
 
+    private void playSoundEffect(int i){
+        sound.setFile(i);
+        sound.play();
+    }
     public String getGameName() {
         return gameName;
     }
@@ -835,6 +839,7 @@ public class Game {
         if(fireball.getxVelocity()==0 && fireball.getyVelocity()==0){
             this.fireball.setxVelocity(0);
             this.fireball.setyVelocity(-3);
+            playSoundEffect(6);
         }
     }
 

@@ -191,8 +191,11 @@ public class RunningModePage extends Page implements InventoryListener {
 
                 // Handle end of game session
                 if (runningModeController.getGameSession().ended) {
+
+                    stopMusic();
                     if (runningModeController.getGameSession().getBarriers().isEmpty() ||
                             runningModeController.getGameSession().getMpGameInformation().get(2) == 0) {
+
                         JOptionPane.showMessageDialog(null, "You won!");
                     }else
                         JOptionPane.showMessageDialog(null, "You lost!");
@@ -247,7 +250,7 @@ public class RunningModePage extends Page implements InventoryListener {
     protected void initUI() {
         setLayout(new BorderLayout());
         initializeGameObjects();
-        //playMusic(0); TODO
+        playMusic(0);
     }
 
     private void initializeGameObjects() {

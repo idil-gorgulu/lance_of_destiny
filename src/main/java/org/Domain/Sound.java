@@ -18,6 +18,7 @@ public class Sound {
         files[3]=new File("assets/sound/expandBarrier.wav");
         files[4]=new File("assets/sound/fireBullet.wav");
         files[5]=new File("assets/sound/addChance.wav");
+        files[6]=new File("assets/sound/launchBall.wav");
 
 
     }
