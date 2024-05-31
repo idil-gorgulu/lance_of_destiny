@@ -142,7 +142,7 @@ public class Game {
         int boardX = coordinates.getX() / 50; // Adjust the indexing here
         int boardY = coordinates.getY() / 20; // Adjust the indexing here
         barrierBoard[boardY][boardX] = s; // Adjusted the indexing here
-        printBoard();
+        //printBoard();
     }
 
     public void addPurpleBarrier(Coordinate coordinates) {
