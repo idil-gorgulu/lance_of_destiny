@@ -23,7 +23,7 @@ public class Inventory{
 
     public Inventory() {
         this.spellCountsList = new ArrayList<>(Arrays.asList(0, 0, 0, 0));
-        this.multiplayersSpellCountsList = new ArrayList<>(Arrays.asList(0, 0, 0, 0));
+        this.multiplayersSpellCountsList = new ArrayList<>(Arrays.asList(10, 10, 10));
         this.listeners = new ArrayList<>();
 
     }

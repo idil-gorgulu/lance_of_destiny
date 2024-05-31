@@ -8,10 +8,12 @@ public class DatabaseOperations {
     Database db = Database.getInstance();
 
     public void deleteAllInstances() {
-        db.getGameCollection().deleteMany(new Document());
+        db.getMultiplayerGameCollection().deleteMany(new Document());
     }
 
     public static void main(String[] args) {
         // Do the operation you want to do on DB
+        DatabaseOperations dbOperations = new DatabaseOperations();
+        dbOperations.deleteAllInstances();
     }
 }

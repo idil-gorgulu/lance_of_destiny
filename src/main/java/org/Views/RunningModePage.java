@@ -618,21 +618,21 @@ public class RunningModePage extends Page implements InventoryListener, MPInfoLi
         infiniteVoidButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                runningModeController.comm.sendSpell("iv");
+                runningModeController.comm.sendSpell("Spell: {spellType: iv}");
                 gamePanel.requestFocus();
             }
         });
         hollowPurpleButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                runningModeController.comm.sendSpell("hp");
+                runningModeController.comm.sendSpell("Spell: {spellType: hp}");
                 gamePanel.requestFocus();
             }
         });
         doubleAccelButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                runningModeController.comm.sendSpell("da");
+                runningModeController.comm.sendSpell("Spell: {spellType: da}");
                 gamePanel.requestFocus();
             }
         });
