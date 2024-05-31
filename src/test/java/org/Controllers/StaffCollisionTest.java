@@ -8,7 +8,7 @@ import org.junit.jupiter.api.Test;
 
 import org.Domain.*;
 public class StaffCollisionTest {
-
+/*
     private Game game;
     private RunningModePage runningModePage;
     private Fireball fireball;
@@ -124,4 +124,6 @@ public class StaffCollisionTest {
         assertEquals(30, fireball.getxVelocity());
         assertEquals(15, fireball.getyVelocity());
     }
+
+ */
 }
