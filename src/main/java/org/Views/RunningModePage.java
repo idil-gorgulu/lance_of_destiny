@@ -44,6 +44,7 @@ public class RunningModePage extends Page implements InventoryListener, MPInfoLi
     private BufferedImage backgroundImage;
     private JPanel gamePanel =  new JPanel();
     private JPanel infoContainer =  new JPanel();
+    private JPanel opponentInfoContainer = new JPanel();
     private JPanel inventoryContainer = new JPanel();
     protected RunningModeController runningModeController;
     public boolean pause = false;
@@ -190,9 +191,10 @@ public class RunningModePage extends Page implements InventoryListener, MPInfoLi
 
                 // Handle end of game session
                 if (runningModeController.getGameSession().ended) {
-                    if (runningModeController.getGameSession().getBarriers().isEmpty())
+                    if (runningModeController.getGameSession().getBarriers().isEmpty() ||
+                            runningModeController.getGameSession().getMpGameInformation().get(2) == 0) {
                         JOptionPane.showMessageDialog(null, "You won!");
-                    else
+                    }else
                         JOptionPane.showMessageDialog(null, "You lost!");
                     runningModeController = null;
                     Navigator.getInstance().showStartSingleplayerPage();
@@ -399,6 +401,16 @@ public class RunningModePage extends Page implements InventoryListener, MPInfoLi
                     gamePanel.add(runningModeController.getGameSession().getYmir());
                     System.out.println("YMIR ADDED TO THE GAME");
                 }
+
+                /*if (mpgame){
+                    opponentInfoContainer = new JPanel(new FlowLayout());
+                    opponentInfoContainer.setPreferredSize(new Dimension(150, 80));
+                    opponentInfoContainer.setBackground(new Color(color.getRed(), color.getGreen(), color.getBlue(), 50));
+                    infoContainer.setBounds(850,80,150,80);
+                    infoContainer.setOpaque(true);
+                    infoContainer.setVisible(true);
+                    gamePanel.add(opponentInfoContainer);
+                }*/
 
                 gamePanel.requestFocus();
                 gamePanel.setFocusTraversalKeysEnabled(false);
