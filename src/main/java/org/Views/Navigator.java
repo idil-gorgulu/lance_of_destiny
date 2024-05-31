@@ -14,10 +14,9 @@ public class Navigator {
         mainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         mainFrame.setLocationRelativeTo(null);
 
-        pageStack = new Stack<>(); // Yığın başlatılır
+        pageStack = new Stack<>();
 
     }
-
 
     public static Navigator getInstance() {
         if (instance == null) {
@@ -26,10 +25,7 @@ public class Navigator {
         return instance;
     }
 
-
-
     public void showPage(Page page) {
-        // Yığının en üst sayfası mevcut sayfa değilse, sayfayı yığına ekle
         if (pageStack.isEmpty() || !pageStack.peek().getClass().equals(page.getClass())) {
             pageStack.push(page);
         }

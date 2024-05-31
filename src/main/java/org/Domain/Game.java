@@ -364,14 +364,18 @@ public class Game {
         this.score = new Score();
         this.barriers.clear();
         this.activeDebris.clear();
+        this.purpleBarriers.clear();
         this.numSimpleBarrier = 0;
         this.numFirmBarrier = 0;
         this.numExplosiveBarrier = 0;
         this.numRewardingBarrier = 0;
+        this.numPurpleBarrier = 0;
         this.numTotal = 0;
         this.started = true;
         this.ended = false;
         this.barrierBoard = new String[20][20];
+        this.inventory = new Inventory();
+        this.lastCollisionTime = 0;
     }
 
     public static Game createNewGame() {
@@ -674,7 +678,7 @@ public class Game {
                 getMagicalStaff().setCannonTime(System.currentTimeMillis());
                 inventory.updateInventory(spellType, -1);
             }
-            if(spellType == SpellType.OVERWHELMING_FIREBALL && getFireball().isOverwhelming()){
+            if(spellType == SpellType.OVERWHELMING_FIREBALL ){
                 getFireball().setOverwhelming(true);
                 getFireball().setOverwhelmTime(System.currentTimeMillis());
                 inventory.updateInventory(spellType, -1);
