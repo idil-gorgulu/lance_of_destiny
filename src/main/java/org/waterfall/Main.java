@@ -16,7 +16,7 @@ public class Main {
             Navigator navigator = Navigator.getInstance();
             navigator.showEnterPage();
             navigator.show();
-/        });
+        });
         */
 
         Database dbSingleton = Database.getInstance();
@@ -27,6 +27,7 @@ public class Main {
             navigator.showGameModePage();
             navigator.show();
         });
+
 
     }
 }

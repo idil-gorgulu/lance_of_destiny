@@ -17,7 +17,7 @@ import java.io.IOException;
 import java.util.*;
 import java.util.Timer;
 
-public class RunningModePage extends Page implements InventoryListener, MPInfoListener {
+public class RunningModePage extends Page implements InventoryListener {
     private JLabel infiniteVoidCount = new JLabel("0");
     private JLabel hollowPurpleCount = new JLabel("0");
     private JLabel doubleAccelCount = new JLabel("0");
@@ -44,6 +44,7 @@ public class RunningModePage extends Page implements InventoryListener, MPInfoLi
     private BufferedImage backgroundImage;
     private JPanel gamePanel =  new JPanel();
     private JPanel infoContainer =  new JPanel();
+    private JPanel opponentInfoContainer = new JPanel();
     private JPanel inventoryContainer = new JPanel();
     protected RunningModeController runningModeController;
     public boolean pause = false;
@@ -59,9 +60,9 @@ public class RunningModePage extends Page implements InventoryListener, MPInfoLi
     private Timer gameTimer =  new Timer();
     private Sound sound=new Sound();
     private boolean mpgame=false;
-    private JLabel opponentScore = new JLabel("Opponent Score:");
-    private JLabel opponentBarrier = new JLabel("Opponent Remaining Barrier:");
-    private JLabel opponentChance = new JLabel("Opponents Remaining Chance");
+//    private JLabel opponentScore = new JLabel("Opponent Score:");
+//    private JLabel opponentBarrier = new JLabel("Opponent Remaining Barrier:");
+//    private JLabel opponentChance = new JLabel("Opponents Remaining Chance");
 
     public static final long COLLISION_COOLDOWN = 1000; // Cooldown period in milliseconds
 
@@ -190,10 +191,13 @@ public class RunningModePage extends Page implements InventoryListener, MPInfoLi
 
                 // Handle end of game session
                 if (runningModeController.getGameSession().ended) {
+
                     stopMusic();
-                    if (runningModeController.getGameSession().getBarriers().isEmpty())
+                    if (runningModeController.getGameSession().getBarriers().isEmpty() ||
+                            runningModeController.getGameSession().getMpGameInformation().get(2) == 0) {
+
                         JOptionPane.showMessageDialog(null, "You won!");
-                    else
+                    }else
                         JOptionPane.showMessageDialog(null, "You lost!");
                     runningModeController = null;
                     Navigator.getInstance().showStartSingleplayerPage();
@@ -290,7 +294,8 @@ public class RunningModePage extends Page implements InventoryListener, MPInfoLi
                                 gamePanel.requestFocus(); // Ensure focus is returned to the game panel on resume
                                 break;
                             case JOptionPane.CANCEL_OPTION: // Quit
-                                pause = false; // Reset pause state
+                                runningModeController.getGameSession().resetInstance();
+                                pause = false; // Reset pause state\
                                 runningModeController = null;
                                 Navigator.getInstance().showStartSingleplayerPage(); // Navigate away from the game page
                                 break;
@@ -401,6 +406,16 @@ public class RunningModePage extends Page implements InventoryListener, MPInfoLi
                     System.out.println("YMIR ADDED TO THE GAME");
                 }
 
+                /*if (mpgame){
+                    opponentInfoContainer = new JPanel(new FlowLayout());
+                    opponentInfoContainer.setPreferredSize(new Dimension(150, 80));
+                    opponentInfoContainer.setBackground(new Color(color.getRed(), color.getGreen(), color.getBlue(), 50));
+                    infoContainer.setBounds(850,80,150,80);
+                    infoContainer.setOpaque(true);
+                    infoContainer.setVisible(true);
+                    gamePanel.add(opponentInfoContainer);
+                }*/
+
                 gamePanel.requestFocus();
                 gamePanel.setFocusTraversalKeysEnabled(false);
 
@@ -427,15 +442,15 @@ public class RunningModePage extends Page implements InventoryListener, MPInfoLi
         });
     }
 
-    @Override
-    public void onMPInfoUpdate() {
-        opponentScore.setText("Opponent Score:" + " " + runningModeController.getGameSession().getMpGameInformation().get(0));
-        opponentChance .setText("Opponent Chance:"+ " "+ runningModeController.getGameSession().getMpGameInformation().get(2));
-        opponentBarrier.setText("Opponent Barrier:"+ " "+runningModeController.getGameSession().getMpGameInformation().get(1));
-        opponentScore.repaint();
-        opponentChance.repaint();
-        opponentBarrier.repaint();
-    }
+//    @Override
+//    public void onMPInfoUpdate() {
+//        opponentScore.setText("Opponent Score:" + " " + runningModeController.getGameSession().getMpGameInformation().get(0));
+//        opponentChance .setText("Opponent Chance:"+ " "+ runningModeController.getGameSession().getMpGameInformation().get(2));
+//        opponentBarrier.setText("Opponent Barrier:"+ " "+runningModeController.getGameSession().getMpGameInformation().get(1));
+//        opponentScore.repaint();
+//        opponentChance.repaint();
+//        opponentBarrier.repaint();
+//    }
 
     /*
     private void initializeInventory(GridBagConstraints gbc) {
@@ -584,7 +599,6 @@ public class RunningModePage extends Page implements InventoryListener, MPInfoLi
     }
 
     private void addActionListenersMultiplayer() {
-        System.out.println("actionlitenerlar ekledni");
         hexButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
