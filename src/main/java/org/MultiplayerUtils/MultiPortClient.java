@@ -182,18 +182,15 @@ public class MultiPortClient implements CommInterface {
     }
 
     private static void parseSpell(String input) {
-        Pattern pattern = Pattern.compile("spellType: (\\d+)");
+        Pattern pattern = Pattern.compile("spellType: ([a-zA-Z]+)");
         Matcher matcher = pattern.matcher(input);
 
         if (matcher.find()) {
-            int spellType = Integer.parseInt(matcher.group(1));
+            String spellType = matcher.group(1);
             System.out.println("Spell Information:");
             System.out.println("SpellType: " + spellType);
-//            if () {
-//                multiplayerGame.getYmir().
-//            } else {
-//
-//            }
+            // TODO: Implement the listener for action the game
+
         } else {
             System.out.println("No spell information found!");
         }
