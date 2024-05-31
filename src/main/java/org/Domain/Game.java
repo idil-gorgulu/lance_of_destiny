@@ -45,7 +45,7 @@ public class Game {
     }
 
     private ArrayList<Integer> mpGameInformation;
-    private JPanel mpGamePanel;
+    private JPanel mpGamePanel = new JPanel();
 
     private List<MPInfoListener> mpInfoListeners = new ArrayList<>();
     public void addMPInfoListener(MPInfoListener listener) {
@@ -61,33 +61,21 @@ public class Game {
 
 
     public JPanel getMpGamePanel() {
-        JPanel mpGamePanel = new JPanel();
-        if(mpGameInformation != null){
-            JLabel opponentLabel = new JLabel("Opponent Information:");
-            JLabel opponentScore = new JLabel("Opponent Score:" + " " + this.getMpGameInformation().get(0));
-            JLabel opponentChance = new JLabel("Opponent Chance:"+ " "+ this.getMpGameInformation().get(2));
-            JLabel opponentBarrier= new JLabel("Opponent Barrier:"+ " "+this.getMpGameInformation().get(1));
-            mpGamePanel.add(opponentLabel );
-            mpGamePanel.add(opponentScore );
-            mpGamePanel.add(opponentChance);
-            mpGamePanel.add(opponentBarrier);
-            return mpGamePanel;
-        }
-        return null;
+        return mpGamePanel;
     }
     public void setMpGameInformation(ArrayList<Integer> mpGameInformation) {
         this.mpGameInformation = mpGameInformation;
         if(mpGameInformation != null){
+            System.out.println(mpGameInformation);
             JLabel opponentLabel = new JLabel("Opponent Information:");
-            JLabel opponentScore = new JLabel("Opponent Score:" + " " + this.getMpGameInformation().get(0));
-            JLabel opponentChance = new JLabel("Opponent Chance:"+ " "+ this.getMpGameInformation().get(2));
-            JLabel opponentBarrier= new JLabel("Opponent Barrier:"+ " "+this.getMpGameInformation().get(1));
+            JLabel opponentScore = new JLabel("Opponent Score:" + " "  + mpGameInformation.get(0));
+            JLabel opponentChance = new JLabel("Opponent Chance:"+ " " + mpGameInformation.get(2));
+            JLabel opponentBarrier= new JLabel("Opponent Barrier:"+ " " + mpGameInformation.get(1));
             mpGamePanel.add(opponentLabel );
             mpGamePanel.add(opponentScore );
             mpGamePanel.add(opponentChance);
             mpGamePanel.add(opponentBarrier);
         }
-        mpGamePanel = null;
     }
 
 
