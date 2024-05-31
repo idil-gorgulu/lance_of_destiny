@@ -1,7 +1,6 @@
 package org.Views;
 
 import org.Controllers.DataBaseController;
-import org.Domain.Game;
 import org.Domain.User;
 import org.bson.Document;
 
@@ -59,17 +58,17 @@ public class GameSelectionPage extends Page {
 
 
         JPanel backButtonPanel = new JPanel(new BorderLayout());
-        backButtonPanel.setOpaque(false); // Make the panel transparent
+        backButtonPanel.setOpaque(false);
         JButton backButton = new JButton("Back");
         backButton.addActionListener(e -> Navigator.getInstance().getPrevious());
         backgroundPanel.add(backButtonPanel, BorderLayout.NORTH);
         customizeButtonback(backButton);
         backButtonPanel.add(backButton, BorderLayout.WEST);
         JPanel headingPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
-        headingPanel.setOpaque(false); // Make the panel transparent
+        headingPanel.setOpaque(false);
         JLabel headingLabel = new JLabel("Your Saved Games");
-        headingLabel.setForeground(Color.WHITE); // Set text color
-        headingLabel.setFont(new Font("Tahoma", Font.BOLD, 24)); // Set font and size
+        headingLabel.setForeground(Color.WHITE);
+        headingLabel.setFont(new Font("Tahoma", Font.BOLD, 24));
         headingPanel.add(headingLabel);
         backButtonPanel.add(headingPanel, BorderLayout.CENTER);
 
@@ -97,24 +96,22 @@ public class GameSelectionPage extends Page {
 
         ArrayList<Document> games = User.getUserInstance().getAllGames();
 
-        // Group games by name
         Map<String, List<Document>> groupedGames = new HashMap<>();
         for (Document game : games) {
             String gameName = game.getString("gameName");
             groupedGames.computeIfAbsent(gameName, k -> new ArrayList<>()).add(game);
         }
 
-        // Using groups to show.
         for (Map.Entry<String, List<Document>> entry : groupedGames.entrySet()) {
-            JPanel gamePanel = new JPanel(new FlowLayout(FlowLayout.LEFT)); // Use FlowLayout for left alignment
+            JPanel gamePanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
             gamePanel.setOpaque(false);
 
-            for (Document game : entry.getValue()) { //creating buttons
+            for (Document game : entry.getValue()) {
                 JButton gameButton = new JButton("<html>" + game.getString("gameName") + "<br><small>" + game.getString("gameDate") + "</small></html>");
                 customizeButton(gameButton);
-                gameButton.setPreferredSize(new Dimension(180, 80  )); // Set preferred size for uniformity
-                gameButton.setMaximumSize(new Dimension(180, 80)); // Set maximum size for uniformity
-                gameButton.setMinimumSize(new Dimension(180, 80)); // Set minimum size for uniformity
+                gameButton.setPreferredSize(new Dimension(180, 80  ));
+                gameButton.setMaximumSize(new Dimension(180, 80));
+                gameButton.setMinimumSize(new Dimension(180, 80));
                 gameButton.addActionListener(new ActionListener() {
                     @Override
                     public void actionPerformed(ActionEvent e) {
@@ -129,7 +126,6 @@ public class GameSelectionPage extends Page {
             formPanel.add(gamePanel);
         }
 
-        // formPanel is scrollable
         JScrollPane scrollPane = new JScrollPane(formPanel);
         scrollPane.setOpaque(false);
         scrollPane.getViewport().setOpaque(false);
@@ -152,13 +148,13 @@ public class GameSelectionPage extends Page {
         button.setBackground(new Color(100, 149, 237));
         button.setForeground(Color.WHITE);
         button.setFocusPainted(false);
-        button.setFont(new Font("Tahoma", Font.BOLD, 18)); // Increased font size
-        button.setOpaque(false); // Make button transparent so we can custom paint
-        button.setContentAreaFilled(false); // Tell Swing to not fill the content area
-        button.setBorderPainted(false); // Tell Swing to not paint the border
-        button.setBorder(BorderFactory.createEmptyBorder(20, 30, 20, 30)); // Increased padding
-        button.setFocusable(false); // Optional: Removes the focus border
-        button.setCursor(new Cursor(Cursor.HAND_CURSOR)); // Changes the cursor to a hand cursor on hover
+        button.setFont(new Font("Tahoma", Font.BOLD, 18));
+        button.setOpaque(false);
+        button.setContentAreaFilled(false);
+        button.setBorderPainted(false);
+        button.setBorder(BorderFactory.createEmptyBorder(20, 30, 20, 30));
+        button.setFocusable(false);
+        button.setCursor(new Cursor(Cursor.HAND_CURSOR));
 
         button.addMouseListener(new MouseAdapter() {
             @Override
@@ -178,33 +174,33 @@ public class GameSelectionPage extends Page {
                 JButton b = (JButton) c;
                 g.setColor(b.getBackground());
                 ((Graphics2D) g).setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-                ((Graphics2D) g).fillRoundRect(0, 0, b.getWidth(), b.getHeight(), 30, 30); // 30, 30 defines the roundness
+                ((Graphics2D) g).fillRoundRect(0, 0, b.getWidth(), b.getHeight(), 30, 30);
                 super.paint(g, c);
             }
         });
     }
 
     private void customizeButtonback(JButton button) {
-        button.setBackground(new Color(70, 130, 180)); // Set the background color of the button
-        button.setForeground(Color.WHITE); // Set text color
-        button.setFocusPainted(false); // Remove focus border
-        button.setFont(new Font("Tahoma", Font.BOLD, 18)); // Increase font size
-        button.setOpaque(true); // Set button opacity
-        button.setContentAreaFilled(false); // Set if the content area is filled
-        button.setBorderPainted(false); // Remove border painting
-        button.setBorder(BorderFactory.createEmptyBorder(20, 30, 20, 30)); // Add padding
-        button.setFocusable(false); // Remove focusability
-        button.setCursor(new Cursor(Cursor.HAND_CURSOR)); // Change cursor to hand cursor
+        button.setBackground(new Color(70, 130, 180));
+        button.setForeground(Color.WHITE);
+        button.setFocusPainted(false);
+        button.setFont(new Font("Tahoma", Font.BOLD, 18));
+        button.setOpaque(true);
+        button.setContentAreaFilled(false);
+        button.setBorderPainted(false);
+        button.setBorder(BorderFactory.createEmptyBorder(20, 30, 20, 30));
+        button.setFocusable(false);
+        button.setCursor(new Cursor(Cursor.HAND_CURSOR));
 
         button.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseEntered(MouseEvent e) {
-                button.setCursor(new Cursor(Cursor.HAND_CURSOR)); // Change cursor to hand cursor
+                button.setCursor(new Cursor(Cursor.HAND_CURSOR));
             }
 
             @Override
             public void mouseExited(MouseEvent e) {
-                button.setCursor(Cursor.getDefaultCursor()); // Change cursor to default
+                button.setCursor(Cursor.getDefaultCursor());
             }
         });
 

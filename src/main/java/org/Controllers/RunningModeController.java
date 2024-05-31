@@ -2,16 +2,11 @@ package org.Controllers;
 
 import org.Domain.*;
 import org.MultiplayerUtils.CommInterface;
-import org.Utils.Database;
 import org.Views.RunningModePage;
-import org.bson.Document;
 
-import javax.swing.*;
 import java.awt.*;
-import java.awt.geom.AffineTransform;
 import java.awt.geom.Rectangle2D;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Random;
 
@@ -34,7 +29,6 @@ public class RunningModeController {
         return Game.getInstance();
     }
 
-    // These are the functions for updating the views of the game components.
     public void updateFireballView(){
         game.getFireball().updateFireballView();
     }
@@ -47,11 +41,10 @@ public class RunningModeController {
         }
     }
 
-    // These are the functions for updating the position and angle orientation of the magical staff.
     public void slideMagicalStaff(int x){
         game.getMagicalStaff().setVelocity(x);
         Fireball fireball= game.getFireball();
-        if (fireball.getyVelocity()==0){ //if on staff, move together with the staff
+        if (fireball.getyVelocity()==0){
             fireball.setxVelocity(x);
         }
     }
@@ -73,10 +66,8 @@ public class RunningModeController {
     public void run(){
         Fireball fireball = game.getFireball();
         MagicalStaff magicalStaff = game.getMagicalStaff();
-        Ymir ymir = game.getYmir();
         ArrayList<Barrier> barriers = game.getBarriers();
-        Chance chance = getGameSession().getChance();
-        Score score = getGameSession().getScore();
+
 
         magicalStaff.setBounds(magicalStaff.getCoordinate().getX(), magicalStaff.getCoordinate().getY(), magicalStaff.getPreferredSize().width, magicalStaff.getPreferredSize().height);
 
@@ -109,8 +100,7 @@ public class RunningModeController {
                 iterator.remove();
             }
 
-            // TODO move collision logic
-            // For debris collision with magical staff
+
             Rectangle2D.Double debrisRectangle = new Rectangle2D.Double(
                     debris.getCoordinate().getX() - debris.debrisImage.getWidth()/2 ,
                     debris.getCoordinate().getY() - debris.debrisImage.getHeight()/2,
@@ -135,8 +125,7 @@ public class RunningModeController {
                 runningModePage.getGamePanel().remove(spell);
                 iterator.remove();
             }
-            // TODO move collision logic
-            // For spell collision with magical staff
+
             Rectangle2D.Double spellRectangle = new Rectangle2D.Double(
                     spell.getCoordinate().getX() - spell.spellImage.getWidth()/2 ,
                     spell.getCoordinate().getY() - spell.spellImage.getHeight()/2,
@@ -156,7 +145,7 @@ public class RunningModeController {
             Bullet bullet = iterator.next();
             runningModePage.getGamePanel().add(bullet);
             bullet.moveUp();
-            if (bullet.getCoordinate().getY() < 0) { //Out of Screen Top Border
+            if (bullet.getCoordinate().getY() < 0) {
                 runningModePage.getGamePanel().remove(bullet);
                 iterator.remove();
             }
@@ -183,7 +172,7 @@ public class RunningModeController {
     }
 
     public void checkYmirAbilities() {
-        if (new Random().nextBoolean()) { // Simulate the coin flip
+        if (new Random().nextBoolean()) {
             if (new Random().nextBoolean()) {
                 game.getYmir().activateInfiniteVoid();
             } else {

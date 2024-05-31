@@ -19,26 +19,24 @@ public class StartMultiplayerPage extends Page {
 
     @Override
     protected void initUI() {
-        setLayout(new BorderLayout());  // Ana panelin düzenini BorderLayout olarak değiştirin
+        setLayout(new BorderLayout());
         try {
             backgroundImage = ImageIO.read(new File("assets/Background.png"));
         } catch (IOException e) {
             e.printStackTrace();
         }
 
-        // Back Button Paneli oluşturuluyor ve BorderLayout.NORTH'a ekleniyor
         JPanel backButtonPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
-        backButtonPanel.setOpaque(false);  // Şeffaf yapılıyor, arka plan gözüksün diye
+        backButtonPanel.setOpaque(false);
         JButton backButton = new JButton("Back");
         backButton.addActionListener(e -> Navigator.getInstance().getPrevious());
         backButtonPanel.add(backButton);
         add(backButtonPanel, BorderLayout.NORTH);
 
-        // Merkez panel, içeriklerin düzenlendiği yer
         JPanel centerPanel = new JPanel();
         centerPanel.setLayout(new BoxLayout(centerPanel, BoxLayout.Y_AXIS));
-        centerPanel.setOpaque(false);  // Şeffaf yapılıyor
-        centerPanel.add(Box.createVerticalStrut(50));  // İçeriği biraz aşağı indirmek için ayarlama
+        centerPanel.setOpaque(false);
+        centerPanel.add(Box.createVerticalStrut(50));
         JLabel gameTitle = new JLabel("Lance of Destiny");
         gameTitle.setForeground(Color.WHITE);
         gameTitle.setFont(new Font("Arial", Font.BOLD, 24));
@@ -55,7 +53,7 @@ public class StartMultiplayerPage extends Page {
         centerPanel.add(Box.createVerticalStrut(10));
         centerPanel.add(joinMultiplayerGameButton);
 
-        add(centerPanel, BorderLayout.CENTER);  // Merkez paneli ekleniyor
+        add(centerPanel, BorderLayout.CENTER);
     }
 
     @Override

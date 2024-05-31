@@ -186,10 +186,8 @@ public class JoinMultiplayerGamePage extends Page implements ConnectedStateChang
         if (inClient != null) {
             inClient.selfReadyClicked = true;
             if (inClient.opponentReadyClicked) {
-                // Load the game
                 Navigator.getInstance().showRunningModePage();
             } else {
-                // Display a waiting message
                 System.out.println("Waiting for opponent...");
             }
         }
@@ -210,18 +208,18 @@ public class JoinMultiplayerGamePage extends Page implements ConnectedStateChang
 
     private void startCountdown() {
         while (countdownValue >= 0) {
-            System.out.println(countdownValue); // Print the current countdown value
-            countdownValue--; // Decrement the countdown value
+            System.out.println(countdownValue);
+            countdownValue--;
 
             try {
-                Thread.sleep(1000); // Wait for 1 second before continuing
+                Thread.sleep(1000);
             } catch (InterruptedException e) {
                 System.err.println("Countdown was interrupted!");
                 break;
             }
         }
 
-        System.out.println("Go!"); // Print "Go!" when the countdown finishes
+        System.out.println("Go!");
         // Set the game in here
         DataBaseController.getInstance().openMultiplayerGame(this.gameName);
         multiplayerGame = Game.getInstance();

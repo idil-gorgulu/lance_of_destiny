@@ -35,10 +35,6 @@ public class MultiPortServer implements CommInterface {
     private List<ConnectedStateChangeListener> listeners = new ArrayList<>();
     private List<CountdownStateChangeListener> countdownListeners = new ArrayList<>();
 
-    public Game getMultiplayerGame() {
-        return multiplayerGame;
-    }
-
     public void setMultiplayerGame(Game multiplayerGame) {
         this.multiplayerGame = multiplayerGame;
     }

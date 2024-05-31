@@ -15,7 +15,7 @@ public class Fireball extends JPanel {
     private BufferedImage fireballImage;
     private boolean isOverwhelming=false;
     private Barrier lastCollided=null;
-    private long overwhelmTime=(long)Double.POSITIVE_INFINITY; // last time when ball is overwhelming
+    private long overwhelmTime=(long)Double.POSITIVE_INFINITY;
     private boolean isOnStaff;
 
 
@@ -29,7 +29,6 @@ public class Fireball extends JPanel {
             Graphics2D g2d = fireballImage.createGraphics();
             g2d.drawImage(originalImage, 0, 0, 16, 16, null);
             g2d.dispose();
-            // Update the fireball radius
             this.fireballRadius = 8;
         } catch (IOException e) {
             e.printStackTrace();

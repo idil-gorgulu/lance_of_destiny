@@ -1,5 +1,5 @@
 package org.Domain;
-import org.Controllers.RunningModeController;
+
 import org.Listeners.MPInfoListener;
 import org.MultiplayerUtils.CommInterface;
 
@@ -7,9 +7,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.Rectangle2D;
-import java.awt.image.AreaAveragingScaleFilter;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Random;
 
@@ -22,21 +20,22 @@ public class Game {
     private Chance chance;
     private Score score;
     private static Game instance;
-    private Sound sound=new Sound();
-    int numSimpleBarrier=0;
-    int numFirmBarrier=0;
-    int numExplosiveBarrier=0;
-    int numRewardingBarrier=0;
-    int numPurpleBarrier=0;
+    private Sound sound = new Sound();
+    int numSimpleBarrier = 0;
+    int numFirmBarrier = 0;
+    int numExplosiveBarrier = 0;
+    int numRewardingBarrier = 0;
+    int numPurpleBarrier = 0;
     int numTotal;
     public boolean started = false;
     public boolean ended = false;
     String[][] barrierBoard = new String[20][20];
     private Ymir ymir;
-    private long lastCollisionTime = 0; // Time of the last collision in milliseconds
-    private ArrayList<Barrier> barriers = new ArrayList<Barrier>(0); // Could maybe be a hashmap?
+    private long lastCollisionTime = 0;
+    private ArrayList<Barrier> barriers = new ArrayList<Barrier>(0);
     private ArrayList<Debris> activeDebris;
-    private ArrayList<Barrier> purpleBarriers = new ArrayList<Barrier>(0);;
+    private ArrayList<Barrier> purpleBarriers = new ArrayList<Barrier>(0);
+    ;
     private ArrayList<Spell> droppingSpells;
     private ArrayList<Bullet> activeBullets;
     private Inventory inventory;
@@ -53,6 +52,7 @@ public class Game {
     private JLabel info = new JLabel();
 
     private List<MPInfoListener> mpInfoListeners = new ArrayList<>();
+
     public void addMPInfoListener(MPInfoListener listener) {
         mpInfoListeners.add(listener);
     }
@@ -66,45 +66,38 @@ public class Game {
     public JPanel getMpGamePanel() {
         return mpGamePanel;
     }
+
     public void setMpGameInformation(ArrayList<Integer> mpGameInformation) {
         this.mpGameInformation = mpGameInformation;
-        if(mpGameInformation != null){
+        if (mpGameInformation != null) {
             System.out.println(mpGameInformation);
-            info.setText("S: "+mpGameInformation.get(0)+" C: "+mpGameInformation.get(2)+" B: "+mpGameInformation.get(1));
-            if (mpGameInformation.get(2)==0) ended=true; //YOU WON
-            if (mpGameInformation.get(1)==0) ended=true;//YOU LOST
+            info.setText("S: " + mpGameInformation.get(0) + " C: " + mpGameInformation.get(2) + " B: " + mpGameInformation.get(1));
+            if (mpGameInformation.get(2) == 0) ended = true; //YOU WON
+            if (mpGameInformation.get(1) == 0) ended = true;//YOU LOST
 
-//            JLabel opponentLabel = new JLabel("Opponent Information:");
-//            JLabel opponentScore = new JLabel("Opponent Score:" + " "  + );
-//            JLabel opponentChance = new JLabel("Opponent Chance:"+ " " + );
-//            JLabel opponentBarrier= new JLabel("Opponent Barrier:"+ " " + mpGameInformation.get(1));
-//            mpGamePanel.add(opponentLabel );
-//            mpGamePanel.add(opponentScore );
-//            mpGamePanel.add(opponentChance);
-//            mpGamePanel.add(opponentBarrier);
+
             mpGamePanel.add(info);
         }
     }
 
 
-    private Game(){
+    private Game() {
         this.fireball = new Fireball();
         this.magicalStaff = new MagicalStaff();
         this.ymir = new Ymir(this);
-        // Think about how to initialize it, from constructor maybe?
-        this.chance= new Chance();
-        this.score= new Score();
-        this.gameName="none";
-        this.date="";
-        numSimpleBarrier=0;
-        numFirmBarrier=0;
-        numExplosiveBarrier=0;
-        numRewardingBarrier=0;
-        numPurpleBarrier=0;
-        numTotal=0;
-        activeDebris= new ArrayList<>();
-        droppingSpells=new ArrayList<>();
-        activeBullets=new ArrayList<>();
+        this.chance = new Chance();
+        this.score = new Score();
+        this.gameName = "none";
+        this.date = "";
+        numSimpleBarrier = 0;
+        numFirmBarrier = 0;
+        numExplosiveBarrier = 0;
+        numRewardingBarrier = 0;
+        numPurpleBarrier = 0;
+        numTotal = 0;
+        activeDebris = new ArrayList<>();
+        droppingSpells = new ArrayList<>();
+        activeBullets = new ArrayList<>();
         inventory = new Inventory();
         isMultiplayer = false;
     }
@@ -112,44 +105,52 @@ public class Game {
     public Fireball getFireball() {
         return fireball;
     }
+
     public MagicalStaff getMagicalStaff() {
         return magicalStaff;
     }
-    public Ymir getYmir() {return ymir;}
-    public Chance getChance() { return chance;}
-    public Score getScore(){return score;}
+
+    public Ymir getYmir() {
+        return ymir;
+    }
+
+    public Chance getChance() {
+        return chance;
+    }
+
+    public Score getScore() {
+        return score;
+    }
 
     public void addBarrier(Coordinate coordinates, BarrierType type) {
         Barrier newBarrier = new Barrier(coordinates, type);
-        if (Math.random()<0.2)    {
+        if (Math.random() < 0.2) {
             newBarrier.setMoving(true);
-            if (Math.random()<0.5)  newBarrier.setVelocity(3);
-            else                    newBarrier.setVelocity(-3);
+            if (Math.random() < 0.5) newBarrier.setVelocity(3);
+            else newBarrier.setVelocity(-3);
         }
         barriers.add(newBarrier);
-        String s="";
+        String s = "";
         if (type == BarrierType.SIMPLE) { //Simple barrier
             numSimpleBarrier++;
-            s="s";
+            s = "s";
         } else if (type == BarrierType.REINFORCED) { //Reinforced barrier
             numFirmBarrier++;
-            s="f";
+            s = "f";
         } else if (type == BarrierType.EXPLOSIVE) { //Explosive barrier
             numExplosiveBarrier++;
-            s="x";
+            s = "x";
         } else if (type == BarrierType.REWARDING) {
             numRewardingBarrier++;
             s = "r";
-        }
-        else if (type  == BarrierType.HOLLOW_PURPLE){
+        } else if (type == BarrierType.HOLLOW_PURPLE) {
             numPurpleBarrier++;
-            s="p";
+            s = "p";
         }
         numTotal++;
-        int boardX = coordinates.getX() / 50; // Adjust the indexing here
-        int boardY = coordinates.getY() / 20; // Adjust the indexing here
-        barrierBoard[boardY][boardX] = s; // Adjusted the indexing here
-        //printBoard();
+        int boardX = coordinates.getX() / 50;
+        int boardY = coordinates.getY() / 20;
+        barrierBoard[boardY][boardX] = s;
     }
 
     /* Attempts to remove a barrier of a specified type at the given coordinates.
@@ -171,21 +172,21 @@ public class Game {
         - Prints messages which indicate the removal state of a barrier and the current barrier board.
         - If no barrier or a barrier of the wrong type is found at the inputted coordinates, a message gets
           printed. */
-    public void removeBarrier(Coordinate coordinates, BarrierType type){
-        int initialSize=barriers.size();
-        if(initialSize!=0){
+    public void removeBarrier(Coordinate coordinates, BarrierType type) {
+        int initialSize = barriers.size();
+        if (initialSize != 0) {
             for (int i = 0; i < initialSize; i++) {
                 Barrier barrier = barriers.get(i);
                 if (barrier.isFrozen()) return;
-                if (barrier.getCoordinate().getX()==coordinates.getX() && barrier.getCoordinate().getY() == coordinates.getY()
-                   && barrier.getType() == type) {
+                if (barrier.getCoordinate().getX() == coordinates.getX() && barrier.getCoordinate().getY() == coordinates.getY()
+                        && barrier.getType() == type) {
                     System.out.println("Removed");
                     barriers.remove(barrier);
                     i--; // Decrease index because the size of ArrayList is reduced
                     System.out.println("After removal, board:");
-                    int boardX= coordinates.getY()/20;
-                    int boardY= coordinates.getX()/50;
-                    barrierBoard[boardX][boardY]=null;
+                    int boardX = coordinates.getY() / 20;
+                    int boardY = coordinates.getX() / 50;
+                    barrierBoard[boardX][boardY] = null;
                     printBoard();
                     numTotal--;
                     if (type == BarrierType.SIMPLE) { //Simple barrier
@@ -196,8 +197,7 @@ public class Game {
                         numExplosiveBarrier--;
                     } else if (type == BarrierType.REWARDING) {
                         numRewardingBarrier--;
-                    }
-                    else if (type == BarrierType.HOLLOW_PURPLE) {
+                    } else if (type == BarrierType.HOLLOW_PURPLE) {
                         numPurpleBarrier--;
                     }
                     return;
@@ -206,12 +206,12 @@ public class Game {
         }
         System.out.println("No barriers in that coordinates");
     }
-    public static Game getInstance(){
-        if (instance==null) {
-            instance=new Game();
+
+    public static Game getInstance() {
+        if (instance == null) {
+            instance = new Game();
             return instance;
-        }
-        else{
+        } else {
             return instance;
         }
     }
@@ -226,7 +226,7 @@ public class Game {
 
     public void setChance(int chance) {
 
-        this.chance.setRemainingChance( chance);
+        this.chance.setRemainingChance(chance);
     }
 
     public void setScore(Score score) {
@@ -249,33 +249,35 @@ public class Game {
     public ArrayList<Debris> getActiveDebris() {
         return activeDebris;
     }
-    public ArrayList<Spell> getSpells(){
+
+    public ArrayList<Spell> getSpells() {
         return droppingSpells;
     }
-    public ArrayList<Bullet>getActiveBullets(){
+
+    public ArrayList<Bullet> getActiveBullets() {
         return activeBullets;
     }
 
     /**
      * public boolean initialPopulation(int simpleNum, int firmNum, int exNum, int giftNum)
      * Initializes the population of barriers on the board with inputs.
-     *
+     * <p>
      * //REQUIRES:
      * - simpleNum, firmNum, exNum, and giftNum are non-negative integers.
      * - numSimpleBarrier, numExplosiveBarrier, numFirmBarrier, and numrewardingBarrier are non-negative integers.
      * - barrierBoard is a 2D array of dimensions 20x20.
-     *
+     * <p>
      * //MODIFIES: barrierBoard, numSimpleBarrier, numExplosiveBarrier, numFirmBarrier, numrewardingBarrier
-     *
+     * <p>
      * //EFFECTS:
      * - Places the specified numbers of simple, firm, explosive, and gift barriers
-     *   on the board if there is sufficient space.
+     * on the board if there is sufficient space.
      * -  if there is not enough space: Returns false to place all the specified barriers.
      * -  if there is sufficient space: Returns true and places barriers.
      */
-    public boolean initialPopulation(int simpleNum, int firmNum, int exNum, int giftNum){
+    public boolean initialPopulation(int simpleNum, int firmNum, int exNum, int giftNum) {
         int tot = numSimpleBarrier + numExplosiveBarrier + numFirmBarrier + numRewardingBarrier;
-        if (400 - tot < simpleNum + firmNum + exNum + giftNum){
+        if (400 - tot < simpleNum + firmNum + exNum + giftNum) {
             return false;
         }
         Random random = new Random();
@@ -289,7 +291,7 @@ public class Game {
             int randomCol = random.nextInt(20);
 
             if (barrierBoard[randomRow][randomCol] == null) {
-                Coordinate newCoord = new Coordinate( randomCol * 50,randomRow * 20);
+                Coordinate newCoord = new Coordinate(randomCol * 50, randomRow * 20);
                 if (simpleCount < simpleNum) {
                     addBarrier(newCoord, BarrierType.SIMPLE);
                     simpleCount++;
@@ -308,13 +310,13 @@ public class Game {
         System.out.println("Adding Completed");
         return true;
     }
-    public void printBoard(){
+
+    public void printBoard() {
         for (int i = 0; i < barrierBoard.length; i++) {
             for (int j = 0; j < barrierBoard[i].length; j++) {
-                if(barrierBoard[i][j]==null){
+                if (barrierBoard[i][j] == null) {
                     System.out.print("0" + " ");
-                }
-                else{
+                } else {
                     System.out.print(barrierBoard[i][j] + " ");
                 }
             }
@@ -351,31 +353,30 @@ public class Game {
     }
 
 
-    //TODO: Update this according to new database saving
     public void addDetailedBarrier(Coordinate coordinates, BarrierType type, int numHits, boolean isMoving, int velocity) {
         Barrier newBarrier = new Barrier(coordinates, type);
         newBarrier.setnHits(numHits);
         newBarrier.setMoving(isMoving);
         newBarrier.setVelocity(velocity);
         barriers.add(newBarrier);
-        String s="";
+        String s = "";
         if (type == BarrierType.SIMPLE) { //Simple barrier
             numSimpleBarrier++;
-            s="s";
+            s = "s";
         } else if (type == BarrierType.REINFORCED) { //Reinforced barrier
             numFirmBarrier++;
-            s="f";
+            s = "f";
         } else if (type == BarrierType.EXPLOSIVE) { //Explosive barrier
             numExplosiveBarrier++;
-            s="x";
+            s = "x";
         } else if (type == BarrierType.REWARDING) {
             numRewardingBarrier++;
-            s="r";
+            s = "r";
         }
         numTotal++;
-        int boardX = coordinates.getX() / 50; // Adjust the indexing here
-        int boardY = coordinates.getY() / 20; // Adjust the indexing here
-        barrierBoard[boardY][boardX] = s; // Adjusted the indexing here
+        int boardX = coordinates.getX() / 50;
+        int boardY = coordinates.getY() / 20;
+        barrierBoard[boardY][boardX] = s;
         printBoard();
     }
 
@@ -418,6 +419,7 @@ public class Game {
         this.lastCollisionTime = 0;
         this.isMultiplayer = false;
     }
+
     public void resetInstance() {
         this.ymir.getTimer().cancel();
         instance = new Game();
@@ -429,34 +431,34 @@ public class Game {
         return instance;
     }
 
-    // TODO Fix the logic
-    public void moveBarriers(){
+    public void moveBarriers() {
         int newpos;
         boolean isAvailable;
-        int width= 10;
-        for (Barrier br: getBarriers()){
+        int width = 10;
+        for (Barrier br : getBarriers()) {
             if (br.isMoving()) {
                 if (br.getType() == BarrierType.EXPLOSIVE) {
                     if (br.getVelocity() != 0) {
-                        br.moveBarrier();                   }               }
-                else {
+                        br.moveBarrier();
+                    }
+                } else {
                     isAvailable = true;
-                    newpos = br.getCoordinate().getX() +  br.getVelocity();
+                    newpos = br.getCoordinate().getX() + br.getVelocity();
                     for (Barrier br2 : getBarriers()) {
-                        if ((!br2.equals(br)) && (br.getCoordinate().getY()==br2.getCoordinate().getY())
-                                &&(width*4.5>Math.abs(br2.getCoordinate().getX() - newpos)) ){
+                        if ((!br2.equals(br)) && (br.getCoordinate().getY() == br2.getCoordinate().getY())
+                                && (width * 4.5 > Math.abs(br2.getCoordinate().getX() - newpos))) {
                             isAvailable = false;
-                            br.setVelocity(-1*br.getVelocity());
+                            br.setVelocity(-1 * br.getVelocity());
                             break;
                         }
                     }
-                    if (isAvailable)   br.moveBarrier();
+                    if (isAvailable) br.moveBarrier();
                 }
             }
         }
     }
 
-    public void checkScreenBordersFireballCollision(){
+    public void checkScreenBordersFireballCollision() {
 
         Fireball fireball = getFireball();
         int fireballX = fireball.getCoordinate().getX();
@@ -473,17 +475,15 @@ public class Game {
             playSoundEffect(1);
             fireball.setLastCollided(null);
             fireball.setxVelocity(-xVelocity);// Reverse X velocity
-            fireball.setCoordinate(new Coordinate((int) (fireballX-xVelocity),fireballY));
+            fireball.setCoordinate(new Coordinate((int) (fireballX - xVelocity), fireballY));
         }
         // Check collision with top and bottom boundaries
-        if (fireballY - fireballRadius <= -10)  {
+        if (fireballY - fireballRadius <= -10) {
             playSoundEffect(1);
             fireball.setyVelocity(-yVelocity);// TOP
             fireball.setLastCollided(null);
-            fireball.setCoordinate(new Coordinate(fireballX,(int)(fireballY-yVelocity)));
-        }
-
-        else if (fireballY + fireballRadius >= containerHeight) {
+            fireball.setCoordinate(new Coordinate(fireballX, (int) (fireballY - yVelocity)));
+        } else if (fireballY + fireballRadius >= containerHeight) {
             // BOTTOM
             fireball.setLastCollided(null);
             getChance().decrementChance();
@@ -491,17 +491,16 @@ public class Game {
             if (getChance().getRemainingChance() == 0) {
                 this.started = false;
                 System.out.println("Not active");
-                // runningModePage.stopMusic(); TODO fix
                 return;
             }
             int fireballWidth = fireball.getPreferredSize().width;
-            int fireballPositionX = (int) this.magicalStaff.getMagicalStaffRectangle().getX()+50;
+            int fireballPositionX = (int) this.magicalStaff.getMagicalStaffRectangle().getX() + 50;
             System.out.println("coordinate----");
             System.out.println((int) this.magicalStaff.getMagicalStaffRectangle().getX());
             System.out.println((int) this.magicalStaff.getMagicalStaffRectangle().getY());
 
             int fireballHeight = fireball.getPreferredSize().height;
-            int fireballPositionY = 620-(int) this.magicalStaff.getMagicalStaffRectangle().getY();
+            int fireballPositionY = 620 - (int) this.magicalStaff.getMagicalStaffRectangle().getY();
 
             fireball.setxVelocity(0);
             fireball.setyVelocity(0);
@@ -509,8 +508,7 @@ public class Game {
             fireball.getCoordinate().setY(fireballPositionY);
             fireball.setBounds(fireballPositionX, fireballPositionY, fireballWidth, fireballHeight);
             fireball.setOverwhelming(false);
-            //fireball.setBackground(Color.red);
-            fireball.setBackground(new Color(0, 0, 0, 0)); // Transparent background
+            fireball.setBackground(new Color(0, 0, 0, 0));
             fireball.setOpaque(true);
         }
     }
@@ -533,7 +531,7 @@ public class Game {
      * - Plays a sound effect upon collision.
      * - Ensures a cooldown period between consecutive collision checks to avoid multiple detections of the same collision.
      */
-    public void checkMagicalStaffFireballCollision(){
+    public void checkMagicalStaffFireballCollision() {
         long currentTime = System.currentTimeMillis();
         if (currentTime - lastCollisionTime < COLLISION_COOLDOWN) {
             return; // Skip collision check if we are within the cooldown period
@@ -574,26 +572,21 @@ public class Game {
             playSoundEffect(1);
             lastCollisionTime = currentTime;
 
-            double energy=xVelocity*xVelocity+yVelocity*yVelocity;
-            //System.out.println("\nold: " + fireball.getxVelocity() + " " + fireball.getyVelocity()+" "+energy);
 
-            double u=xVelocity*Math.cos(angleRadians)+yVelocity*Math.sin(angleRadians);
-            double v=xVelocity*Math.sin(angleRadians)-yVelocity*Math.cos(angleRadians);
+            double u = xVelocity * Math.cos(angleRadians) + yVelocity * Math.sin(angleRadians);
+            double v = xVelocity * Math.sin(angleRadians) - yVelocity * Math.cos(angleRadians);
 
-            double reflectionX=u*Math.cos(angleRadians)-v*Math.sin(angleRadians);
-            double reflectionY=u*Math.sin(angleRadians)+v*Math.cos(angleRadians);
+            double reflectionX = u * Math.cos(angleRadians) - v * Math.sin(angleRadians);
+            double reflectionY = u * Math.sin(angleRadians) + v * Math.cos(angleRadians);
 
-            if (reflectionX*magicalStaffVelocity>0){ //staff & ball same direction
-                reflectionX= reflectionX+  Math.signum(xVelocity) * 0.5;
-            }
-            else if (reflectionX*magicalStaffVelocity<0){ //opposite direction
-                reflectionX=-reflectionX;
+            if (reflectionX * magicalStaffVelocity > 0) { //staff & ball same direction
+                reflectionX = reflectionX + Math.signum(xVelocity) * 0.5;
+            } else if (reflectionX * magicalStaffVelocity < 0) { //opposite direction
+                reflectionX = -reflectionX;
             }
 
             fireball.setxVelocity(reflectionX);
             fireball.setyVelocity(reflectionY);
-            energy = reflectionX*reflectionX+reflectionY*reflectionY;
-            //System.out.println("new: " + fireball.getxVelocity() + " " + fireball.getyVelocity()+" "+energy);
 
         }
 
@@ -606,14 +599,13 @@ public class Game {
      *
      * @requires game != null && game.getFireball() != null && game.getBarriers() != null && runningModePage != null && this.getGameSession() != null
      * @modifies game.getBarriers(), fireball, this.getGameSession().getScore()
-     * @effects
-     *      - Detects and processes collisions between the fireball and barriers.
-     *      - Updates the fireball's velocity based on the collision direction.
-     *      - Removes barriers that are hit by the fireball.
-     *      - Plays a sound effect when a collision occurs.
-     *      - Updates the score based on the number of barriers removed.
+     * @effects - Detects and processes collisions between the fireball and barriers.
+     * - Updates the fireball's velocity based on the collision direction.
+     * - Removes barriers that are hit by the fireball.
+     * - Plays a sound effect when a collision occurs.
+     * - Updates the score based on the number of barriers removed.
      */
-    public void checkBarrierFireballCollision(int timeInSeconds){
+    public void checkBarrierFireballCollision(int timeInSeconds) {
         ArrayList<Barrier> barriers = getBarriers();
         ArrayList<Barrier> toRemove = new ArrayList<>();
         ArrayList<Barrier> purplesToRemove = new ArrayList<>();
@@ -633,33 +625,32 @@ public class Game {
             Rectangle brRect = new Rectangle(br.getCoordinate().getX(), br.getCoordinate().getY(), (int) br.getPreferredSize().getWidth(), (int) br.getPreferredSize().getHeight());
 
             if (brRect.intersects(fireballRectangle)) {
-               playSoundEffect(1);
+                playSoundEffect(1);
 
-                if (br==fireball.getLastCollided()) return;
+                if (br == fireball.getLastCollided()) return;
 
                 fireball.setLastCollided(br);
-                if(br.getType()==BarrierType.HOLLOW_PURPLE) hollowCount++;
-                if (!fireball.isOverwhelming()){ // no collision if it is
+                if (br.getType() == BarrierType.HOLLOW_PURPLE) hollowCount++;
+                if (!fireball.isOverwhelming()) { // no collision if it is
                     Rectangle sideLRect = new Rectangle(br.getCoordinate().getX(), br.getCoordinate().getY() + 5, 1, 5);
                     Rectangle sideRRect = new Rectangle(br.getCoordinate().getX() + 50, br.getCoordinate().getY() + 5, 1, 5);
 
                     if ((sideLRect.intersects(fireballRectangle)) || (sideRRect.intersects(fireballRectangle))) {
                         fireball.setxVelocity(-xVelocity);
                     } else {
-                        if (xVelocity*br.getVelocity()>0){ //barrier & ball same direction
-                            fireball.setxVelocity( xVelocity+  Math.signum(xVelocity) * 0.5);
-                        }
-                        else if (xVelocity*br.getVelocity()<0){ //opposite direction
+                        if (xVelocity * br.getVelocity() > 0) { //barrier & ball same direction
+                            fireball.setxVelocity(xVelocity + Math.signum(xVelocity) * 0.5);
+                        } else if (xVelocity * br.getVelocity() < 0) { //opposite direction
                             fireball.setxVelocity(-xVelocity);
                         }
                         fireball.setyVelocity(-yVelocity);
                     }
-                    if (hitBarrier(br,1)) {
+                    if (hitBarrier(br, 1)) {
                         toRemove.add(br);
-                    }}
-                else {
-                    if (hitBarrier(br,10)){ //This is always true
-                        if(br.getType()==BarrierType.HOLLOW_PURPLE){
+                    }
+                } else {
+                    if (hitBarrier(br, 10)) { //This is always true
+                        if (br.getType() == BarrierType.HOLLOW_PURPLE) {
                             purplesToRemove.add(br);
                         }
                         toRemove.add(br);
@@ -669,21 +660,19 @@ public class Game {
         }
         barriers.removeAll(toRemove);
         purpleBarriers.removeAll(purplesToRemove);
-        // Updating the score.
-        getScore().incrementScore(toRemove.size()-hollowCount, timeInSeconds);
+        getScore().incrementScore(toRemove.size() - hollowCount, timeInSeconds);
     }
+
     private boolean hitBarrier(Barrier barrier, int hitTimes) {
         if (barrier.isFrozen()) return false;
         barrier.setnHits(barrier.getnHits() - hitTimes);
         if (barrier.getnHits() <= 0) {
             barrier.destroy();
-            if(barrier.getType()==BarrierType.EXPLOSIVE){
+            if (barrier.getType() == BarrierType.EXPLOSIVE) {
                 explodeBarrier(barrier);
-            }
-            else if(barrier.getType()==BarrierType.REWARDING){
+            } else if (barrier.getType() == BarrierType.REWARDING) {
                 dropSpell(barrier);
-            }
-            else if(barrier.getType()==BarrierType.HOLLOW_PURPLE){
+            } else if (barrier.getType() == BarrierType.HOLLOW_PURPLE) {
                 purpleBarriers.remove(barrier);
             }
             return true;
@@ -694,75 +683,75 @@ public class Game {
 
     private void explodeBarrier(Barrier barrier) {
         Debris debris = new Debris(barrier.getCoordinate());
-        debris.setBackground(new Color(0, 0, 0, 0)); // Transparent background
+        debris.setBackground(new Color(0, 0, 0, 0));
         activeDebris.add(debris);
     }
 
-    private void dropSpell(Barrier barrier){
+    private void dropSpell(Barrier barrier) {
         Spell spell = new Spell(barrier.getCoordinate(), this.isMultiplayer);
-        spell.setBackground(new Color(0, 0, 0, 0)); // Transparent background
+        spell.setBackground(new Color(0, 0, 0, 0));
         droppingSpells.add(spell);
     }
 
-    public void useSpell(SpellType spellType){
+    public void useSpell(SpellType spellType) {
 
-        if(inventory.checkSpellCount(spellType)){
-            if(spellType == SpellType.FELIX_FELICIS){
+        if (inventory.checkSpellCount(spellType)) {
+            if (spellType == SpellType.FELIX_FELICIS) {
                 chance.incrementChance();
                 inventory.updateInventory(spellType, -1);
                 playSoundEffect(5);
             }
-            if(spellType == SpellType.STAFF_EXPANSION && magicalStaff.getStaffWidth()==100) {
+            if (spellType == SpellType.STAFF_EXPANSION && magicalStaff.getStaffWidth() == 100) {
                 magicalStaff.setStaffWidth(200);
                 magicalStaff.setExpansionTime(System.currentTimeMillis());
                 inventory.updateInventory(spellType, -1);
                 playSoundEffect(3);
             }
-            if(spellType == SpellType.HEX && !getMagicalStaff().isShooting()){
+            if (spellType == SpellType.HEX && !getMagicalStaff().isShooting()) {
                 getMagicalStaff().setShooting(true);
                 getMagicalStaff().setCannonTime(System.currentTimeMillis());
                 inventory.updateInventory(spellType, -1);
             }
-            if(spellType == SpellType.OVERWHELMING_FIREBALL && !getFireball().isOverwhelming()){
+            if (spellType == SpellType.OVERWHELMING_FIREBALL && !getFireball().isOverwhelming()) {
                 getFireball().setOverwhelming(true);
                 getFireball().setOverwhelmTime(System.currentTimeMillis());
                 inventory.updateInventory(spellType, -1);
             }
-            if(spellType == SpellType.INFINITE_VOID){
+            if (spellType == SpellType.INFINITE_VOID) {
 
             }
         }
     }
 
-    public Bullet[] createHexBullet(){
+    public Bullet[] createHexBullet() {
 
-        MagicalStaff magicalStaff=getMagicalStaff();
-        int leftMostX=magicalStaff.getTopLeftCornerOfMagicalStaff().getX();
-        int leftMostY=magicalStaff.getTopLeftCornerOfMagicalStaff().getY();
-        int length=magicalStaff.getStaffWidth();
-        double angleRadian=Math.toRadians(magicalStaff.getAngle());
-        double lengthY= (double) length /2 * Math.sin(angleRadian);
-        double lengthXLeft= (double) length/2*(1-Math.cos(angleRadian));
-        double lengthXRight= (double) length/2 * (1+Math.cos(angleRadian));
+        MagicalStaff magicalStaff = getMagicalStaff();
+        int leftMostX = magicalStaff.getTopLeftCornerOfMagicalStaff().getX();
+        int leftMostY = magicalStaff.getTopLeftCornerOfMagicalStaff().getY();
+        int length = magicalStaff.getStaffWidth();
+        double angleRadian = Math.toRadians(magicalStaff.getAngle());
+        double lengthY = (double) length / 2 * Math.sin(angleRadian);
+        double lengthXLeft = (double) length / 2 * (1 - Math.cos(angleRadian));
+        double lengthXRight = (double) length / 2 * (1 + Math.cos(angleRadian));
 
-        Coordinate leftCoordinate= new Coordinate((int) (leftMostX+lengthXLeft),(int) (leftMostY-lengthY));
-        Coordinate rightCoordinate=new Coordinate((int) (leftMostX+lengthXRight),(int) (leftMostY+lengthY));
-        int bulletX=3*(int)Math.round(Math.sin(Math.toRadians(magicalStaff.getAngle())));
-        int bulletY=3*(int)-Math.round( Math.cos(Math.toRadians(magicalStaff.getAngle())));
+        Coordinate leftCoordinate = new Coordinate((int) (leftMostX + lengthXLeft), (int) (leftMostY - lengthY));
+        Coordinate rightCoordinate = new Coordinate((int) (leftMostX + lengthXRight), (int) (leftMostY + lengthY));
+        int bulletX = 3 * (int) Math.round(Math.sin(Math.toRadians(magicalStaff.getAngle())));
+        int bulletY = 3 * (int) -Math.round(Math.cos(Math.toRadians(magicalStaff.getAngle())));
 
-        Bullet bullet=new Bullet(leftCoordinate,bulletX,bulletY);
+        Bullet bullet = new Bullet(leftCoordinate, bulletX, bulletY);
         bullet.setBackground(new Color(0, 0, 0, 0));
-        Bullet bullet2=new Bullet(rightCoordinate,bulletX,bulletY);
+        Bullet bullet2 = new Bullet(rightCoordinate, bulletX, bulletY);
         bullet2.setBackground(new Color(0, 0, 0, 0));
 
         activeBullets.add(bullet);
         activeBullets.add(bullet2);
 
-        Bullet[] bullets= {bullet,bullet2};
+        Bullet[] bullets = {bullet, bullet2};
         return bullets;
     }
 
-    public Shape getStaffOrientation(){
+    public Shape getStaffOrientation() {
         MagicalStaff magicalStaff = getMagicalStaff();
         double msAngle = magicalStaff.getAngle();
         double angleRadians = Math.toRadians(msAngle);
@@ -781,18 +770,18 @@ public class Game {
         return transformedRectangle;
     }
 
-    public boolean checkHexBulletCollision(Bullet bullet, int timeInSeconds){
-        boolean collides=false;
+    public boolean checkHexBulletCollision(Bullet bullet, int timeInSeconds) {
+        boolean collides = false;
         ArrayList<Barrier> toRemove = new ArrayList<>();
         Rectangle2D.Double bulletRectangle = new Rectangle2D.Double( // Barrier collision
-                bullet.getCoordinate().getX()  ,  bullet.getCoordinate().getY(),20,20);
+                bullet.getCoordinate().getX(), bullet.getCoordinate().getY(), 20, 20);
 
         for (Barrier br : barriers) {
             Rectangle brRect = new Rectangle(br.getCoordinate().getX(), br.getCoordinate().getY(),
                     (int) br.getPreferredSize().getWidth(), (int) br.getPreferredSize().getHeight());
             if (brRect.intersects(bulletRectangle)) {
-                if (hitBarrier(br,1))  toRemove.add(br);
-                collides=true;
+                if (hitBarrier(br, 1)) toRemove.add(br);
+                collides = true;
             }
         }
         barriers.removeAll(toRemove);
@@ -809,13 +798,15 @@ public class Game {
         this.purpleBarriers = purpleBarriers;
     }
 
-    private void playSoundEffect(int i){
+    private void playSoundEffect(int i) {
         sound.setFile(i);
         sound.play();
     }
+
     public String getGameName() {
         return gameName;
     }
+
     public void setGameName(String gameName) {
         this.gameName = gameName;
     }
@@ -823,20 +814,13 @@ public class Game {
     public String getDate() {
         return date;
     }
+
     public void setDate(String date) {
         this.date = date;
     }
 
-    public void setYmir(Ymir ymir) {
-        this.ymir = ymir;
-    }
-
-    public void getYmir(Ymir ymir) {
-        this.ymir = ymir;
-    }
-
     public void triggerBall() {
-        if(fireball.getxVelocity()==0 && fireball.getyVelocity()==0){
+        if (fireball.getxVelocity() == 0 && fireball.getyVelocity() == 0) {
             this.fireball.setxVelocity(0);
             this.fireball.setyVelocity(-3);
             playSoundEffect(6);

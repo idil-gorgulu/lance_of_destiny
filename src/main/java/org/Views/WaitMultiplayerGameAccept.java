@@ -23,10 +23,9 @@ public class WaitMultiplayerGameAccept extends Page implements ConnectedStateCha
     private JProgressBar progressBar;
     private JPanel centerPanel;
     private MultiPortServer server;
-    private int countdownValue = 3; // starting from 3 seconds
+    private int countdownValue = 3;
     private Game multiplayerGame;
 
-    DataBaseController dataBaseController;
 
 
     public WaitMultiplayerGameAccept() {
@@ -69,18 +68,18 @@ public class WaitMultiplayerGameAccept extends Page implements ConnectedStateCha
 
     private void startCountdown() {
         while (countdownValue >= 0) {
-            System.out.println(countdownValue); // Print the current countdown value
-            countdownValue--; // Decrement the countdown value
+            System.out.println(countdownValue);
+            countdownValue--;
 
             try {
-                Thread.sleep(1000); // Wait for 1 second before continuing
+                Thread.sleep(1000);
             } catch (InterruptedException e) {
                 System.err.println("Countdown was interrupted!");
                 break;
             }
         }
 
-        System.out.println("Go!"); // Print "Go!" when the countdown finishes
+        System.out.println("Go!");
         // Set the game in here
         DataBaseController.getInstance().openMultiplayerGame(User.getUserInstance().getMultiplayerGameName());
         multiplayerGame = Game.getInstance();
@@ -141,7 +140,6 @@ public class WaitMultiplayerGameAccept extends Page implements ConnectedStateCha
         if (server.opponentReadyClicked) {
             Navigator.getInstance().showRunningModePage();
         } else {
-            // Update UI to show a waiting message or similar
 
         }
     }

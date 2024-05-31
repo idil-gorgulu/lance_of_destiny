@@ -30,8 +30,8 @@ public class Barrier extends JPanel {
         this.type = type;
         this.nHits = initializenHits(type);
         this.isMoving=false;
-        this.radius = 150; // Example radius, adjust based on your screen size and desired movement scale
-        this.centerX = coordinate.getX() + radius; // Center based on initial position
+        this.radius = 150;
+        this.centerX = coordinate.getX() + radius;
         this.centerY = coordinate.getY();
         //Option 1:
         try {
@@ -40,7 +40,6 @@ public class Barrier extends JPanel {
             e.printStackTrace();
         }
         System.out.println("Barrier size:" + barrierImage.getWidth() + barrierImage.getHeight());
-        //setPreferredSize(new Dimension(barrierImage.getWidth(), barrierImage.getHeight()));
 
         //Option 2:
         try {
@@ -95,7 +94,6 @@ public class Barrier extends JPanel {
                 int textWidth = fm.stringWidth(hitsText);
                 int textHeight = fm.getHeight();
 
-                //Adding background to improve the readability of the remaining hits
                 int rectX = x + (barrierImage.getWidth() - textWidth) / 2 - 5;
                 int rectY = y + (barrierImage.getHeight() - textHeight) / 2 - 5;
                 int rectWidth = textWidth + 10;
@@ -152,7 +150,7 @@ public class Barrier extends JPanel {
         repaint();
     }
 
-    public double currentAngle = 0; // Maintain the current angle as a member variable
+    public double currentAngle = 0;
 
     public void moveCircular() {
         // REQUIRES:
@@ -222,7 +220,6 @@ public class Barrier extends JPanel {
     public void freeze(){
         isFrozen = true;
         try {
-            //this.barrierImage = ImageIO.read(new File("assets/frozenicongem.png"));
             this.barrierImage = resizeImage(ImageIO.read(new File("assets/frozenicongem.png")), 50, 15);
         } catch (IOException e) {
             e.printStackTrace();

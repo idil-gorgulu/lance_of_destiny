@@ -19,25 +19,23 @@ public class StartSingleplayerPage extends Page {
 
     @Override
     protected void initUI() {
-        setLayout(new BorderLayout());  // Ana panelin düzenini BorderLayout olarak değiştirin
+        setLayout(new BorderLayout());
         try {
             backgroundImage = ImageIO.read(new File("assets/Background.png"));
         } catch (IOException e) {
             e.printStackTrace();
         }
 
-        // Back Button oluşturuluyor ve BorderLayout'un WEST kısmına ekleniyor
         JButton backButton = new JButton("Back");
         backButton.addActionListener(e -> Navigator.getInstance().showGameModePage());
         JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
         buttonPanel.add(backButton);
-        buttonPanel.setOpaque(false);  // Buton paneli şeffaf yapılır
-        add(buttonPanel, BorderLayout.NORTH);  // Buton paneli en üstte ve sol tarafta olacak şekilde ekleniyor
+        buttonPanel.setOpaque(false);
+        add(buttonPanel, BorderLayout.NORTH);
 
-        // Geri kalan içerikler için bir merkez panel oluşturulur
         JPanel centerPanel = new JPanel();
         centerPanel.setLayout(new BoxLayout(centerPanel, BoxLayout.Y_AXIS));
-        centerPanel.setOpaque(false);  // Arka plan görüntüsünün görünmesi için şeffaf yapılır
+        centerPanel.setOpaque(false);
 
         centerPanel.add(Box.createVerticalStrut(50));
         JLabel gameTitle = new JLabel("Lance of Destiny");
@@ -57,7 +55,7 @@ public class StartSingleplayerPage extends Page {
         centerPanel.add(Box.createVerticalStrut(10));
         centerPanel.add(runningModeButton);
 
-        add(centerPanel, BorderLayout.CENTER);  // Merkez paneli ekleniyor
+        add(centerPanel, BorderLayout.CENTER);
     }
 
     @Override

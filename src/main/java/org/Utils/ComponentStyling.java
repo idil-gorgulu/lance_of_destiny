@@ -22,26 +22,26 @@ public class ComponentStyling {
     }
 
     public static void customizeButtonback(JButton button) {
-        button.setBackground(new Color(70, 130, 180)); // Set the background color of the button
-        button.setForeground(Color.WHITE); // Set text color
-        button.setFocusPainted(false); // Remove focus border
-        button.setFont(new Font("Tahoma", Font.BOLD, 18)); // Increase font size
-        button.setOpaque(true); // Set button opacity
-        button.setContentAreaFilled(false); // Set if the content area is filled
-        button.setBorderPainted(false); // Remove border painting
-        button.setBorder(BorderFactory.createEmptyBorder(20, 30, 20, 30)); // Add padding
-        button.setFocusable(false); // Remove focusability
-        button.setCursor(new Cursor(Cursor.HAND_CURSOR)); // Change cursor to hand cursor
+        button.setBackground(new Color(70, 130, 180));
+        button.setForeground(Color.WHITE);
+        button.setFocusPainted(false);
+        button.setFont(new Font("Tahoma", Font.BOLD, 18));
+        button.setOpaque(true);
+        button.setContentAreaFilled(false);
+        button.setBorderPainted(false);
+        button.setBorder(BorderFactory.createEmptyBorder(20, 30, 20, 30));
+        button.setFocusable(false);
+        button.setCursor(new Cursor(Cursor.HAND_CURSOR));
 
         button.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseEntered(MouseEvent e) {
-                button.setCursor(new Cursor(Cursor.HAND_CURSOR)); // Change cursor to hand cursor
+                button.setCursor(new Cursor(Cursor.HAND_CURSOR));
             }
 
             @Override
             public void mouseExited(MouseEvent e) {
-                button.setCursor(Cursor.getDefaultCursor()); // Change cursor to default
+                button.setCursor(Cursor.getDefaultCursor());
             }
         });
 
@@ -51,7 +51,7 @@ public class ComponentStyling {
                 JButton b = (JButton) c;
                 g.setColor(b.getBackground());
                 ((Graphics2D) g).setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-                ((Graphics2D) g).fillRoundRect(0, 0, b.getWidth(), b.getHeight(), 30, 30); // Rounded corners
+                ((Graphics2D) g).fillRoundRect(0, 0, b.getWidth(), b.getHeight(), 30, 30);
                 super.paint(g, c);
             }
         });
@@ -66,7 +66,7 @@ public class ComponentStyling {
                     Graphics2D g2 = (Graphics2D) g.create();
                     g2.setColor(Color.GRAY);
                     g2.setFont(getFont().deriveFont(Font.ITALIC));
-                    g2.drawString(placeholder, 5, 20); // position the text
+                    g2.drawString(placeholder, 5, 20);
                     g2.dispose();
                 }
             }
@@ -85,7 +85,7 @@ public class ComponentStyling {
             }
         });
         textField.setForeground(Color.GRAY);
-        textField.setFont(new Font("Tahoma", Font.PLAIN, 18)); // Increased font size
+        textField.setFont(new Font("Tahoma", Font.PLAIN, 18));
         textField.setMaximumSize(new Dimension(Integer.MAX_VALUE, textField.getPreferredSize().height));
         textField.setAlignmentX(Component.CENTER_ALIGNMENT);
         return textField;
@@ -101,7 +101,7 @@ public class ComponentStyling {
                     Graphics2D g2 = (Graphics2D) g.create();
                     g2.setColor(Color.GRAY);
                     g2.setFont(getFont().deriveFont(Font.ITALIC));
-                    g2.drawString(placeholder, 5, 20); // position the text
+                    g2.drawString(placeholder, 5, 20);
                     g2.dispose();
                 }
             }
@@ -121,23 +121,23 @@ public class ComponentStyling {
             }
         });
         passwordField.setForeground(Color.GRAY);
-        passwordField.setFont(new Font("Tahoma", Font.PLAIN, 18)); // Increased font size
+        passwordField.setFont(new Font("Tahoma", Font.PLAIN, 18));
         passwordField.setMaximumSize(new Dimension(Integer.MAX_VALUE, passwordField.getPreferredSize().height));
         passwordField.setAlignmentX(Component.CENTER_ALIGNMENT);
         return passwordField;
     }
 
     public static void customizeButton(JButton button) {
-        button.setBackground(new Color(100, 149, 237)); // Cornflower blue
+        button.setBackground(new Color(100, 149, 237));
         button.setForeground(Color.WHITE);
         button.setFocusPainted(false);
-        button.setFont(new Font("Tahoma", Font.BOLD, 18)); // Increased font size
-        button.setOpaque(false); // Make button transparent so we can custom paint
-        button.setContentAreaFilled(false); // Tell Swing to not fill the content area
-        button.setBorderPainted(false); // Tell Swing to not paint the border
-        button.setBorder(BorderFactory.createEmptyBorder(20, 30, 20, 30)); // Increased padding
-        button.setFocusable(false); // Optional: Removes the focus border
-        button.setCursor(new Cursor(Cursor.HAND_CURSOR)); // Changes the cursor to a hand cursor on hover
+        button.setFont(new Font("Tahoma", Font.BOLD, 18));
+        button.setOpaque(false);
+        button.setContentAreaFilled(false);
+        button.setBorderPainted(false);
+        button.setBorder(BorderFactory.createEmptyBorder(20, 30, 20, 30));
+        button.setFocusable(false);
+        button.setCursor(new Cursor(Cursor.HAND_CURSOR));
 
         button.addMouseListener(new MouseAdapter() {
             @Override

@@ -19,17 +19,13 @@ public class EnterPage extends Page {
 
     @Override
     protected void initUI() {
-        // Setting the layout
         setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
-
-        // Setting the background
         try {
             backgroundImage = ImageIO.read(new File("assets/Background.png"));
         } catch (IOException e) {
             e.printStackTrace();
         }
 
-        // Game Title
         add(Box.createVerticalStrut(50));
         JLabel gameTitle = new JLabel("Lance of Destiny");
         gameTitle.setForeground(Color.WHITE);
@@ -40,7 +36,6 @@ public class EnterPage extends Page {
         JButton loginButton = ComponentStyling.createStyledButton("Login");
         JButton signupButton = ComponentStyling.createStyledButton("Signup");
 
-        // Action listeners for buttons
         loginButton.addActionListener(e -> Navigator.getInstance().showLoginPage());
         signupButton.addActionListener(e -> Navigator.getInstance().showSignupPage());
 

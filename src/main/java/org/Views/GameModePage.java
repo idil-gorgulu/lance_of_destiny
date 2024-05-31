@@ -47,7 +47,7 @@ public class GameModePage extends Page {
         add(singleplayerModeButton);
         add(Box.createVerticalStrut(10));
         add(multiplayerModeButton);
-        add(Box.createVerticalStrut(10)); // Add space between multiplayer and help buttons
+        add(Box.createVerticalStrut(10));
         add(helpScreenButton);
     }
     @Override

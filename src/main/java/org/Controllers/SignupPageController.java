@@ -19,13 +19,11 @@ public class SignupPageController {
     }
 
     public void createUser(String email, String username, String password) {
-        // Check if password is suitable
         if (!isValidPassword(password)) {
             JOptionPane.showMessageDialog(null, "Password must be at least 6 characters long and contain at least one digit.");
             return;
         }
 
-        // Check if already exists
         if (emailExists(email)) {
             JOptionPane.showMessageDialog(null, "Email already exists.");
             return;
@@ -36,7 +34,6 @@ public class SignupPageController {
             return;
         }
 
-        // Save user
         Document user = new Document();
         user.put("email", email);
         user.put("username", username);

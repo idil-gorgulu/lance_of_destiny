@@ -335,15 +335,15 @@ public class BuildingModePage extends Page {
         leftSide.add(playButton, BorderLayout.SOUTH);
 
         if (buildingModeController.getReady()){
-            //donot delete these commented out lines
-//            infoContainer.add(saveButton, BorderLayout.SOUTH);
-//            leftSide.add(playButton, BorderLayout.SOUTH);
+            // donot delete these commented out lines
+            infoContainer.add(saveButton, BorderLayout.SOUTH);
+            leftSide.add(playButton, BorderLayout.SOUTH);
             infoContainer.remove(lowerBoundInfo);
         }
         else{
-            //donot delete these commented out lines
-//            infoContainer.remove(saveButton);
-//            leftSide.remove(playButton);
+            // donot delete these commented out lines
+            infoContainer.remove(saveButton);
+            leftSide.remove(playButton);
             lowerBoundInfo.setHorizontalAlignment(SwingConstants.LEFT);
             infoContainer.add(lowerBoundInfo); }
 

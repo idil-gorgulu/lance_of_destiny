@@ -17,16 +17,13 @@ public class HandleSending extends KeyAdapter implements Runnable {
         int keyCode = e.getKeyCode();
         switch (keyCode) {
             case KeyEvent.VK_Z:
-//                multiplayerGame.getYmir().activateHollowPurple();
-                output.println("hp"); //hollow purple
+                output.println("hp");
                 break;
             case KeyEvent.VK_X:
-//                multiplayerGame.getYmir().activateInfiniteVoid();
-                output.println("iv"); //hollow purple
+                output.println("iv");
                 break;
             case KeyEvent.VK_C:
-//                multiplayerGame.getYmir().activateDoubleAccel();
-                output.println("da"); //hollow purple
+                output.println("da");
                 break;
         }
     }

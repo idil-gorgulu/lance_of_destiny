@@ -9,7 +9,6 @@ public class Sound {
     Clip clip;
     Clip clip2;
     File[] files=new File[20];
-    //File file1;
 
     public Sound(){
         files[0]= new File("assets/sound/gameTheme.wav");

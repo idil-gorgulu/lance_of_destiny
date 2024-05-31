@@ -21,14 +21,14 @@ public class SignupPage extends Page {
 
     public SignupPage() {
         super();
-        this.setOpaque(false); // Maintain consistent visual styling
+        this.setOpaque(false);
         loadBackgroundImage();
         initUI();
     }
 
     private void loadBackgroundImage() {
         try {
-            backgroundImage = ImageIO.read(new File("assets/bckg.jpg")); // Ensure this matches your project structure
+            backgroundImage = ImageIO.read(new File("assets/bckg.jpg"));
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -38,7 +38,6 @@ public class SignupPage extends Page {
     protected void initUI() {
         setLayout(new BorderLayout());
 
-        // Reuse backgroundPanel setup from LoginPage
         JPanel backgroundPanel = new JPanel(new BorderLayout()) {
             @Override
             protected void paintComponent(Graphics g) {
@@ -51,7 +50,6 @@ public class SignupPage extends Page {
         backgroundPanel.setOpaque(false);
         add(backgroundPanel, BorderLayout.NORTH);
 
-        // Reuse backButton setup from LoginPage
         JPanel backButtonPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
         backButtonPanel.setOpaque(false);
         JButton backButton = new JButton("Back");
@@ -60,7 +58,6 @@ public class SignupPage extends Page {
         backgroundPanel.add(backButtonPanel, BorderLayout.NORTH);
 
         customizeButtonback(backButton);
-        // Central panel for form elements, reuse from LoginPage
         JPanel centerPanel = setupCenterPanel(backgroundImage);
         add(centerPanel, BorderLayout.CENTER);
     }
@@ -77,12 +74,10 @@ public class SignupPage extends Page {
         };
         centerPanel.setOpaque(false);
 
-        // Form panel for input fields and buttons
         JPanel formPanel = new JPanel();
         formPanel.setLayout(new BoxLayout(formPanel, BoxLayout.Y_AXIS));
         formPanel.setOpaque(false);
 
-        // Setup for username, email, and password fields
         JTextField usernameTextField = setupTextField("Username");
         formPanel.add(usernameTextField);
 
@@ -92,7 +87,6 @@ public class SignupPage extends Page {
         JPasswordField passwordField = setupPasswordField("Password");
         formPanel.add(passwordField);
 
-        // Setup for signup button, reuse customizeButton from LoginPage
         JButton signupButton = new JButton("Sign Up");
         customizeButton(signupButton); // You can reuse the customizeButton method from LoginPage
         signupButton.addActionListener(e -> SignupPageController.getInstance().createUser(emailTextField.getText(), usernameTextField.getText(), String.copyValueOf(passwordField.getPassword())));
@@ -107,7 +101,6 @@ public class SignupPage extends Page {
         return centerPanel;
     }
 
-    // Reuse the setupTextField, setupPasswordField, and customizeButton methods from LoginPage
     private JTextField setupTextField(String placeholder) {
         JTextField textField = new JTextField("", 15) {
             @Override
@@ -179,16 +172,16 @@ public class SignupPage extends Page {
     }
 
     private void customizeButton(JButton button) {
-        button.setBackground(new Color(100, 149, 237)); // Cornflower blue
+        button.setBackground(new Color(100, 149, 237));
         button.setForeground(Color.WHITE);
         button.setFocusPainted(false);
-        button.setFont(new Font("Tahoma", Font.BOLD, 18)); // Increased font size
-        button.setOpaque(false); // Make button transparent so we can custom paint
-        button.setContentAreaFilled(false); // Tell Swing to not fill the content area
-        button.setBorderPainted(false); // Tell Swing to not paint the border
-        button.setBorder(BorderFactory.createEmptyBorder(20, 30, 20, 30)); // Increased padding
-        button.setFocusable(false); // Optional: Removes the focus border
-        button.setCursor(new Cursor(Cursor.HAND_CURSOR)); // Changes the cursor to a hand cursor on hover
+        button.setFont(new Font("Tahoma", Font.BOLD, 18));
+        button.setOpaque(false);
+        button.setContentAreaFilled(false);
+        button.setBorderPainted(false);
+        button.setBorder(BorderFactory.createEmptyBorder(20, 30, 20, 30));
+        button.setFocusable(false);
+        button.setCursor(new Cursor(Cursor.HAND_CURSOR));
 
         button.addMouseListener(new MouseAdapter() {
             @Override
@@ -215,26 +208,26 @@ public class SignupPage extends Page {
     }
 
     private void customizeButtonback(JButton button) {
-        button.setBackground(new Color(70, 130, 180)); // Set the background color of the button
-        button.setForeground(Color.WHITE); // Set text color
-        button.setFocusPainted(false); // Remove focus border
-        button.setFont(new Font("Tahoma", Font.BOLD, 18)); // Increase font size
-        button.setOpaque(true); // Set button opacity
-        button.setContentAreaFilled(false); // Set if the content area is filled
-        button.setBorderPainted(false); // Remove border painting
-        button.setBorder(BorderFactory.createEmptyBorder(20, 30, 20, 30)); // Add padding
-        button.setFocusable(false); // Remove focusability
-        button.setCursor(new Cursor(Cursor.HAND_CURSOR)); // Change cursor to hand cursor
+        button.setBackground(new Color(70, 130, 180));
+        button.setForeground(Color.WHITE);
+        button.setFocusPainted(false);
+        button.setFont(new Font("Tahoma", Font.BOLD, 18));
+        button.setOpaque(true);
+        button.setContentAreaFilled(false);
+        button.setBorderPainted(false);
+        button.setBorder(BorderFactory.createEmptyBorder(20, 30, 20, 30));
+        button.setFocusable(false);
+        button.setCursor(new Cursor(Cursor.HAND_CURSOR));
 
         button.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseEntered(MouseEvent e) {
-                button.setCursor(new Cursor(Cursor.HAND_CURSOR)); // Change cursor to hand cursor
+                button.setCursor(new Cursor(Cursor.HAND_CURSOR));
             }
 
             @Override
             public void mouseExited(MouseEvent e) {
-                button.setCursor(Cursor.getDefaultCursor()); // Change cursor to default
+                button.setCursor(Cursor.getDefaultCursor());
             }
         });
 
@@ -251,5 +244,4 @@ public class SignupPage extends Page {
     }
 
 
-    // Additional methods from LoginPage (like setupTextField, setupPasswordField, customizeButton, etc.) should be either reused directly if they're not private, or copied into this class if they are.
 }
