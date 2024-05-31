@@ -1,6 +1,7 @@
 package org.Views;
 import org.Domain.*;
 import org.Controllers.*;
+import org.Listeners.MPInfoListener;
 import org.Listeners.MyKeyListener;
 import org.Listeners.InventoryListener;
 
@@ -15,7 +16,7 @@ import java.io.IOException;
 import java.util.*;
 import java.util.Timer;
 
-public class RunningModePage extends Page implements InventoryListener {
+public class RunningModePage extends Page implements InventoryListener, MPInfoListener {
     private JLabel hexCount = new JLabel("0");
     private JLabel overwhelmingFireballCount = new JLabel("0");
     private JLabel magicalStaffExpansionCount = new JLabel("0");
@@ -46,6 +47,9 @@ public class RunningModePage extends Page implements InventoryListener {
     private Timer gameTimer =  new Timer();
     private Sound sound=new Sound();
     private boolean mpgame=false;
+    private JLabel opponentScore = new JLabel("Opponent Score:");
+    private JLabel opponentBarrier = new JLabel("Opponent Remaining Barrier:");
+    private JLabel opponentChance = new JLabel("Opponents Remaining Chance");
 
     public static final long COLLISION_COOLDOWN = 1000; // Cooldown period in milliseconds
 
@@ -290,17 +294,10 @@ public class RunningModePage extends Page implements InventoryListener {
                 //TODO: add opponent's information here.
                 if(mpgame==true){
                     JLabel opponentLabel = new JLabel("Opponent Information:");
-                    if(runningModeController.getGameSession().getMpGameInformation()!=null){
-                        JLabel opponentScore = new JLabel("Opponent Score:" + " " + runningModeController.getGameSession().getMpGameInformation().get(0));
-                        JLabel opponentChance = new JLabel("Opponent Chance:"+ " "+ runningModeController.getGameSession().getMpGameInformation().get(2));
-                        JLabel opponentBarrier= new JLabel("Opponent Barrier:"+ " "+runningModeController.getGameSession().getMpGameInformation().get(1));
-
-                        infoContainer.add(opponentLabel );
-                        infoContainer.add(opponentScore );
-                        infoContainer.add(opponentChance);
-                        infoContainer.add(opponentBarrier);
-                    }
-
+                    infoContainer.add(opponentLabel);
+                    infoContainer.add(opponentScore );
+                    infoContainer.add(opponentChance);
+                    infoContainer.add(opponentBarrier);
 
                 }
 
@@ -409,6 +406,16 @@ public class RunningModePage extends Page implements InventoryListener {
                 }
             }
         });
+    }
+
+    @Override
+    public void onMPInfoUpdate() {
+        opponentScore.setText("Opponent Score:" + " " + runningModeController.getGameSession().getMpGameInformation().get(0));
+        opponentChance .setText("Opponent Chance:"+ " "+ runningModeController.getGameSession().getMpGameInformation().get(2));
+        opponentBarrier.setText("Opponent Barrier:"+ " "+runningModeController.getGameSession().getMpGameInformation().get(1));
+        opponentScore.repaint();
+        opponentChance.repaint();
+        opponentBarrier.repaint();
     }
 
     private void initializeInventory(GridBagConstraints gbc) {
