@@ -4,6 +4,7 @@ import org.Controllers.*;
 import org.Listeners.MPInfoListener;
 import org.Listeners.MyKeyListener;
 import org.Listeners.InventoryListener;
+import org.MultiplayerUtils.MultiPortClient;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
@@ -104,6 +105,7 @@ public class RunningModePage extends Page implements InventoryListener, MPInfoLi
         setupTimer();
         this.runningModeController.getGameSession().getInventory().addInventoryListener(this);
         this.runningModeController.getGameSession().getInventory().reloadInventory();
+
     }
 
     protected void paintComponent(Graphics g) { //background for the whole frame
@@ -293,12 +295,7 @@ public class RunningModePage extends Page implements InventoryListener, MPInfoLi
                 infoContainer.add(runningModeController.getGameSession().getScore());
                 //TODO: add opponent's information here.
                 if(mpgame==true){
-                    JLabel opponentLabel = new JLabel("Opponent Information:");
-                    infoContainer.add(opponentLabel);
-                    infoContainer.add(opponentScore );
-                    infoContainer.add(opponentChance);
-                    infoContainer.add(opponentBarrier);
-
+                    infoContainer.add(runningModeController.getGameSession().getMpGamePanel());
                 }
 
                 JPanel mainPanel = new JPanel();

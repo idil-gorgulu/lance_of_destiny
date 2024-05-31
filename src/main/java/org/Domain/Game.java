@@ -1,10 +1,15 @@
 package org.Domain;
+import org.Controllers.RunningModeController;
+import org.Listeners.MPInfoListener;
+
+import javax.swing.*;
 import java.awt.*;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.Rectangle2D;
 import java.awt.image.AreaAveragingScaleFilter;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Random;
 
 import static org.Views.RunningModePage.COLLISION_COOLDOWN;
@@ -34,14 +39,55 @@ public class Game {
     private ArrayList<Bullet> activeBullets;
     private Inventory inventory;
     private String date;
-    private ArrayList<Integer> mpGameInformation;
-
 
     public ArrayList<Integer> getMpGameInformation() {
         return mpGameInformation;
     }
+
+    private ArrayList<Integer> mpGameInformation;
+    private JPanel mpGamePanel;
+
+    private List<MPInfoListener> mpInfoListeners = new ArrayList<>();
+    public void addMPInfoListener(MPInfoListener listener) {
+        mpInfoListeners.add(listener);
+    }
+
+    private void notifyMPInfoListeners() {
+        for (MPInfoListener listener : mpInfoListeners) {
+            listener.onMPInfoUpdate();
+        }
+    }
+
+
+
+    public JPanel getMpGamePanel() {
+        JPanel mpGamePanel = new JPanel();
+        if(mpGameInformation != null){
+            JLabel opponentLabel = new JLabel("Opponent Information:");
+            JLabel opponentScore = new JLabel("Opponent Score:" + " " + this.getMpGameInformation().get(0));
+            JLabel opponentChance = new JLabel("Opponent Chance:"+ " "+ this.getMpGameInformation().get(2));
+            JLabel opponentBarrier= new JLabel("Opponent Barrier:"+ " "+this.getMpGameInformation().get(1));
+            mpGamePanel.add(opponentLabel );
+            mpGamePanel.add(opponentScore );
+            mpGamePanel.add(opponentChance);
+            mpGamePanel.add(opponentBarrier);
+            return mpGamePanel;
+        }
+        return null;
+    }
     public void setMpGameInformation(ArrayList<Integer> mpGameInformation) {
         this.mpGameInformation = mpGameInformation;
+        if(mpGameInformation != null){
+            JLabel opponentLabel = new JLabel("Opponent Information:");
+            JLabel opponentScore = new JLabel("Opponent Score:" + " " + this.getMpGameInformation().get(0));
+            JLabel opponentChance = new JLabel("Opponent Chance:"+ " "+ this.getMpGameInformation().get(2));
+            JLabel opponentBarrier= new JLabel("Opponent Barrier:"+ " "+this.getMpGameInformation().get(1));
+            mpGamePanel.add(opponentLabel );
+            mpGamePanel.add(opponentScore );
+            mpGamePanel.add(opponentChance);
+            mpGamePanel.add(opponentBarrier);
+        }
+        mpGamePanel = null;
     }
 
 

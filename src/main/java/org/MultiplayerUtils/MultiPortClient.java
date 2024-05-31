@@ -17,7 +17,6 @@ import java.util.regex.Pattern;
 public class MultiPortClient{
     private List<ConnectedStateChangeListener> connectedStateChangeListeners = new ArrayList<>();
     private List<CountdownStateChangeListener> countdownStateChangeListeners = new ArrayList<>();
-    private List<MPInfoListener> mpInfoListeners = new ArrayList<>();
     private Socket outputSocket;
     public PrintWriter output;
     private Socket inputSocket;
@@ -53,9 +52,7 @@ public class MultiPortClient{
     public void addCountdownStateChangeListener(CountdownStateChangeListener listener) {
         countdownStateChangeListeners.add(listener);
     }
-    public void addMPInfoListener(MPInfoListener listener) {
-        mpInfoListeners.add(listener);
-    }
+
 
     private void notifyAllConnectedStateChangeListeners() {
         for (ConnectedStateChangeListener listener : connectedStateChangeListeners) {
@@ -68,11 +65,7 @@ public class MultiPortClient{
         }
     }
 
-    private void notifyMPInfoListeners() {
-        for (MPInfoListener listener : mpInfoListeners) {
-            listener.onMPInfoUpdate();
-        }
-    }
+
 
 
     public void start() {
@@ -159,7 +152,7 @@ public class MultiPortClient{
         if (inputLine.startsWith("GameInformation")) {
             ArrayList<Integer> gameInformations = parseGameInformation(inputLine);
             multiplayerGame.setMpGameInformation(gameInformations);
-            notifyMPInfoListeners();
+
         }
         // Check for "Spell" identifier
         else if (inputLine.startsWith("Spell")) {
