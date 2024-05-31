@@ -2,6 +2,7 @@ package org.Domain;
 import java.awt.*;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.Rectangle2D;
+import java.awt.image.AreaAveragingScaleFilter;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Random;
@@ -33,6 +34,17 @@ public class Game {
     private ArrayList<Bullet> activeBullets;
     private Inventory inventory;
     private String date;
+    private ArrayList<Integer> mpGameInformation;
+
+
+    public ArrayList<Integer> getMpGameInformation() {
+        return mpGameInformation;
+    }
+    public void setMpGameInformation(ArrayList<Integer> mpGameInformation) {
+        this.mpGameInformation = mpGameInformation;
+    }
+
+
     private Game(){
         this.fireball = new Fireball();
         this.magicalStaff = new MagicalStaff();
