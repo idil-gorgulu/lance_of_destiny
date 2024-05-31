@@ -117,7 +117,7 @@ public class Ymir extends JPanel {
                 .forEach(Barrier::freeze);
     }
 
-    private void activateDoubleAccel() {
+    public void activateDoubleAccel() {
         System.out.println("Activating Double Accel");
         Fireball fireball = game.getFireball();
         fireball.setxVelocity(fireball.getxVelocity() / 2);

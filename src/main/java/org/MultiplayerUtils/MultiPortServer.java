@@ -5,6 +5,8 @@ import org.Domain.User;
 import org.Utils.Database;
 import org.bson.Document;
 
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 import java.io.*;
 import java.net.*;
 import java.util.ArrayList;
@@ -16,7 +18,7 @@ import java.util.concurrent.TimeUnit;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class MultiPortServer {
+public class MultiPortServer extends KeyAdapter {
     public static MultiPortServer instance;
     private ServerSocket serverSocketOut;
     private Socket outputSocket;
@@ -154,7 +156,7 @@ public class MultiPortServer {
             ScheduledExecutorService executor = Executors.newScheduledThreadPool(1);
             executor.scheduleAtFixedRate(sendStatisticsRunnable, 0, 1, TimeUnit.SECONDS);
 
-            Thread sendThread = new Thread(this::handleSending);
+            Thread sendThread = new Thread(new HandleSending(output));
             sendThread.start();
 
             while ((inputLine = input.readLine()) != null) {
@@ -255,6 +257,28 @@ public class MultiPortServer {
         } catch (IOException e) {
             System.out.println("Error closing server resources: " + e.getMessage());
         }
+    }
+
+    @Override
+    public void keyPressed(KeyEvent e) {
+        int keyCode = e.getKeyCode();
+        switch (keyCode) {
+            case KeyEvent.VK_Z:
+                //multiplayerGame.getYmir().activateHollowPurple();
+                spellMessage("hp");
+                break;
+            case KeyEvent.VK_X:
+                //multiplayerGame.getYmir().activateInfiniteVoid();
+                spellMessage("iv");
+                break;
+            case KeyEvent.VK_C:
+                //multiplayerGame.getYmir().activateDoubleAccel();
+                spellMessage("da");
+                break;
+        }
+    }
+    public String spellMessage(String spell) {
+        return spell;
     }
 
     public static void main(String[] args) {
