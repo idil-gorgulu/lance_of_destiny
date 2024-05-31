@@ -2,11 +2,8 @@ package org.Domain;
 
 import org.Listeners.InventoryListener;
 
-import javax.swing.*;
-import java.awt.*;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashMap;
 
 public class Inventory{
 
@@ -105,5 +102,13 @@ public class Inventory{
         else if (spellType == SpellType.OVERWHELMING_FIREBALL){
             spellCountsList.set(2, count);
         }
+    }
+
+    // Reloads inventory for database read.
+    public void reloadInventory (){
+        notifyListeners(SpellType.HEX, spellCountsList.get(0));
+        notifyListeners(SpellType.FELIX_FELICIS, spellCountsList.get(1));
+        notifyListeners(SpellType.STAFF_EXPANSION, spellCountsList.get(2));
+        notifyListeners(SpellType.OVERWHELMING_FIREBALL, spellCountsList.get(3));
     }
 }

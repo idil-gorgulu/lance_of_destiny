@@ -3,6 +3,7 @@ import org.Domain.*;
 import org.Controllers.*;
 import org.Listeners.MyKeyListener;
 import org.Listeners.InventoryListener;
+
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import javax.swing.border.Border;
@@ -14,11 +15,15 @@ import java.io.IOException;
 import java.util.*;
 import java.util.Timer;
 
-public class RunningModePage extends Page implements InventoryListener{
+public class RunningModePage extends Page implements InventoryListener {
     private JLabel hexCount = new JLabel("0");
     private JLabel overwhelmingFireballCount = new JLabel("0");
     private JLabel magicalStaffExpansionCount = new JLabel("0");
     private JLabel felixFelicisCount = new JLabel("0");
+    private JButton hexButton = new JButton("Use");
+    private JButton overwhelmingFireballButton = new JButton("Use");
+    private JButton magicalStaffExpansionButton = new JButton("Use");
+    private JButton felixFelicisButton = new JButton("Use");
     private BufferedImage hexImage;
     private BufferedImage felixFelicisImage;
     private BufferedImage magicalStaffExpansionImage;
@@ -40,7 +45,7 @@ public class RunningModePage extends Page implements InventoryListener{
     private int frameCount = 0;
     private Timer gameTimer =  new Timer();
     private Sound sound = new Sound();
-    public static final long COLLISION_COOLDOWN = 1000; // Cooldown period in milliseconds
+    public static final long COLLISION_COOLDOWN = 1000;
     private JLabel timeLabel;
     public RunningModePage() {
         super();
@@ -64,6 +69,7 @@ public class RunningModePage extends Page implements InventoryListener{
         requestFocus();
         setupTimer();
         this.runningModeController.getGameSession().getInventory().addInventoryListener(this);
+        this.runningModeController.getGameSession().getInventory().reloadInventory();
     }
 
     protected void paintComponent(Graphics g) { //background for the whole frame
@@ -203,7 +209,6 @@ public class RunningModePage extends Page implements InventoryListener{
                 infoContainer.setOpaque(true);
                 timeLabel = new JLabel("Time: 0s", SwingConstants.CENTER);
                 infoContainer.add(timeLabel);
-
                 JButton pauseButton = new JButton("Pause");
                 pauseButton.addActionListener(e -> {
                     // Toggle pause state
@@ -242,8 +247,6 @@ public class RunningModePage extends Page implements InventoryListener{
                         }
                     }
                 });
-
-
 
                 infoContainer.add(pauseButton);
                 JButton helpScreenButton = new JButton("Help Screen");
@@ -364,15 +367,51 @@ public class RunningModePage extends Page implements InventoryListener{
     }
 
     private void initializeInventory(GridBagConstraints gbc) {
+
+        hexButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                runningModeController.getGameSession().useSpell(SpellType.HEX);
+                gamePanel.requestFocus();
+            }
+        });
+
+        overwhelmingFireballButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                runningModeController.getGameSession().useSpell(SpellType.OVERWHELMING_FIREBALL);
+                gamePanel.requestFocus();
+            }
+        });
+
+        magicalStaffExpansionButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                runningModeController.getGameSession().useSpell(SpellType.STAFF_EXPANSION);
+                gamePanel.requestFocus();
+            }
+        });
+
+        felixFelicisButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                runningModeController.getGameSession().useSpell(SpellType.FELIX_FELICIS);
+                gamePanel.requestFocus();
+            }
+        });
         ArrayList<JLabel> countLabels = new ArrayList<>(Arrays.asList(hexCount, felixFelicisCount, magicalStaffExpansionCount, overwhelmingFireballCount));
         ArrayList<BufferedImage> images = new ArrayList<>(Arrays.asList(hexImage, felixFelicisImage, magicalStaffExpansionImage, overwhelmingFireballImage));
-        ArrayList<JLabel> activationKeys = new ArrayList<>(Arrays.asList(new JLabel("H"),new JLabel("Q"),new JLabel("T"),new JLabel("E")));
+        ArrayList<JLabel> activationKeys = new ArrayList<>(Arrays.asList(new JLabel("T"),new JLabel("Q"),new JLabel("W"),new JLabel("E")));
+        ArrayList<JButton> activationButtons = new ArrayList<>(Arrays.asList(hexButton, felixFelicisButton, magicalStaffExpansionButton, overwhelmingFireballButton));
+
         int imageWidth = 40;  // Resimlerin istenen genişliği
         int imageHeight = 40; // Resimlerin istenen yüksekliği
 
         gbc.gridx = 0;
         gbc.gridy = 0;
-        gbc.gridwidth = 3;
+
+        gbc.gridwidth = 4; // Başlık genişliği üç sütunu kaplayacak şekilde ayarlanıyor
+
         gbc.anchor = GridBagConstraints.CENTER;
         gbc.insets = new Insets(10, 0, 10, 0);
         JLabel inventoryTitleLabel = new JLabel("Inventory");
@@ -400,6 +439,10 @@ public class RunningModePage extends Page implements InventoryListener{
             gbc.gridx = 2;
             gbc.insets = commonPadding;
             inventoryContainer.add(activationKeys.get(i), gbc);
+
+            gbc.gridx = 3;
+            gbc.insets = commonPadding;
+            inventoryContainer.add(activationButtons.get(i), gbc);
         }
     }
 
@@ -440,4 +483,5 @@ public class RunningModePage extends Page implements InventoryListener{
         inventoryContainer.repaint();
         inventoryContainer.revalidate();
     }
+
 }

@@ -9,7 +9,7 @@ public class Chance extends JPanel {
     int remainingChances;
 
     public Chance() {
-        this.remainingChances = 3;
+        this.remainingChances = 3; // Initialize with 5 chances
         setPreferredSize(new Dimension(190, 50));
         setLayout(new BoxLayout(this, BoxLayout.X_AXIS));
         setOpaque(false); // Make the background transparent
