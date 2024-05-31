@@ -50,7 +50,6 @@ public class GameModePage extends Page {
         add(Box.createVerticalStrut(10)); // Add space between multiplayer and help buttons
         add(helpScreenButton);
     }
-
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);

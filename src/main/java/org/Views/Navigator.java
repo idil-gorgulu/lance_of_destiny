@@ -36,12 +36,12 @@ public class Navigator {
 
 
     public void getPrevious() {
-        if (pageStack.size() > 1) { // Yığının en az bir önceki sayfa olmalı
-            pageStack.pop(); // Son sayfayı çıkar
-            Page previousPage = pageStack.peek(); // Bir önceki sayfayı al
-            showPage(previousPage); // Bir önceki sayfayı göster
+        if (pageStack.size() > 1) {
+            pageStack.pop();
+            Page previousPage = pageStack.peek();
+            showPage(previousPage);
         } else {
-            System.out.println("No previous page!"); // Yığın boşsa bir mesaj basın
+            System.out.println("No previous page!");
         }
     }
     public void showEnterPage() {showPage(new EnterPage());}
@@ -58,10 +58,13 @@ public class Navigator {
         showPage(new SignupPage());
     }
     public void showBuildingModePage() { showPage(new BuildingModePage()); }
+    public void showMultiplayerBuildingModePage() { showPage(new BuildingModePage(true)); }
+
     public void showRunningModePage() { showPage(new RunningModePage()); }
     public void showGameSelectionPage() {showPage(new GameSelectionPage()); }
     public void showGameModePage() {showPage(new GameModePage()); }
     public void showJoinMultiplayerGamePage() {showPage(new JoinMultiplayerGamePage()); }
+    public void showWaitMultiplayerGameAcceptPage() {showPage(new WaitMultiplayerGameAccept());}
 
     public void show() {
         mainFrame.setVisible(true);

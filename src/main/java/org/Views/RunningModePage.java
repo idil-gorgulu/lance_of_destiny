@@ -44,8 +44,11 @@ public class RunningModePage extends Page implements InventoryListener {
     public int timeInSeconds = 0;
     private int frameCount = 0;
     private Timer gameTimer =  new Timer();
-    private Sound sound = new Sound();
-    public static final long COLLISION_COOLDOWN = 1000;
+    private Sound sound=new Sound();
+    private boolean multiplayerGame = false;
+
+    public static final long COLLISION_COOLDOWN = 1000; // Cooldown period in milliseconds
+
     private JLabel timeLabel;
     public RunningModePage() {
         super();

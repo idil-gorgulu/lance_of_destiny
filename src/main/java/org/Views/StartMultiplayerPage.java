@@ -48,7 +48,7 @@ public class StartMultiplayerPage extends Page {
         JButton createMultiplayerGameButton = ComponentStyling.createStyledButton("Host a Game");
         JButton joinMultiplayerGameButton = ComponentStyling.createStyledButton("Join a Game");
 
-        createMultiplayerGameButton.addActionListener(e -> Navigator.getInstance().showBuildingModePage());
+        createMultiplayerGameButton.addActionListener(e -> Navigator.getInstance().showMultiplayerBuildingModePage());
         joinMultiplayerGameButton.addActionListener(e -> Navigator.getInstance().showJoinMultiplayerGamePage());
         centerPanel.add(Box.createVerticalStrut(10));
         centerPanel.add(createMultiplayerGameButton);

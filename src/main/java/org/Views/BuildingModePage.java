@@ -39,10 +39,18 @@ public class BuildingModePage extends Page {
     private JButton saveButton;
     private JLabel templateGameName;
     private JTextField templateGameNameInput;
+    private boolean mpgame = false;
 
     public BuildingModePage() {
         super();
         this.buildingModeController = new BuildingModeController();
+        initUI();
+    }
+
+    public BuildingModePage(boolean mpgame) {
+        super();
+        this.buildingModeController = new BuildingModeController();
+        this.mpgame = true;
         initUI();
     }
 
@@ -172,10 +180,22 @@ public class BuildingModePage extends Page {
         lowerBoundInfo.setHorizontalAlignment(SwingConstants.LEFT);
         infoContainer.add(lowerBoundInfo);
 
-        saveButton = new JButton("Save");
-        saveButton.addActionListener(e -> buildingModeController.saveGameToDatabase(templateGameNameInput.getText()));
-        add(leftSide, BorderLayout.WEST);
-
+        if (!this.mpgame) {
+            saveButton = new JButton("Save");
+            saveButton.addActionListener(e -> buildingModeController.saveGameToDatabase(templateGameNameInput.getText()));
+            add(leftSide, BorderLayout.WEST);
+        } else {
+            saveButton = new JButton("Multiplayer");
+            saveButton.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    buildingModeController.saveGameToDatabase(templateGameNameInput.getText());
+                    User.getUserInstance().setMultiplayerGameName(templateGameNameInput.getText());
+                    Navigator.getInstance().showWaitMultiplayerGameAcceptPage();
+                }
+            });
+            add(leftSide, BorderLayout.WEST);
+        }
         JPanel buttonPanel = new JPanel(new FlowLayout());
         buttons = new JButton[4];
         try {

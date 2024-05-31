@@ -28,6 +28,8 @@ public class Database {
 
     private static final String USER_COLLECTION = "Users";
     private static final String GAME_COLLECTION = "GameSettings";
+    private static final String MULTIPLAYER_GAME_COLLECTION = "MultiplayerGameSettings";
+
     private Database() {
 
         // For closing the logs
@@ -65,5 +67,11 @@ public class Database {
     public MongoCollection<Document> getGameCollection() {
         return database.getCollection(GAME_COLLECTION);
     }
+
+    public MongoCollection<Document> getMultiplayerGameCollection() {
+        return database.getCollection(MULTIPLAYER_GAME_COLLECTION);
+    }
+
+
 
 }

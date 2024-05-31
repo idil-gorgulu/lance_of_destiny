@@ -8,7 +8,26 @@ import java.util.ArrayList;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class CheckBarrierFireballCollisionTest {
-/*
+
+    /**
+     * Overview:
+     * Checks for collisions between the fireball and barriers in the game.
+     *
+     * Requires:
+     * - barriers and fireball must not be null.
+     * - barriers must contain a non-null ArrayList of Barrier objects.
+     * - fireball must be a non-null Fireball object.
+     *
+     * Modifies:
+     * - Fireball's velocity and lastCollided properties.
+     * - The list of barriers.
+     *
+     * Effects:
+     * - If a collision is detected between the fireball and a barrier:
+     *   - Updates the fireball's velocity based on the collision logic.
+     *   - Removes the barrier if it is hit.
+     */
+    /*
     private Fireball fireball;
     private Barrier barrier1, barrier2;
     private ArrayList<Barrier> barriers;
@@ -141,5 +160,5 @@ public class CheckBarrierFireballCollisionTest {
         assertEquals(1, barriers.size());
     }
 
- */
+     */
 }
