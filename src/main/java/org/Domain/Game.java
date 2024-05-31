@@ -1,6 +1,7 @@
 package org.Domain;
 import org.Controllers.RunningModeController;
 import org.Listeners.MPInfoListener;
+import org.MultiplayerUtils.CommInterface;
 
 import javax.swing.*;
 import java.awt.*;
@@ -39,6 +40,7 @@ public class Game {
     private ArrayList<Bullet> activeBullets;
     private Inventory inventory;
     private String date;
+    public CommInterface comm;
 
     public ArrayList<Integer> getMpGameInformation() {
         return mpGameInformation;
@@ -46,6 +48,7 @@ public class Game {
 
     private ArrayList<Integer> mpGameInformation;
     private JPanel mpGamePanel = new JPanel();
+    private JLabel info = new JLabel();
 
     private List<MPInfoListener> mpInfoListeners = new ArrayList<>();
     public void addMPInfoListener(MPInfoListener listener) {
@@ -67,14 +70,16 @@ public class Game {
         this.mpGameInformation = mpGameInformation;
         if(mpGameInformation != null){
             System.out.println(mpGameInformation);
-            JLabel opponentLabel = new JLabel("Opponent Information:");
-            JLabel opponentScore = new JLabel("Opponent Score:" + " "  + mpGameInformation.get(0));
-            JLabel opponentChance = new JLabel("Opponent Chance:"+ " " + mpGameInformation.get(2));
-            JLabel opponentBarrier= new JLabel("Opponent Barrier:"+ " " + mpGameInformation.get(1));
-            mpGamePanel.add(opponentLabel );
-            mpGamePanel.add(opponentScore );
-            mpGamePanel.add(opponentChance);
-            mpGamePanel.add(opponentBarrier);
+            info.setText("S:"+mpGameInformation.get(0)+"C:"+mpGameInformation.get(2)+"B:"+mpGameInformation.get(1));
+//            JLabel opponentLabel = new JLabel("Opponent Information:");
+//            JLabel opponentScore = new JLabel("Opponent Score:" + " "  + );
+//            JLabel opponentChance = new JLabel("Opponent Chance:"+ " " + );
+//            JLabel opponentBarrier= new JLabel("Opponent Barrier:"+ " " + mpGameInformation.get(1));
+//            mpGamePanel.add(opponentLabel );
+//            mpGamePanel.add(opponentScore );
+//            mpGamePanel.add(opponentChance);
+//            mpGamePanel.add(opponentBarrier);
+            mpGamePanel.add(info);
         }
     }
 
@@ -140,7 +145,7 @@ public class Game {
         int boardX = coordinates.getX() / 50; // Adjust the indexing here
         int boardY = coordinates.getY() / 20; // Adjust the indexing here
         barrierBoard[boardY][boardX] = s; // Adjusted the indexing here
-        printBoard();
+        //printBoard();
     }
 
     /* Attempts to remove a barrier of a specified type at the given coordinates.

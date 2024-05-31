@@ -5,6 +5,8 @@ import org.Domain.User;
 import org.Utils.Database;
 import org.bson.Document;
 
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 import java.io.*;
 import java.net.*;
 import java.util.ArrayList;
@@ -16,7 +18,7 @@ import java.util.concurrent.TimeUnit;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class MultiPortServer {
+public class MultiPortServer implements CommInterface {
     public static MultiPortServer instance;
     private ServerSocket serverSocketOut;
     private Socket outputSocket;
@@ -203,14 +205,15 @@ public class MultiPortServer {
     }
 
     private static void parseSpell(String input) {
-        Pattern pattern = Pattern.compile("spellType: (\\d+)");
+        Pattern pattern = Pattern.compile("spellType: ([a-zA-Z]+)");
         Matcher matcher = pattern.matcher(input);
 
         if (matcher.find()) {
-            int spellType = Integer.parseInt(matcher.group(1));
+            String spellType = matcher.group(1);
             System.out.println("Spell Information:");
             System.out.println("SpellType: " + spellType);
             // TODO: Implement the listener for action the game
+
         } else {
             System.out.println("No spell information found!");
         }
@@ -255,6 +258,11 @@ public class MultiPortServer {
         } catch (IOException e) {
             System.out.println("Error closing server resources: " + e.getMessage());
         }
+    }
+
+    @Override
+    public void sendSpell(String spell) {
+        output.println(spell);
     }
 
     public static void main(String[] args) {

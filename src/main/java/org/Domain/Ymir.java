@@ -31,7 +31,7 @@ public class Ymir extends JPanel {
     public Ymir(Game game) {
         this.game = game;
         this.coordinate = new Coordinate(890, 430);
-        timer = new Timer();
+
         lastAbilities.offer(ABILITIES[random.nextInt(ABILITIES.length)]);
         lastAbilities.offer(ABILITIES[random.nextInt(ABILITIES.length)]);
 
@@ -117,7 +117,7 @@ public class Ymir extends JPanel {
                 .forEach(Barrier::freeze);
     }
 
-    private void activateDoubleAccel() {
+    public void activateDoubleAccel() {
         System.out.println("Activating Double Accel");
         Fireball fireball = game.getFireball();
         fireball.setxVelocity(fireball.getxVelocity() / 2);

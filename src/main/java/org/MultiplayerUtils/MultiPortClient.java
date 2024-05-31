@@ -1,8 +1,9 @@
 package org.MultiplayerUtils;
 
 import org.Domain.Game;
-import org.Listeners.MPInfoListener;
 
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 import java.io.*;
 import java.net.*;
 import java.util.ArrayList;
@@ -14,7 +15,7 @@ import java.util.concurrent.TimeUnit;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class MultiPortClient{
+public class MultiPortClient implements CommInterface {
     private List<ConnectedStateChangeListener> connectedStateChangeListeners = new ArrayList<>();
     private List<CountdownStateChangeListener> countdownStateChangeListeners = new ArrayList<>();
     private Socket outputSocket;
@@ -140,7 +141,6 @@ public class MultiPortClient{
             while ((fromServer = input.readLine()) != null) {
                 System.out.println("Server says: " + fromServer);
                 processInput(fromServer);
-
             }
             System.out.println("Server has disconnected.");
         } catch (IOException e) {
@@ -182,13 +182,15 @@ public class MultiPortClient{
     }
 
     private static void parseSpell(String input) {
-        Pattern pattern = Pattern.compile("spellType: (\\d+)");
+        Pattern pattern = Pattern.compile("spellType: ([a-zA-Z]+)");
         Matcher matcher = pattern.matcher(input);
 
         if (matcher.find()) {
-            int spellType = Integer.parseInt(matcher.group(1));
+            String spellType = matcher.group(1);
             System.out.println("Spell Information:");
             System.out.println("SpellType: " + spellType);
+            // TODO: Implement the listener for action the game
+
         } else {
             System.out.println("No spell information found!");
         }
@@ -229,6 +231,10 @@ public class MultiPortClient{
         } catch (IOException e) {
             System.out.println("Error when closing client resources: " + e.getMessage());
         }
+    }
+    @Override
+    public void sendSpell(String spell) {
+        output.println(spell);
     }
 
     public static void main(String[] args) {
