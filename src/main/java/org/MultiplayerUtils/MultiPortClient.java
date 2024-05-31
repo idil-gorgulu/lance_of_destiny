@@ -152,7 +152,6 @@ public class MultiPortClient{
         if (inputLine.startsWith("GameInformation")) {
             ArrayList<Integer> gameInformations = parseGameInformation(inputLine);
             multiplayerGame.setMpGameInformation(gameInformations);
-
         }
         // Check for "Spell" identifier
         else if (inputLine.startsWith("Spell")) {
@@ -188,7 +187,6 @@ public class MultiPortClient{
 
         if (matcher.find()) {
             int spellType = Integer.parseInt(matcher.group(1));
-
             System.out.println("Spell Information:");
             System.out.println("SpellType: " + spellType);
         } else {
