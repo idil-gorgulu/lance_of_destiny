@@ -162,7 +162,6 @@ public class RunningModePage extends Page implements InventoryListener {
         };
 
 
-
         gameTimer.scheduleAtFixedRate(task, delay, period);
     }
 

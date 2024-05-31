@@ -20,6 +20,7 @@ public class Ymir extends JPanel {
     private Coordinate coordinate;
     private BufferedImage ymirImage;
     private Queue<String> lastAbilities = new LinkedList<>();
+    private boolean isActive = false;
 
     private static Ymir instance;
     private Random random = new Random();
