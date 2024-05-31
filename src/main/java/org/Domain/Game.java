@@ -36,6 +36,7 @@ public class Game {
     private String date;
     private ArrayList<Integer> mpGameInformation;
 
+
     public ArrayList<Integer> getMpGameInformation() {
         return mpGameInformation;
     }

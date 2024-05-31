@@ -208,9 +208,9 @@ public class MultiPortServer {
 
         if (matcher.find()) {
             int spellType = Integer.parseInt(matcher.group(1));
-
             System.out.println("Spell Information:");
             System.out.println("SpellType: " + spellType);
+            // TODO: Implement the listener for action the game
         } else {
             System.out.println("No spell information found!");
         }
