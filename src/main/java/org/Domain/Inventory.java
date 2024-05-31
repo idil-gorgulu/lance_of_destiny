@@ -23,7 +23,7 @@ public class Inventory{
 
     public Inventory() {
         this.spellCountsList = new ArrayList<>(Arrays.asList(0, 0, 0, 0));
-        this.multiplayersSpellCountsList = new ArrayList<>(Arrays.asList(0, 0, 0, 0));
+        this.multiplayersSpellCountsList = new ArrayList<>(Arrays.asList(0, 0, 0));
         this.listeners = new ArrayList<>();
 
     }
@@ -68,8 +68,8 @@ public class Inventory{
             newCount = multiplayersSpellCountsList.get(1);
         }
         else if (spellType == SpellType.DOUBLE_ACCEL){
-            multiplayersSpellCountsList.set(0, (multiplayersSpellCountsList.get(0)+countChange));
-            newCount = multiplayersSpellCountsList.get(1);
+            multiplayersSpellCountsList.set(2, (multiplayersSpellCountsList.get(2)+countChange));
+            newCount = multiplayersSpellCountsList.get(2);
         }
         notifyListeners(spellType, newCount);
     }
@@ -159,5 +159,8 @@ public class Inventory{
         notifyListeners(SpellType.FELIX_FELICIS, spellCountsList.get(1));
         notifyListeners(SpellType.STAFF_EXPANSION, spellCountsList.get(2));
         notifyListeners(SpellType.OVERWHELMING_FIREBALL, spellCountsList.get(3));
+        notifyListeners(SpellType.INFINITE_VOID, multiplayersSpellCountsList.get(0));
+        notifyListeners(SpellType.HOLLOW_PURPLE, multiplayersSpellCountsList.get(1));
+        notifyListeners(SpellType.DOUBLE_ACCEL, spellCountsList.get(2));
     }
 }

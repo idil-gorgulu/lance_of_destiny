@@ -38,6 +38,7 @@ public class JoinMultiplayerGamePage extends Page implements ConnectedStateChang
     private ScheduledExecutorService countdownExecutor;
     private int countdownValue = 3; // starting from 3 seconds
     private String gameName;
+    private Game multiplayerGame;
 
     public JoinMultiplayerGamePage() {
         super();
@@ -223,6 +224,8 @@ public class JoinMultiplayerGamePage extends Page implements ConnectedStateChang
         System.out.println("Go!"); // Print "Go!" when the countdown finishes
         // Set the game in here
         DataBaseController.getInstance().openMultiplayerGame(this.gameName);
+        multiplayerGame = Game.getInstance();
+        multiplayerGame.isMultiplayer = true;
         inClient.setMultiplayerGame(Game.getInstance());
         Game.getInstance().comm = inClient;
         inClient.gameStarted = true;

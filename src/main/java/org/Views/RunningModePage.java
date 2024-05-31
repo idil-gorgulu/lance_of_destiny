@@ -729,8 +729,14 @@ public class RunningModePage extends Page implements InventoryListener, MPInfoLi
                 case STAFF_EXPANSION:
                     magicalStaffExpansionCount.setText(String.valueOf(newCount));
                     break;
-                case OVERWHELMING_FIREBALL:
-                    overwhelmingFireballCount.setText(String.valueOf(newCount));
+                case INFINITE_VOID:
+                    infiniteVoidCount.setText(String.valueOf(newCount));
+                    break;
+                case DOUBLE_ACCEL:
+                    doubleAccelCount.setText(String.valueOf(newCount));
+                    break;
+                case HOLLOW_PURPLE:
+                    hollowPurpleCount.setText(String.valueOf(newCount));
                     break;
             }
         });

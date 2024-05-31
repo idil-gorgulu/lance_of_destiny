@@ -41,6 +41,7 @@ public class Game {
     private Inventory inventory;
     private String date;
     public CommInterface comm;
+    public boolean isMultiplayer = false;
 
     public ArrayList<Integer> getMpGameInformation() {
         return mpGameInformation;
@@ -60,8 +61,6 @@ public class Game {
             listener.onMPInfoUpdate();
         }
     }
-
-
 
     public JPanel getMpGamePanel() {
         return mpGamePanel;
@@ -103,6 +102,7 @@ public class Game {
         droppingSpells=new ArrayList<>();
         activeBullets=new ArrayList<>();
         inventory = new Inventory();
+        isMultiplayer = false;
     }
 
     public Fireball getFireball() {
@@ -692,7 +692,7 @@ public class Game {
     }
 
     private void dropSpell(Barrier barrier){
-        Spell spell = new Spell(barrier.getCoordinate());
+        Spell spell = new Spell(barrier.getCoordinate(), this.isMultiplayer);
         spell.setBackground(new Color(0, 0, 0, 0)); // Transparent background
         droppingSpells.add(spell);
     }

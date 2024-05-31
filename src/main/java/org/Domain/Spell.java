@@ -16,9 +16,14 @@ public class Spell extends JComponent {
     private int yVelocity = 3;
     SpellType spellType;
 
-    public Spell(Coordinate coordinate) {
+    public Spell(Coordinate coordinate, boolean isMultiplayer) {
         this.coordinate = new Coordinate(coordinate.getX(), coordinate.getY());
-        this.spellType = initializeSpellType();
+        if(isMultiplayer){
+            this.spellType = initializeMultiplayerSpellType();
+        } else {
+            this.spellType = initializeSpellType();
+        }
+
         try {
             this.spellImage = ImageIO.read(new File(setImageDirectory()));
         } catch (IOException e) {
@@ -65,7 +70,13 @@ public class Spell extends JComponent {
     }
     public SpellType initializeSpellType(){
         Random rand = new Random();
-        int randomSpellTypeIndex = rand.nextInt(SpellType.values().length);
+        int randomSpellTypeIndex = rand.nextInt(SpellType.values().length - 3);
+        return SpellType.values()[randomSpellTypeIndex];
+    }
+
+    public SpellType initializeMultiplayerSpellType(){
+        Random rand = new Random();
+        int randomSpellTypeIndex = rand.nextInt(SpellType.values().length );
         return SpellType.values()[randomSpellTypeIndex];
     }
 
