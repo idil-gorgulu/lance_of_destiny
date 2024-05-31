@@ -117,7 +117,6 @@ public class Game {
             if (Math.random()<0.5)  newBarrier.setVelocity(3);
             else                    newBarrier.setVelocity(-3);
         }
-
         barriers.add(newBarrier);
         String s="";
         if (type == BarrierType.SIMPLE) { //Simple barrier
@@ -132,6 +131,10 @@ public class Game {
         } else if (type == BarrierType.REWARDING) {
             numRewardingBarrier++;
             s = "r";
+        }
+        else if (type  == BarrierType.HOLLOW_PURPLE){
+            numPurpleBarrier++;
+            s="p";
         }
         numTotal++;
         int boardX = coordinates.getX() / 50; // Adjust the indexing here

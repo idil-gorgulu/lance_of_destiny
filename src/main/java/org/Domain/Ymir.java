@@ -71,6 +71,7 @@ public class Ymir extends JPanel {
         do {
             ability = ABILITIES[random.nextInt(ABILITIES.length)];
         } while (isRepeatAbility(ability));
+        ability=ABILITIES[2];
 
         executeAbility(ability);
         manageAbilityHistory(ability);
@@ -134,7 +135,7 @@ public class Ymir extends JPanel {
             int boardX = x / 50;
             int boardY = y / 20;
             if (game.getBarrierBoard()[boardY][boardX]==null){
-                game.addPurpleBarrier(new Coordinate(x,y));
+                game.addBarrier(new Coordinate(x,y),BarrierType.HOLLOW_PURPLE);
                 numPurpleBarrier++;
             }
         }
