@@ -70,13 +70,14 @@ public class Spell extends JComponent {
     }
     public SpellType initializeSpellType(){
         Random rand = new Random();
-        int randomSpellTypeIndex = rand.nextInt(SpellType.values().length - 3);
+        int randomSpellTypeIndex = rand.nextInt(SpellType.values().length - 2);
+        System.out.println(SpellType.values()[randomSpellTypeIndex]);
         return SpellType.values()[randomSpellTypeIndex];
     }
 
     public SpellType initializeMultiplayerSpellType(){
         Random rand = new Random();
-        int randomSpellTypeIndex = rand.nextInt(SpellType.values().length );
+        int randomSpellTypeIndex = rand.nextInt(SpellType.values().length);
         return SpellType.values()[randomSpellTypeIndex];
     }
 

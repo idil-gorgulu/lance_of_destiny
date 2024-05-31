@@ -561,6 +561,9 @@ public class RunningModePage extends Page implements InventoryListener {
                 case FELIX_FELICIS:
                     felixFelicisCount.setText(String.valueOf(newCount));
                     break;
+                case OVERWHELMING_FIREBALL:
+                    overwhelmingFireballCount.setText(String.valueOf(newCount));
+                    break;
                 case STAFF_EXPANSION:
                     magicalStaffExpansionCount.setText(String.valueOf(newCount));
                     break;
