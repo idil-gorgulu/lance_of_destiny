@@ -111,7 +111,7 @@ public class MultiPortClient{
                     int score = multiplayerGame.getScore().getTotalScore();
                     int barrierCount = multiplayerGame.getBarriers().size();
                     int chance = multiplayerGame.getChance().getRemainingChance();
-                    output.println(String.format("{score: %d, barrierCount: %d, chance: %d}", score, barrierCount, chance));
+                    output.println(String.format("GameInformation: {score: %d, barrierCount: %d, chance: %d}", score, barrierCount, chance));
                 }
             };
 
