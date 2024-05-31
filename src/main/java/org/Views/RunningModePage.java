@@ -45,7 +45,7 @@ public class RunningModePage extends Page implements InventoryListener {
     private int frameCount = 0;
     private Timer gameTimer =  new Timer();
     private Sound sound=new Sound();
-    private boolean multiplayerGame = false;
+    private boolean mpgame=false;
 
     public static final long COLLISION_COOLDOWN = 1000; // Cooldown period in milliseconds
 
@@ -59,6 +59,33 @@ public class RunningModePage extends Page implements InventoryListener {
             felixFelicisImage = ImageIO.read(new File("assets/spells/felix_felicis.png"));
             magicalStaffExpansionImage = ImageIO.read(new File("assets/spells/magical_staff_expansion.png"));
             overwhelmingFireballImage = ImageIO.read(new File("assets/spells/overwhelmingfb.png"));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        this.runningModeController = new RunningModeController(this);
+        this.runningModeController.getGameSession().started = true;
+        activeDebris = runningModeController.getGameDebris();
+        droppingSpells = runningModeController.getGameSpells();
+        activeBullets = runningModeController.getGameBullets();
+        initUI();
+        setFocusable(true);
+        requestFocus();
+        setupTimer();
+        this.runningModeController.getGameSession().getInventory().addInventoryListener(this);
+        this.runningModeController.getGameSession().getInventory().reloadInventory();
+    }
+
+    public RunningModePage(boolean mpgame) {
+        super();
+        this.mpgame = true;
+        this.setDoubleBuffered(true);
+        try {
+            backgroundImage = ImageIO.read(new File("assets/Background.png"));
+            hexImage = ImageIO.read(new File("assets/spells/hex.png"));
+            felixFelicisImage = ImageIO.read(new File("assets/spells/felix_felicis.png"));
+            magicalStaffExpansionImage = ImageIO.read(new File("assets/spells/magical_staff_expansion.png"));
+            overwhelmingFireballImage = ImageIO.read(new File("assets/spells/overwhelmingfb.png"));
+            //TODO: Image for other spells come here.
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -161,8 +188,6 @@ public class RunningModePage extends Page implements InventoryListener {
             }
         };
 
-
-
         gameTimer.scheduleAtFixedRate(task, delay, period);
     }
 
@@ -262,6 +287,19 @@ public class RunningModePage extends Page implements InventoryListener {
                 // Adding infoContainer the chance and score instances which are already visual JPanels.
                 infoContainer.add(runningModeController.getGameSession().getChance());
                 infoContainer.add(runningModeController.getGameSession().getScore());
+                //TODO: add opponent's information here.
+                if(mpgame==true){
+                    JLabel opponentLabel = new JLabel("Opponent Information:");
+                    JLabel opponentScore = new JLabel("Opponent Score:" + " " );
+                    JLabel opponentChance = new JLabel("Opponent Chance:"+ " ");
+                    JLabel opponentBarrier= new JLabel("Opponent Barrier:"+ " ");
+
+                    infoContainer.add(opponentLabel );
+                    infoContainer.add(opponentScore );
+                    infoContainer.add(opponentChance);
+                    infoContainer.add(opponentBarrier);
+
+                }
 
                 JPanel mainPanel = new JPanel();
                 mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.Y_AXIS));
