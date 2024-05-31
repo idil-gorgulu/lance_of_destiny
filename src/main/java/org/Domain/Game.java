@@ -69,14 +69,16 @@ public class Game {
         this.mpGameInformation = mpGameInformation;
         if(mpGameInformation != null){
             System.out.println(mpGameInformation);
-            JLabel opponentLabel = new JLabel("Opponent Information:");
-            JLabel opponentScore = new JLabel("Opponent Score:" + " "  + mpGameInformation.get(0));
-            JLabel opponentChance = new JLabel("Opponent Chance:"+ " " + mpGameInformation.get(2));
-            JLabel opponentBarrier= new JLabel("Opponent Barrier:"+ " " + mpGameInformation.get(1));
-            mpGamePanel.add(opponentLabel );
-            mpGamePanel.add(opponentScore );
-            mpGamePanel.add(opponentChance);
-            mpGamePanel.add(opponentBarrier);
+            JLabel info = new JLabel("S:"+mpGameInformation.get(0)+"C:"+mpGameInformation.get(2)+"B:"+mpGameInformation.get(1));
+//            JLabel opponentLabel = new JLabel("Opponent Information:");
+//            JLabel opponentScore = new JLabel("Opponent Score:" + " "  + );
+//            JLabel opponentChance = new JLabel("Opponent Chance:"+ " " + );
+//            JLabel opponentBarrier= new JLabel("Opponent Barrier:"+ " " + mpGameInformation.get(1));
+//            mpGamePanel.add(opponentLabel );
+//            mpGamePanel.add(opponentScore );
+//            mpGamePanel.add(opponentChance);
+//            mpGamePanel.add(opponentBarrier);
+            mpGamePanel.add(info);
         }
     }
 
