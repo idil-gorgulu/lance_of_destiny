@@ -1,5 +1,6 @@
 package org.Views;
 
+import org.Controllers.DataBaseController;
 import org.Domain.MultiPlayerGame;
 import org.MultiplayerUtils.CountdownStateChangeListener;
 import org.MultiplayerUtils.MultiPortClient;
@@ -34,6 +35,7 @@ public class JoinMultiplayerGamePage extends Page implements ConnectedStateChang
     private JLabel countdownLabel;
     private ScheduledExecutorService countdownExecutor;
     private int countdownValue = 3; // starting from 3 seconds
+    private String gameName;
 
     public JoinMultiplayerGamePage() {
         super();
@@ -130,6 +132,7 @@ public class JoinMultiplayerGamePage extends Page implements ConnectedStateChang
 
             for (Document game : games) {
                 JButton gameButton = new JButton(game.getString("gameName"));
+
                 customizeButton(gameButton);
                 gameButton.setPreferredSize(new Dimension(180, 80));
                 gameButton.setMaximumSize(new Dimension(180, 80));
@@ -149,8 +152,7 @@ public class JoinMultiplayerGamePage extends Page implements ConnectedStateChang
                         } else {
                             // Lets hope no else
                         }
-                        // dataBaseController.openMultiplayerGame(game.getString("gameName"));
-                        // Navigator.getInstance().showRunningModePage();
+                        gameName = game.getString("gameName");
                     }
                 });
                 formPanel.add(gameButton);
@@ -219,6 +221,7 @@ public class JoinMultiplayerGamePage extends Page implements ConnectedStateChang
         System.out.println("Go!"); // Print "Go!" when the countdown finishes
         inClient.gameStarted = true;
         // Set the game in here
+        DataBaseController.getInstance().openMultiplayerGame(this.gameName);
         Navigator.getInstance().showRunningModePage();
     }
 }
