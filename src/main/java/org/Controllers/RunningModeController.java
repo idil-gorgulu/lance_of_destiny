@@ -49,6 +49,10 @@ public class RunningModeController {
     // These are the functions for updating the position and angle orientation of the magical staff.
     public void slideMagicalStaff(int x){
         game.getMagicalStaff().setVelocity(x);
+        Fireball fireball= game.getFireball();
+        if (fireball.getyVelocity()==0){ //if on staff, move together with the staff
+            fireball.setxVelocity(x);
+        }
     }
 
     public void rotateMagicalStaff(double dTheta){
