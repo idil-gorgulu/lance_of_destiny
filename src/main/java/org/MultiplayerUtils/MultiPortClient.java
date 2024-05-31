@@ -268,7 +268,7 @@ public class MultiPortClient implements CommInterface {
     }
 
     public static void main(String[] args) {
-        MultiPortClient client = new MultiPortClient("localhost", 59326, 59325);
+        MultiPortClient client = new MultiPortClient("172.20.104.230", 49270, 49269);
         client.start();
     }
 

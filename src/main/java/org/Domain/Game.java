@@ -69,7 +69,7 @@ public class Game {
         this.mpGameInformation = mpGameInformation;
         if(mpGameInformation != null){
             System.out.println(mpGameInformation);
-            info.setText("Opponent Score: "+mpGameInformation.get(0)+"\nOpponent Chance: "+mpGameInformation.get(2)+"\nOpponent Barrier Count: "+mpGameInformation.get(1));
+            info.setText("S: "+mpGameInformation.get(0)+" C: "+mpGameInformation.get(2)+" B: "+mpGameInformation.get(1));
 //            JLabel opponentLabel = new JLabel("Opponent Information:");
 //            JLabel opponentScore = new JLabel("Opponent Score:" + " "  + );
 //            JLabel opponentChance = new JLabel("Opponent Chance:"+ " " + );

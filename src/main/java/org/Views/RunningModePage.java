@@ -17,7 +17,7 @@ import java.io.IOException;
 import java.util.*;
 import java.util.Timer;
 
-public class RunningModePage extends Page implements InventoryListener, MPInfoListener {
+public class RunningModePage extends Page implements InventoryListener {
     private JLabel infiniteVoidCount = new JLabel("0");
     private JLabel hollowPurpleCount = new JLabel("0");
     private JLabel doubleAccelCount = new JLabel("0");
@@ -59,9 +59,9 @@ public class RunningModePage extends Page implements InventoryListener, MPInfoLi
     private Timer gameTimer =  new Timer();
     private Sound sound=new Sound();
     private boolean mpgame=false;
-    private JLabel opponentScore = new JLabel("Opponent Score:");
-    private JLabel opponentBarrier = new JLabel("Opponent Remaining Barrier:");
-    private JLabel opponentChance = new JLabel("Opponents Remaining Chance");
+//    private JLabel opponentScore = new JLabel("Opponent Score:");
+//    private JLabel opponentBarrier = new JLabel("Opponent Remaining Barrier:");
+//    private JLabel opponentChance = new JLabel("Opponents Remaining Chance");
 
     public static final long COLLISION_COOLDOWN = 1000; // Cooldown period in milliseconds
 
@@ -426,15 +426,15 @@ public class RunningModePage extends Page implements InventoryListener, MPInfoLi
         });
     }
 
-    @Override
-    public void onMPInfoUpdate() {
-        opponentScore.setText("Opponent Score:" + " " + runningModeController.getGameSession().getMpGameInformation().get(0));
-        opponentChance .setText("Opponent Chance:"+ " "+ runningModeController.getGameSession().getMpGameInformation().get(2));
-        opponentBarrier.setText("Opponent Barrier:"+ " "+runningModeController.getGameSession().getMpGameInformation().get(1));
-        opponentScore.repaint();
-        opponentChance.repaint();
-        opponentBarrier.repaint();
-    }
+//    @Override
+//    public void onMPInfoUpdate() {
+//        opponentScore.setText("Opponent Score:" + " " + runningModeController.getGameSession().getMpGameInformation().get(0));
+//        opponentChance .setText("Opponent Chance:"+ " "+ runningModeController.getGameSession().getMpGameInformation().get(2));
+//        opponentBarrier.setText("Opponent Barrier:"+ " "+runningModeController.getGameSession().getMpGameInformation().get(1));
+//        opponentScore.repaint();
+//        opponentChance.repaint();
+//        opponentBarrier.repaint();
+//    }
 
     /*
     private void initializeInventory(GridBagConstraints gbc) {
@@ -583,7 +583,6 @@ public class RunningModePage extends Page implements InventoryListener, MPInfoLi
     }
 
     private void addActionListenersMultiplayer() {
-        System.out.println("actionlitenerlar ekledni");
         hexButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
