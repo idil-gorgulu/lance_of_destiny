@@ -18,7 +18,6 @@ public class Navigator {
 
     }
 
-
     public static Navigator getInstance() {
         if (instance == null) {
             instance = new Navigator();
@@ -26,10 +25,7 @@ public class Navigator {
         return instance;
     }
 
-
-
     public void showPage(Page page) {
-        // Yığının en üst sayfası mevcut sayfa değilse, sayfayı yığına ekle
         if (pageStack.isEmpty() || !pageStack.peek().getClass().equals(page.getClass())) {
             pageStack.push(page);
         }
