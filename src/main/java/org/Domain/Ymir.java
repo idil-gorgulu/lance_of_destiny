@@ -134,7 +134,7 @@ public class Ymir extends JPanel {
             int boardX = x / 50;
             int boardY = y / 20;
             if (game.getBarrierBoard()[boardY][boardX]==null){
-                game.addPurpleBarrier(new Coordinate(x,y));
+                game.addBarrier(new Coordinate(x,y),BarrierType.HOLLOW_PURPLE);
                 numPurpleBarrier++;
             }
         }
