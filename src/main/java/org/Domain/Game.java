@@ -28,11 +28,10 @@ public class Game {
     private long lastCollisionTime = 0; // Time of the last collision in milliseconds
     private ArrayList<Barrier> barriers = new ArrayList<Barrier>(0); // Could maybe be a hashmap?
     private ArrayList<Debris> activeDebris;
-
     private ArrayList<Barrier> purpleBarriers = new ArrayList<Barrier>(0);;
     private ArrayList<Spell> droppingSpells;
     private ArrayList<Bullet> activeBullets;
-    private HashMap<SpellType,Integer> inventory;
+    private Inventory inventory;
     private String date;
     private Game(){
         this.fireball = new Fireball();
@@ -52,25 +51,18 @@ public class Game {
         activeDebris= new ArrayList<>();
         droppingSpells=new ArrayList<>();
         activeBullets=new ArrayList<>();
-        inventory=new HashMap<>();
-        for (SpellType type : SpellType.values()) {
-            inventory.put(type, 0);
-        }
+        inventory = new Inventory();
     }
 
     public Fireball getFireball() {
         return fireball;
     }
-
     public MagicalStaff getMagicalStaff() {
         return magicalStaff;
     }
-
     public Ymir getYmir() {return ymir;}
     public Chance getChance() { return chance;}
     public Score getScore(){return score;}
-
-    public HashMap<SpellType, Integer> getInventory(){ return inventory;}
 
     public void addBarrier(Coordinate coordinates, BarrierType type) {
         Barrier newBarrier = new Barrier(coordinates, type);
@@ -314,6 +306,11 @@ public class Game {
         return barrierBoard;
     }
 
+    public Inventory getInventory() {
+        return inventory;
+    }
+
+
     //TODO: Update this according to new database saving
     public void addDetailedBarrier(Coordinate coordinates, BarrierType type, int numHits, boolean isMoving, int velocity) {
         Barrier newBarrier = new Barrier(coordinates, type);
@@ -367,14 +364,18 @@ public class Game {
         this.score = new Score();
         this.barriers.clear();
         this.activeDebris.clear();
+        this.purpleBarriers.clear();
         this.numSimpleBarrier = 0;
         this.numFirmBarrier = 0;
         this.numExplosiveBarrier = 0;
         this.numRewardingBarrier = 0;
+        this.numPurpleBarrier = 0;
         this.numTotal = 0;
         this.started = true;
         this.ended = false;
         this.barrierBoard = new String[20][20];
+        this.inventory = new Inventory();
+        this.lastCollisionTime = 0;
     }
 
     public static Game createNewGame() {
@@ -383,7 +384,8 @@ public class Game {
         return instance;
     }
 
-    public void moveBarriers(){ // TODO Fix the logic
+    // TODO Fix the logic
+    public void moveBarriers(){
         int newpos;
         boolean isAvailable;
         int width= 10;
@@ -448,11 +450,16 @@ public class Game {
                 return;
             }
             int fireballWidth = fireball.getPreferredSize().width;
-            int fireballPositionX = (1000 - fireballWidth) / 2; // make these dynamic
+            int fireballPositionX = (int) this.magicalStaff.getMagicalStaffRectangle().getX()+50;
+            System.out.println("coordinate----");
+            System.out.println((int) this.magicalStaff.getMagicalStaffRectangle().getX());
+            System.out.println((int) this.magicalStaff.getMagicalStaffRectangle().getY());
+
             int fireballHeight = fireball.getPreferredSize().height;
-            int fireballPositionY = (500 - fireballHeight - 200); // make these dynamic
-            fireball.setxVelocity(3);
-            fireball.setyVelocity(-3);
+            int fireballPositionY = 620-(int) this.magicalStaff.getMagicalStaffRectangle().getY();
+
+            fireball.setxVelocity(0);
+            fireball.setyVelocity(0);
             fireball.getCoordinate().setX(fireballPositionX);
             fireball.getCoordinate().setY(fireballPositionY);
             fireball.setBounds(fireballPositionX, fireballPositionY, fireballWidth, fireballHeight);
@@ -543,7 +550,7 @@ public class Game {
 
             fireball.setxVelocity(reflectionX);
             fireball.setyVelocity(reflectionY);
-            energy=reflectionX*reflectionX+reflectionY*reflectionY;
+            energy = reflectionX*reflectionX+reflectionY*reflectionY;
             //System.out.println("new: " + fireball.getxVelocity() + " " + fireball.getyVelocity()+" "+energy);
 
         }
@@ -621,8 +628,6 @@ public class Game {
         purpleBarriers.removeAll(purplesToRemove);
         // Updating the score.
         getScore().incrementScore(toRemove.size(), timeInSeconds);
-
-
     }
     private boolean hitBarrier(Barrier barrier, int hitTimes) {
         if (barrier.isFrozen()) return false;
@@ -656,45 +661,29 @@ public class Game {
         droppingSpells.add(spell);
     }
 
-    public boolean useFelixFelicis(){
-        int remaining=inventory.get(SpellType.FELIX_FELICIS);
-        boolean nonzero=remaining>0;
-        if (nonzero) {
-            getChance().incrementChance();
-            inventory.put(SpellType.FELIX_FELICIS,remaining -1 );
-        }
-        return nonzero;
-    }
-    public boolean useStaffExpansion(){
-        int remaining=inventory.get(SpellType.STAFF_EXPANSION);
-        boolean cond=(remaining>0 && getMagicalStaff().getStaffWidth()==100);
-        if (cond) {
-            getMagicalStaff().setStaffWidth(200);
-            inventory.put(SpellType.STAFF_EXPANSION,  remaining -1 );
-            getMagicalStaff().setExpansionTime(System.currentTimeMillis());
-        }
-        return cond;
-    }
-    public boolean useHex(){
-        int remaining=inventory.get(SpellType.HEX);
-        boolean cond=(remaining>0 && !getMagicalStaff().isShooting());
-        if (cond){
-            getMagicalStaff().setShooting(true);
-            getMagicalStaff().setCannonTime(System.currentTimeMillis());
-            inventory.put(SpellType.HEX,  remaining -1 );
-        }
-        return cond;
-    }
+    public void useSpell(SpellType spellType){
 
-    public boolean useOverwhelmingFB(){
-        int remaining=inventory.get(SpellType.OVERWHELMING_FIREBALL);
-        boolean cond=(remaining>0 && getFireball().isOverwhelming());
-        if (cond){
-            getFireball().setOverwhelming(true);
-            getFireball().setOverwhelmTime(System.currentTimeMillis());
-            inventory.put(SpellType.OVERWHELMING_FIREBALL,remaining-1);
+        if(inventory.checkSpellCount(spellType)){
+            if(spellType == SpellType.FELIX_FELICIS){
+                chance.incrementChance();
+                inventory.updateInventory(spellType, -1);
+            }
+            if(spellType == SpellType.STAFF_EXPANSION) {
+                magicalStaff.setStaffWidth(200);
+                magicalStaff.setExpansionTime(System.currentTimeMillis());
+                inventory.updateInventory(spellType, -1);
+            }
+            if(spellType == SpellType.HEX && !getMagicalStaff().isShooting()){
+                getMagicalStaff().setShooting(true);
+                getMagicalStaff().setCannonTime(System.currentTimeMillis());
+                inventory.updateInventory(spellType, -1);
+            }
+            if(spellType == SpellType.OVERWHELMING_FIREBALL ){
+                getFireball().setOverwhelming(true);
+                getFireball().setOverwhelmTime(System.currentTimeMillis());
+                inventory.updateInventory(spellType, -1);
+            }
         }
-        return cond;
     }
 
     public Bullet[] createHexBullet(){
@@ -785,4 +774,20 @@ public class Game {
     public void setDate(String date) {
         this.date = date;
     }
+
+    public void setYmir(Ymir ymir) {
+        this.ymir = ymir;
+    }
+
+    public void getYmir(Ymir ymir) {
+        this.ymir = ymir;
+    }
+
+    public void triggerBall() {
+        if(fireball.getxVelocity()==0 && fireball.getyVelocity()==0){
+            this.fireball.setxVelocity(0);
+            this.fireball.setyVelocity(-3);
+        }
+    }
+
 }

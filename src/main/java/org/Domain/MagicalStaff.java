@@ -61,7 +61,6 @@ public class MagicalStaff extends JPanel {
         if (magicalStaffImage != null) {
             g2d.drawImage(magicalStaffImage, (int) magicalStaffRectangle.x, (int) magicalStaffRectangle.y, null);
         }
-        g2d.setColor(Color.RED);
         g2d.draw(magicalStaffRectangle);
         g2d.setTransform(old);
     }
@@ -203,5 +202,13 @@ public class MagicalStaff extends JPanel {
 
     public void setShotTime(long shotTime) {
         this.shotTime = shotTime;
+    }
+
+    public Rectangle2D.Double getMagicalStaffRectangle() {
+        return magicalStaffRectangle;
+    }
+
+    public void setMagicalStaffRectangle(Rectangle2D.Double magicalStaffRectangle) {
+        this.magicalStaffRectangle = magicalStaffRectangle;
     }
 }

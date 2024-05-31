@@ -18,15 +18,12 @@ public class Navigator {
 
     }
 
-
     public static Navigator getInstance() {
         if (instance == null) {
             instance = new Navigator();
         }
         return instance;
     }
-
-
 
     public void showPage(Page page) {
         if (pageStack.isEmpty() || !pageStack.peek().getClass().equals(page.getClass())) {

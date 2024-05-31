@@ -26,7 +26,6 @@ public class RunningModeController {
         this.runningModePage = runningModePage;
         this.game= Game.getInstance();
         this.dataBaseController=DataBaseController.getInstance();
-
     }
     public Game getGameSession() {
         return Game.getInstance();
@@ -135,15 +134,8 @@ public class RunningModeController {
                     spell.spellImage.getWidth(),
                     spell.spellImage.getHeight()
             );
-            //THIS WILL BE UPDATED SO THAT THE SPELL APPEARS IN THE INVENTORY
             if (transformedRectangle.intersects(spellRectangle)) {
-                SpellType type = spell.getSpellType();
-                if(getGameInventory().containsKey(type)) {
-                    getGameInventory().put(type,getGameInventory().get(type)+1);
-                }
-                else{
-                    getGameInventory().put(type,1);
-                }
+                this.game.getInventory().updateInventory(spell.getSpellType(), +1);
                 runningModePage.getGamePanel().remove(spell);
                 iterator.remove();
             }
@@ -177,71 +169,6 @@ public class RunningModeController {
         }
     }
 
-    //Not used yet:
-    public void saveGame(String gameName, int timeInSeconds, ArrayList<Debris> activeDebris){
-        ArrayList<Barrier> barriers = game.getBarriers();
-        Document gameSession = new Document();
-        gameSession.put("email", User.getUserInstance().getEmail());
-        gameSession.put("gameName", gameName);
-        gameSession.put("score", getGameSession().getScore().getScore());
-        gameSession.put("timeElapsed", timeInSeconds);
-
-        for(int i=0; i<barriers.size(); i++){
-            gameSession.put("barrier_"+i, barriers.get(i).getCoordinate().getX() + "-"+barriers.get(i).getCoordinate().getY() +
-                    "-"+ barriers.get(i).getType().toString()+ "-" + barriers.get(i).getnHits());
-        }
-
-        ArrayList<Document> debrisList = new ArrayList<>();
-        for (Debris debris : activeDebris) {
-            Document debrisDoc = new Document();
-            debrisDoc.put("x", debris.getCoordinate().getX());
-            debrisDoc.put("y", debris.getCoordinate().getY());
-            debrisList.add(debrisDoc);
-        }
-
-        gameSession.put("debris", debrisList);
-        gameSession.put("played", "True");
-
-        Coordinate staffCoord = game.getMagicalStaff().getCoordinate();
-        gameSession.put("magicalStaff", new Document("x", staffCoord.getX()).append("y", staffCoord.getY()));
-
-        // Save fireball details
-        Fireball fireball = game.getFireball();
-        gameSession.put("fireball", new Document("x", fireball.getCoordinate().getX())
-                .append("y", fireball.getCoordinate().getY())
-                .append("velocityX", fireball.getxVelocity())
-                .append("velocityY", fireball.getyVelocity()));
-
-        Database.getInstance().getGameCollection().insertOne(gameSession);
-        JOptionPane.showMessageDialog(null, "Game saved successfully!");
-
-    }
-
-
-    //FELIX_FELICIS
-    public void useFelixFelicis(){
-        if (game.useFelixFelicis()){ // check if spell was used
-            runningModePage.playSoundEffect(5);
-        }
-    }
-    //STAFF_EXPANSION
-    public void useMSExpansion(){
-        if (game.useStaffExpansion()){
-        runningModePage.playSoundEffect(3);
-        }
-    }
-    // Hex
-    public void useHex(){
-        if(game.useHex()){
-            runningModePage.playSoundEffect(3);  // Change SFX
-        }
-    }
-    //Overwhelming Fireball
-    public void useOverwhelmingFB(){
-        if (game.useOverwhelmingFB()){
-            runningModePage.playSoundEffect(3); // Change SFX
-        }
-    }
     public void volume(int i){
         runningModePage.volume((float) (0.1*i));
     }
@@ -255,11 +182,9 @@ public class RunningModeController {
             }
         }
     }
+
     public void saveGameToDatabase() {
         dataBaseController.saveGameToDatabase(game.getGameName(), game,true);
-    }
-    public HashMap<SpellType, Integer> getGameInventory(){
-        return game.getInventory();
     }
     public ArrayList<Spell> getGameSpells(){
         return game.getSpells();

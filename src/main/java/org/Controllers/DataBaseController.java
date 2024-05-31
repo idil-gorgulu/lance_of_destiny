@@ -17,7 +17,7 @@ public class DataBaseController {
     private static Game gameSession;
     private static DataBaseController instance;
     public DataBaseController(){
-        this.gameSession = Game.getInstance();
+        gameSession = Game.getInstance();
     }
     public void openFromDatabase(Document game){
         Game gameInstance = Game.getInstance();
@@ -42,16 +42,21 @@ public class DataBaseController {
             Coordinate co  =new Coordinate(xCoordinate, yCoordinate);
             gameInstance.addDetailedBarrierFromDb(co, barrierType, numHits, isMoving, velocity);
         }
-        gameInstance.getInventory().put(SpellType.FELIX_FELICIS, game.getInteger("spellFelixFelicis"));
-        gameInstance.getInventory().put(SpellType.STAFF_EXPANSION, game.getInteger("spellStaffExpansion"));
-        gameInstance.getInventory().put(SpellType.HEX, game.getInteger("spellHex"));
-        gameInstance.getInventory().put(SpellType.OVERWHELMING_FIREBALL, game.getInteger("spellOverwhelming"));
-        String[] fireballParts = game.getString("fireball").split("/");
-        gameInstance.getFireball().getCoordinate().setX(Integer.parseInt(fireballParts[0]));
-        gameInstance.getFireball().getCoordinate().setY(Integer.parseInt(fireballParts[1]));
-        gameInstance.getFireball().setxVelocity(Float.parseFloat(fireballParts[2]));
-        gameInstance.getFireball().setyVelocity(Float.parseFloat(fireballParts[3]));
+        gameInstance.getInventory().setSpellCount(SpellType.FELIX_FELICIS, game.getInteger("spellFelixFelicis"));
+        gameInstance.getInventory().setSpellCount(SpellType.STAFF_EXPANSION, game.getInteger("spellStaffExpansion"));
+        gameInstance.getInventory().setSpellCount(SpellType.HEX, game.getInteger("spellHex"));
+        gameInstance.getInventory().setSpellCount(SpellType.OVERWHELMING_FIREBALL, game.getInteger("spellOverwhelming"));
+//        String[] fireballParts = game.getString("fireball").split("/");
+//        gameInstance.getFireball().getCoordinate().setX(Integer.parseInt(fireballParts[0]));
+//        gameInstance.getFireball().getCoordinate().setY(Integer.parseInt(fireballParts[1]));
+//        gameInstance.getFireball().setxVelocity(Float.parseFloat(fireballParts[2]));
+//        gameInstance.getFireball().setyVelocity(Float.parseFloat(fireballParts[3]));
 
+        String[] ymirAbilities = game.getString("Ymir").split("/");
+        gameInstance.getYmir().manageAbilityHistory(ymirAbilities[0]);
+        gameInstance.getYmir().manageAbilityHistory(ymirAbilities[1]);
+        System.out.println(ymirAbilities[0] +"---"+ ymirAbilities[1]);
+        gameInstance.getScore().setTotalScore(game.getInteger("score"));
     }
     public void saveGameToDatabase(String gameName, Game game, boolean played) {
         // Get the current date and time with time zone
@@ -72,18 +77,22 @@ public class DataBaseController {
                     "/"+ barriers.get(i).getType().toString()+ "/" + barriers.get(i).getnHits() +
                     "/"+ barriers.get(i).isMoving() + "/"+barriers.get(i).getVelocity() );
         }
-        HashMap<SpellType, Integer> inventory = game.getInventory();
-        gameSession.put("spellFelixFelicis",inventory.get(SpellType.FELIX_FELICIS));
-        gameSession.put("spellStaffExpansion",inventory.get(SpellType.STAFF_EXPANSION));
-        gameSession.put("spellHex",inventory.get(SpellType.HEX));
-        gameSession.put("spellOverwhelming",inventory.get(SpellType.OVERWHELMING_FIREBALL));
-        Fireball fireball = game.getFireball();
-        gameSession.put("fireball", fireball.getCoordinate().getX() + "/"+
-                fireball.getCoordinate().getY() + "/" +
-                fireball.getxVelocity()+ "/" +
-                fireball.getyVelocity());
+        gameSession.put("spellFelixFelicis",game.getInventory().getSpellCount(SpellType.FELIX_FELICIS));
+        gameSession.put("spellStaffExpansion",game.getInventory().getSpellCount(SpellType.STAFF_EXPANSION));
+        gameSession.put("spellHex",game.getInventory().getSpellCount(SpellType.HEX));
+        gameSession.put("spellOverwhelming",game.getInventory().getSpellCount(SpellType.OVERWHELMING_FIREBALL));
+//        Fireball fireball = game.getFireball();
+//        gameSession.put("fireball", fireball.getCoordinate().getX() + "/"+
+//                fireball.getCoordinate().getY() + "/" +
+//                fireball.getxVelocity()+ "/" +
+//                fireball.getyVelocity());
         if(played)gameSession.put("played", "True");
         else gameSession.put("played", "False");
+
+        //add other fields here:
+        gameSession.put("Ymir",game.getYmir().getLastAbilitiesAsList().get(0).toString()+"/"+game.getYmir().getLastAbilitiesAsList().get(1).toString());
+        gameSession.put("score",game.getScore().getTotalScore());
+
         Database.getInstance().getGameCollection().insertOne(gameSession);
         System.out.println("Saved");
     }

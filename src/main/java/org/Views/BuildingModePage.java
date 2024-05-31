@@ -2,6 +2,7 @@ package org.Views;
 
 import org.Controllers.BuildingModeController;
 import org.Domain.*;
+import org.Utils.ComponentStyling;
 import org.Utils.Database;
 import org.bson.Document;
 
@@ -57,6 +58,13 @@ public class BuildingModePage extends Page {
     protected void initUI() {
         setLayout(new BorderLayout());
         infoContainer = new JPanel(new FlowLayout());
+        JButton helpScreenButton = new JButton("Help Screen");
+        infoContainer.add(helpScreenButton);
+
+        helpScreenButton.addActionListener(e -> {
+            HelpScreenPage helpScreen = new HelpScreenPage();
+            helpScreen.setVisible(true);
+        });
 
         JButton backButton = new JButton("Back");
         JButton createButton = new JButton("Create");

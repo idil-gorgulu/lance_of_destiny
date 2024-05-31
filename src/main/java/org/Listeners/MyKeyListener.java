@@ -1,6 +1,7 @@
-package org.Views;
+package org.Listeners;
 
 import org.Controllers.RunningModeController;
+import org.Domain.SpellType;
 
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
@@ -29,6 +30,23 @@ public class MyKeyListener extends KeyAdapter {
                 runningModeController.rotateMagicalStaff(+3); // Rotate clockwise (degrees)
                 runningModeController.getGameSession().getMagicalStaff().setReleased(false);
                 break;
+            case KeyEvent.VK_H:
+                runningModeController.getGameSession().useSpell(SpellType.HEX);
+                break;
+            case KeyEvent.VK_Q:
+                runningModeController.getGameSession().useSpell(SpellType.FELIX_FELICIS);
+                break;
+            case KeyEvent.VK_T:
+                runningModeController.getGameSession().useSpell(SpellType.STAFF_EXPANSION);
+                break;
+            case KeyEvent.VK_E:
+                System.out.println("overwhelmingggg");
+                runningModeController.getGameSession().useSpell(SpellType.OVERWHELMING_FIREBALL);
+                break;
+
+            case KeyEvent.VK_W:
+                runningModeController.getGameSession().triggerBall();
+                break;
         }
     }
     @Override
@@ -49,18 +67,7 @@ public class MyKeyListener extends KeyAdapter {
                 runningModeController.rotateMagicalStaff(-3); // Rotate clockwise
                 runningModeController.getGameSession().getMagicalStaff().setReleased(true);
                 break;
-            case KeyEvent.VK_Q:
-                runningModeController.useFelixFelicis();
-                break;
-            case KeyEvent.VK_W:
-                runningModeController.useMSExpansion();
-                break;
-            case KeyEvent.VK_E:
-                runningModeController.useOverwhelmingFB();
-                break;
-            case KeyEvent.VK_T:
-                runningModeController.useHex();
-                break;
+
             case KeyEvent.VK_P:
                 runningModeController.volume(1);
                 break;
