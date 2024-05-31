@@ -583,6 +583,7 @@ public class RunningModePage extends Page implements InventoryListener, MPInfoLi
     }
 
     private void addActionListenersMultiplayer() {
+        System.out.println("actionlitenerlar ekledni");
         hexButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -618,6 +619,7 @@ public class RunningModePage extends Page implements InventoryListener, MPInfoLi
         infiniteVoidButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                System.out.println("infinitvoid");
                 runningModeController.comm.sendSpell("Spell: {spellType: iv}");
                 gamePanel.requestFocus();
             }
@@ -625,6 +627,7 @@ public class RunningModePage extends Page implements InventoryListener, MPInfoLi
         hollowPurpleButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                System.out.println("hollowputrple");
                 runningModeController.comm.sendSpell("Spell: {spellType: hp}");
                 gamePanel.requestFocus();
             }
@@ -632,6 +635,7 @@ public class RunningModePage extends Page implements InventoryListener, MPInfoLi
         doubleAccelButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                System.out.println("doubleaccel");
                 runningModeController.comm.sendSpell("Spell: {spellType: da}");
                 gamePanel.requestFocus();
             }

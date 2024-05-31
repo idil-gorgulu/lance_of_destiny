@@ -276,18 +276,19 @@ public class MultiPortServer implements CommInterface {
 
     @Override
     public void sendSpell(String spell) {
+        System.out.println("sendspelldeyim");
         boolean hasSpell = false;
-        if(Objects.equals(spell, "iv") && this.multiplayerGame.getInventory().checkSpellCount(SpellType.INFINITE_VOID)){
+        if(spell.equals("iv") && this.multiplayerGame.getInventory().checkSpellCount(SpellType.INFINITE_VOID)){
             hasSpell = true;
             this.multiplayerGame.getInventory().updateInventory(SpellType.INFINITE_VOID, -1);
             System.out.println("Infinite void activated due to the spell from opponent user.");
         }
-        if(Objects.equals(spell, "hp") && this.multiplayerGame.getInventory().checkSpellCount(SpellType.HOLLOW_PURPLE)){
+        if(spell.equals("hp") && this.multiplayerGame.getInventory().checkSpellCount(SpellType.HOLLOW_PURPLE)){
             hasSpell = true;
             this.multiplayerGame.getInventory().updateInventory(SpellType.HOLLOW_PURPLE, -1);
             System.out.println("Hollow purple activated due to the spell from opponent user.");
         }
-        if(Objects.equals(spell, "da") && this.multiplayerGame.getInventory().checkSpellCount(SpellType.DOUBLE_ACCEL)){
+        if(spell.equals("da") && this.multiplayerGame.getInventory().checkSpellCount(SpellType.DOUBLE_ACCEL)){
             hasSpell = true;
             this.multiplayerGame.getInventory().updateInventory(SpellType.DOUBLE_ACCEL, -1);
             System.out.println("Double accel activated due to the spell from opponent user.");
