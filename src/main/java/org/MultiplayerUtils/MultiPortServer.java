@@ -143,10 +143,11 @@ public class MultiPortServer {
             Runnable sendStatisticsRunnable = new Runnable() {
                 //
                 public void run() {
-                    int score = multiplayerGame.getScore().getTotalScore();
-                    int barrierCount = multiplayerGame.getBarriers().size();
-                    int chance = multiplayerGame.getChance().getRemainingChance();
-                    output.println(String.format("{score: %d, barrierCount: %d, chance: %d}", score, barrierCount, chance));
+                        output.println("send statistics");
+//                    int score = multiplayerGame.getScore().getTotalScore();
+//                    int barrierCount = multiplayerGame.getBarriers().size();
+//                    int chance = multiplayerGame.getChance().getRemainingChance();
+//                    output.println(String.format("{score: %d, barrierCount: %d, chance: %d}", score, barrierCount, chance));
                 }
             };
 

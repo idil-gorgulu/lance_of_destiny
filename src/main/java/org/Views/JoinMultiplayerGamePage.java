@@ -220,10 +220,10 @@ public class JoinMultiplayerGamePage extends Page implements ConnectedStateChang
         }
 
         System.out.println("Go!"); // Print "Go!" when the countdown finishes
-        inClient.gameStarted = true;
         // Set the game in here
         DataBaseController.getInstance().openMultiplayerGame(this.gameName);
         inClient.setMultiplayerGame(Game.getInstance());
+        inClient.gameStarted = true;
         Navigator.getInstance().showRunningModePage();
     }
 }

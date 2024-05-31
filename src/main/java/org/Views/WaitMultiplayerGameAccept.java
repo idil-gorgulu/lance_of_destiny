@@ -81,11 +81,11 @@ public class WaitMultiplayerGameAccept extends Page implements ConnectedStateCha
         }
 
         System.out.println("Go!"); // Print "Go!" when the countdown finishes
-        server.gameStarted = true;
         // Set the game in here
         DataBaseController.getInstance().openMultiplayerGame(User.getUserInstance().getMultiplayerGameName());
         multiplayerGame = Game.getInstance();
         MultiPortServer.getInstance().setMultiplayerGame(multiplayerGame);
+        server.gameStarted = true;
         Navigator.getInstance().showRunningModePage();
     }
 
