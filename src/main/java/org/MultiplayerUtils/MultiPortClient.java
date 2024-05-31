@@ -135,7 +135,7 @@ public class MultiPortClient{
         try {
             String fromServer;
             while ((fromServer = input.readLine()) != null) {
-                // System.out.println("Server says: " + fromServer);
+                System.out.println("Server says: " + fromServer);
                 processInput(fromServer);
 
             }

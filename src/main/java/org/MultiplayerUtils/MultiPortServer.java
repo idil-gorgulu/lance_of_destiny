@@ -156,8 +156,9 @@ public class MultiPortServer {
 
             Thread sendThread = new Thread(this::handleSending);
             sendThread.start();
+
             while ((inputLine = input.readLine()) != null) {
-                // System.out.println("Incoming Message: " + inputLine);
+                System.out.println("Incoming Message: " + inputLine);
                 processInput(inputLine);
             }
         } catch (IOException e) {
@@ -170,6 +171,7 @@ public class MultiPortServer {
     public void processInput(String inputLine) {
         if (inputLine.startsWith("GameInformation")) {
             ArrayList<Integer> gameInformations = parseGameInformation(inputLine);
+            System.out.println(gameInformations);
             multiplayerGame.setMpGameInformation(gameInformations);
         }
         // Check for "Spell" identifier
