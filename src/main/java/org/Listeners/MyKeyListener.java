@@ -7,7 +7,7 @@ import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 
 public class MyKeyListener extends KeyAdapter {
-    private RunningModeController runningModeController;  //will be staff controller
+    private RunningModeController runningModeController;
 
     public MyKeyListener(RunningModeController controller) {
         this.runningModeController = controller;
@@ -40,7 +40,6 @@ public class MyKeyListener extends KeyAdapter {
                 runningModeController.getGameSession().useSpell(SpellType.STAFF_EXPANSION);
                 break;
             case KeyEvent.VK_E:
-                System.out.println("overwhelmingggg");
                 runningModeController.getGameSession().useSpell(SpellType.OVERWHELMING_FIREBALL);
                 break;
             case KeyEvent.VK_W:

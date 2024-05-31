@@ -1,13 +1,13 @@
 package org.MultiplayerUtils;
 
 import org.Domain.Game;
+import org.Domain.SpellType;
 
-import java.awt.event.KeyAdapter;
-import java.awt.event.KeyEvent;
 import java.io.*;
 import java.net.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Scanner;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
@@ -181,7 +181,7 @@ public class MultiPortClient implements CommInterface {
         }
     }
 
-    private static void parseSpell(String input) {
+    private void parseSpell(String input) {
         Pattern pattern = Pattern.compile("spellType: ([a-zA-Z]+)");
         Matcher matcher = pattern.matcher(input);
 
@@ -189,10 +189,24 @@ public class MultiPortClient implements CommInterface {
             String spellType = matcher.group(1);
             System.out.println("Spell Information:");
             System.out.println("SpellType: " + spellType);
-            // TODO: Implement the listener for action the game
-
+            getAffectedByMultiplayerSpell(spellType);
         } else {
             System.out.println("No spell information found!");
+        }
+    }
+
+    private void getAffectedByMultiplayerSpell(String spellType){
+        if(Objects.equals(spellType, "iv")){
+            this.multiplayerGame.getYmir().activateInfiniteVoid();
+            System.out.println("Infinite void activated due to the spell from opponent user.");
+        }
+        else if(Objects.equals(spellType, "hp")){
+            this.multiplayerGame.getYmir().activateHollowPurple();
+            System.out.println("Hollow purple activated due to the spell from opponent user.");
+        }
+        else if(Objects.equals(spellType, "da")){
+            this.multiplayerGame.getYmir().activateDoubleAccel();
+            System.out.println("Double accel activated due to the spell from opponent user.");
         }
     }
 
@@ -234,7 +248,23 @@ public class MultiPortClient implements CommInterface {
     }
     @Override
     public void sendSpell(String spell) {
-        output.println(spell);
+        boolean hasSpell = false;
+        if(Objects.equals(spell, "iv") && this.multiplayerGame.getInventory().checkSpellCount(SpellType.INFINITE_VOID)){
+            hasSpell = true;
+            this.multiplayerGame.getInventory().updateInventory(SpellType.INFINITE_VOID, -1);
+            System.out.println("Infinite void activated due to the spell from opponent user.");
+        }
+        if(Objects.equals(spell, "hp") && this.multiplayerGame.getInventory().checkSpellCount(SpellType.HOLLOW_PURPLE)){
+            hasSpell = true;
+            this.multiplayerGame.getInventory().updateInventory(SpellType.HOLLOW_PURPLE, -1);
+            System.out.println("Hollow purple activated due to the spell from opponent user.");
+        }
+        if(Objects.equals(spell, "da") && this.multiplayerGame.getInventory().checkSpellCount(SpellType.DOUBLE_ACCEL)){
+            hasSpell = true;
+            this.multiplayerGame.getInventory().updateInventory(SpellType.DOUBLE_ACCEL, -1);
+            System.out.println("Double accel activated due to the spell from opponent user.");
+        }
+        if(hasSpell) output.println(spell);
     }
 
     public static void main(String[] args) {

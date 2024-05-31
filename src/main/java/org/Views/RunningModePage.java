@@ -18,6 +18,13 @@ import java.util.*;
 import java.util.Timer;
 
 public class RunningModePage extends Page implements InventoryListener, MPInfoListener {
+    private JLabel infiniteVoidCount = new JLabel("0");
+    private JLabel hollowPurpleCount = new JLabel("0");
+    private JLabel doubleAccelCount = new JLabel("0");
+    private BufferedImage infiniteVoidImage;
+    private BufferedImage hollowPurpleImage;
+    private BufferedImage doubleAccelImage;
+
     private JLabel hexCount = new JLabel("0");
     private JLabel overwhelmingFireballCount = new JLabel("0");
     private JLabel magicalStaffExpansionCount = new JLabel("0");
@@ -26,6 +33,10 @@ public class RunningModePage extends Page implements InventoryListener, MPInfoLi
     private JButton overwhelmingFireballButton = new JButton("Use");
     private JButton magicalStaffExpansionButton = new JButton("Use");
     private JButton felixFelicisButton = new JButton("Use");
+    private JButton infiniteVoidButton = new JButton("Use");
+    private JButton hollowPurpleButton = new JButton("Use");
+    private JButton doubleAccelButton = new JButton("Use");
+
     private BufferedImage hexImage;
     private BufferedImage felixFelicisImage;
     private BufferedImage magicalStaffExpansionImage;
@@ -93,7 +104,9 @@ public class RunningModePage extends Page implements InventoryListener, MPInfoLi
             felixFelicisImage = ImageIO.read(new File("assets/spells/felix_felicis.png"));
             magicalStaffExpansionImage = ImageIO.read(new File("assets/spells/magical_staff_expansion.png"));
             overwhelmingFireballImage = ImageIO.read(new File("assets/spells/overwhelmingfb.png"));
-            //TODO: Image for other spells come here.
+            infiniteVoidImage = ImageIO.read(new File("assets/spells/inf_void.png"));
+            hollowPurpleImage = ImageIO.read(new File("assets/spells/hollow_purp.png"));
+            doubleAccelImage = ImageIO.read(new File("assets/spells/double_accel.png"));
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -420,6 +433,7 @@ public class RunningModePage extends Page implements InventoryListener, MPInfoLi
         opponentBarrier.repaint();
     }
 
+    /*
     private void initializeInventory(GridBagConstraints gbc) {
 
         hexButton.addActionListener(new ActionListener() {
@@ -453,10 +467,39 @@ public class RunningModePage extends Page implements InventoryListener, MPInfoLi
                 gamePanel.requestFocus();
             }
         });
+
+        infiniteVoidButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                runningModeController.comm.sendSpell("iv");
+                gamePanel.requestFocus();
+            }
+        });
+        hollowPurpleButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                runningModeController.comm.sendSpell("hp");
+                gamePanel.requestFocus();
+            }
+        });
+        doubleAccelButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                runningModeController.comm.sendSpell("da");
+                gamePanel.requestFocus();
+            }
+        });
+
         ArrayList<JLabel> countLabels = new ArrayList<>(Arrays.asList(hexCount, felixFelicisCount, magicalStaffExpansionCount, overwhelmingFireballCount));
         ArrayList<BufferedImage> images = new ArrayList<>(Arrays.asList(hexImage, felixFelicisImage, magicalStaffExpansionImage, overwhelmingFireballImage));
         ArrayList<JLabel> activationKeys = new ArrayList<>(Arrays.asList(new JLabel("T"),new JLabel("Q"),new JLabel("W"),new JLabel("E")));
         ArrayList<JButton> activationButtons = new ArrayList<>(Arrays.asList(hexButton, felixFelicisButton, magicalStaffExpansionButton, overwhelmingFireballButton));
+
+
+        ArrayList<JLabel> multiplayerCountLabels = new ArrayList<>(Arrays.asList(infiniteVoidCount, hollowPurpleCount, doubleAccelCount));
+        ArrayList<BufferedImage> multiplayerImages = new ArrayList<>(Arrays.asList(infiniteVoidImage,hollowPurpleImage,doubleAccelImage));
+        ArrayList<JLabel> multiplayerActivationKeys = new ArrayList<>(Arrays.asList(new JLabel("Z"),new JLabel("X"),new JLabel("c")));
+        ArrayList<JButton> multiplayerActivationButtons = new ArrayList<>(Arrays.asList(infiniteVoidButton, hollowPurpleButton, doubleAccelButton));
 
         int imageWidth = 40;  // Resimlerin istenen genişliği
         int imageHeight = 40; // Resimlerin istenen yüksekliği
@@ -498,6 +541,163 @@ public class RunningModePage extends Page implements InventoryListener, MPInfoLi
             gbc.insets = commonPadding;
             inventoryContainer.add(activationButtons.get(i), gbc);
         }
+    }
+
+     */
+
+    private void addActionListenersSingleplayer() {
+        hexButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                runningModeController.getGameSession().useSpell(SpellType.HEX);
+                gamePanel.requestFocus();
+            }
+        });
+
+        overwhelmingFireballButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                runningModeController.getGameSession().useSpell(SpellType.OVERWHELMING_FIREBALL);
+                gamePanel.requestFocus();
+            }
+        });
+
+        magicalStaffExpansionButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                runningModeController.getGameSession().useSpell(SpellType.STAFF_EXPANSION);
+                gamePanel.requestFocus();
+            }
+        });
+
+        felixFelicisButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                runningModeController.getGameSession().useSpell(SpellType.FELIX_FELICIS);
+                gamePanel.requestFocus();
+            }
+        });
+    }
+
+    private void addActionListenersMultiplayer() {
+        hexButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                runningModeController.getGameSession().useSpell(SpellType.HEX);
+                gamePanel.requestFocus();
+            }
+        });
+
+        overwhelmingFireballButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                runningModeController.getGameSession().useSpell(SpellType.OVERWHELMING_FIREBALL);
+                gamePanel.requestFocus();
+            }
+        });
+
+        magicalStaffExpansionButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                runningModeController.getGameSession().useSpell(SpellType.STAFF_EXPANSION);
+                gamePanel.requestFocus();
+            }
+        });
+
+        felixFelicisButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                runningModeController.getGameSession().useSpell(SpellType.FELIX_FELICIS);
+                gamePanel.requestFocus();
+            }
+        });
+
+        infiniteVoidButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                runningModeController.comm.sendSpell("iv");
+                gamePanel.requestFocus();
+            }
+        });
+        hollowPurpleButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                runningModeController.comm.sendSpell("hp");
+                gamePanel.requestFocus();
+            }
+        });
+        doubleAccelButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                runningModeController.comm.sendSpell("da");
+                gamePanel.requestFocus();
+            }
+        });
+    }
+
+    private void initializeInventory(GridBagConstraints gbc) {
+        // Clean up previous components if they exist
+        inventoryContainer.removeAll();
+
+        ArrayList<JLabel> countLabels;
+        ArrayList<BufferedImage> images;
+        ArrayList<JLabel> activationKeys;
+        ArrayList<JButton> activationButtons;
+
+        if (mpgame) {
+            // Multiplayer-specific items
+            countLabels = new ArrayList<>(Arrays.asList(hexCount, felixFelicisCount, magicalStaffExpansionCount, overwhelmingFireballCount, infiniteVoidCount, hollowPurpleCount, doubleAccelCount));
+            images = new ArrayList<>(Arrays.asList(hexImage, felixFelicisImage, magicalStaffExpansionImage, overwhelmingFireballImage, infiniteVoidImage, hollowPurpleImage, doubleAccelImage));
+            activationKeys = new ArrayList<>(Arrays.asList(new JLabel("H"), new JLabel("Q"), new JLabel("T"), new JLabel("E"),new JLabel("X"),new JLabel("Z"),new JLabel("C")));
+            activationButtons = new ArrayList<>(Arrays.asList(hexButton, felixFelicisButton, magicalStaffExpansionButton, overwhelmingFireballButton, infiniteVoidButton, hollowPurpleButton, doubleAccelButton));
+
+            addActionListenersMultiplayer();
+        } else {
+            // Single-player items
+            countLabels = new ArrayList<>(Arrays.asList(hexCount, felixFelicisCount, magicalStaffExpansionCount, overwhelmingFireballCount));
+            images = new ArrayList<>(Arrays.asList(hexImage, felixFelicisImage, magicalStaffExpansionImage, overwhelmingFireballImage));
+            activationKeys = new ArrayList<>(Arrays.asList(new JLabel("H"), new JLabel("Q"), new JLabel("T"), new JLabel("E")));
+            activationButtons = new ArrayList<>(Arrays.asList(hexButton, felixFelicisButton, magicalStaffExpansionButton, overwhelmingFireballButton));
+
+            addActionListenersSingleplayer();
+        }
+
+        int imageWidth = 40;
+        int imageHeight = 40;
+
+        gbc.gridx = 0;
+        gbc.gridy = 0;
+        gbc.gridwidth = 4;
+        gbc.anchor = GridBagConstraints.CENTER;
+        gbc.insets = new Insets(10, 0, 10, 0);
+        JLabel inventoryTitleLabel = new JLabel("Inventory");
+        inventoryContainer.add(inventoryTitleLabel, gbc);
+
+        Insets commonPadding = new Insets(5, 5, 5, 5);
+
+        for (int i = 0; i < images.size(); i++) {
+            Image scaledImage = images.get(i).getScaledInstance(imageWidth, imageHeight, Image.SCALE_SMOOTH);
+            ImageIcon scaledIcon = new ImageIcon(scaledImage);
+
+            gbc.gridx = 0;
+            gbc.gridy = i + 1;
+            gbc.gridwidth = 1;
+            gbc.anchor = GridBagConstraints.WEST;
+            gbc.insets = commonPadding;
+            inventoryContainer.add(new JLabel(scaledIcon), gbc);
+
+            gbc.gridx = 1;
+            inventoryContainer.add(countLabels.get(i), gbc);
+
+            gbc.gridx = 2;
+            inventoryContainer.add(activationKeys.get(i), gbc);
+
+            gbc.gridx = 3;
+            inventoryContainer.add(activationButtons.get(i), gbc);
+        }
+
+        inventoryContainer.revalidate();
+        inventoryContainer.repaint();
     }
 
     public void playMusic(int i){

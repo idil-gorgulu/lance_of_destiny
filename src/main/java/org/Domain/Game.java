@@ -719,6 +719,9 @@ public class Game {
                 getFireball().setOverwhelmTime(System.currentTimeMillis());
                 inventory.updateInventory(spellType, -1);
             }
+            if(spellType == SpellType.INFINITE_VOID){
+
+            }
         }
     }
 

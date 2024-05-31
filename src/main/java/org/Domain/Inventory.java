@@ -7,16 +7,25 @@ import java.util.Arrays;
 
 public class Inventory{
 
+    // Singleplayer
     // Hex
     // Felix Felicis
     // Magical Staff Expansion
     // Overwhelming Fireball
+
+    // Multiplayer
+    // Infinite Void
+    // Hollow Purple
+    // Double accel
     private ArrayList<Integer> spellCountsList;
+    private ArrayList<Integer> multiplayersSpellCountsList;
     private ArrayList<InventoryListener> listeners;
 
     public Inventory() {
         this.spellCountsList = new ArrayList<>(Arrays.asList(0, 0, 0, 0));
+        this.multiplayersSpellCountsList = new ArrayList<>(Arrays.asList(0, 0, 0, 0));
         this.listeners = new ArrayList<>();
+
     }
 
     // Method to add a listener
@@ -50,6 +59,18 @@ public class Inventory{
             spellCountsList.set(3, (spellCountsList.get(3)+countChange));
             newCount = spellCountsList.get(3);
         }
+        else if (spellType == SpellType.INFINITE_VOID){
+            multiplayersSpellCountsList.set(0, (multiplayersSpellCountsList.get(0)+countChange));
+            newCount = multiplayersSpellCountsList.get(0);
+        }
+        else if (spellType == SpellType.HOLLOW_PURPLE){
+            multiplayersSpellCountsList.set(1, (multiplayersSpellCountsList.get(1)+countChange));
+            newCount = multiplayersSpellCountsList.get(1);
+        }
+        else if (spellType == SpellType.DOUBLE_ACCEL){
+            multiplayersSpellCountsList.set(0, (multiplayersSpellCountsList.get(0)+countChange));
+            newCount = multiplayersSpellCountsList.get(1);
+        }
         notifyListeners(spellType, newCount);
     }
 
@@ -65,6 +86,15 @@ public class Inventory{
             hasSpell = true;
         }
         else if (spellType == SpellType.OVERWHELMING_FIREBALL && spellCountsList.get(3) > 0){
+            hasSpell = true;
+        }
+        else if (spellType == SpellType.INFINITE_VOID && multiplayersSpellCountsList.get(0) > 0){
+            hasSpell = true;
+        }
+        else if (spellType == SpellType.HOLLOW_PURPLE && multiplayersSpellCountsList.get(1) > 0){
+            hasSpell = true;
+        }
+        else if (spellType == SpellType.DOUBLE_ACCEL && multiplayersSpellCountsList.get(2) > 0){
             hasSpell = true;
         }
         return hasSpell;
@@ -86,6 +116,15 @@ public class Inventory{
         else if (spellType == SpellType.OVERWHELMING_FIREBALL){
             return spellCountsList.get(3);
         }
+        else if (spellType == SpellType.INFINITE_VOID){
+            return multiplayersSpellCountsList.get(0);
+        }
+        else if (spellType == SpellType.HOLLOW_PURPLE){
+            return multiplayersSpellCountsList.get(1);
+        }
+        else if (spellType == SpellType.DOUBLE_ACCEL){
+            return multiplayersSpellCountsList.get(2);
+        }
         return 0;
     }
 
@@ -100,8 +139,18 @@ public class Inventory{
             spellCountsList.set(2, count);
         }
         else if (spellType == SpellType.OVERWHELMING_FIREBALL){
-            spellCountsList.set(2, count);
+            spellCountsList.set(3, count);
         }
+        else if (spellType == SpellType.INFINITE_VOID){
+            multiplayersSpellCountsList.set(0,count);
+        }
+        else if (spellType == SpellType.HOLLOW_PURPLE){
+            multiplayersSpellCountsList.set(1,count);
+        }
+        else if (spellType == SpellType.DOUBLE_ACCEL){
+            multiplayersSpellCountsList.set(2,count);
+        }
+
     }
 
     // Reloads inventory for database read.
