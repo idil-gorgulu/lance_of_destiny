@@ -70,6 +70,9 @@ public class Game {
         if(mpGameInformation != null){
             System.out.println(mpGameInformation);
             info.setText("S: "+mpGameInformation.get(0)+" C: "+mpGameInformation.get(2)+" B: "+mpGameInformation.get(1));
+            if (mpGameInformation.get(2)==0) ended=true; //YOU WON
+            if (mpGameInformation.get(1)==0) ended=true;//YOU LOST
+
 //            JLabel opponentLabel = new JLabel("Opponent Information:");
 //            JLabel opponentScore = new JLabel("Opponent Score:" + " "  + );
 //            JLabel opponentChance = new JLabel("Opponent Chance:"+ " " + );
