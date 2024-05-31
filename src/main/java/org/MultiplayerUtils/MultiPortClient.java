@@ -124,7 +124,7 @@ public class MultiPortClient extends KeyAdapter {
             ScheduledExecutorService executor = Executors.newScheduledThreadPool(1);
             executor.scheduleAtFixedRate(sendStatisticsRunnable, 0, 1, TimeUnit.SECONDS);
 
-            Thread receiveThread = new Thread(new HandleSending(output));
+            Thread receiveThread = new Thread(this::receiveFromServer);
             receiveThread.start();
 
             sendToServer();
@@ -242,13 +242,16 @@ public class MultiPortClient extends KeyAdapter {
         int keyCode = e.getKeyCode();
         switch (keyCode) {
             case KeyEvent.VK_Z:
-                multiplayerGame.getYmir().activateHollowPurple();
+                //multiplayerGame.getYmir().activateHollowPurple();
+                output.println("hp");
                 break;
             case KeyEvent.VK_X:
-                multiplayerGame.getYmir().activateInfiniteVoid();
+                //multiplayerGame.getYmir().activateInfiniteVoid();
+                output.println("iv");
                 break;
             case KeyEvent.VK_C:
-                multiplayerGame.getYmir().activateDoubleAccel();
+                //multiplayerGame.getYmir().activateDoubleAccel();
+                output.println("da");
                 break;
         }
     }
