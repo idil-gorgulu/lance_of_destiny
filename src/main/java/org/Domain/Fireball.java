@@ -16,11 +16,11 @@ public class Fireball extends JPanel {
     private boolean isOverwhelming=false;
     private Barrier lastCollided=null;
     private long overwhelmTime=(long)Double.POSITIVE_INFINITY; // last time when ball is overwhelming
+    private boolean isOnStaff;
 
 
     public Fireball() {
         this.coordinate = new Coordinate(500, 530);
-
         try {
             // Load the original fireball image
             BufferedImage originalImage = ImageIO.read(new File("assets/200Fireball.png"));
@@ -37,6 +37,8 @@ public class Fireball extends JPanel {
         }
     }
     public void updateFireballView(){
+        boolean onStaff=(xVelocity==0 && yVelocity==0);
+
         // change this so that coordinate will hande the update of the location
         this.getCoordinate().setX((int) Math.ceil(this.getCoordinate().getX() + this.xVelocity));
         this.getCoordinate().setY((int) Math.ceil(this.getCoordinate().getY() + this.yVelocity));
@@ -137,5 +139,13 @@ public class Fireball extends JPanel {
 
     public void setOverwhelmTime(long overwhelmTime) {
         this.overwhelmTime = overwhelmTime;
+    }
+
+    public boolean isOnStaff() {
+        return isOnStaff;
+    }
+
+    public void setOnStaff(boolean onStaff) {
+        isOnStaff = onStaff;
     }
 }
