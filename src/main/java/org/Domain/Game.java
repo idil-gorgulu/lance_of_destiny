@@ -417,6 +417,10 @@ public class Game {
         this.lastCollisionTime = 0;
         this.isMultiplayer = false;
     }
+    public void resetInstance() {
+        this.ymir.getTimer().cancel();
+        instance = new Game();
+    }
 
     public static Game createNewGame() {
         instance = new Game();

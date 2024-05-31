@@ -291,7 +291,8 @@ public class RunningModePage extends Page implements InventoryListener {
                                 gamePanel.requestFocus(); // Ensure focus is returned to the game panel on resume
                                 break;
                             case JOptionPane.CANCEL_OPTION: // Quit
-                                pause = false; // Reset pause state
+                                runningModeController.getGameSession().resetInstance();
+                                pause = false; // Reset pause state\
                                 runningModeController = null;
                                 Navigator.getInstance().showStartSingleplayerPage(); // Navigate away from the game page
                                 break;
