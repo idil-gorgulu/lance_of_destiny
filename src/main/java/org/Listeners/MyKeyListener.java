@@ -46,18 +46,25 @@ public class MyKeyListener extends KeyAdapter {
             case KeyEvent.VK_W:
                 runningModeController.getGameSession().triggerBall();
                 break;
-//            case KeyEvent.VK_Z:
-//                runningModeController.getGameSession().useSpell(SpellType.STAFF_EXPANSION);
-//                break;
-//            case KeyEvent.VK_X:
-//                System.out.println("overwhelmingggg");
-//                runningModeController.getGameSession().useSpell(SpellType.OVERWHELMING_FIREBALL);
-//                break;
-//            case KeyEvent.VK_C:
-//                runningModeController.getGameSession().triggerBall();
-//                break;
+            case KeyEvent.VK_Z:
+                //multiplayerGame.getYmir().activateHollowPurple();
+//                spellMessage("hp");
+                runningModeController.comm.sendSpell("hp");
+                break;
+            case KeyEvent.VK_X:
+                //multiplayerGame.getYmir().activateInfiniteVoid();
+//                spellMessage("iv");
+                runningModeController.comm.sendSpell("iv");
 
+                break;
+            case KeyEvent.VK_C:
+                //multiplayerGame.getYmir().activateDoubleAccel();
+//                spellMessage("da");
+                runningModeController.comm.sendSpell("da");
+
+                break;
         }
+
     }
     @Override
     public void keyReleased(KeyEvent e) {

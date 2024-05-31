@@ -18,7 +18,7 @@ import java.util.concurrent.TimeUnit;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class MultiPortServer extends KeyAdapter {
+public class MultiPortServer implements CommInterface {
     public static MultiPortServer instance;
     private ServerSocket serverSocketOut;
     private Socket outputSocket;
@@ -260,25 +260,8 @@ public class MultiPortServer extends KeyAdapter {
     }
 
     @Override
-    public void keyPressed(KeyEvent e) {
-        int keyCode = e.getKeyCode();
-        switch (keyCode) {
-            case KeyEvent.VK_Z:
-                //multiplayerGame.getYmir().activateHollowPurple();
-                spellMessage("hp");
-                break;
-            case KeyEvent.VK_X:
-                //multiplayerGame.getYmir().activateInfiniteVoid();
-                spellMessage("iv");
-                break;
-            case KeyEvent.VK_C:
-                //multiplayerGame.getYmir().activateDoubleAccel();
-                spellMessage("da");
-                break;
-        }
-    }
-    public String spellMessage(String spell) {
-        return spell;
+    public void sendSpell(String spell) {
+        output.println(spell);
     }
 
     public static void main(String[] args) {

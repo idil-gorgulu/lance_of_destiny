@@ -15,7 +15,7 @@ import java.util.concurrent.TimeUnit;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class MultiPortClient extends KeyAdapter {
+public class MultiPortClient implements CommInterface {
     private List<ConnectedStateChangeListener> connectedStateChangeListeners = new ArrayList<>();
     private List<CountdownStateChangeListener> countdownStateChangeListeners = new ArrayList<>();
     private Socket outputSocket;
@@ -141,7 +141,6 @@ public class MultiPortClient extends KeyAdapter {
             while ((fromServer = input.readLine()) != null) {
                 System.out.println("Server says: " + fromServer);
                 processInput(fromServer);
-
             }
             System.out.println("Server has disconnected.");
         } catch (IOException e) {
@@ -236,24 +235,9 @@ public class MultiPortClient extends KeyAdapter {
             System.out.println("Error when closing client resources: " + e.getMessage());
         }
     }
-
     @Override
-    public void keyPressed(KeyEvent e) {
-        int keyCode = e.getKeyCode();
-        switch (keyCode) {
-            case KeyEvent.VK_Z:
-                //multiplayerGame.getYmir().activateHollowPurple();
-                output.println("hp");
-                break;
-            case KeyEvent.VK_X:
-                //multiplayerGame.getYmir().activateInfiniteVoid();
-                output.println("iv");
-                break;
-            case KeyEvent.VK_C:
-                //multiplayerGame.getYmir().activateDoubleAccel();
-                output.println("da");
-                break;
-        }
+    public void sendSpell(String spell) {
+        output.println(spell);
     }
 
     public static void main(String[] args) {

@@ -1,6 +1,7 @@
 package org.Controllers;
 
 import org.Domain.*;
+import org.MultiplayerUtils.CommInterface;
 import org.Utils.Database;
 import org.Views.RunningModePage;
 import org.bson.Document;
@@ -21,10 +22,12 @@ public class RunningModeController {
     protected RunningModePage runningModePage;
     private DataBaseController dataBaseController;
     private Game game;
+    public CommInterface comm;
 
     public RunningModeController(RunningModePage runningModePage){
         this.runningModePage = runningModePage;
         this.game= Game.getInstance();
+        this.comm = Game.getInstance().comm;
         this.dataBaseController=DataBaseController.getInstance();
     }
     public Game getGameSession() {
