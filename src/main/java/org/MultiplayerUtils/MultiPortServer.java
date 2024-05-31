@@ -1,5 +1,6 @@
 package org.MultiplayerUtils;
 
+import org.Domain.Game;
 import org.Domain.User;
 import org.Utils.Database;
 import org.bson.Document;
@@ -28,9 +29,17 @@ public class MultiPortServer {
     public boolean startCountdown = false;
     public boolean gameStarted = false;
     private List<ConnectedStateChangeListener> listeners = new ArrayList<>();
-
     private List<CountdownStateChangeListener> countdownListeners = new ArrayList<>();
 
+    public Game getMultiplayerGame() {
+        return multiplayerGame;
+    }
+
+    public void setMultiplayerGame(Game multiplayerGame) {
+        this.multiplayerGame = multiplayerGame;
+    }
+
+    private Game multiplayerGame;
 
 
     public static MultiPortServer  getInstance() {
@@ -132,8 +141,12 @@ public class MultiPortServer {
 
             // Assure that the game is loaded
             Runnable sendStatisticsRunnable = new Runnable() {
+                //
                 public void run() {
-                    output.println("sending statistics");
+                    int score = multiplayerGame.getScore().getTotalScore();
+                    int barrierCount = multiplayerGame.getBarriers().size();
+                    int chance = multiplayerGame.getChance().getRemainingChance();
+                    output.println(String.format("{score: %d, barrierCount: %d, chance: %d}", score, barrierCount, chance));
                 }
             };
 
@@ -145,6 +158,7 @@ public class MultiPortServer {
 
             while ((inputLine = input.readLine()) != null) {
                 System.out.println("Incoming Message: " + inputLine);
+                processInput(inputLine);
             }
         } catch (IOException e) {
             e.printStackTrace();
@@ -153,6 +167,9 @@ public class MultiPortServer {
         }
     }
 
+    public void processInput(String inputLine) {
+        // In here according to what have to be done, implement in here
+    }
     private void handleSending() {
         Scanner scanner = new Scanner(System.in);
         try {

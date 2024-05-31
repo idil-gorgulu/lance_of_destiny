@@ -1,5 +1,7 @@
 package org.MultiplayerUtils;
 
+import org.Domain.Game;
+
 import java.io.*;
 import java.net.*;
 import java.util.ArrayList;
@@ -24,6 +26,16 @@ public class MultiPortClient{
     public boolean opponentReadyClicked = false;
     public boolean startCountdown = false;
     public boolean gameStarted = false;
+
+    public Game getMultiplayerGame() {
+        return multiplayerGame;
+    }
+
+    public void setMultiplayerGame(Game multiplayerGame) {
+        this.multiplayerGame = multiplayerGame;
+    }
+
+    public Game multiplayerGame;
 
     public MultiPortClient(String gameHostIpAdress, int outputPort, int inputPort) {
         this.gameHostIpAdress = gameHostIpAdress;
@@ -95,7 +107,10 @@ public class MultiPortClient{
             }
             Runnable sendStatisticsRunnable = new Runnable() {
                 public void run() {
-                    output.println("sending statistics");
+                    int score = multiplayerGame.getScore().getTotalScore();
+                    int barrierCount = multiplayerGame.getBarriers().size();
+                    int chance = multiplayerGame.getChance().getRemainingChance();
+                    output.println(String.format("{score: %d, barrierCount: %d, chance: %d}", score, barrierCount, chance));
                 }
             };
 

@@ -1,6 +1,7 @@
 package org.Views;
 
 import org.Controllers.DataBaseController;
+import org.Domain.Game;
 import org.Domain.User;
 import org.MultiplayerUtils.CountdownStateChangeListener;
 import org.MultiplayerUtils.MultiPortServer;
@@ -23,6 +24,7 @@ public class WaitMultiplayerGameAccept extends Page implements ConnectedStateCha
     private JPanel centerPanel;
     private MultiPortServer server;
     private int countdownValue = 3; // starting from 3 seconds
+    private Game multiplayerGame;
 
     DataBaseController dataBaseController;
 
@@ -82,6 +84,8 @@ public class WaitMultiplayerGameAccept extends Page implements ConnectedStateCha
         server.gameStarted = true;
         // Set the game in here
         DataBaseController.getInstance().openMultiplayerGame(User.getUserInstance().getMultiplayerGameName());
+        multiplayerGame = Game.getInstance();
+        MultiPortServer.getInstance().setMultiplayerGame(multiplayerGame);
         Navigator.getInstance().showRunningModePage();
     }
 

@@ -1,6 +1,7 @@
 package org.Views;
 
 import org.Controllers.DataBaseController;
+import org.Domain.Game;
 import org.Domain.MultiPlayerGame;
 import org.MultiplayerUtils.CountdownStateChangeListener;
 import org.MultiplayerUtils.MultiPortClient;
@@ -222,6 +223,7 @@ public class JoinMultiplayerGamePage extends Page implements ConnectedStateChang
         inClient.gameStarted = true;
         // Set the game in here
         DataBaseController.getInstance().openMultiplayerGame(this.gameName);
+        inClient.setMultiplayerGame(Game.getInstance());
         Navigator.getInstance().showRunningModePage();
     }
 }
