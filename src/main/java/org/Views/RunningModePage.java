@@ -78,6 +78,9 @@ public class RunningModePage extends Page implements InventoryListener, MPInfoLi
         setupTimer();
         this.runningModeController.getGameSession().getInventory().addInventoryListener(this);
         this.runningModeController.getGameSession().getInventory().reloadInventory();
+        if(mpgame==false){
+            runningModeController.getGameSession().getYmir().setActive(true);
+        }
     }
 
     public RunningModePage(boolean mpgame) {
