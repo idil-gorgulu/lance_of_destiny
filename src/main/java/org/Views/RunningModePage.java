@@ -290,14 +290,17 @@ public class RunningModePage extends Page implements InventoryListener {
                 //TODO: add opponent's information here.
                 if(mpgame==true){
                     JLabel opponentLabel = new JLabel("Opponent Information:");
-                    JLabel opponentScore = new JLabel("Opponent Score:" + " " + runningModeController.getGameSession().getMpGameInformation().get(0));
-                    JLabel opponentChance = new JLabel("Opponent Chance:"+ " "+ runningModeController.getGameSession().getMpGameInformation().get(2));
-                    JLabel opponentBarrier= new JLabel("Opponent Barrier:"+ " "+runningModeController.getGameSession().getMpGameInformation().get(1));
+                    if(runningModeController.getGameSession().getMpGameInformation()!=null){
+                        JLabel opponentScore = new JLabel("Opponent Score:" + " " + runningModeController.getGameSession().getMpGameInformation().get(0));
+                        JLabel opponentChance = new JLabel("Opponent Chance:"+ " "+ runningModeController.getGameSession().getMpGameInformation().get(2));
+                        JLabel opponentBarrier= new JLabel("Opponent Barrier:"+ " "+runningModeController.getGameSession().getMpGameInformation().get(1));
 
-                    infoContainer.add(opponentLabel );
-                    infoContainer.add(opponentScore );
-                    infoContainer.add(opponentChance);
-                    infoContainer.add(opponentBarrier);
+                        infoContainer.add(opponentLabel );
+                        infoContainer.add(opponentScore );
+                        infoContainer.add(opponentChance);
+                        infoContainer.add(opponentBarrier);
+                    }
+
 
                 }
 
